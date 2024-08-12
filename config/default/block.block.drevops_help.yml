@@ -1,0 +1,22 @@
+uuid: d386f21a-55fa-48f3-b16a-6c07f4e8ea62
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - drevops
+_core:
+  default_config_hash: VfPFqqxfkomud5CO8DUijw85QIl9GIxh_nIxLOYESxg
+id: drevops_help
+theme: drevops
+region: content_above
+weight: 0
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

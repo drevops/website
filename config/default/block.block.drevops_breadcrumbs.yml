@@ -1,0 +1,22 @@
+uuid: bc0210c0-20ad-4ae2-acfa-41de5d6f3982
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - drevops
+_core:
+  default_config_hash: VhBzWb7lMRtIOg9G7VSw_0uopi-7zXeHq4vXqqV1HFE
+id: drevops_breadcrumbs
+theme: drevops
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

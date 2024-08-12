@@ -1,0 +1,22 @@
+uuid: b0789217-4046-4ac8-b46f-cc0d59f40f0f
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - drevops
+_core:
+  default_config_hash: erQSEZF2XUjNmgTl0uNRBzmg18ZGXwUcw2FhApoeuHk
+id: drevops_content
+theme: drevops
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

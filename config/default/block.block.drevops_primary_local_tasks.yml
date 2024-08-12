@@ -1,0 +1,22 @@
+uuid: 1f836c90-49c7-473f-9da1-c32aa3d3e534
+langcode: en
+status: true
+dependencies:
+  theme:
+    - drevops
+_core:
+  default_config_hash: nGE3EoPQQaQCuqTUtZgw0-KIzmrqdKDzdNQf2JyPUt4
+id: drevops_primary_local_tasks
+theme: drevops
+region: highlighted
+weight: -4
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary tabs'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: false
+visibility: {  }

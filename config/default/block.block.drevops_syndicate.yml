@@ -1,0 +1,23 @@
+uuid: 18bfac9c-b58e-40d5-88db-7479b0b3a275
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  theme:
+    - drevops
+_core:
+  default_config_hash: 0gq3VPg-_UM69FCCWurLFIrrnIjC2HLKhwo9iQNtcUo
+id: drevops_syndicate
+theme: drevops
+region: social
+weight: 0
+provider: null
+plugin: node_syndicate_block
+settings:
+  id: node_syndicate_block
+  label: 'RSS feed'
+  label_display: '0'
+  provider: node
+  block_count: 10
+visibility: {  }
