@@ -1,0 +1,220 @@
+# Docker Compose configuration file.
+#
+# - Using a single file to work in local, CI and production environments.
+# - Local overrides are possible using docker-compose.override.yml file.
+# - Environment variables are read from .env file.
+# - Containers will be named after the project directory.
+# - Use inline comments containing '###' to have the line removed in CI.
+# - Use inline comments starting with '##' to have the line being automatically
+#   uncommented in CI.
+# See more about Docker at https://docs.drevops.com/docker/
+# For YAML support of anchors and references, see http://blog.daemonl.com/2016/02/yaml.html
+
+# ------------------------------------------------------------------------------
+# Variable aliases.
+# ------------------------------------------------------------------------------
+
+# Volumes available in each container to share application data.
+# See more about Docker host volume mounting at https://docs.drevops.com/docker#host-volume-mounting-in-docker-based-projects
+x-volumes: &default-volumes
+  volumes:
+    # All application files mounted into container.
+    - .:/app:${VOLUME_FLAGS:-delegated} ### Local overrides to mount host filesystem. Automatically removed in CI and PROD.
+    # Override mount for files to allow different type of syncing for optimised performance.
+    - ./web/sites/default/files:/app/web/sites/default/files:${VOLUME_FLAGS:-delegated} ### Local overrides to mount host filesystem. Automatically removed in CI and PROD.
+    # Use the same volumes in environments without host mounts support.
+    ##- app:/app # Override for environment without host mounts. Automatically uncommented in CI.
+    ##- files:/app/web/sites/default/files # Override for environment without host mounts. Automatically uncommented in CI.
+
+# The default user under which the containers should run.
+x-user: &default-user
+  # Change this if you are on linux and run with another user than id `1000`
+  user: '1000'
+
+# Environment variables set in all containers during build and runtime.
+# Note that these variables are not read from here in Lagoon environment.
+x-environment: &default-environment
+  TZ: ${DREVOPS_TZ:-Australia/Melbourne}
+  # Local development URL.
+  DREVOPS_LOCALDEV_URL: &default-url ${COMPOSE_PROJECT_NAME:-example-site}.docker.amazee.io
+  # Local development route used in Lagoon images and Pygmy to route requests.
+  LAGOON_ROUTE: *default-url
+  # Local database host (not used in production).
+  MARIADB_HOST: mariadb
+  # Local database name (not used in production).
+  MARIADB_DATABASE: drupal
+  # Local database user (not used in production).
+  MARIADB_USERNAME: drupal
+  # Local database password (not used in production).
+  MARIADB_PASSWORD: drupal
+  # Local database port (not used in production).
+  MARIADB_PORT: 3306
+  # Pass-through 'XDEBUG_ENABLE' to enable XDebug with "ahoy debug" or "XDEBUG_ENABLE=true docker compose up -d".
+  XDEBUG_ENABLE: ${XDEBUG_ENABLE:-}
+  # Pass-through 'CI' variable used to identify the CI environment.
+  CI: ${CI:-}
+  # Forward emails to Mailhog locally.
+  SSMTP_MAILHUB: ${SSMTP_MAILHUB:-host.docker.internal:1025}
+  # Path to configuration files.
+  DRUPAL_CONFIG_PATH: ${DRUPAL_CONFIG_PATH:-/app/config/default}
+  # Drupal file paths.
+  DRUPAL_PUBLIC_FILES: ${DRUPAL_PUBLIC_FILES:-/app/web/sites/default/files}
+  DRUPAL_PRIVATE_FILES: ${DRUPAL_PRIVATE_FILES:-/app/web/sites/default/files/private}
+  DRUPAL_TEMPORARY_FILES: ${DRUPAL_TEMPORARY_FILES:-/tmp}
+  # Drupal Shield credentials.
+  DRUPAL_SHIELD_USER: ${DRUPAL_SHIELD_USER:-}
+  DRUPAL_SHIELD_PASS: ${DRUPAL_SHIELD_PASS:-}
+  # Redis integration flag.
+  DRUPAL_REDIS_ENABLED: ${DRUPAL_REDIS_ENABLED:-}
+  # Lagoon environment type.
+  LAGOON_ENVIRONMENT_TYPE: ${LAGOON_ENVIRONMENT_TYPE:-local}
+
+# ------------------------------------------------------------------------------
+# Services.
+# ------------------------------------------------------------------------------
+
+services:
+  # CLI container, used for executing CLI commands such as Composer, Drush etc. Not used to handle web requests.
+  cli:
+    build:
+      context: .
+      dockerfile: .docker/cli.dockerfile
+      args:
+        WEBROOT: "${DREVOPS_WEBROOT:-web}"
+        GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
+
+    image: &cli-image ${COMPOSE_PROJECT_NAME:-example_site}
+    user: root
+    <<: *default-volumes
+    environment:
+      <<: *default-environment
+    # Mount volumes from the ssh-agent running in Pygmy to inject host SSH key into container. See https://pygmy.readthedocs.io/en/master/ssh_agent/
+    volumes_from: ### Local overrides to mount host SSH keys. Automatically removed in CI.
+      - container:amazeeio-ssh-agent ### Local overrides to mount host SSH keys. Automatically removed in CI.
+    labels:
+      lagoon.type: cli-persistent # See https://docs.lagoon.sh/using-lagoon-advanced/service-types/
+      lagoon.persistent.name: &lagoon-nginx-name nginx-php # Mount the persistent storage of nginx-php pod into this container.
+      lagoon.persistent: &lagoon-persistent-files /app/web/sites/default/files/  # Location where the persistent storage should be mounted.
+
+  nginx:
+    build:
+      context: .
+      dockerfile: .docker/nginx-drupal.dockerfile
+      args:
+        CLI_IMAGE: *cli-image
+        WEBROOT: "${DREVOPS_WEBROOT:-web}"
+        DRUPAL_CONFIG_PATH: ${DRUPAL_CONFIG_PATH:-/app/config/default}
+        DRUPAL_PUBLIC_FILES: ${DRUPAL_PUBLIC_FILES:-/app/web/sites/default/files}
+        DRUPAL_PRIVATE_FILES: ${DRUPAL_PRIVATE_FILES:-/app/web/sites/default/files/private}
+        DRUPAL_TEMPORARY_FILES: ${DRUPAL_TEMPORARY_FILES:-/tmp}
+    <<: [*default-volumes, *default-user]
+    environment:
+      <<: *default-environment
+    depends_on:
+      - cli
+    networks:
+      - amazeeio-network # This network is supported by Pygmy and used to route all requests to host machine.
+      - default # This is a standard network and is used for all other environments, where requests routing is not required and/or not supported.
+    labels:
+      lagoon.type: nginx-php-persistent # See https://docs.lagoon.sh/using-lagoon-advanced/service-types/
+      lagoon.name: *lagoon-nginx-name
+      lagoon.persistent: *lagoon-persistent-files
+      lagoon.persistent.class: slow
+
+  # PHP FPM container. All web requests are going through this container.
+  php:
+    build:
+      context: .
+      dockerfile: .docker/php.dockerfile
+      args:
+        CLI_IMAGE: *cli-image
+    <<: [*default-volumes, *default-user]
+    environment:
+      <<: *default-environment
+    depends_on:
+      - cli
+    labels:
+      lagoon.type: nginx-php-persistent # See https://docs.lagoon.sh/using-lagoon-advanced/service-types/
+      lagoon.name: *lagoon-nginx-name
+      lagoon.persistent: *lagoon-persistent-files
+      lagoon.persistent.class: slow
+
+  mariadb:
+    build:
+      context: .
+      dockerfile: .docker/mariadb.dockerfile
+      args:
+        IMAGE: "${DREVOPS_DB_IMAGE:-uselagoon/mariadb-10.11-drupal:24.7.0}" # Use custom database image (if defined) or fallback to standard database image.
+    <<: *default-user
+    environment:
+      <<: *default-environment
+    ports:
+      - "3306" # MariaDB port in container. Find port on host with `ahoy info` or `docker compose port mariadb 3306`.
+    labels:
+      lagoon.type: mariadb # See https://docs.lagoon.sh/using-lagoon-advanced/service-types/
+
+  redis:
+    image: uselagoon/redis-6:24.7.0
+    labels:
+      lagoon.type: redis # Change to 'none' if dedicated Redis service is used. See https://docs.lagoon.sh/using-lagoon-advanced/service-types/
+
+  solr:
+    build:
+      context: .
+      dockerfile: .docker/solr.dockerfile
+      args:
+        CLI_IMAGE: *cli-image
+    environment:
+      <<: *default-environment
+    depends_on:
+      - cli
+    ports:
+      - "8983" # Solr port in container. Find port on host with `ahoy info` or `docker compose port solr 8983`.
+    volumes:
+      - solr:/var/solr
+    labels:
+      lagoon.type: solr # See https://docs.lagoon.sh/using-lagoon-advanced/service-types/
+
+  clamav:
+    image: clamav/clamav:1.3.1
+    ports:
+      - "3310" # Find port on host with `docker-compose port clamav 3310`.
+    environment:
+      << : *default-environment
+    networks:
+      - default
+    labels:
+      lagoon.type: basic
+      lagoon.service.port: 3310
+      lagoon.autogeneratedroute: false
+
+  # Chrome container, used for browser testing.
+  chrome:
+    image: selenium/standalone-chrome:111.0
+    shm_size: '1gb' # Increase '/dev/shm' partition size to avoid browser crashing.
+    <<: *default-volumes # Use default volumes to provide access to test fixtures.
+    environment:
+      <<: *default-environment
+    depends_on:
+      - cli
+    labels:
+      lagoon.type: none # Do not deploy in Lagoon.
+
+  # Helper container to wait for services to become available.
+  wait_dependencies:
+    image: drevops/docker-wait-for-dependencies:24.7.0
+    depends_on:
+      - cli
+      - mariadb
+    command: mariadb:3306
+    labels:
+      lagoon.type: none # Do not deploy in Lagoon.
+
+networks:
+  amazeeio-network:
+    external: true
+
+volumes:
+  app: {}
+  files: {}
+  solr: {}
