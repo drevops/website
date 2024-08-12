@@ -1,0 +1,16 @@
+uuid: c76d67ce-b7e3-4e77-8161-bb9c93a1352e
+langcode: en
+status: true
+dependencies:
+  module:
+    - search_api_db
+_core:
+  default_config_hash: mLxbXvPNYEdAX56hYoBkkf7iHkA0hwxqmZIf8Tqn6bg
+id: civictheme_database
+name: Database
+description: ''
+backend: search_api_db
+backend_config:
+  database: 'default:default'
+  min_chars: 1
+  matching: words

@@ -1,0 +1,31 @@
+uuid: 4af41779-4f50-4619-98e9-5d08ce5817c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_document
+    - media.type.civictheme_document
+    - paragraphs.paragraphs_type.civictheme_publication_card
+_core:
+  default_config_hash: I3kx7gkYw9cyY23ql2hZQPavvGnqK6hd0QphYgyr-OU
+id: paragraph.civictheme_publication_card.field_c_p_document
+field_name: field_c_p_document
+entity_type: paragraph
+bundle: civictheme_publication_card
+label: Document
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      civictheme_document: civictheme_document
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,19 @@
+uuid: 867085a2-959f-4ad4-8f2a-3d3d588e3411
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+_core:
+  default_config_hash: _f2KOMaq47Y0czmM4a-nQoopdEnVe99p1Ow5Q-BHAh0
+name: civictheme_campaign
+label: Campaign
+effects:
+  dd0cef2a-f164-4c8e-ab0c-3898ec0f139b:
+    uuid: dd0cef2a-f164-4c8e-ab0c-3898ec0f139b
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 600
+      height: 600
+      crop_type: focal_point

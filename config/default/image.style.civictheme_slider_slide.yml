@@ -1,0 +1,19 @@
+uuid: e493dd53-6cf1-4231-acb9-79ebf4771f85
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+_core:
+  default_config_hash: K4mNGZccpjWUxZS_RDpLZJ6bKY-pXEQQXIisEVpklHQ
+name: civictheme_slider_slide
+label: 'Slider Slide'
+effects:
+  5143132c-afdd-4410-a619-7718b9f7f7e8:
+    uuid: 5143132c-afdd-4410-a619-7718b9f7f7e8
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 600
+      height: 600
+      crop_type: focal_point

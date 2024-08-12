@@ -1,0 +1,25 @@
+uuid: 02fff3f8-519f-434e-86b0-487e80bd20ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_embed_url
+    - paragraphs.paragraphs_type.civictheme_map
+  module:
+    - link
+_core:
+  default_config_hash: zMBDpmtxeTkhyKssBV4FtqymjGd-OcrJBXLdTvb6F04
+id: paragraph.civictheme_map.field_c_p_embed_url
+field_name: field_c_p_embed_url
+entity_type: paragraph
+bundle: civictheme_map
+label: 'Embed URL'
+description: 'URL of the map to embed.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

@@ -1,0 +1,29 @@
+uuid: 7c506cf4-c8c5-48fb-9419-34bd94fd8ad3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_c_m_document
+    - media.type.civictheme_document
+  module:
+    - file
+_core:
+  default_config_hash: 0lWDojt8IDWJAth-SgWHp8Rc_KpUW_dsaN92_i9QbCg
+id: media.civictheme_document.field_c_m_document
+field_name: field_c_m_document
+entity_type: media
+bundle: civictheme_document
+label: File
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: 'documents/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt rtf doc docx ppt pptx xls xlsx pdf odf odg odp ods odt fodt fods fodp fodg key numbers pages'
+  max_filesize: ''
+  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

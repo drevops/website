@@ -1,0 +1,33 @@
+uuid: d0ec95b2-c46c-4af7-a189-b54f7c98cb2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.civictheme_site_sections
+_core:
+  default_config_hash: oocDE4m6O62aabl8BLPo0R7npn4hfVtbtyzHK31idFE
+id: taxonomy_term.civictheme_site_sections.default
+targetEntityType: taxonomy_term
+bundle: civictheme_site_sections
+mode: default
+content:
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  description: true
+  path: true
+  simple_sitemap: true
+  status: true

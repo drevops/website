@@ -1,0 +1,21 @@
+uuid: 61fb83ae-2719-4d4b-bd09-d2e4940651d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_summary
+    - paragraphs.paragraphs_type.civictheme_promo_card
+_core:
+  default_config_hash: X1MCoQKV67X6ngrycABPotKGhAaD_F0PmTSVx0bpygk
+id: paragraph.civictheme_promo_card.field_c_p_summary
+field_name: field_c_p_summary
+entity_type: paragraph
+bundle: civictheme_promo_card
+label: Summary
+description: 'Limited to the number of characters configured in the theme settings. Any characters past the character limit will not show for users.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

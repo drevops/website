@@ -1,0 +1,35 @@
+uuid: 27a60b7c-4c36-48fb-8d07-039b39d90fef
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+_core:
+  default_config_hash: bQbrn5bQXs0e-oLPNdoGr6j-GNoe13n0VEvSacWc9hs
+id: node.field_c_n_vertical_spacing
+field_name: field_c_n_vertical_spacing
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: none
+      label: None
+    -
+      value: top
+      label: Top
+    -
+      value: bottom
+      label: Bottom
+    -
+      value: both
+      label: Both
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

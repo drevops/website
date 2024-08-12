@@ -8,6 +8,7 @@
         "composer/installers": "^2.2",
         "cweagans/composer-patches": "^1.7",
         "drupal/admin_toolbar": "^3.4",
+        "drupal/civictheme": "^1.8",
         "drupal/clamav": "^2.0",
         "drupal/coffee": "^1.4",
         "drupal/config_split": "^1.9",

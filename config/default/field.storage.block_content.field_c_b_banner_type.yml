@@ -1,0 +1,29 @@
+uuid: 9ae8598e-f58a-4431-845b-4615d9f598c6
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - options
+_core:
+  default_config_hash: mtdIrDR8yM5kQGRFMcQui0OXI3iPyVDo7b-hTXfIMMI
+id: block_content.field_c_b_banner_type
+field_name: field_c_b_banner_type
+entity_type: block_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: default
+      label: Default
+    -
+      value: large
+      label: Large
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

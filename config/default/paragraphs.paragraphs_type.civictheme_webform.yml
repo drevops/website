@@ -1,0 +1,12 @@
+uuid: b2cbe828-18ab-4f0e-b1ff-8a5f78664fe1
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: J3Br-tDVrM-8vz38_7YU5B3uANEQk5bCqCZ6epG7Ous
+id: civictheme_webform
+label: Webform
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

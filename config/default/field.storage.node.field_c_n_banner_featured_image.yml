@@ -1,0 +1,22 @@
+uuid: b779e194-51e3-40e8-a022-5abe4bc5698a
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+    - node
+_core:
+  default_config_hash: v7RobNgWGqXIKi1CsObLuMrXnQm3WFg1LGcq-k1OU4I
+id: node.field_c_n_banner_featured_image
+field_name: field_c_n_banner_featured_image
+entity_type: node
+type: entity_reference
+settings:
+  target_type: media
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

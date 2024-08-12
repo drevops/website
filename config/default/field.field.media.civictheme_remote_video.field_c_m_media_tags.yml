@@ -1,0 +1,31 @@
+uuid: 04e7cc05-a85d-4896-a9a3-9488a9784ca8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_c_m_media_tags
+    - media.type.civictheme_remote_video
+    - taxonomy.vocabulary.civictheme_media_tags
+_core:
+  default_config_hash: mPd5cJUkfhN2ytju1BouH3rNSWnC1hSfMtp3pQe1_XI
+id: media.civictheme_remote_video.field_c_m_media_tags
+field_name: field_c_m_media_tags
+entity_type: media
+bundle: civictheme_remote_video
+label: 'Media tags'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      civictheme_media_tags: civictheme_media_tags
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

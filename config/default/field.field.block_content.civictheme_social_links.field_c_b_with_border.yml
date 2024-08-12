@@ -1,0 +1,25 @@
+uuid: 24b41ec4-a652-44cc-8364-500415c5801e
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_social_links
+    - field.storage.block_content.field_c_b_with_border
+_core:
+  default_config_hash: slSNCHLv8FV2UsRyeb_4RLh7ogytgJ5WzIi8a-wk7FQ
+id: block_content.civictheme_social_links.field_c_b_with_border
+field_name: field_c_b_with_border
+entity_type: block_content
+bundle: civictheme_social_links
+label: 'With border'
+description: 'Use border on icons.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

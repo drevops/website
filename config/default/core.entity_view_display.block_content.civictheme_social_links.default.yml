@@ -1,0 +1,53 @@
+uuid: a5bb1c67-57a8-47c9-8840-6fd615a4882e
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_social_links
+    - field.field.block_content.civictheme_social_links.field_c_b_social_icons
+    - field.field.block_content.civictheme_social_links.field_c_b_theme
+    - field.field.block_content.civictheme_social_links.field_c_b_with_border
+  module:
+    - entity_reference_revisions
+    - options
+_core:
+  default_config_hash: DrA55YdIgXlLOFLRXvRIT84CQehzBufesSwtTeQmBb4
+id: block_content.civictheme_social_links.default
+targetEntityType: block_content
+bundle: civictheme_social_links
+mode: default
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_c_b_social_icons:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_b_theme:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_b_with_border:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

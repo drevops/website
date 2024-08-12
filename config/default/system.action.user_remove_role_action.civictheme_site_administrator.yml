@@ -1,0 +1,14 @@
+uuid: 6ba18207-bcf4-43a7-9f35-5878217eab48
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.civictheme_site_administrator
+  module:
+    - user
+id: user_remove_role_action.civictheme_site_administrator
+label: 'Remove the Site Administrator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: civictheme_site_administrator

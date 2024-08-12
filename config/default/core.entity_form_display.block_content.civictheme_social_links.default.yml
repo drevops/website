@@ -1,0 +1,67 @@
+uuid: 8b6306b6-92cd-484a-9769-0832eee11ce4
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_social_links
+    - field.field.block_content.civictheme_social_links.field_c_b_social_icons
+    - field.field.block_content.civictheme_social_links.field_c_b_theme
+    - field.field.block_content.civictheme_social_links.field_c_b_with_border
+    - workflows.workflow.civictheme_editorial
+  module:
+    - content_moderation
+    - paragraphs
+_core:
+  default_config_hash: hJANapPTEaqd4aqYvCXek5T0WcF_4JUUCW3ppLRyVi0
+id: block_content.civictheme_social_links.default
+targetEntityType: block_content
+bundle: civictheme_social_links
+mode: default
+content:
+  field_c_b_social_icons:
+    type: entity_reference_paragraphs
+    weight: 2
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+  field_c_b_theme:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_b_with_border:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

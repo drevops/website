@@ -1,0 +1,60 @@
+uuid: b27f6fa6-d91a-4fee-be31-7071d2054ede
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_callout.field_c_p_content
+    - field.field.paragraph.civictheme_callout.field_c_p_links
+    - field.field.paragraph.civictheme_callout.field_c_p_theme
+    - field.field.paragraph.civictheme_callout.field_c_p_title
+    - field.field.paragraph.civictheme_callout.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.civictheme_callout
+  module:
+    - link
+    - text
+_core:
+  default_config_hash: kdHX0kUPI9j7zagKkFEDwF0xzc3cgexhOW0UGeluXGI
+id: paragraph.civictheme_callout.default
+targetEntityType: paragraph
+bundle: civictheme_callout
+mode: default
+content:
+  field_c_p_content:
+    type: text_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_links:
+    type: link_default
+    weight: 3
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_vertical_spacing:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

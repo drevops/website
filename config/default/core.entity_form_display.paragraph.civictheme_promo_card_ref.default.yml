@@ -1,0 +1,34 @@
+uuid: 1fc494d8-850e-41fa-8b8b-498367f04faf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_promo_card_ref.field_c_p_reference
+    - field.field.paragraph.civictheme_promo_card_ref.field_c_p_theme
+    - paragraphs.paragraphs_type.civictheme_promo_card_ref
+_core:
+  default_config_hash: jq0fT4ZBDr9uIsujgn2A95D1A4DaOPkrQKsiWv3fusQ
+id: paragraph.civictheme_promo_card_ref.default
+targetEntityType: paragraph
+bundle: civictheme_promo_card_ref
+mode: default
+content:
+  field_c_p_reference:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

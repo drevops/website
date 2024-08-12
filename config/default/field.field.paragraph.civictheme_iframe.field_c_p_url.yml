@@ -1,0 +1,21 @@
+uuid: c2cf1029-1720-4f6e-80bf-51153e4e57f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_url
+    - paragraphs.paragraphs_type.civictheme_iframe
+_core:
+  default_config_hash: GkaHulW8_ie0CuhT2j6IJysBHNXr9zchxpZJ-KDn2rU
+id: paragraph.civictheme_iframe.field_c_p_url
+field_name: field_c_p_url
+entity_type: paragraph
+bundle: civictheme_iframe
+label: URL
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

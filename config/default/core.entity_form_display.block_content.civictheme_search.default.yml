@@ -1,0 +1,48 @@
+uuid: 55bb2533-f671-4cb9-ba5c-c623246a631d
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_search
+    - field.field.block_content.civictheme_search.field_c_b_link
+    - workflows.workflow.civictheme_editorial
+  module:
+    - content_moderation
+    - link
+_core:
+  default_config_hash: 5RzHw_0ssPVRa1sNd_7avt_Z8nifDocmpyUGBsYRNvY
+id: block_content.civictheme_search.default
+targetEntityType: block_content
+bundle: civictheme_search
+mode: default
+content:
+  field_c_b_link:
+    type: link_default
+    weight: 26
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

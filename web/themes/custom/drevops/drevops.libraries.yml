@@ -1,11 +1,10 @@
-global-styling:
-  version: 1.x
+global:
   css:
     theme:
-      build/css/drevops.min.css: {}
+      dist/civictheme.css: {}
   js:
-    build/js/drevops.min.js: {}
+    dist/civictheme.js: {}
   dependencies:
-    - core/jquery
     - core/drupal
+    - core/once
     - core/drupalSettings

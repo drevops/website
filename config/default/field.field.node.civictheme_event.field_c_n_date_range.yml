@@ -1,0 +1,23 @@
+uuid: 4cf8e7b4-fbb4-4aec-83b3-0950ce246f93
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_date_range
+    - node.type.civictheme_event
+  module:
+    - datetime_range
+_core:
+  default_config_hash: TPcBa9GWCtVZSd_-zXfpb6JW61v9RrIkXxIwXNanAGw
+id: node.civictheme_event.field_c_n_date_range
+field_name: field_c_n_date_range
+entity_type: node
+bundle: civictheme_event
+label: Date
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

@@ -1,0 +1,23 @@
+uuid: 7e30a2e0-28a9-4686-abe3-2069700deea9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: 4t291Vv8VbCBwnzJZAbmq15x_LlTK1hRufr4RtOAuRg
+id: node.field_c_n_banner_title
+field_name: field_c_n_banner_title
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

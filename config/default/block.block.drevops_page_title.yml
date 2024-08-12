@@ -1,6 +1,6 @@
 uuid: 336af186-82fc-449e-9f08-2381e7bd08d8
 langcode: en
-status: true
+status: false
 dependencies:
   theme:
     - drevops
@@ -8,7 +8,7 @@ _core:
   default_config_hash: 6aOgWsNTXjqrDm98TXSAjP6qd2nCijD1xw45MrnbK-Y
 id: drevops_page_title
 theme: drevops
-region: content_above
+region: header_top_1
 weight: -5
 provider: null
 plugin: page_title_block

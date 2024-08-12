@@ -1,0 +1,25 @@
+uuid: b6f938e0-d99f-4c61-a20b-62e472c4e623
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_show_toc
+    - node.type.civictheme_event
+_core:
+  default_config_hash: y8vYqIcVKzCBiZTIMilgmHmXivwOnC9PB5iBg40hN7Q
+id: node.civictheme_event.field_c_n_show_toc
+field_name: field_c_n_show_toc
+entity_type: node
+bundle: civictheme_event
+label: 'Show Table of Contents'
+description: 'Scan the content of the page for <code>h2</code> HTML tags and automatically create a Table of Contents.'
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

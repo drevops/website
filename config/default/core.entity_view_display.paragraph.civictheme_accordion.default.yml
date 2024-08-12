@@ -1,0 +1,66 @@
+uuid: b13a29e0-7a23-4cb1-aebe-c77142f095ef
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_accordion.field_c_p_background
+    - field.field.paragraph.civictheme_accordion.field_c_p_expand
+    - field.field.paragraph.civictheme_accordion.field_c_p_panels
+    - field.field.paragraph.civictheme_accordion.field_c_p_theme
+    - field.field.paragraph.civictheme_accordion.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.civictheme_accordion
+  module:
+    - entity_reference_revisions
+    - options
+_core:
+  default_config_hash: sA5t4jUyHdri3ctngvX7oTDDe9swifnW94XXSXNu-og
+id: paragraph.civictheme_accordion.default
+targetEntityType: paragraph
+bundle: civictheme_accordion
+mode: default
+content:
+  field_c_p_background:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_c_p_expand:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_c_p_panels:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_p_vertical_spacing:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  search_api_excerpt: true

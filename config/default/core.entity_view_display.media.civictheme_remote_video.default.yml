@@ -1,0 +1,67 @@
+uuid: 1e830fdb-2a40-413c-9df9-aeb3d5eb21c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.civictheme_remote_video.field_c_m_media_tags
+    - field.field.media.civictheme_remote_video.field_c_m_oembed_video
+    - field.field.media.civictheme_remote_video.field_c_m_transcript
+    - field.field.media.civictheme_remote_video.field_c_m_transcript_link
+    - media.type.civictheme_remote_video
+  module:
+    - link
+    - media
+    - text
+_core:
+  default_config_hash: CA9witv4PZTZkJttA5HGQZdINTfCW-IJ6L_wedzq3Po
+id: media.civictheme_remote_video.default
+targetEntityType: media
+bundle: civictheme_remote_video
+mode: default
+content:
+  field_c_m_media_tags:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_m_oembed_video:
+    type: oembed
+    label: visually_hidden
+    settings:
+      max_width: 0
+      max_height: 0
+      loading:
+        attribute: eager
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_m_transcript:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_m_transcript_link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  content_moderation_control: true
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

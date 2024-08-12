@@ -1,0 +1,25 @@
+uuid: 11047a96-cc3c-4bb8-93f9-95c30e28d8ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_banner
+    - field.storage.block_content.field_c_b_banner_type
+  module:
+    - options
+_core:
+  default_config_hash: NmccUIYLvGxVqm-w8L03ReJ9ywTXj7xwZKRx5_1TuyI
+id: block_content.civictheme_banner.field_c_b_banner_type
+field_name: field_c_b_banner_type
+entity_type: block_content
+bundle: civictheme_banner
+label: Type
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: default
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,42 @@
+uuid: e64fb6cf-9cfc-4b32-9427-5f609d73e9c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_map.field_c_p_address
+    - field.field.paragraph.civictheme_map.field_c_p_background
+    - field.field.paragraph.civictheme_map.field_c_p_embed_url
+    - field.field.paragraph.civictheme_map.field_c_p_theme
+    - field.field.paragraph.civictheme_map.field_c_p_vertical_spacing
+    - field.field.paragraph.civictheme_map.field_c_p_view_link
+    - paragraphs.paragraphs_type.civictheme_map
+  module:
+    - options
+_core:
+  default_config_hash: 8QHsXzckQSLUrhw-T6buT4CWZ-GU8Pt1TdxNeaYY3j8
+id: paragraph.civictheme_map.default
+targetEntityType: paragraph
+bundle: civictheme_map
+mode: default
+content:
+  field_c_p_address:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_c_p_background: true
+  field_c_p_embed_url: true
+  field_c_p_vertical_spacing: true
+  field_c_p_view_link: true
+  search_api_excerpt: true

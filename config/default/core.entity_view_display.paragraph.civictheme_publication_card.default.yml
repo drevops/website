@@ -1,0 +1,61 @@
+uuid: 2379bcc4-d0c6-4a69-80e7-a96db30d4c0d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_publication_card.field_c_p_document
+    - field.field.paragraph.civictheme_publication_card.field_c_p_image
+    - field.field.paragraph.civictheme_publication_card.field_c_p_summary
+    - field.field.paragraph.civictheme_publication_card.field_c_p_theme
+    - field.field.paragraph.civictheme_publication_card.field_c_p_title
+    - paragraphs.paragraphs_type.civictheme_publication_card
+  module:
+    - options
+_core:
+  default_config_hash: z0d4lwoYdRi1BhO_c7JgJpiUskwKcE6Debq_qSJu778
+id: paragraph.civictheme_publication_card.default
+targetEntityType: paragraph
+bundle: civictheme_publication_card
+mode: default
+content:
+  field_c_p_document:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_c_p_image:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_p_summary:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_p_title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

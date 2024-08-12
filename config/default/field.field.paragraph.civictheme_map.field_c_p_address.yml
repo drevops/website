@@ -1,0 +1,21 @@
+uuid: 18767d9e-e2de-4c9c-9901-43333f3b5c97
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_address
+    - paragraphs.paragraphs_type.civictheme_map
+_core:
+  default_config_hash: bzPRG0aMi6Bt3gAkS0dl_WLfsJCYvkzHJqXwqPEOj5E
+id: paragraph.civictheme_map.field_c_p_address
+field_name: field_c_p_address
+entity_type: paragraph
+bundle: civictheme_map
+label: Address
+description: 'Geographical address.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

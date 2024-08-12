@@ -1,0 +1,10 @@
+uuid: ba3da728-390a-4e5d-a8d9-77d3b39434bf
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: lECdoq-2xgVAakAtzkKkijL4mBHWK644ehVR4vcA4bw
+id: civictheme-primary-navigation
+label: 'Primary Navigation'
+description: 'Primary Navigation menu provided by CivicTheme.'
+locked: false

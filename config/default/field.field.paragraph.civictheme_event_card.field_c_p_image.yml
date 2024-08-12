@@ -1,0 +1,31 @@
+uuid: 81790730-46d8-4ebd-9b31-0f910d8ed52b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_image
+    - media.type.civictheme_image
+    - paragraphs.paragraphs_type.civictheme_event_card
+_core:
+  default_config_hash: XrW43lNAN4qnxolKKkXPjuNtP69dUiP5lZ3o0BdWAbE
+id: paragraph.civictheme_event_card.field_c_p_image
+field_name: field_c_p_image
+entity_type: paragraph
+bundle: civictheme_event_card
+label: Image
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      civictheme_image: civictheme_image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

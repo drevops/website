@@ -1,0 +1,14 @@
+uuid: f1f89cec-84b3-4700-a5c6-37e42a804d6e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.civictheme_content_author
+  module:
+    - user
+id: user_add_role_action.civictheme_content_author
+label: 'Add the Content Author role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: civictheme_content_author

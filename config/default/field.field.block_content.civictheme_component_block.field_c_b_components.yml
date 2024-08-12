@@ -1,0 +1,135 @@
+uuid: e11766fe-e793-49c4-bc09-e75c29cbc7d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_component_block
+    - field.storage.block_content.field_c_b_components
+    - paragraphs.paragraphs_type.civictheme_accordion
+    - paragraphs.paragraphs_type.civictheme_attachment
+    - paragraphs.paragraphs_type.civictheme_automated_list
+    - paragraphs.paragraphs_type.civictheme_callout
+    - paragraphs.paragraphs_type.civictheme_campaign
+    - paragraphs.paragraphs_type.civictheme_content
+    - paragraphs.paragraphs_type.civictheme_iframe
+    - paragraphs.paragraphs_type.civictheme_manual_list
+    - paragraphs.paragraphs_type.civictheme_map
+    - paragraphs.paragraphs_type.civictheme_next_step
+    - paragraphs.paragraphs_type.civictheme_promo
+    - paragraphs.paragraphs_type.civictheme_slider
+    - paragraphs.paragraphs_type.civictheme_webform
+  module:
+    - entity_reference_revisions
+_core:
+  default_config_hash: AjECm6ckv6Ax8khuFtGTwsWetKZgUWKRjYnjTUmETp8
+id: block_content.civictheme_component_block.field_c_b_components
+field_name: field_c_b_components
+entity_type: block_content
+bundle: civictheme_component_block
+label: Components
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      civictheme_content: civictheme_content
+      civictheme_accordion: civictheme_accordion
+      civictheme_attachment: civictheme_attachment
+      civictheme_automated_list: civictheme_automated_list
+      civictheme_callout: civictheme_callout
+      civictheme_campaign: civictheme_campaign
+      civictheme_iframe: civictheme_iframe
+      civictheme_manual_list: civictheme_manual_list
+      civictheme_map: civictheme_map
+      civictheme_next_step: civictheme_next_step
+      civictheme_promo: civictheme_promo
+      civictheme_slider: civictheme_slider
+      civictheme_webform: civictheme_webform
+    negate: 0
+    target_bundles_drag_drop:
+      civictheme_accordion:
+        weight: -58
+        enabled: true
+      civictheme_accordion_panel:
+        weight: -44
+        enabled: false
+      civictheme_attachment:
+        weight: -57
+        enabled: true
+      civictheme_automated_list:
+        weight: -56
+        enabled: true
+      civictheme_callout:
+        weight: -55
+        enabled: true
+      civictheme_campaign:
+        weight: -54
+        enabled: true
+      civictheme_content:
+        weight: -59
+        enabled: true
+      civictheme_event_card:
+        weight: -38
+        enabled: false
+      civictheme_event_card_ref:
+        weight: -37
+        enabled: false
+      civictheme_iframe:
+        weight: -53
+        enabled: true
+      civictheme_manual_list:
+        weight: -52
+        enabled: true
+      civictheme_map:
+        weight: -51
+        enabled: true
+      civictheme_navigation_card:
+        weight: -43
+        enabled: false
+      civictheme_navigation_card_ref:
+        weight: -36
+        enabled: false
+      civictheme_next_step:
+        weight: -50
+        enabled: true
+      civictheme_promo:
+        weight: -49
+        enabled: true
+      civictheme_promo_card:
+        weight: -35
+        enabled: false
+      civictheme_promo_card_ref:
+        weight: -40
+        enabled: false
+      civictheme_publication_card:
+        weight: -33
+        enabled: false
+      civictheme_service_card:
+        weight: -42
+        enabled: false
+      civictheme_slider:
+        weight: -48
+        enabled: true
+      civictheme_slider_slide:
+        weight: -41
+        enabled: false
+      civictheme_slider_slide_ref:
+        weight: -32
+        enabled: false
+      civictheme_social_icon:
+        weight: -31
+        enabled: false
+      civictheme_subject_card:
+        weight: -39
+        enabled: false
+      civictheme_subject_card_ref:
+        weight: -34
+        enabled: false
+      civictheme_webform:
+        weight: -45
+        enabled: true
+field_type: entity_reference_revisions

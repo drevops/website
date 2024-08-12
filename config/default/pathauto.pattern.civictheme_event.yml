@@ -1,0 +1,24 @@
+uuid: b2722db3-ed62-4785-ae23-0ea2758c7465
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: KV9HB9U9EKrz1zdWyVg4qpY4Hb3EbHhbLVWs-4vLJlU
+id: civictheme_event
+label: Event
+type: 'canonical_entities:node'
+pattern: 'events/[node:title]'
+selection_criteria:
+  7c00cfca-667b-46d2-b889-cc27fc0467d0:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 7c00cfca-667b-46d2-b889-cc27fc0467d0
+    context_mapping:
+      node: node
+    bundles:
+      civictheme_event: civictheme_event
+selection_logic: and
+weight: -5
+relationships: {  }

@@ -1,0 +1,12 @@
+uuid: 672a709f-a0d9-48df-bf8e-e1ec8f155599
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: CHHhR7OaA5ZutZFbT_hIO7gFCLgXiGJeWbzeVclR_b0
+id: civictheme_automated_list
+label: 'Automated list'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

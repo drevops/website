@@ -1,0 +1,13 @@
+uuid: e1e69301-4323-4bf1-aa1a-3ffc3522cad0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: HGiWrFG9Xlh6WPVNdnmNv4KAAsZN-F-EWdjBw6rvzvk
+id: node.civictheme_navigation_card
+label: 'Navigation card'
+description: ''
+targetEntityType: node
+cache: true

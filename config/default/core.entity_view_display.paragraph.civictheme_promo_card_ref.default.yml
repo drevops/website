@@ -1,0 +1,35 @@
+uuid: 90a5ae0a-3ccd-43fa-92cd-499b6add16ed
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_promo_card_ref.field_c_p_reference
+    - field.field.paragraph.civictheme_promo_card_ref.field_c_p_theme
+    - paragraphs.paragraphs_type.civictheme_promo_card_ref
+  module:
+    - options
+_core:
+  default_config_hash: P-NaZTjlbBKPFpYEtJmgKm5KeaVML8-DUoypuvTp9VI
+id: paragraph.civictheme_promo_card_ref.default
+targetEntityType: paragraph
+bundle: civictheme_promo_card_ref
+mode: default
+content:
+  field_c_p_reference:
+    weight: 1
+    label: hidden
+    settings:
+      view_mode: civictheme_promo_card
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_entity_view
+    region: content
+  field_c_p_theme:
+    weight: 0
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+hidden:
+  search_api_excerpt: true

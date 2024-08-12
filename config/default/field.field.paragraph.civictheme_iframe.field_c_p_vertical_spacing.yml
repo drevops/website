@@ -1,0 +1,25 @@
+uuid: 4b42f26e-19aa-4e50-9bba-80fafa7e84b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.civictheme_iframe
+  module:
+    - options
+_core:
+  default_config_hash: 6rRrCG8DOtRTb9qog5RrnlnT76qHpkJzHRYYzHWSroY
+id: paragraph.civictheme_iframe.field_c_p_vertical_spacing
+field_name: field_c_p_vertical_spacing
+entity_type: paragraph
+bundle: civictheme_iframe
+label: 'Vertical spacing'
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: bottom
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,21 @@
+uuid: 5eb8d48b-b204-4deb-9eaf-8bad655930b0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_title
+    - paragraphs.paragraphs_type.civictheme_slider_slide
+_core:
+  default_config_hash: gZq-PaB9cSO1JHxECLrPlNQn6WTtCBnkJ2eAO6X6FjU
+id: paragraph.civictheme_slider_slide.field_c_p_title
+field_name: field_c_p_title
+entity_type: paragraph
+bundle: civictheme_slider_slide
+label: Title
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

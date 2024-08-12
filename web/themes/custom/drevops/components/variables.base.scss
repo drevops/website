@@ -1,0 +1,110 @@
+//
+// Custom base variables overrides.
+//
+// CivicTheme variables can be found in
+// <path/to/civictheme>/components/00-base/_variables.base.scss
+//
+// Variables values in this file cannot be based on any variables
+// in _variables.base.scss
+//
+// stylelint-disable scss/dollar-variable-pattern
+
+// Example to override existing CivicTheme's palette color and define
+// custom colors, which will automatically appear in Storybook.
+
+$ct-colors-brands: (
+  'light': (
+    'brand1': #00698f,
+    'brand2': #e6e9eb,
+    'brand3': #121313,
+  ),
+  'dark': (
+    'brand1': #61daff,
+    'brand2': #003a4f,
+    'brand3': #00698f,
+  )
+);
+
+// Example to override existing CivicTheme's palette color variants.
+$ct-colors: (
+  // Override palette color variant.
+  'light': (
+    'success': green,
+    'custom1': brown,
+  ),
+  'dark': (
+    'custom1': red,
+    'custom2': orange,
+    'custom3': blue,
+  ),
+);
+
+// Example to define 2 custom local fonts which will automatically appear
+// in Storybook.
+$ct-fonts: (
+  'tertiary': (
+    'family': 'Roboto, sans-serif',
+    'types': (
+      (
+        'uri': (
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.ttf',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.woff',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.eot',
+        ),
+      ),
+      (
+        'italic': true,
+        'uri': (
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.ttf',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.woff',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.eot',
+        ),
+      ),
+      (
+        'weight': 'bold',
+        'uri': (
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.ttf',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.woff',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.eot',
+        ),
+      ),
+      (
+        'italic': true,
+        'weight': 'bold',
+        'uri': (
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.ttf',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.woff',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.eot',
+        ),
+      ),
+      (
+        'weight': 300,
+        'uri': (
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.ttf',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.woff',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.eot',
+        ),
+      ),
+      (
+        'weight': 700,
+        'uri': (
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.ttf',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.woff',
+          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.eot',
+        ),
+      ),
+    ),
+  ),
+  'quartary': (
+    'family': '"Dancing Script", serif',
+    'types': (
+      (
+        'uri': (
+          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.ttf',
+          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.woff',
+          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.woff2',
+        ),
+      ),
+    ),
+  ),
+);

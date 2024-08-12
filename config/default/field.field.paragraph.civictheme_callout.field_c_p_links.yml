@@ -1,0 +1,25 @@
+uuid: 6bfb7d42-34bc-4474-8a8a-ed07eecad637
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_links
+    - paragraphs.paragraphs_type.civictheme_callout
+  module:
+    - link
+_core:
+  default_config_hash: 0DZ7WnI7YSF2scDMKi4f_nTDDgbnaL14NUiPs3YMZaQ
+id: paragraph.civictheme_callout.field_c_p_links
+field_name: field_c_p_links
+entity_type: paragraph
+bundle: civictheme_callout
+label: Links
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 2
+  link_type: 17
+field_type: link

@@ -1,0 +1,24 @@
+uuid: a8a8072d-7c38-4965-917e-3a94a291fe51
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_body
+    - node.type.civictheme_alert
+  module:
+    - text
+_core:
+  default_config_hash: QfJN8rhXDL1GNxgWqeDUgKA5nXRFRUi6ccZXKElTMhU
+id: node.civictheme_alert.field_c_n_body
+field_name: field_c_n_body
+entity_type: node
+bundle: civictheme_alert
+label: Message
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

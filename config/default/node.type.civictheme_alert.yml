@@ -1,0 +1,19 @@
+uuid: a2745728-8c5a-4c68-9ae8-ce7f1372ec3f
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+_core:
+  default_config_hash: jNwW_QSuxE0bJr7cGzubQ-LhPCnXT88LKYv6xfaS-jk
+name: Alert
+type: civictheme_alert
+description: '<em>CivicTheme</em>. Use alerts to provide information for site users using a status bar.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

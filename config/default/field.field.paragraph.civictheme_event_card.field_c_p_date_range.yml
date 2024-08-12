@@ -1,0 +1,23 @@
+uuid: 75c43a6a-5104-4a41-8606-8d69ab4b9f08
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_date_range
+    - paragraphs.paragraphs_type.civictheme_event_card
+  module:
+    - datetime_range
+_core:
+  default_config_hash: uzX-rEFjzVwEHzoIz-dyTTtFnqhnehkI_cx0BGTlfH0
+id: paragraph.civictheme_event_card.field_c_p_date_range
+field_name: field_c_p_date_range
+entity_type: paragraph
+bundle: civictheme_event_card
+label: Date
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

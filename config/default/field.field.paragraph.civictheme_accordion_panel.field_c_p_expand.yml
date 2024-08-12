@@ -1,0 +1,25 @@
+uuid: d8dc1762-3123-4b95-9e3a-b0362b62b88a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_expand
+    - paragraphs.paragraphs_type.civictheme_accordion_panel
+_core:
+  default_config_hash: 7MCE-PinaAoSq_34IuSqvm_wA8A_3gbACyf-ko1TACE
+id: paragraph.civictheme_accordion_panel.field_c_p_expand
+field_name: field_c_p_expand
+entity_type: paragraph
+bundle: civictheme_accordion_panel
+label: Expanded
+description: 'Accordion panel is expanded.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

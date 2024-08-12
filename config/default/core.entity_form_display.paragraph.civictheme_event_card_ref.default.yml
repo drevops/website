@@ -1,0 +1,34 @@
+uuid: fa0d7bb1-64ba-4b97-8a9c-a5ac90522840
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_event_card_ref.field_c_p_reference
+    - field.field.paragraph.civictheme_event_card_ref.field_c_p_theme
+    - paragraphs.paragraphs_type.civictheme_event_card_ref
+_core:
+  default_config_hash: BbWebb0q0jd9r0vdyvIp-zVUv9MHdI6N9Os9IZKWkWE
+id: paragraph.civictheme_event_card_ref.default
+targetEntityType: paragraph
+bundle: civictheme_event_card_ref
+mode: default
+content:
+  field_c_p_reference:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

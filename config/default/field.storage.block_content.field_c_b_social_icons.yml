@@ -1,0 +1,23 @@
+uuid: a6a178ef-fbc7-4e3a-b08b-cc862de46f77
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - entity_reference_revisions
+    - paragraphs
+_core:
+  default_config_hash: 0qfc71SUdbcQ1GaGvk4-k5h512FMtqNiOo9mnZjv_nI
+id: block_content.field_c_b_social_icons
+field_name: field_c_b_social_icons
+entity_type: block_content
+type: entity_reference_revisions
+settings:
+  target_type: paragraph
+module: entity_reference_revisions
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

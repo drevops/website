@@ -1,0 +1,25 @@
+uuid: 4eae407d-ee48-4f9e-9265-748c0849d760
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_list_link_below
+    - paragraphs.paragraphs_type.civictheme_manual_list
+  module:
+    - link
+_core:
+  default_config_hash: fZA4vbnx6NDOj4Vll6lfZbuZjfDKOnHUzYAzv8qMYpo
+id: paragraph.civictheme_manual_list.field_c_p_list_link_below
+field_name: field_c_p_list_link_below
+entity_type: paragraph
+bundle: civictheme_manual_list
+label: 'Link below'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 2
+  link_type: 17
+field_type: link

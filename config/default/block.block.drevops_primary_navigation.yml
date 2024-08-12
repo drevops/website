@@ -1,0 +1,33 @@
+uuid: af446c70-a4cc-4cea-856a-1e8f72c5e55e
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.civictheme-primary-navigation
+  module:
+    - menu_block
+  theme:
+    - drevops
+id: drevops_primary_navigation
+theme: drevops
+region: header_middle_3
+weight: 0
+provider: null
+plugin: 'menu_block:civictheme-primary-navigation'
+settings:
+  id: 'menu_block:civictheme-primary-navigation'
+  label: 'Primary Navigation'
+  label_display: ''
+  provider: menu_block
+  follow: false
+  follow_parent: child
+  label_link: false
+  label_type: block
+  level: 1
+  depth: 3
+  expand_all_items: false
+  parent: 'civictheme-primary-navigation:'
+  render_parent: false
+  suggestion: civictheme_primary_navigation
+  hide_on_nonactive: false
+visibility: {  }

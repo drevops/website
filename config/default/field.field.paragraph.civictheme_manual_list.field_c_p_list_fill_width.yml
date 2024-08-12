@@ -1,0 +1,25 @@
+uuid: fea2e3f7-87d2-42ee-9ed5-11b6a7845d9e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_list_fill_width
+    - paragraphs.paragraphs_type.civictheme_manual_list
+_core:
+  default_config_hash: sp8z7HAJY85gXPINS5Bo2ZtZu-htNQZSykt3qyuauq8
+id: paragraph.civictheme_manual_list.field_c_p_list_fill_width
+field_name: field_c_p_list_fill_width
+entity_type: paragraph
+bundle: civictheme_manual_list
+label: 'Fill width in the last row'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

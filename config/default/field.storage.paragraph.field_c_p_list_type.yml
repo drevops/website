@@ -1,0 +1,26 @@
+uuid: 5d535617-4527-4cdb-824d-e1f64ca6de14
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+_core:
+  default_config_hash: dGWMjM_Pz93-AQIs-mQBnXHLi1OjmImixQ8D_EPZ3mE
+id: paragraph.field_c_p_list_type
+field_name: field_c_p_list_type
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: civictheme_automated_list__block1
+      label: Default
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

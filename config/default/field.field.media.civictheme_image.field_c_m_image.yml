@@ -1,0 +1,40 @@
+uuid: 601d26a5-c9b6-4bd0-8480-db46f658b390
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_c_m_image
+    - media.type.civictheme_image
+  module:
+    - image
+_core:
+  default_config_hash: kKyPVkzp9Ec6eBoC-hk2r6q_-wD2hTxvg0mx0cM4pXc
+id: media.civictheme_image.field_c_m_image
+field_name: field_c_m_image
+entity_type: media
+bundle: civictheme_image
+label: Image
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: 'images/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg svg'
+  max_filesize: ''
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: true
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: image

@@ -1,0 +1,62 @@
+uuid: b8df5608-da8a-452a-97d8-ed42d34d1909
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_slider.field_c_p_background
+    - field.field.paragraph.civictheme_slider.field_c_p_slides
+    - field.field.paragraph.civictheme_slider.field_c_p_theme
+    - field.field.paragraph.civictheme_slider.field_c_p_title
+    - field.field.paragraph.civictheme_slider.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.civictheme_slider
+  module:
+    - paragraphs
+_core:
+  default_config_hash: mQ9btWIQzwRvp5SBtg-2mCLlZuM1gMxZYU-TlhyITWA
+id: paragraph.civictheme_slider.default
+targetEntityType: paragraph
+bundle: civictheme_slider
+mode: default
+content:
+  field_c_p_background:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_c_p_slides:
+    type: entity_reference_paragraphs
+    weight: 1
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_vertical_spacing:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

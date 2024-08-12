@@ -1,0 +1,29 @@
+uuid: e033ef1b-7d9a-4724-918c-d41a64177071
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+_core:
+  default_config_hash: JGf-1DYQlkAluLSmkLjuuns1c1d4TSm9IYANWutSkV4
+id: paragraph.field_c_p_list_limit_type
+field_name: field_c_p_list_limit_type
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: limited
+      label: Limited
+    -
+      value: unlimited
+      label: Unlimited
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

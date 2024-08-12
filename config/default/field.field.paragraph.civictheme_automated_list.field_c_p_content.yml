@@ -1,0 +1,24 @@
+uuid: 756ba1e7-1e22-4518-8e8d-4e663d54c5c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_content
+    - paragraphs.paragraphs_type.civictheme_automated_list
+  module:
+    - text
+_core:
+  default_config_hash: J4QwtHr6peQIeeRhCZ7vocDKr0KTh5E7HGTgMp1yGzc
+id: paragraph.civictheme_automated_list.field_c_p_content
+field_name: field_c_p_content
+entity_type: paragraph
+bundle: civictheme_automated_list
+label: Content
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

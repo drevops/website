@@ -1,0 +1,25 @@
+uuid: 2e318ce5-af16-4dcf-ad80-9d656c9a0b11
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_banner
+    - field.storage.block_content.field_c_b_banner_blend_mode
+  module:
+    - options
+_core:
+  default_config_hash: LUM_Uc6CADWpD8Sq9nGYjb-0zhzpZHfk_DDahMRDhbI
+id: block_content.civictheme_banner.field_c_b_banner_blend_mode
+field_name: field_c_b_banner_blend_mode
+entity_type: block_content
+bundle: civictheme_banner
+label: 'Blend mode'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: normal
+default_value_callback: ''
+settings: {  }
+field_type: list_string

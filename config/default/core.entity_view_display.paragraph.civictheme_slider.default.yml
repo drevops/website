@@ -1,0 +1,64 @@
+uuid: dd597046-5e00-4c05-aa86-f897ac22ffe6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_slider.field_c_p_background
+    - field.field.paragraph.civictheme_slider.field_c_p_slides
+    - field.field.paragraph.civictheme_slider.field_c_p_theme
+    - field.field.paragraph.civictheme_slider.field_c_p_title
+    - field.field.paragraph.civictheme_slider.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.civictheme_slider
+  module:
+    - entity_reference_revisions
+    - options
+_core:
+  default_config_hash: DMDFBACB5q6nN1fa1Yf-nfW2O3-AKDQDizK_15Fcn2c
+id: paragraph.civictheme_slider.default
+targetEntityType: paragraph
+bundle: civictheme_slider
+mode: default
+content:
+  field_c_p_background:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_c_p_slides:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_p_title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_p_vertical_spacing:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  search_api_excerpt: true

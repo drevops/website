@@ -1,0 +1,19 @@
+uuid: 47a2f12c-e2c4-4ff6-9a5c-1087c40a00c9
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+_core:
+  default_config_hash: XW8hm6l7XjUifWuLfYw6YUXwX5-pjQgp46sqwAffATA
+name: civictheme_medium
+label: Medium
+effects:
+  057ded4a-e764-4232-91d2-79c07a5da33b:
+    uuid: 057ded4a-e764-4232-91d2-79c07a5da33b
+    id: focal_point_scale_and_crop
+    weight: 2
+    data:
+      width: 220
+      height: 220
+      crop_type: focal_point

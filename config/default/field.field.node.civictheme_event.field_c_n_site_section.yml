@@ -1,0 +1,31 @@
+uuid: 3ef767de-3d67-4776-bb69-33f7f8579426
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_site_section
+    - node.type.civictheme_event
+    - taxonomy.vocabulary.civictheme_site_sections
+_core:
+  default_config_hash: D6_knbgm8KiYiby1JlEXZsiKlLk205RfW-_Qb-FLlqI
+id: node.civictheme_event.field_c_n_site_section
+field_name: field_c_n_site_section
+entity_type: node
+bundle: civictheme_event
+label: 'Site section'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      civictheme_site_sections: civictheme_site_sections
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

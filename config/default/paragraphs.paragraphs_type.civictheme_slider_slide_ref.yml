@@ -1,0 +1,12 @@
+uuid: bbfa9cfe-6672-49f5-a65c-e9544c34ccb6
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: t-jAqQLgT1KN0V5Ga-wBxNhqgf07BKZha3o0Iu5NNow
+id: civictheme_slider_slide_ref
+label: 'Slider reference slide'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

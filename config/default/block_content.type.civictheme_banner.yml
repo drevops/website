@@ -1,0 +1,10 @@
+uuid: a3fde5d0-79bb-4012-86af-1cfbb13602bd
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: a01c8JiBcSb_luiFBPxWydybk6zDz4CSD_tFvvgSOxk
+id: civictheme_banner
+label: Banner
+revision: false
+description: ''

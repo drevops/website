@@ -1,0 +1,32 @@
+uuid: d3ec3ef3-093d-4325-a76a-c9dbd9d568ee
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+_core:
+  default_config_hash: myDWw1gGlms2vjgYahQw1YIEIWebA6m4k1XFysvZB7w
+id: node.field_c_n_banner_theme
+field_name: field_c_n_banner_theme
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: inherit
+      label: Inherit
+    -
+      value: light
+      label: Light
+    -
+      value: dark
+      label: Dark
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

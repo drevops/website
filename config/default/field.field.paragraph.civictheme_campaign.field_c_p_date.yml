@@ -1,0 +1,23 @@
+uuid: ff1d34d2-36ba-4a4d-a443-b5f064e20a78
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_date
+    - paragraphs.paragraphs_type.civictheme_campaign
+  module:
+    - datetime
+_core:
+  default_config_hash: eKCSuE79CwPrjyzq2Ca-UYOGIZYv11knHWiJaeCSHwo
+id: paragraph.civictheme_campaign.field_c_p_date
+field_name: field_c_p_date
+entity_type: paragraph
+bundle: civictheme_campaign
+label: Date
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

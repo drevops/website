@@ -1,0 +1,22 @@
+uuid: 6ed04337-e707-4885-9a9c-8bfedca284cc
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+    - paragraphs
+_core:
+  default_config_hash: _R8rOd7tHRMtE8qvzVF_uO7Tos2BZtFFmHHyzqwXoSs
+id: paragraph.field_c_p_attachments
+field_name: field_c_p_attachments
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: media
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

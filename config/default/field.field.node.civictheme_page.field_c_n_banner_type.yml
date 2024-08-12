@@ -1,0 +1,25 @@
+uuid: 0ea70845-d9b9-43b2-889e-769e3d10777b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_banner_type
+    - node.type.civictheme_page
+  module:
+    - options
+_core:
+  default_config_hash: 6tHBzou6VT3Xe-eEelzwIryLT-LRxu32h_ruWK-k0Vw
+id: node.civictheme_page.field_c_n_banner_type
+field_name: field_c_n_banner_type
+entity_type: node
+bundle: civictheme_page
+label: 'Banner type'
+description: 'Use <code>Inherit</code> type to inherit this value from the site-wide banner block.'
+required: true
+translatable: false
+default_value:
+  -
+    value: inherit
+default_value_callback: ''
+settings: {  }
+field_type: list_string

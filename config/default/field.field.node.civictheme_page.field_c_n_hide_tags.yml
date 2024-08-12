@@ -1,0 +1,25 @@
+uuid: 6aa252e6-6af3-406a-9305-c11fc52e6dbf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_hide_tags
+    - node.type.civictheme_page
+_core:
+  default_config_hash: QScCQnX6C2ChsGiVQwLfb8kY1wx2J41fm9JAhbHlGNo
+id: node.civictheme_page.field_c_n_hide_tags
+field_name: field_c_n_hide_tags
+entity_type: node
+bundle: civictheme_page
+label: 'Hide tags'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

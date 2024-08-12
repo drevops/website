@@ -1,0 +1,25 @@
+uuid: ba10cfb0-d998-4d44-bebf-e744ac75badf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_vertical_spacing
+    - node.type.civictheme_page
+  module:
+    - options
+_core:
+  default_config_hash: qdYBjlukrOT2cqwxJqYLWtUNJJkt8cbxHCsCh_uU8OE
+id: node.civictheme_page.field_c_n_vertical_spacing
+field_name: field_c_n_vertical_spacing
+entity_type: node
+bundle: civictheme_page
+label: 'Vertical spacing'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: both
+default_value_callback: ''
+settings: {  }
+field_type: list_string

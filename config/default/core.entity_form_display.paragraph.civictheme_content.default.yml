@@ -1,0 +1,49 @@
+uuid: 6fb3ca80-9725-4cd8-bb12-62e4d2ee83f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_content.field_c_p_background
+    - field.field.paragraph.civictheme_content.field_c_p_content
+    - field.field.paragraph.civictheme_content.field_c_p_theme
+    - field.field.paragraph.civictheme_content.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.civictheme_content
+  module:
+    - text
+_core:
+  default_config_hash: ObgtBP-GEueRg2o4yKSEOoN__MnkLRRRKmrW9SN_hDU
+id: paragraph.civictheme_content.default
+targetEntityType: paragraph
+bundle: civictheme_content
+mode: default
+content:
+  field_c_p_background:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_c_p_content:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_vertical_spacing:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

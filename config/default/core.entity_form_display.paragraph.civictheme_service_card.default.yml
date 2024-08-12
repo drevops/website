@@ -1,0 +1,43 @@
+uuid: afcdcd4e-03c5-4490-84ac-4d13d0ea1ccb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_service_card.field_c_p_links
+    - field.field.paragraph.civictheme_service_card.field_c_p_theme
+    - field.field.paragraph.civictheme_service_card.field_c_p_title
+    - paragraphs.paragraphs_type.civictheme_service_card
+  module:
+    - link
+_core:
+  default_config_hash: uZGBrHYs6xEZ0yyFMfipMQJ-5x1rrcBoEZoCnpm3Jxg
+id: paragraph.civictheme_service_card.default
+targetEntityType: paragraph
+bundle: civictheme_service_card
+mode: default
+content:
+  field_c_p_links:
+    type: link_default
+    weight: 1
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

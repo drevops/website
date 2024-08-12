@@ -1,0 +1,67 @@
+uuid: 4aaf072a-8fd1-4945-9115-755b4899f447
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_map.field_c_p_address
+    - field.field.paragraph.civictheme_map.field_c_p_background
+    - field.field.paragraph.civictheme_map.field_c_p_embed_url
+    - field.field.paragraph.civictheme_map.field_c_p_theme
+    - field.field.paragraph.civictheme_map.field_c_p_vertical_spacing
+    - field.field.paragraph.civictheme_map.field_c_p_view_link
+    - paragraphs.paragraphs_type.civictheme_map
+  module:
+    - link
+_core:
+  default_config_hash: Iw12MQHqYX024BLsFfq3yr-bNmTHwFq5EnqgV3Dig9o
+id: paragraph.civictheme_map.default
+targetEntityType: paragraph
+bundle: civictheme_map
+mode: default
+content:
+  field_c_p_address:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_background:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_c_p_embed_url:
+    type: link_default
+    weight: 0
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_vertical_spacing:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_view_link:
+    type: link_default
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

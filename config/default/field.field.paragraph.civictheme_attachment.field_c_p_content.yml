@@ -1,0 +1,24 @@
+uuid: a5130592-a012-492e-832f-50bf0ef79b26
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_content
+    - paragraphs.paragraphs_type.civictheme_attachment
+  module:
+    - text
+_core:
+  default_config_hash: 0XZrINX5el5m2Z16gwbLFBHGXcNgvosn8fHCx_UHH3E
+id: paragraph.civictheme_attachment.field_c_p_content
+field_name: field_c_p_content
+entity_type: paragraph
+bundle: civictheme_attachment
+label: Content
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

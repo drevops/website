@@ -1,0 +1,12 @@
+uuid: 89b61d80-be10-497b-affd-03b2ee6a3bd6
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: GIW2rgvcj8RSZBb7NtkYwn92cAPEwbwnXgfy_rodtW4
+id: civictheme_map
+label: Map
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

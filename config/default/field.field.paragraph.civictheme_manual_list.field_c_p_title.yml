@@ -1,0 +1,21 @@
+uuid: e5636528-41c5-40bb-a644-8aa426cac8c4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_title
+    - paragraphs.paragraphs_type.civictheme_manual_list
+_core:
+  default_config_hash: ovZbD8kIcaflNJFhiLpkpENq57w5zZ_zCCIT8JpaBt4
+id: paragraph.civictheme_manual_list.field_c_p_title
+field_name: field_c_p_title
+entity_type: paragraph
+bundle: civictheme_manual_list
+label: Title
+description: 'Title appears above the listing.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

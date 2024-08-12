@@ -1,0 +1,25 @@
+uuid: 9619db14-a5e6-435f-bdc7-c25d4564a4f5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_show_image_as_icon
+    - paragraphs.paragraphs_type.civictheme_navigation_card
+_core:
+  default_config_hash: dBirlqgES3lpQs2UqkJFiw1H_3mzv7WGL8EiD_aNEoE
+id: paragraph.civictheme_navigation_card.field_c_p_show_image_as_icon
+field_name: field_c_p_show_image_as_icon
+entity_type: paragraph
+bundle: civictheme_navigation_card
+label: 'Show image as icon'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

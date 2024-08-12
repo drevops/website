@@ -1,0 +1,24 @@
+uuid: 041e1dad-bc4c-4060-96fe-daae2c586adb
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: M8V8lPjBQEUcNDzQeK0MJTctkv87HxNjMlhzuHwRl7U
+id: civictheme_alert
+label: Alert
+type: 'canonical_entities:node'
+pattern: 'alerts/[node:title]'
+selection_criteria:
+  47608ecb-ac88-4819-b6e1-9a517f094bd8:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 47608ecb-ac88-4819-b6e1-9a517f094bd8
+    context_mapping:
+      node: node
+    bundles:
+      civictheme_alert: civictheme_alert
+selection_logic: and
+weight: -5
+relationships: {  }

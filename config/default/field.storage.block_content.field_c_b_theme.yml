@@ -1,0 +1,29 @@
+uuid: 45638aeb-3c48-46a8-bc6a-58a142b31068
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - options
+_core:
+  default_config_hash: giK_FiWvXgk3RDK68ZdrDSIRXLBa3I6L_a5mDCqUl6k
+id: block_content.field_c_b_theme
+field_name: field_c_b_theme
+entity_type: block_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: light
+      label: Light
+    -
+      value: dark
+      label: Dark
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

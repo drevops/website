@@ -1,0 +1,83 @@
+uuid: ee05204c-5c6d-4786-846c-f3bb9482d7cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_promo_card.field_c_p_image
+    - field.field.paragraph.civictheme_promo_card.field_c_p_link
+    - field.field.paragraph.civictheme_promo_card.field_c_p_subtitle
+    - field.field.paragraph.civictheme_promo_card.field_c_p_summary
+    - field.field.paragraph.civictheme_promo_card.field_c_p_theme
+    - field.field.paragraph.civictheme_promo_card.field_c_p_title
+    - field.field.paragraph.civictheme_promo_card.field_c_p_topics
+    - paragraphs.paragraphs_type.civictheme_promo_card
+  module:
+    - link
+    - options
+_core:
+  default_config_hash: 1pvJ25Zlt1MFeVKV5iVwynNOQtiAB-SUrbpCXyTa_T0
+id: paragraph.civictheme_promo_card.default
+targetEntityType: paragraph
+bundle: civictheme_promo_card
+mode: default
+content:
+  field_c_p_image:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_p_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_c_p_subtitle:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_c_p_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_p_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_p_topics:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  search_api_excerpt: true

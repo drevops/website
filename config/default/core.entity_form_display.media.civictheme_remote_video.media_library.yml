@@ -1,0 +1,43 @@
+uuid: 11508dd9-a56a-4549-9e54-0866fb2000b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.civictheme_remote_video.field_c_m_media_tags
+    - field.field.media.civictheme_remote_video.field_c_m_oembed_video
+    - field.field.media.civictheme_remote_video.field_c_m_transcript
+    - field.field.media.civictheme_remote_video.field_c_m_transcript_link
+    - media.type.civictheme_remote_video
+_core:
+  default_config_hash: 5qdQ1pX6qIIopm5jlBK7NB2eZt2f7KCD01ROxqNaiPc
+id: media.civictheme_remote_video.media_library
+targetEntityType: media
+bundle: civictheme_remote_video
+mode: media_library
+content:
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_c_m_media_tags: true
+  field_c_m_oembed_video: true
+  field_c_m_transcript: true
+  field_c_m_transcript_link: true
+  moderation_state: true
+  path: true
+  status: true
+  uid: true

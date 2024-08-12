@@ -1,0 +1,25 @@
+uuid: 00853f4d-23f6-444c-a8fd-64b3a451879a
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_mobile_navigation
+    - field.storage.block_content.field_c_b_trigger_theme
+  module:
+    - options
+_core:
+  default_config_hash: aJg_McE9i1wzmh5HnciMUCV7cZxlnp4foMGdT5vUfmk
+id: block_content.civictheme_mobile_navigation.field_c_b_trigger_theme
+field_name: field_c_b_trigger_theme
+entity_type: block_content
+bundle: civictheme_mobile_navigation
+label: 'Trigger theme'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: light
+default_value_callback: ''
+settings: {  }
+field_type: list_string

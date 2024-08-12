@@ -1,0 +1,19 @@
+{
+    "name": "civictheme/drevops",
+    "description": "DrevOps public website",
+    "type": "drupal-theme",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.2"
+    },
+    "extra": {
+        "civictheme": {
+            "version": "1.0.0",
+            "homepage": "https://github.com/civictheme/civictheme",
+            "support": {
+                "issues": "https://github.com/civictheme/monorepo-drupal/issues",
+                "source": "https://github.com/civictheme/monorepo-drupal"
+            }
+        }
+    }
+}

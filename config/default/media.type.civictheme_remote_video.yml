@@ -1,0 +1,20 @@
+uuid: 54b8445b-dc2d-4af5-bfd1-e99f7ae4831b
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: il6TnOEJKOHuRpQClndzJgzsAq_8zSb5e0YsHbUcVNE
+id: civictheme_remote_video
+label: 'Remote video'
+description: 'A remotely hosted video from YouTube or Vimeo.'
+source: 'oembed:video'
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_c_m_oembed_video
+  thumbnails_directory: 'public://oembed_thumbnails'
+  providers:
+    - YouTube
+    - Vimeo
+field_map:
+  title: name

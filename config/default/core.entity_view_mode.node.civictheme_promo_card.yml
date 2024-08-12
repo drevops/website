@@ -1,0 +1,13 @@
+uuid: b0674c76-7986-472c-aee2-7a325a6f577f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: 7EJIu-rZYHGM45MuMuFXRcsg0LI7qP658ZyVK7c2AXk
+id: node.civictheme_promo_card
+label: 'Promo Card'
+description: ''
+targetEntityType: node
+cache: true

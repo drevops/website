@@ -1,0 +1,49 @@
+uuid: 7ff16053-b327-422a-bec2-7afa332587a4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_webform.field_c_p_background
+    - field.field.paragraph.civictheme_webform.field_c_p_theme
+    - field.field.paragraph.civictheme_webform.field_c_p_vertical_spacing
+    - field.field.paragraph.civictheme_webform.field_c_p_webform
+    - paragraphs.paragraphs_type.civictheme_webform
+  module:
+    - webform
+_core:
+  default_config_hash: r0EUp4ZQDNLEhdtYPqvHI4lYmcXUJL1r9cxSQFdGRaM
+id: paragraph.civictheme_webform.default
+targetEntityType: paragraph
+bundle: civictheme_webform
+mode: default
+content:
+  field_c_p_background:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_vertical_spacing:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_webform:
+    type: webform_entity_reference_select
+    weight: 0
+    region: content
+    settings:
+      default_data: true
+      webforms: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

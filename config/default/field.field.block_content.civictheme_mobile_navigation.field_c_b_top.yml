@@ -1,0 +1,25 @@
+uuid: 889d3ee3-2c7a-41db-9306-e75a3bf6867b
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_mobile_navigation
+    - field.storage.block_content.field_c_b_top
+_core:
+  default_config_hash: 2LxqEzSwUdToPex6e0ik-7GiN3sZ5U17YFV8XD0PXew
+id: block_content.civictheme_mobile_navigation.field_c_b_top
+field_name: field_c_b_top
+entity_type: block_content
+bundle: civictheme_mobile_navigation
+label: 'Top block'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:block'
+  handler_settings:
+    target_bundles: null
+    auto_create: false
+field_type: entity_reference

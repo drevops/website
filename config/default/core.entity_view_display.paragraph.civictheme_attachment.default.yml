@@ -1,0 +1,72 @@
+uuid: 7b9552b5-1917-4058-b548-e2e219c3491b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_attachment.field_c_p_attachments
+    - field.field.paragraph.civictheme_attachment.field_c_p_background
+    - field.field.paragraph.civictheme_attachment.field_c_p_content
+    - field.field.paragraph.civictheme_attachment.field_c_p_theme
+    - field.field.paragraph.civictheme_attachment.field_c_p_title
+    - field.field.paragraph.civictheme_attachment.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.civictheme_attachment
+  module:
+    - options
+    - text
+_core:
+  default_config_hash: RgU7wI1ykVEGbJr9MJkH0HbEK4QRjCfGK6VDHuvLX-E
+id: paragraph.civictheme_attachment.default
+targetEntityType: paragraph
+bundle: civictheme_attachment
+mode: default
+content:
+  field_c_p_attachments:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_c_p_background:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_c_p_content:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_p_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_p_vertical_spacing:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+hidden:
+  search_api_excerpt: true

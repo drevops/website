@@ -1,0 +1,25 @@
+uuid: 12b5b402-2248-4c4b-bf7f-1548a0724e91
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - media
+_core:
+  default_config_hash: QUFV7Opq21qg_q7vnCPLjPP_iHXZHSYLc4Wj-4OQDlM
+id: media.field_c_m_video_file
+field_name: field_c_m_video_file
+entity_type: media
+type: file
+settings:
+  display_field: false
+  display_default: false
+  uri_scheme: public
+  target_type: file
+module: file
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

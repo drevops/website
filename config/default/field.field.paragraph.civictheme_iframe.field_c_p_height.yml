@@ -1,0 +1,21 @@
+uuid: 4c877868-e2e1-4c73-b84c-f510f6456168
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_height
+    - paragraphs.paragraphs_type.civictheme_iframe
+_core:
+  default_config_hash: rMCXX5VDKa_4bURShnTFlQP09RiAGaNcpbPjD-6dCQo
+id: paragraph.civictheme_iframe.field_c_p_height
+field_name: field_c_p_height
+entity_type: paragraph
+bundle: civictheme_iframe
+label: Height
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

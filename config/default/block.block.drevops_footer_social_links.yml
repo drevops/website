@@ -1,0 +1,25 @@
+uuid: 27d85161-27c3-4697-98c7-559fefb32f8e
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:civictheme_social_links:5c0ad15f-3e9c-4eeb-8525-7a064b06fc58'
+  module:
+    - block_content
+  theme:
+    - drevops
+id: drevops_footer_social_links
+theme: drevops
+region: footer_top_2
+weight: 0
+provider: null
+plugin: 'block_content:5c0ad15f-3e9c-4eeb-8525-7a064b06fc58'
+settings:
+  id: 'block_content:5c0ad15f-3e9c-4eeb-8525-7a064b06fc58'
+  label: 'Social links'
+  label_display: ''
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

@@ -1,0 +1,39 @@
+uuid: 329027b9-c8bf-40ea-9f32-78ed26951a0b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.civictheme_audio.field_c_m_audio_file
+    - field.field.media.civictheme_audio.field_c_m_media_tags
+    - media.type.civictheme_audio
+_core:
+  default_config_hash: b1n7GaTWiKgiCXqYkiulpw5k9EDoi6b0JuD5bHlhXwE
+id: media.civictheme_audio.media_library
+targetEntityType: media
+bundle: civictheme_audio
+mode: media_library
+content:
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_c_m_audio_file: true
+  field_c_m_media_tags: true
+  moderation_state: true
+  path: true
+  status: true
+  uid: true

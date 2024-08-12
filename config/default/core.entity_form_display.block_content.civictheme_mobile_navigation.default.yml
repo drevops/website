@@ -1,0 +1,102 @@
+uuid: d538e37c-42b4-4138-aec1-38fec146f86c
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_mobile_navigation
+    - field.field.block_content.civictheme_mobile_navigation.field_c_b_bottom
+    - field.field.block_content.civictheme_mobile_navigation.field_c_b_theme
+    - field.field.block_content.civictheme_mobile_navigation.field_c_b_top
+    - field.field.block_content.civictheme_mobile_navigation.field_c_b_trigger_text
+    - field.field.block_content.civictheme_mobile_navigation.field_c_b_trigger_theme
+    - workflows.workflow.civictheme_editorial
+  module:
+    - content_moderation
+    - field_group
+third_party_settings:
+  field_group:
+    group_trigger:
+      children:
+        - field_c_b_trigger_text
+        - field_c_b_trigger_theme
+      label: Trigger
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+_core:
+  default_config_hash: gQTbnhLcjLcvWtmdySt48Ff-F3ofC7p8_4DFVrshntI
+id: block_content.civictheme_mobile_navigation.default
+targetEntityType: block_content
+bundle: civictheme_mobile_navigation
+mode: default
+content:
+  field_c_b_bottom:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_b_theme:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_b_top:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_b_trigger_text:
+    type: string_textfield
+    weight: 4
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_b_trigger_theme:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

@@ -1,0 +1,25 @@
+uuid: fd085429-b39a-4b62-986e-483b215d2197
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_image_position
+    - paragraphs.paragraphs_type.civictheme_slider_slide_ref
+  module:
+    - options
+_core:
+  default_config_hash: IrTZXXx8Mr_olasAP8towNBoZ021mcbfOeQGWyP_iWQ
+id: paragraph.civictheme_slider_slide_ref.field_c_p_image_position
+field_name: field_c_p_image_position
+entity_type: paragraph
+bundle: civictheme_slider_slide_ref
+label: 'Image position'
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: right
+default_value_callback: ''
+settings: {  }
+field_type: list_string

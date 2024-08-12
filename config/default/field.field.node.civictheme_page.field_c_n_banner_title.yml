@@ -1,0 +1,21 @@
+uuid: 6ad35150-21ee-4056-ae16-9f0de2aa802b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_banner_title
+    - node.type.civictheme_page
+_core:
+  default_config_hash: EkyX_Gs-mqcVozcsOm0HLRnjCEZ8r9lLX-cEUyC33Qc
+id: node.civictheme_page.field_c_n_banner_title
+field_name: field_c_n_banner_title
+entity_type: node
+bundle: civictheme_page
+label: 'Banner title'
+description: 'Override banner title. Leave empty to use page title.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

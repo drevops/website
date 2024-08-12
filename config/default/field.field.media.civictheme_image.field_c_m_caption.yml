@@ -1,0 +1,21 @@
+uuid: 44c79d5d-d000-4c3b-85eb-55bfd16714ed
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_c_m_caption
+    - media.type.civictheme_image
+_core:
+  default_config_hash: oHhc1kq9LjnsjcRhzl4gf0sGBs4jom547DJqhGsYCzg
+id: media.civictheme_image.field_c_m_caption
+field_name: field_c_m_caption
+entity_type: media
+bundle: civictheme_image
+label: Caption
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

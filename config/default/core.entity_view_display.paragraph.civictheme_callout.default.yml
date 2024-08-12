@@ -1,0 +1,65 @@
+uuid: 3d9939bb-98d3-420d-9c91-006fd1b96d47
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_callout.field_c_p_content
+    - field.field.paragraph.civictheme_callout.field_c_p_links
+    - field.field.paragraph.civictheme_callout.field_c_p_theme
+    - field.field.paragraph.civictheme_callout.field_c_p_title
+    - field.field.paragraph.civictheme_callout.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.civictheme_callout
+  module:
+    - link
+    - options
+    - text
+_core:
+  default_config_hash: thUTvJBTabAcLfDO0hMYRna-G9_snlxTtVXiMlonhJ4
+id: paragraph.civictheme_callout.default
+targetEntityType: paragraph
+bundle: civictheme_callout
+mode: default
+content:
+  field_c_p_content:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_c_p_links:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_p_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_p_vertical_spacing:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  search_api_excerpt: true

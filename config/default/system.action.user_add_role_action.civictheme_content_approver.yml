@@ -1,0 +1,14 @@
+uuid: 458d533f-64d0-4460-9260-dd6fea6f81d8
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.civictheme_content_approver
+  module:
+    - user
+id: user_add_role_action.civictheme_content_approver
+label: 'Add the Content Approver role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: civictheme_content_approver

@@ -4,7 +4,7 @@ langcode: en
 uuid: 0701b409-7ef4-47d3-8cec-91bd3ac752cd
 name: 'DrevOps Website'
 mail: webmaster@drevops.com
-slogan: ''
+slogan: 'A design system by Salsa Digital'
 page:
   403: ''
   404: ''

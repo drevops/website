@@ -1,0 +1,23 @@
+uuid: dd189188-7f12-4433-b4f9-6f7bcb7b1e5f
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_mobile_navigation
+    - field.storage.block_content.field_c_b_bottom
+_core:
+  default_config_hash: X6pDr1njbFMK8RgK531rGUbdhLKLDSaE9h-ZLfrvBxI
+id: block_content.civictheme_mobile_navigation.field_c_b_bottom
+field_name: field_c_b_bottom
+entity_type: block_content
+bundle: civictheme_mobile_navigation
+label: 'Bottom block'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:block'
+  handler_settings: {  }
+field_type: entity_reference

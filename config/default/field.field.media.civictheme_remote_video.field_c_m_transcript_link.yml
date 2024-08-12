@@ -1,0 +1,25 @@
+uuid: f3697929-9415-4f73-8e24-bfe9644e32e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_c_m_transcript_link
+    - media.type.civictheme_remote_video
+  module:
+    - link
+_core:
+  default_config_hash: nBwNM-BaKlntaTL3mwBfPqAdL_Uc9gJhmbe3OYBf0Pk
+id: media.civictheme_remote_video.field_c_m_transcript_link
+field_name: field_c_m_transcript_link
+entity_type: media
+bundle: civictheme_remote_video
+label: 'Transcript link'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

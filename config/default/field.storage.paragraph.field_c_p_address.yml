@@ -1,0 +1,23 @@
+uuid: 4f2215be-9994-4888-a17e-3608bb4c625a
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+_core:
+  default_config_hash: e3rXp0z4Abdgfn6INuFg9LgBHcSD5yyPrA1OllXrZiQ
+id: paragraph.field_c_p_address
+field_name: field_c_p_address
+entity_type: paragraph
+type: string
+settings:
+  max_length: 255
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

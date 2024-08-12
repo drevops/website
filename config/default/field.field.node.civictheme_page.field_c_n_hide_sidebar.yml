@@ -1,0 +1,25 @@
+uuid: 3eb135d6-e5b7-4723-b314-ac83fd78259d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_hide_sidebar
+    - node.type.civictheme_page
+_core:
+  default_config_hash: FhgU1rUx2TKk3YntkpfffoONxOOwTr5SIPU1d2nInys
+id: node.civictheme_page.field_c_n_hide_sidebar
+field_name: field_c_n_hide_sidebar
+entity_type: node
+bundle: civictheme_page
+label: 'Hide sidebar'
+description: "Hide sidebar making this page's component appear edge-to-edge."
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,23 @@
+uuid: 2e21c5d1-3697-49b6-a8e4-0eb1a931ba72
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_alert_type
+    - node.type.civictheme_alert
+  module:
+    - options
+_core:
+  default_config_hash: c6GNw6qblXDxPpCvYbUGflCbJojXcDCvkjhDl88i2Mw
+id: node.civictheme_alert.field_c_n_alert_type
+field_name: field_c_n_alert_type
+entity_type: node
+bundle: civictheme_alert
+label: Type
+description: 'Determines how alerts will be shown on the page.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

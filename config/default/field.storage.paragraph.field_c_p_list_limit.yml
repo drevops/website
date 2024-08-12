@@ -1,0 +1,22 @@
+uuid: 417efb31-1af9-42de-97fc-3a95525a8896
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+_core:
+  default_config_hash: VGhGQQk-vHgvuHCh2_Xxdj6NzhJzM1DVtJW-uJNo3bk
+id: paragraph.field_c_p_list_limit
+field_name: field_c_p_list_limit
+entity_type: paragraph
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

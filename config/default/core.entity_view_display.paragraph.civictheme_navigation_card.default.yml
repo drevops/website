@@ -1,0 +1,77 @@
+uuid: 1ffc43ac-59b7-48f1-86ea-193c6567f226
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_navigation_card.field_c_p_image
+    - field.field.paragraph.civictheme_navigation_card.field_c_p_link
+    - field.field.paragraph.civictheme_navigation_card.field_c_p_show_image_as_icon
+    - field.field.paragraph.civictheme_navigation_card.field_c_p_summary
+    - field.field.paragraph.civictheme_navigation_card.field_c_p_theme
+    - field.field.paragraph.civictheme_navigation_card.field_c_p_title
+    - paragraphs.paragraphs_type.civictheme_navigation_card
+  module:
+    - link
+    - options
+_core:
+  default_config_hash: RUx40E_CcygvcaEw9oXfadxgrqDQSojI_oNwz8FB7dA
+id: paragraph.civictheme_navigation_card.default
+targetEntityType: paragraph
+bundle: civictheme_navigation_card
+mode: default
+content:
+  field_c_p_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_p_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_c_p_show_image_as_icon:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_c_p_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_c_p_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

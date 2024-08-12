@@ -1,0 +1,53 @@
+uuid: e532665d-5ea5-4158-860c-e450c0f92502
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.civictheme_image.field_c_m_caption
+    - field.field.media.civictheme_image.field_c_m_image
+    - field.field.media.civictheme_image.field_c_m_media_tags
+    - media.type.civictheme_image
+  module:
+    - image
+_core:
+  default_config_hash: _-h4eI-FPDZwrqkxpuJ62T52hfxmUQ-44QUiMZcG9ek
+id: media.civictheme_image.default
+targetEntityType: media
+bundle: civictheme_image
+mode: default
+content:
+  field_c_m_caption:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_m_image:
+    type: image
+    label: visually_hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_m_media_tags:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  content_moderation_control: true
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

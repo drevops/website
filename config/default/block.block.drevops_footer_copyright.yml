@@ -1,0 +1,25 @@
+uuid: 7fd3b73d-3fae-42d4-aae1-8d3b81898049
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:civictheme_component_block:d7098a8c-3ba3-48f7-bc0c-5787ebaa0427'
+  module:
+    - block_content
+  theme:
+    - drevops
+id: drevops_footer_copyright
+theme: drevops
+region: footer_bottom_2
+weight: 0
+provider: null
+plugin: 'block_content:d7098a8c-3ba3-48f7-bc0c-5787ebaa0427'
+settings:
+  id: 'block_content:d7098a8c-3ba3-48f7-bc0c-5787ebaa0427'
+  label: 'Footer - Copyright'
+  label_display: ''
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

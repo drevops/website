@@ -1,0 +1,11 @@
+uuid: 82024a1a-a6f6-4073-a473-7874054c538a
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: Sb4CQ2_6_hY18839fJMveHDuF4Vc5I6d7kW8ghG-I3c
+name: 'Media tags'
+vid: civictheme_media_tags
+description: null
+weight: 0
+new_revision: false

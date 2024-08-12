@@ -1,0 +1,12 @@
+uuid: d365e088-bae8-422a-8f4e-bea4db0a4c84
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 69LeMWjcRs9b8F-1YMn8kPpBd5R1EIBBLFdMYo06qXw
+id: civictheme_content
+label: Content
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

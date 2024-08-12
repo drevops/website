@@ -1,0 +1,25 @@
+uuid: 446f7b93-0c1d-4ad8-a3e0-37fa153038a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_background
+    - paragraphs.paragraphs_type.civictheme_attachment
+_core:
+  default_config_hash: GFKvNFPCq2ZwF81o7hMHqSRdzvzz7RPwNA5kibr6aPw
+id: paragraph.civictheme_attachment.field_c_p_background
+field_name: field_c_p_background
+entity_type: paragraph
+bundle: civictheme_attachment
+label: Background
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

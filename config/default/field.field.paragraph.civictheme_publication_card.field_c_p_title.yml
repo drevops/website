@@ -1,0 +1,21 @@
+uuid: d17e490c-466e-4fdf-bd66-3ddc806cd8e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_title
+    - paragraphs.paragraphs_type.civictheme_publication_card
+_core:
+  default_config_hash: RbuK7rHfeg07T-S3r--EEVNPkxY8Ayq555KiG-gc3T4
+id: paragraph.civictheme_publication_card.field_c_p_title
+field_name: field_c_p_title
+entity_type: paragraph
+bundle: civictheme_publication_card
+label: Title
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

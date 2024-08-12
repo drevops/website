@@ -1,0 +1,34 @@
+uuid: f89e4ff4-d8cc-4929-bf55-254e4251dd44
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_subject_card_ref.field_c_p_reference
+    - field.field.paragraph.civictheme_subject_card_ref.field_c_p_theme
+    - paragraphs.paragraphs_type.civictheme_subject_card_ref
+_core:
+  default_config_hash: xmiiUkPaP5q1RsyvUki8d_XS512YevFTLRmyRaUX6JQ
+id: paragraph.civictheme_subject_card_ref.default
+targetEntityType: paragraph
+bundle: civictheme_subject_card_ref
+mode: default
+content:
+  field_c_p_reference:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

@@ -1,0 +1,31 @@
+uuid: c8eeade7-baac-4aa5-99af-a84078c982e1
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.civictheme_banner
+    - field.storage.block_content.field_c_b_background_image
+    - media.type.civictheme_image
+_core:
+  default_config_hash: YKPIvbg84iW_498TWmLnqEMqp3vjG1IFGVnqU-cp3MM
+id: block_content.civictheme_banner.field_c_b_background_image
+field_name: field_c_b_background_image
+entity_type: block_content
+bundle: civictheme_banner
+label: 'Background image'
+description: 'Default background image for the banner.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      civictheme_image: civictheme_image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

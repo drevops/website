@@ -1,0 +1,54 @@
+uuid: e4246b56-f9d3-4720-b35f-e343be27fcb3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.civictheme_webform.field_c_p_background
+    - field.field.paragraph.civictheme_webform.field_c_p_theme
+    - field.field.paragraph.civictheme_webform.field_c_p_vertical_spacing
+    - field.field.paragraph.civictheme_webform.field_c_p_webform
+    - paragraphs.paragraphs_type.civictheme_webform
+  module:
+    - options
+    - webform
+_core:
+  default_config_hash: 9Pe_vJx08jgoCR8oCiyG34AJePNAbsy_1bcx6zafThY
+id: paragraph.civictheme_webform.default
+targetEntityType: paragraph
+bundle: civictheme_webform
+mode: default
+content:
+  field_c_p_background:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_p_vertical_spacing:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_c_p_webform:
+    type: webform_entity_reference_entity_view
+    label: hidden
+    settings:
+      source_entity: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

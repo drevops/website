@@ -1,0 +1,25 @@
+uuid: c3945e54-6b10-483c-8e87-ad03f951cf30
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - civictheme
+_core:
+  default_config_hash: JsxXX1yr2lrenxigULjJmgP88YKVxKnsaKSMSdhBqo8
+id: civictheme_footer_sitebranding
+theme: civictheme
+region: footer_top_1
+weight: -7
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Footer site branding - logo'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: false
+  use_site_slogan: false
+visibility: {  }

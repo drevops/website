@@ -1,0 +1,11 @@
+//
+// Custom components variables overrides.
+//
+// CivicTheme variables can be found in
+// <path/to/civictheme>/components/00-base/_variables.components.scss
+//
+// stylelint-disable scss/dollar-variable-pattern
+
+// Example to override component's variable - Back to Top should have a
+// 'custom1' colour background.
+$ct-back-to-top-light-background-color: ct-color-light('custom1');

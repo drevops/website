@@ -1,0 +1,19 @@
+uuid: 44aa5003-f102-4d1a-a40f-f68c506663af
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+_core:
+  default_config_hash: XwRPwhaQ3qwUpovxCs-tMdjTlsX92-PZKcmoZ-Q0N-o
+name: civictheme_subject_card
+label: 'Subject Card'
+effects:
+  c5ec6c21-ddb9-4b47-b9b4-f5206e0afb9d:
+    uuid: c5ec6c21-ddb9-4b47-b9b4-f5206e0afb9d
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 600
+      height: 600
+      crop_type: focal_point

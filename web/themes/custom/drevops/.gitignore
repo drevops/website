@@ -1,6 +1,4 @@
-# Assets cache.
-.sass-cache
-scss/_components.scss
-
-# Note that compiled assets are ignored in the root .gitignore so that
-# the deployment artifact could include them.
+.components-civictheme
+components_combined
+dist
+storybook-static
