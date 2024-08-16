@@ -23,12 +23,15 @@ dependencies:
     - field.field.node.civictheme_page.field_c_n_thumbnail
     - field.field.node.civictheme_page.field_c_n_topics
     - field.field.node.civictheme_page.field_c_n_vertical_spacing
+    - field.field.node.civictheme_page.field_n_metatags
     - node.type.civictheme_page
+    - workflows.workflow.civictheme_editorial
   module:
     - content_moderation
     - datetime
     - field_group
     - media_library
+    - metatag
     - paragraphs
     - path
 third_party_settings:
@@ -355,6 +358,14 @@ content:
     weight: 17
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_n_metatags:
+    type: metatag_firehose
+    weight: 26
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   langcode:
     type: language_select

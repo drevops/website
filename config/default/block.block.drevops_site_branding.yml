@@ -1,6 +1,6 @@
 uuid: 81bc6a39-3f31-4e8b-8276-acebbae98d59
 langcode: en
-status: false
+status: true
 dependencies:
   module:
     - system
@@ -10,8 +10,8 @@ _core:
   default_config_hash: n_nlgjggHVfQt2H__zvLOKB2YtjPDbQ5tHijF9LE1aM
 id: drevops_site_branding
 theme: drevops
-region: header_top_1
-weight: 0
+region: header_middle_2
+weight: -13
 provider: null
 plugin: system_branding_block
 settings:
@@ -20,6 +20,6 @@ settings:
   label_display: '0'
   provider: system
   use_site_logo: true
-  use_site_name: true
+  use_site_name: false
   use_site_slogan: false
 visibility: {  }

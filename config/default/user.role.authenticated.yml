@@ -6,7 +6,6 @@ dependencies:
     - filter.format.basic_html
     - filter.format.webform_default
   module:
-    - comment
     - contact
     - file
     - filter
@@ -20,13 +19,10 @@ label: 'Authenticated user'
 weight: 1
 is_admin: false
 permissions:
-  - 'access comments'
   - 'access content'
   - 'access shortcuts'
   - 'access site-wide contact form'
   - 'delete own files'
-  - 'post comments'
-  - 'skip comment approval'
   - 'use text format basic_html'
   - 'use text format webform_default'
   - 'view media'

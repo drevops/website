@@ -2,12 +2,8 @@ uuid: cfeec46a-bedf-47ed-b107-159cda5e90bc
 langcode: en
 status: true
 dependencies:
-  config:
-    - filter.format.restricted_html
   module:
-    - comment
     - contact
-    - filter
     - media
     - system
 _core:
@@ -17,8 +13,6 @@ label: 'Anonymous user'
 weight: 0
 is_admin: false
 permissions:
-  - 'access comments'
   - 'access content'
   - 'access site-wide contact form'
-  - 'use text format restricted_html'
   - 'view media'

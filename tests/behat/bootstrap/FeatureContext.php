@@ -10,6 +10,7 @@ declare(strict_types=1);
 use DrevOps\BehatSteps\ContentTrait;
 use DrevOps\BehatSteps\FieldTrait;
 use DrevOps\BehatSteps\FileTrait;
+use DrevOps\BehatSteps\ParagraphsTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\SearchApiTrait;
 use DrevOps\BehatSteps\TaxonomyTrait;
@@ -25,9 +26,10 @@ class FeatureContext extends DrupalContext {
   use ContentTrait;
   use FieldTrait;
   use FileTrait;
+  use ParagraphsTrait;
   use PathTrait;
-  use TaxonomyTrait;
   use SearchApiTrait;
+  use TaxonomyTrait;
   use WaitTrait;
   use WatchdogTrait;
 

@@ -1,0 +1,21 @@
+uuid: 7c70b03c-a2f7-48b8-aa03-667608f82fd6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_n_metatags
+    - node.type.civictheme_page
+  module:
+    - metatag
+id: node.civictheme_page.field_n_metatags
+field_name: field_n_metatags
+entity_type: node
+bundle: civictheme_page
+label: Metatags
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

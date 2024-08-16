@@ -1,6 +1,6 @@
 uuid: 8a7bf8ec-1cb8-4dcf-89ba-4a0a01b5ef49
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - system.menu.civictheme-footer

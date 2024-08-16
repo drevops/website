@@ -11,7 +11,7 @@ _core:
 id: drevops_powered
 theme: drevops
 region: header_top_1
-weight: 0
+weight: -9
 provider: null
 plugin: system_powered_by_block
 settings:

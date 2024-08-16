@@ -12,7 +12,7 @@ _core:
   default_config_hash: iZ3ki2gqNAiVHosDl1GbAAbqHv9zr8YhIxraF9_4ZC8
 name: 'Rich text'
 format: civictheme_rich_text
-weight: 0
+weight: -9
 filters:
   editor_file_reference:
     id: editor_file_reference

@@ -9,7 +9,7 @@ _core:
 id: drevops_page_title
 theme: drevops
 region: header_top_1
-weight: -5
+weight: -14
 provider: null
 plugin: page_title_block
 settings:

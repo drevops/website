@@ -1,0 +1,23 @@
+uuid: 604fac9d-b34a-4da0-ad79-f2ddc510e107
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - drevops
+id: drevops_sitebranding
+theme: drevops
+region: footer_top_1
+weight: 0
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: false
+  use_site_slogan: false
+visibility: {  }

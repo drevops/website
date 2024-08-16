@@ -1,7 +1,7 @@
 # DrevOps Website
 Drupal 10 implementation of DrevOps Website for DrevOps
 
-[![CircleCI](https://circleci.com/gh/drevops/website.svg?style=shield)](https://circleci.com/gh/drevops/website)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/drevops/website/tree/main.svg?style=shield&circle-token=CCIPRJ_PoXMozZNjmvtyESrUQdKZa_0b9f2ba0b72fd042187733abcecdc6b7ae5cdaf1)](https://dl.circleci.com/status-badge/redirect/gh/drevops/website/tree/main)
 ![Drupal 10](https://img.shields.io/badge/Drupal-10-blue.svg)
 [![codecov](https://codecov.io/gh/drevops/website/graph/badge.svg)](https://codecov.io/gh/drevops/website)
 
@@ -12,10 +12,6 @@ Drupal 10 implementation of DrevOps Website for DrevOps
 [//]: # (DO NOT REMOVE THE BADGE BELOW. IT IS USED BY DREVOPS TO TRACK INTEGRATION)
 
 [![DrevOps](https://img.shields.io/badge/DrevOps-1.22.0-blue.svg)](https://github.com/drevops/scaffold/tree/1.22.0)
-
-## Onboarding to DrevOps
-Use [Onboarding checklist](docs/onboarding.md) to track the project onboarding
-to DrevOps progress. Remove this section once onboarding is finished.
 
 ## Local environment setup
 

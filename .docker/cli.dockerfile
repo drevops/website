@@ -73,11 +73,6 @@ COPY composer.json composer.* .env* auth* /app/
 RUN if [ -n "${GITHUB_TOKEN}" ]; then export COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"${GITHUB_TOKEN}\"}}"; fi && \
     COMPOSER_MEMORY_LIMIT=-1 composer install -n --no-dev --ansi --prefer-dist --optimize-autoloader
 
-# Remove Drush launcher installed by the base Lagoon PHP image.
-# @see https://github.com/uselagoon/lagoon-images/blob/main/images/php-cli-drupal/8.2.Dockerfile#L19
-RUN rm -rf /usr/local/bin/drush
-ENV PATH="/app/vendor/bin:${PATH}"
-
 # Install NodeJS dependencies.
 # Note that package-lock.json is not explicitly copied, allowing to run the
 # stack without existing lock file (this is not advisable, but allows to build
@@ -85,6 +80,7 @@ ENV PATH="/app/vendor/bin:${PATH}"
 # the repository.
 # File Gruntfile.js is copied into image as it is required to generate
 # front-end assets.
+COPY ${WEBROOT}/themes/custom/drevops/package.json ${WEBROOT}/themes/custom/drevops/package* /app/${WEBROOT}/themes/custom/drevops/
 COPY ${WEBROOT}/themes/custom/drevops/patches /app/${WEBROOT}/themes/custom/drevops/patches
 
 # Install NodeJS dependencies.
@@ -97,8 +93,8 @@ RUN npm --prefix /app/${WEBROOT}/themes/custom/drevops ci --no-audit --no-progre
 COPY . /app
 
 # Create files directories and set correct permissions.
-RUN mkdir -p "${DRUPAL_PUBLIC_FILES}" "${DRUPAL_PRIVATE_FILES}" "${DRUPAL_TEMPORARY_FILES}" "${DRUPAL_CONFIG_PATH}" && \
- chmod 0770 "${DRUPAL_PUBLIC_FILES}" "${DRUPAL_PRIVATE_FILES}" "${DRUPAL_TEMPORARY_FILES}" "${DRUPAL_CONFIG_PATH}"
+RUN mkdir -p "${DRUPAL_PUBLIC_FILES:-/app/${WEBROOT}/sites/default/files}" "${DRUPAL_PRIVATE_FILES:-/app/${WEBROOT}/sites/default/files/private}" "${DRUPAL_TEMPORARY_FILES:-/tmp}" "${DRUPAL_CONFIG_PATH:-/app/config/default}" && \
+ chmod 0770 "${DRUPAL_PUBLIC_FILES:-/app/${WEBROOT}/sites/default/files}" "${DRUPAL_PRIVATE_FILES:-/app/${WEBROOT}/sites/default/files/private}" "${DRUPAL_TEMPORARY_FILES:-/tmp}" "${DRUPAL_CONFIG_PATH:-/app/config/default}"
 
 # Compile front-end assets. Running this after copying all files as we need
 # sources to compile assets.

@@ -6,7 +6,7 @@ _core:
   default_config_hash: I1E1naPAQkb9WWWZBd2SaKbCSk1m-DFBQiH2CXAE0lE
 name: 'Plain text'
 format: civictheme_plain_text
-weight: 10
+weight: -5
 filters:
   filter_autop:
     id: filter_autop

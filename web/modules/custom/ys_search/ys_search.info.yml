@@ -1,8 +1,0 @@
-name: DrevOps Website Search
-type: module
-description: Search functionality for DrevOps Website site.
-core_version_requirement: ^10
-package: website
-dependencies:
-  - search_api:search_api
-  - search_api_solr:search_api_solr

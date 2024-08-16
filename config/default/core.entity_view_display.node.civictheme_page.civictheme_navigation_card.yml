@@ -24,6 +24,7 @@ dependencies:
     - field.field.node.civictheme_page.field_c_n_thumbnail
     - field.field.node.civictheme_page.field_c_n_topics
     - field.field.node.civictheme_page.field_c_n_vertical_spacing
+    - field.field.node.civictheme_page.field_n_metatags
     - node.type.civictheme_page
   module:
     - layout_builder
@@ -39,6 +40,11 @@ targetEntityType: node
 bundle: civictheme_page
 mode: civictheme_navigation_card
 content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
   field_c_n_summary:
     type: basic_string
     label: visually_hidden
@@ -73,6 +79,7 @@ hidden:
   field_c_n_site_section: true
   field_c_n_topics: true
   field_c_n_vertical_spacing: true
+  field_n_metatags: true
   langcode: true
   links: true
   search_api_excerpt: true
