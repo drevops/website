@@ -17,6 +17,6 @@ RUN cat /tmp/clamav.conf >> /etc/clamav/clamd.conf && \
     chown -R clamav:clamav /var/run/clamav /run/clamav /var/log/clamav /var/lock /run/lock && \
     chmod 770 -R /var/run/clamav /run/clamav /var/log/clamav /var/lock /run/lock
 
-VOLUME /var/lib/clamav
+# VOLUME /var/lib/clamav
 
 USER clamav
