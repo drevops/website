@@ -11,6 +11,11 @@ RUN apk add --no-cache tzdata
 
 COPY .docker/config/clamav/clamav.conf /tmp/clamav.conf
 
+COPY .docker/scripts/fix-permissions.sh /bin/fix-permissions
+
+RUN chmod +x /bin/fix-permissions && \
+    fix-permissions /var/lib/clamav
+
 RUN cat /tmp/clamav.conf >> /etc/clamav/clamd.conf && \
     rm /tmp/clamav.conf && \
     mkdir -p /var/run/clamav /run/lock && \
@@ -20,3 +25,5 @@ RUN cat /tmp/clamav.conf >> /etc/clamav/clamd.conf && \
 VOLUME /var/lib/clamav
 
 USER clamav
+
+ENTRYPOINT [ "/init-unprivileged" ]
