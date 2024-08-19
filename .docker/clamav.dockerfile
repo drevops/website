@@ -18,7 +18,10 @@ COPY --from=commons /bin/fix-permissions /bin/ep /bin/docker-sleep /bin/wait-for
 
 RUN apk add --no-cache tzdata
 
-RUN sed -i "s/^LogFile /# LogFile /g" /etc/clamav/clamd.conf && \
+COPY .docker/config/clamav/clamav.conf /tmp/clamav.conf
+
+RUN cat /tmp/clamav.conf >> /etc/clamav/clamd.conf && rm /tmp/clamav.conf && \
+    sed -i "s/^LogFile /# LogFile /g" /etc/clamav/clamd.conf && \
     sed -i "s/^#LogSyslog /LogSyslog /g" /etc/clamav/clamd.conf && \
     sed -i "s/^UpdateLogFile /# UpdateLogFile /g" /etc/clamav/freshclam.conf && \
     sed -i "s/^#LogSyslog /LogSyslog /g" /etc/clamav/freshclam.conf
