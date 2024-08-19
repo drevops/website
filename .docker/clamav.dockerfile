@@ -14,12 +14,9 @@ COPY .docker/config/clamav/clamav.conf /tmp/clamav.conf
 RUN cat /tmp/clamav.conf >> /etc/clamav/clamd.conf && \
     rm /tmp/clamav.conf && \
     mkdir -p /var/run/clamav /run/lock && \
-    chown -R clamav:clamav /var/run/clamav /run/clamav /var/log/clamav /var/lock /run/lock /var/lib/clamav && \
-    chmod 770 -R /var/run/clamav /run/clamav /var/log/clamav /var/lock /run/lock /var/lib/clamav
+    chown -R clamav:clamav /var/run/clamav /run/clamav /var/log/clamav /var/lock /run/lock && \
+    chmod 770 -R /var/run/clamav /run/clamav /var/log/clamav /var/lock /run/lock
 
-#VOLUME /var/lib/clamav
-
-#ENV CLAMAV_NO_CLAMD=true
-#ENV CLAMAV_NO_FRESHCLAMD=true
+VOLUME /var/lib/clamav
 
 USER clamav
