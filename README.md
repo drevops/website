@@ -15,26 +15,15 @@ Drupal 10 implementation of DrevOps Website for DrevOps
 
 ## Local environment setup
 
-- Make sure that you have latest versions of all required software installed:
-  - [Docker](https://www.docker.com/)
-  - [Pygmy](https://github.com/pygmystack/pygmy)
-  - [Ahoy](https://github.com/ahoy-cli/ahoy)
+- Make sure that you have latest versions of all required software installed: [Docker](https://www.docker.com/), [Pygmy](https://github.com/pygmystack/pygmy), [Ahoy](https://github.com/ahoy-cli/ahoy)
 - Make sure that all local web development services are shut down (Apache/Nginx, Mysql, MAMP etc).
 - Checkout project repository (in one of the [supported Docker directories](https://docs.docker.com/docker-for-mac/osxfs/#access-control)).
-
-
-
 - Authenticate with Lagoon
-  1. Create an SSH key and add it to your account in the [Lagoon Dashboard](https://ui-lagoon-master.ch.amazee.io/).
+  1. Create an SSH key and add it to your account in the [Lagoon Dashboard](https://dashboard.amazeeio.cloud/).
   2. Copy `.env.local.default` to `.env.local`.
   3. Update `$DREVOPS_DB_DOWNLOAD_SSH_FILE` environment variable in `.env.local` file
      with the path to the SSH key.
-
-
-
-
 - `ahoy download-db`
-
 - `pygmy up`
 - `ahoy build`
 
@@ -51,4 +40,4 @@ Copy `docker-compose.override.default.yml` to `docker-compose.override.yml`.
 - [Deployment](docs/deployment.md)
 
 ---
-_Repository created using [DrevOps Scaffold](https://github.com/drevops/scaffold) project template_
+_This repository was created using the [DrevOps Scaffold](https://github.com/drevops/scaffold) project template_
