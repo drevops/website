@@ -15,20 +15,30 @@
 # shellcheck disable=SC2086
 
 set -eu
-[ "${DREVOPS_DEBUG-}" = "1" ] && set -x
+[ "${VORTEX_DEBUG-}" = "1" ] && set -x
 
 # ------------------------------------------------------------------------------
 
 drush() { ./vendor/bin/drush -y "$@"; }
 
 # Perform operations based on the current environment.
-if echo "${DREVOPS_PROVISION_ENVIRONMENT:-}" | grep -q -e dev -e test -e ci -e local; then
+if echo "${VORTEX_PROVISION_ENVIRONMENT:-}" | grep -q -e dev -e test -e ci -e local; then
   echo "==> Executing example operations in non-production environment."
 
   # Below are examples of running operations.
 
   # Set site name.
   drush php:eval "\Drupal::service('config.factory')->getEditable('system.site')->set('name', 'DrevOps Website')->save();"
+
+  # Enable contrib modules.
+  drush pm:install admin_toolbar coffee config_split config_update media environment_indicator pathauto redirect shield stage_file_proxy
+
+  drush pm:install redis
+
+  drush pm:install clamav
+  drush config-set clamav.settings mode_daemon_tcpip.hostname clamav
+
+  drush pm:install search_api search_api_solr
 
   # Enable custom site module and run its deployment hooks.
   #
@@ -44,7 +54,7 @@ if echo "${DREVOPS_PROVISION_ENVIRONMENT:-}" | grep -q -e dev -e test -e ci -e l
   drush deploy:hook
 
   # Conditionally perform an action if this is a "fresh" database.
-  if [ "${DREVOPS_PROVISION_OVERRIDE_DB:-0}" = "1" ]; then
+  if [ "${VORTEX_PROVISION_OVERRIDE_DB:-0}" = "1" ]; then
     echo "  > Fresh database detected. Performing additional example operations."
   else
     echo "  > Existing database detected. Performing additional example operations."

@@ -9,9 +9,9 @@ Drupal 10 implementation of DrevOps Website for DrevOps
 [![RenovateBot](https://img.shields.io/badge/RenovateBot-enabled-brightgreen.svg?logo=renovatebot)](https://renovatebot.com)
 
 
-[//]: # (DO NOT REMOVE THE BADGE BELOW. IT IS USED BY DREVOPS TO TRACK INTEGRATION)
+[//]: # (DO NOT REMOVE THE BADGE BELOW. IT IS USED BY VORTEX TO TRACK INTEGRATION)
 
-[![DrevOps](https://img.shields.io/badge/DrevOps-1.22.0-blue.svg)](https://github.com/drevops/scaffold/tree/1.22.0)
+[![Vortex](https://img.shields.io/badge/Vortex-24.9.1-blue.svg)](https://github.com/drevops/vortex/tree/24.9.1)
 
 ## Local environment setup
 
@@ -21,15 +21,11 @@ Drupal 10 implementation of DrevOps Website for DrevOps
 - Authenticate with Lagoon
   1. Create an SSH key and add it to your account in the [Lagoon Dashboard](https://dashboard.amazeeio.cloud/).
   2. Copy `.env.local.default` to `.env.local`.
-  3. Update `$DREVOPS_DB_DOWNLOAD_SSH_FILE` environment variable in `.env.local` file
+  3. Update `$VORTEX_DB_DOWNLOAD_SSH_FILE` environment variable in `.env.local` file
      with the path to the SSH key.
 - `ahoy download-db`
 - `pygmy up`
 - `ahoy build`
-
-### Apple M1 adjustments
-
-Copy `docker-compose.override.default.yml` to `docker-compose.override.yml`.
 
 ## Project documentation
 
@@ -40,4 +36,4 @@ Copy `docker-compose.override.default.yml` to `docker-compose.override.yml`.
 - [Deployment](docs/deployment.md)
 
 ---
-_This repository was created using the [DrevOps Scaffold](https://github.com/drevops/scaffold) project template_
+_This repository was created using the [Vortex](https://github.com/drevops/vortex) project template_
