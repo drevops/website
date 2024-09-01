@@ -3,13 +3,3 @@ type: module
 description: Core feature for DrevOps Website site.
 core_version_requirement: ^10
 package: website
-dependencies:
-  - coffee:coffee
-  - config_split:config_split
-  - config_update:config_update
-  - drupal:media
-  - environment_indicator:environment_indicator
-  - pathauto:pathauto
-  - redirect:redirect
-  - shield:shield
-  - stage_file_proxy:stage_file_proxy

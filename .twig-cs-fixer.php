@@ -15,5 +15,6 @@ $finder->in(__DIR__ . '/web/themes/custom')->exclude([
 $config = new TwigCsFixer\Config\Config();
 $config->setRuleset($ruleset);
 $config->setFinder($finder);
+$config->addTokenParser(new Drupal\Core\Template\TwigTransTokenParser());
 
 return $config;

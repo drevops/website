@@ -31,7 +31,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
-    $this->assertEquals($expected_env, $this->settings['environment']);
+    $this->assertEquals($expected_env, $this->settings['environment'], print_r($vars, TRUE));
   }
 
   /**
@@ -55,31 +55,76 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       // Lagoon.
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
         ],
-        static::ENVIRONMENT_LOCAL,
+        static::ENVIRONMENT_DEV,
       ],
 
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'production',
         ],
         static::ENVIRONMENT_PROD,
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_GIT_BRANCH' => 'main',
-          'DREVOPS_LAGOON_PRODUCTION_BRANCH' => 'main',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'main',
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        ],
+        static::ENVIRONMENT_PROD,
+      ],
+      [
+        [
+          'LAGOON_KUBERNETES' => 1,
+          'LAGOON_GIT_BRANCH' => 'main',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'master',
+          'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        ],
+        static::ENVIRONMENT_TEST,
+      ],
+      [
+        [
+          'LAGOON_KUBERNETES' => 1,
+          'LAGOON_GIT_BRANCH' => 'master',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
+          'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        ],
+        static::ENVIRONMENT_TEST,
+      ],
+      [
+        [
+          'LAGOON_KUBERNETES' => 1,
+          'LAGOON_GIT_BRANCH' => 'master',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
+          'LAGOON_ENVIRONMENT_TYPE' => 'production',
+        ],
+        static::ENVIRONMENT_PROD,
+      ],
+      [
+        [
+          'LAGOON_KUBERNETES' => 1,
+          'LAGOON_GIT_BRANCH' => 'main',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
+          'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        ],
+        static::ENVIRONMENT_TEST,
+      ],
+      [
+        [
+          'LAGOON_KUBERNETES' => 1,
+          'LAGOON_GIT_BRANCH' => 'main',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
+          'LAGOON_ENVIRONMENT_TYPE' => 'production',
         ],
         static::ENVIRONMENT_PROD,
       ],
 
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => 'release',
         ],
@@ -87,7 +132,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => 'release/1.2.3',
         ],
@@ -95,7 +140,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => 'hotfix',
         ],
@@ -103,7 +148,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => 'hotfix/1.2.3',
         ],
@@ -112,7 +157,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => FALSE,
         ],
@@ -120,69 +165,69 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'DREVOPS_LAGOON_PRODUCTION_BRANCH' => FALSE,
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
         ],
         static::ENVIRONMENT_DEV,
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => FALSE,
-          'DREVOPS_LAGOON_PRODUCTION_BRANCH' => FALSE,
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
         ],
         static::ENVIRONMENT_DEV,
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => 'somebranch',
-          'DREVOPS_LAGOON_PRODUCTION_BRANCH' => FALSE,
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
         ],
         static::ENVIRONMENT_DEV,
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => FALSE,
-          'DREVOPS_LAGOON_PRODUCTION_BRANCH' => 'otherbranch',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'otherbranch',
         ],
         static::ENVIRONMENT_DEV,
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => 'somebranch',
-          'DREVOPS_LAGOON_PRODUCTION_BRANCH' => 'otherbranch',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'otherbranch',
         ],
         static::ENVIRONMENT_DEV,
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => '',
-          'DREVOPS_LAGOON_PRODUCTION_BRANCH' => '',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => '',
         ],
         static::ENVIRONMENT_DEV,
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => 'somebranch',
-          'DREVOPS_LAGOON_PRODUCTION_BRANCH' => 'somebranch',
+          'LAGOON_GIT_BRANCH' => 'mainbranch',
+          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'mainbranch',
         ],
         static::ENVIRONMENT_PROD,
       ],
       [
         [
-          'LAGOON' => 1,
+          'LAGOON_KUBERNETES' => 1,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
         ],
         static::ENVIRONMENT_DEV,
@@ -329,7 +374,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentLagoonDynamic(): void {
     $this->setEnvVars([
-      'LAGOON' => 1,
+      'LAGOON_KUBERNETES' => 1,
       'LAGOON_ENVIRONMENT_TYPE' => 'development',
       'LAGOON_ROUTES' => 'http://example1.com,https://example2/com',
       'LAGOON_PROJECT' => 'test_project',
@@ -381,7 +426,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentLagoonDev(): void {
     $this->setEnvVars([
-      'LAGOON' => 1,
+      'LAGOON_KUBERNETES' => 1,
       'LAGOON_ENVIRONMENT_TYPE' => 'development',
       'LAGOON_ROUTES' => 'http://example1.com,https://example2/com',
       'LAGOON_PROJECT' => 'test_project',
@@ -433,7 +478,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentLagoonTest(): void {
     $this->setEnvVars([
-      'LAGOON' => 1,
+      'LAGOON_KUBERNETES' => 1,
       'LAGOON_ENVIRONMENT_TYPE' => 'development',
       'LAGOON_ROUTES' => 'http://example1.com,https://example2/com',
       'LAGOON_PROJECT' => 'test_project',
@@ -485,13 +530,13 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentLagoonProd(): void {
     $this->setEnvVars([
-      'LAGOON' => 1,
+      'LAGOON_KUBERNETES' => 1,
       'LAGOON_ENVIRONMENT_TYPE' => 'production',
       'LAGOON_ROUTES' => 'http://example1.com,https://example2/com',
       'LAGOON_PROJECT' => 'test_project',
       'LAGOON_GIT_BRANCH' => 'production',
       'LAGOON_GIT_SAFE_BRANCH' => 'production',
-      'DREVOPS_LAGOON_PRODUCTION_BRANCH' => 'production',
+      'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'production',
     ]);
 
     $this->requireSettingsFile();
