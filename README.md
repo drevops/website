@@ -1,7 +1,7 @@
 # DrevOps Website
 Drupal 10 implementation of DrevOps Website for DrevOps
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/drevops/website.svg?style=shield&circle-token=CCIPRJ_PoXMozZNjmvtyESrUQdKZa_0b9f2ba0b72fd042187733abcecdc6b7ae5cdaf1)](https://dl.circleci.com/status-badge/redirect/gh/drevops/website)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/drevops/website/tree/develop.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/drevops/website/tree/develop)
 ![Drupal 10](https://img.shields.io/badge/Drupal-10-blue.svg)
 [![codecov](https://codecov.io/gh/drevops/website/graph/badge.svg)](https://codecov.io/gh/drevops/website)
 
