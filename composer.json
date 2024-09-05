@@ -153,6 +153,9 @@
         "patches": {
             "drupal/civictheme": {
                 "Fix menu items processing": "patches/civictheme/civictheme-fix-menu-items-processing.patch"
+            },
+            "drupal/gin": {
+                "Fix position of left-aligned dropbuttons": "patches/gin/fix-position-of-left-aligned-dropbuttons-3242554-459.patch"
             }
         }
     },

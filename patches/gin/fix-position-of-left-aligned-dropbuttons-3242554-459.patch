@@ -1,0 +1,199 @@
+diff --git a/.gitignore b/.gitignore
+index 062dc2565c0c55877bb90b6b18e580b930fd421b..1645808ab626bee21fb2c5fad097f73e416e6a90 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -20,3 +20,6 @@ domain.json
+ 
+ # Ignore npm debugs
+ npm-debug.log
++
++# Ignore  JetBrains`s IDE  files
++.idea
+diff --git a/dist/css/base/gin.css b/dist/css/base/gin.css
+index fa12d305a8f5dd87d65f6cb7e793a55404bace2f..266a86f2fbed49bc63ff79b0bef01a7a119876e3 100644
+--- a/dist/css/base/gin.css
++++ b/dist/css/base/gin.css
+@@ -2653,6 +2653,14 @@ html.js .dropbutton-widget {
+   background-color: transparent;
+ }
+ 
++html.js .dropbutton-wrapper.open .dropbutton-widget {
++  z-index: 502;
++}
++
++html.js .dropbutton-wrapper.open .dropbutton {
++  background: var(--gin-bg-layer3);
++}
++
+ .dropbutton {
+   border: 2px solid var(--gin-color-primary);
+   border-radius: var(--gin-border-m);
+@@ -2979,6 +2987,8 @@ html.js .dropbutton-wrapper:not(.open) .dropbutton__items {
+ html.js .dropbutton-wrapper .dropbutton__items {
+   visibility: visible;
+   opacity: 1;
++  max-height: 30vh;
++  overflow: auto;
+ }
+ 
+ html.js .dropbutton-wrapper:not(.open) .dropbutton__item:first-of-type ~ .dropbutton__items {
+@@ -2987,6 +2997,7 @@ html.js .dropbutton-wrapper:not(.open) .dropbutton__item:first-of-type ~ .dropbu
+ 
+ html.js .dropbutton-wrapper:not(.open) .dropbutton__items .dropbutton__item:first-of-type ~ .dropbutton__item {
+   display: block;
++  height: auto;
+ }
+ 
+ html[dir="ltr"].js.no-touchevents .dropbutton--multiple.dropbutton--small .dropbutton__item:first-of-type {
+@@ -3048,6 +3059,10 @@ html[dir="rtl"].js.no-touchevents .dropbutton--multiple.dropbutton--extrasmall .
+   margin-left: 0;
+ }
+ 
++.layout-region-node-secondary .dropbutton .dropbutton__items {
++  min-width: 80px;
++}
++
+ .action-link {
+   color: var(--gin-color-primary);
+   background: transparent;
+diff --git a/dist/js/dropbutton.js b/dist/js/dropbutton.js
+index 96da51c77b9fc219aa3c1e6ed1c52497df2637b4..9b3e734d64362a6ccad94d30ebd661fd615fe9cc 100644
+--- a/dist/js/dropbutton.js
++++ b/dist/js/dropbutton.js
+@@ -8,9 +8,17 @@
+       }));
+     },
+     updatePosition: function(el) {
+-      const secondaryAction = el.querySelector(".secondary-action"), dropbuttonItems = el.querySelector(".dropbutton__items"), toggleHeight = el.offsetHeight, dropbuttonHeight = dropbuttonItems.offsetHeight, boundingRect = secondaryAction.getBoundingClientRect(), spaceBelow = window.innerHeight - boundingRect.bottom;
+-      dropbuttonItems.style.position = "fixed", dropbuttonItems.style.right = window.innerWidth - boundingRect.right + "px", 
+-      dropbuttonItems.style.top = spaceBelow < dropbuttonHeight ? boundingRect.top - toggleHeight - dropbuttonHeight + "px" : `${boundingRect.bottom}px`;
++      const preferredDir = document.documentElement.dir ?? "ltr", secondaryAction = el.querySelector(".secondary-action"), dropMenu = el.querySelector(".dropbutton__items"), toggleHeight = el.offsetHeight, dropMenuWidth = dropMenu.offsetWidth, dropMenuHeight = dropMenu.offsetHeight, boundingRect = secondaryAction.getBoundingClientRect(), spaceBelow = window.innerHeight - boundingRect.bottom, spaceLeft = boundingRect.left, spaceRight = window.innerWidth - boundingRect.right;
++      dropMenu.style.position = "fixed";
++      const leftAlignStyles = {
++        left: `${boundingRect.left}px`,
++        right: "auto"
++      }, rightAlignStyles = {
++        left: "auto",
++        right: window.innerWidth - boundingRect.right + "px"
++      };
++      "ltr" === preferredDir ? spaceRight >= dropMenuWidth ? Object.assign(dropMenu.style, leftAlignStyles) : Object.assign(dropMenu.style, rightAlignStyles) : spaceLeft >= dropMenuWidth ? Object.assign(dropMenu.style, rightAlignStyles) : Object.assign(dropMenu.style, leftAlignStyles), 
++      dropMenu.style.top = spaceBelow >= dropMenuHeight ? `${boundingRect.bottom}px` : boundingRect.top - toggleHeight - dropMenuHeight + "px";
+     }
+   };
+ })(Drupal, once);
+\ No newline at end of file
+diff --git a/js/dropbutton.js b/js/dropbutton.js
+index d6ca69b640c30a3a19e74ed1fbcb8128884c31ab..e3c265e20dc65b7cd5e1e453ed65be5d7958e0cc 100644
+--- a/js/dropbutton.js
++++ b/js/dropbutton.js
+@@ -12,21 +12,50 @@
+     },
+ 
+     updatePosition: function (el) {
++      const preferredDir = document.documentElement.dir ?? 'ltr';
+       const secondaryAction = el.querySelector('.secondary-action');
+-      const dropbuttonItems = el.querySelector('.dropbutton__items');
++      const dropMenu = el.querySelector('.dropbutton__items');
+       const toggleHeight = el.offsetHeight;
+-      const dropbuttonHeight = dropbuttonItems.offsetHeight;
++      const dropMenuWidth = dropMenu.offsetWidth;
++      const dropMenuHeight = dropMenu.offsetHeight;
+       const boundingRect = secondaryAction.getBoundingClientRect();
+       const spaceBelow = window.innerHeight - boundingRect.bottom;
++      const spaceLeft = boundingRect.left;
++      const spaceRight = window.innerWidth - boundingRect.right;
+ 
+-      dropbuttonItems.style.position = 'fixed';
+-      dropbuttonItems.style.right = `${window.innerWidth - boundingRect.right}px`;
++      dropMenu.style.position = 'fixed';
+ 
+-      if (spaceBelow < dropbuttonHeight) {
+-        dropbuttonItems.style.top = `${boundingRect.top - toggleHeight - dropbuttonHeight}px`;
++      // Calculate the menu position based on available space and the preferred
++      // reading direction.
++      const leftAlignStyles = {
++        left: `${boundingRect.left}px`,
++        right: 'auto'
++      };
++      const rightAlignStyles = {
++        left: 'auto',
++        right: `${window.innerWidth - boundingRect.right}px`
++      };
++
++      if ('ltr' === preferredDir) {
++        if (spaceRight >= dropMenuWidth) {
++          Object.assign(dropMenu.style, leftAlignStyles);
++        } else {
++          Object.assign(dropMenu.style, rightAlignStyles);
++        }
+       } else {
+-        dropbuttonItems.style.top = `${boundingRect.bottom}px`;
++        if (spaceLeft >= dropMenuWidth) {
++          Object.assign(dropMenu.style, rightAlignStyles);
++        } else {
++          Object.assign(dropMenu.style, leftAlignStyles);
++        }
+       }
++
++      if (spaceBelow >= dropMenuHeight) {
++        dropMenu.style.top = `${boundingRect.bottom}px`;
++      } else {
++        dropMenu.style.top = `${boundingRect.top - toggleHeight - dropMenuHeight}px`
++      }
++
+     },
+ 
+   };
+diff --git a/styles/base/_dropbutton.scss b/styles/base/_dropbutton.scss
+index 7750920a6b2983c760181aa4ae13e14c3b452764..40cd73365f6adc6875c40f274eaee3afeea924dc 100644
+--- a/styles/base/_dropbutton.scss
++++ b/styles/base/_dropbutton.scss
+@@ -3,6 +3,19 @@ html.js .dropbutton-widget {
+   background-color: transparent;
+ }
+ 
++// Overlay the dropdown button on top of the sticky header and main toolbar
++html.js {
++  .dropbutton-wrapper.open {
++    .dropbutton-widget {
++      z-index: 502; // Above toolbar and sticky header
++    }
++
++    .dropbutton {
++      background: var(--gin-bg-layer3);
++    }
++  }
++}
++
+ .dropbutton {
+   border: 2px solid var(--gin-color-primary);
+   border-radius: var(--gin-border-m);
+@@ -233,6 +246,8 @@ html.js {
+   .dropbutton-wrapper .dropbutton__items {
+     visibility: visible;
+     opacity: 1;
++    max-height: 30vh;
++    overflow: auto;
+   }
+ 
+   .dropbutton-wrapper:not(.open) .dropbutton__item:first-of-type ~ .dropbutton__items {
+@@ -241,6 +256,7 @@ html.js {
+ 
+   .dropbutton-wrapper:not(.open) .dropbutton__items .dropbutton__item:first-of-type ~ .dropbutton__item {
+     display: block;
++    height: auto;
+   }
+ }
+ 
+@@ -288,3 +304,11 @@ html.js.no-touchevents {
+     margin-right: 0;
+   }
+ }
++
++.layout-region-node-secondary {
++  .dropbutton {
++    .dropbutton__items {
++      min-width: 80px;
++    }
++  }
++}
