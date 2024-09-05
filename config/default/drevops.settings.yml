@@ -61,7 +61,7 @@ components:
   navigation_card:
     summary_length: '160'
   promo_card:
-    summary_length: '160'
+    summary_length: '250'
   publication_card:
     summary_length: '160'
     use_media_name: 1
