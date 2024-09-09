@@ -20,14 +20,14 @@ components:
     secondary:
       light:
         desktop:
-          path: themes/custom/drevops/dist/assets/logos/logo_secondary_light_desktop.png
+          path: themes/custom/drevops/dist/assets/logos/logo_secondary_light_desktop.svg
         mobile:
-          path: themes/custom/drevops/dist/assets/logos/logo_secondary_light_mobile.png
+          path: themes/custom/drevops/dist/assets/logos/logo_secondary_light_mobile.svg
       dark:
         desktop:
-          path: themes/custom/drevops/dist/assets/logos/logo_secondary_dark_desktop.png
+          path: themes/custom/drevops/dist/assets/logos/logo_secondary_dark_desktop.svg
         mobile:
-          path: themes/custom/drevops/dist/assets/logos/logo_secondary_dark_mobile.png
+          path: themes/custom/drevops/dist/assets/logos/logo_secondary_dark_mobile.svg
     image_alt: 'Logo image'
   site_slogan:
     content: 'A design system by Salsa Digital'
