@@ -1,8 +1,8 @@
 name: DrevOps
 type: theme
 base theme: civictheme
-description: 'DrevOps public website'
-core_version_requirement: ^9 || ^10
+description: 'DrevOps website theme based on CivicTheme'
+core_version_requirement: ^9 || ^10 || ^11
 
 regions:
   header_top_1: 'Header top 1'
@@ -71,7 +71,7 @@ components:
     templates:
       - components/04-templates
 
-# Information added by Drupal.org packaging script on 2024-07-19
-version: '1.8.1'
+# Information added by Drupal.org packaging script on 2025-03-25
+version: '1.10.0'
 project: 'civictheme'
-datestamp: 1721365941
+datestamp: 1742872350

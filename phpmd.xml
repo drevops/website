@@ -21,7 +21,6 @@
     <exclude-pattern>*/web/modules/custom/*/*.post_update.php</exclude-pattern>
     <exclude-pattern>*/web/modules/custom/*/*.install</exclude-pattern>
 
-
     <rule ref="rulesets/unusedcode.xml"/>
     <rule ref="rulesets/codesize.xml"/>
     <rule ref="rulesets/cleancode.xml">

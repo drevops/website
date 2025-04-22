@@ -7,6 +7,10 @@
 
 declare(strict_types=1);
 
+if (file_exists($app_root . '/' . $site_path . '/services.local.yml')) {
+  $settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.local.yml';
+}
+
 // Show all error messages on the site.
 $config['system.logging']['error_level'] = 'all';
 
@@ -25,6 +29,3 @@ $config['system.performance']['js']['preprocess'] = FALSE;
 
 // Hide admin toolbar. Useful for themeing while logged in as admin.
 // $settings['hide_admin_toolbar'] = TRUE;
-
-// Disable state cache.
-$settings['state_cache'] = FALSE;
