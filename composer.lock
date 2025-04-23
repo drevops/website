@@ -3490,17 +3490,17 @@
         },
         {
             "name": "drupal/search_api_solr",
-            "version": "4.3.8",
+            "version": "4.3.10",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_solr.git",
-                "reference": "4.3.8"
+                "reference": "4.3.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_solr-4.3.8.zip",
-                "reference": "4.3.8",
-                "shasum": "6eb8c620c17f37639fd44c78819925ca05e0da47"
+                "url": "https://ftp.drupal.org/files/projects/search_api_solr-4.3.10.zip",
+                "reference": "4.3.10",
+                "shasum": "8d37467f0f2ab34ed6a0b61872ce7ff8e5e64730"
             },
             "require": {
                 "composer-runtime-api": ">=2.0",
@@ -3541,8 +3541,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.3.8",
-                    "datestamp": "1740166987",
+                    "version": "4.3.10",
+                    "datestamp": "1745427496",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9110,16 +9110,16 @@
     "packages-dev": [
         {
             "name": "behat/behat",
-            "version": "v3.21.0",
+            "version": "v3.21.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "4b6a6cd83202619d22bea6f27a2e8b91d9a3ba8c"
+                "reference": "315970f1f0c7c65e50aac87494575cfb9c6aa9e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/4b6a6cd83202619d22bea6f27a2e8b91d9a3ba8c",
-                "reference": "4b6a6cd83202619d22bea6f27a2e8b91d9a3ba8c",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/315970f1f0c7c65e50aac87494575cfb9c6aa9e3",
+                "reference": "315970f1f0c7c65e50aac87494575cfb9c6aa9e3",
                 "shasum": ""
             },
             "require": {
@@ -9197,9 +9197,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Behat/issues",
-                "source": "https://github.com/Behat/Behat/tree/v3.21.0"
+                "source": "https://github.com/Behat/Behat/tree/v3.21.1"
             },
-            "time": "2025-04-21T07:26:35+00:00"
+            "time": "2025-04-22T17:38:51+00:00"
         },
         {
             "name": "behat/gherkin",
