@@ -1,10 +1,10 @@
 {
     "name": "civictheme/drevops",
-    "description": "DrevOps public website",
+    "description": "DrevOps website theme based on CivicTheme",
     "type": "drupal-theme",
     "license": "proprietary",
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.3"
     },
     "extra": {
         "civictheme": {

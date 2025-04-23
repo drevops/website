@@ -2,6 +2,8 @@
 ##
 # Export database as a container image.
 #
+# IMPORTANT! This script runs outside the container on the host system.
+#
 # shellcheck disable=SC1090,SC1091
 
 t=$(mktemp) && export -p >"${t}" && set -a && . ./.env && if [ -f ./.env.local ]; then . ./.env.local; fi && set +a && . "${t}" && rm "${t}" && unset t
@@ -19,7 +21,7 @@ VORTEX_DB_EXPORT_IMAGE="${VORTEX_DB_EXPORT_IMAGE:-}"
 VORTEX_DB_EXPORT_CONTAINER_REGISTRY="${VORTEX_DB_EXPORT_CONTAINER_REGISTRY:-${VORTEX_CONTAINER_REGISTRY:-docker.io}}"
 
 # The service name to capture.
-VORTEX_DB_EXPORT_SERVICE_NAME="${VORTEX_DB_EXPORT_SERVICE_NAME:-mariadb}"
+VORTEX_DB_EXPORT_SERVICE_NAME="${VORTEX_DB_EXPORT_SERVICE_NAME:-database}"
 
 # Directory with database image archive file.
 VORTEX_DB_EXPORT_IMAGE_DIR="${VORTEX_DB_EXPORT_IMAGE_DIR:-${VORTEX_DB_DIR}}"
@@ -54,7 +56,7 @@ sleep 5
 docker compose exec -T "${VORTEX_DB_EXPORT_SERVICE_NAME}" mysql -e "UNLOCK TABLES;"
 
 note "Running forced service upgrade."
-docker compose exec -T "${VORTEX_DB_EXPORT_SERVICE_NAME}" sh -c "mysql_upgrade --force"
+docker compose exec -T "${VORTEX_DB_EXPORT_SERVICE_NAME}" sh -c "mariadb-upgrade --force || mariadb-upgrade --force"
 
 note "Locking tables after upgrade."
 docker compose exec -T "${VORTEX_DB_EXPORT_SERVICE_NAME}" mysql -e "FLUSH TABLES WITH READ LOCK;"

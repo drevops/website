@@ -37,9 +37,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
   /**
    * Data provider for testing of the resulting environment.
    */
-  public function dataProviderEnvironmentTypeResolution(): array {
-    $this->requireSettingsFile();
-
+  public static function dataProviderEnvironmentTypeResolution(): array {
     return [
       // By default, the default environment type is local.
       [[], static::ENVIRONMENT_LOCAL],
@@ -83,7 +81,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
           'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'master',
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
         ],
-        static::ENVIRONMENT_TEST,
+        static::ENVIRONMENT_STAGE,
       ],
       [
         [
@@ -92,7 +90,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
           'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
         ],
-        static::ENVIRONMENT_TEST,
+        static::ENVIRONMENT_STAGE,
       ],
       [
         [
@@ -110,7 +108,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
           'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
         ],
-        static::ENVIRONMENT_TEST,
+        static::ENVIRONMENT_STAGE,
       ],
       [
         [
@@ -136,7 +134,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => 'release/1.2.3',
         ],
-        static::ENVIRONMENT_TEST,
+        static::ENVIRONMENT_STAGE,
       ],
       [
         [
@@ -152,7 +150,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
           'LAGOON_ENVIRONMENT_TYPE' => 'development',
           'LAGOON_GIT_BRANCH' => 'hotfix/1.2.3',
         ],
-        static::ENVIRONMENT_TEST,
+        static::ENVIRONMENT_STAGE,
       ],
 
       [
@@ -250,14 +248,13 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_SUT;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['maintenance_theme'] = 'drevops';
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
     $config['system.performance']['js']['preprocess'] = 1;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = [];
+    $settings['config_exclude_modules'] = ['devel'];
     $settings['config_sync_directory'] = static::CONFIG_PATH_TESTING;
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -268,12 +265,11 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'bower_components',
     ];
     $settings['file_temp_path'] = static::TMP_PATH_TESTING;
-    $settings['hash_salt'] = hash('sha256', getenv('MARIADB_HOST') ?: 'localhost');
+    $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['trusted_host_patterns'] = [
       '^.+\.docker\.amazee\.io$',
       '^nginx$',
     ];
-    $settings['state_cache'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -294,15 +290,15 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_LOCAL;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['maintenance_theme'] = 'drevops';
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
     $config['system.performance']['js']['preprocess'] = 1;
+    $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = [];
+    $settings['config_exclude_modules'] = ['devel'];
     $settings['config_sync_directory'] = static::CONFIG_PATH_TESTING;
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -313,13 +309,12 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'bower_components',
     ];
     $settings['file_temp_path'] = static::TMP_PATH_TESTING;
-    $settings['hash_salt'] = hash('sha256', getenv('MARIADB_HOST') ?: 'localhost');
+    $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['skip_permissions_hardening'] = TRUE;
     $settings['trusted_host_patterns'] = [
       '^.+\.docker\.amazee\.io$',
       '^nginx$',
     ];
-    $settings['state_cache'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -340,14 +335,14 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_CI;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['maintenance_theme'] = 'drevops';
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
     $config['system.performance']['js']['preprocess'] = 1;
+    $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = [];
+    $settings['config_exclude_modules'] = ['devel'];
     $settings['config_sync_directory'] = static::CONFIG_PATH_TESTING;
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -358,14 +353,13 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'bower_components',
     ];
     $settings['file_temp_path'] = static::TMP_PATH_TESTING;
-    $settings['hash_salt'] = hash('sha256', getenv('MARIADB_HOST') ?: 'localhost');
+    $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['skip_permissions_hardening'] = TRUE;
     $settings['suspend_mail_send'] = TRUE;
     $settings['trusted_host_patterns'] = [
       '^.+\.docker\.amazee\.io$',
       '^nginx$',
     ];
-    $settings['state_cache'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -390,7 +384,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_DEV;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['maintenance_theme'] = 'drevops';
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
@@ -398,7 +391,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_test_branch';
-    $settings['config_exclude_modules'] = [];
+    $settings['config_exclude_modules'] = ['devel'];
     $settings['config_sync_directory'] = static::CONFIG_PATH_TESTING;
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -409,7 +402,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'bower_components',
     ];
     $settings['file_temp_path'] = static::TMP_PATH_TESTING;
-    $settings['hash_salt'] = hash('sha256', getenv('MARIADB_HOST') ?: 'localhost');
+    $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['reverse_proxy'] = TRUE;
     $settings['reverse_proxy_header'] = 'HTTP_TRUE_CLIENT_IP';
     $settings['trusted_host_patterns'][] = '^.+\.docker\.amazee\.io$';
@@ -417,7 +410,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'][] = '^nginx\-php$';
     $settings['trusted_host_patterns'][] = '^.+\.au\.amazee\.io$';
     $settings['trusted_host_patterns'][] = '^example1\.com|example2/com$';
-    $settings['state_cache'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -442,7 +434,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_DEV;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['maintenance_theme'] = 'drevops';
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
@@ -450,7 +441,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_develop';
-    $settings['config_exclude_modules'] = [];
+    $settings['config_exclude_modules'] = ['devel'];
     $settings['config_sync_directory'] = static::CONFIG_PATH_TESTING;
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -461,7 +452,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'bower_components',
     ];
     $settings['file_temp_path'] = static::TMP_PATH_TESTING;
-    $settings['hash_salt'] = hash('sha256', getenv('MARIADB_HOST') ?: 'localhost');
+    $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['reverse_proxy'] = TRUE;
     $settings['reverse_proxy_header'] = 'HTTP_TRUE_CLIENT_IP';
     $settings['trusted_host_patterns'][] = '^.+\.docker\.amazee\.io$';
@@ -469,7 +460,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'][] = '^nginx\-php$';
     $settings['trusted_host_patterns'][] = '^.+\.au\.amazee\.io$';
     $settings['trusted_host_patterns'][] = '^example1\.com|example2/com$';
-    $settings['state_cache'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -491,10 +481,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['config_split.config_split.test']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#fff176';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
-    $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_TEST;
+    $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_STAGE;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['maintenance_theme'] = 'drevops';
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
@@ -502,18 +491,18 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_master';
-    $settings['config_exclude_modules'] = [];
+    $settings['config_exclude_modules'] = ['devel'];
     $settings['config_sync_directory'] = static::CONFIG_PATH_TESTING;
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
-    $settings['environment'] = static::ENVIRONMENT_TEST;
+    $settings['environment'] = static::ENVIRONMENT_STAGE;
     $settings['file_private_path'] = static::PRIVATE_PATH_TESTING;
     $settings['file_scan_ignore_directories'] = [
       'node_modules',
       'bower_components',
     ];
     $settings['file_temp_path'] = static::TMP_PATH_TESTING;
-    $settings['hash_salt'] = hash('sha256', getenv('MARIADB_HOST') ?: 'localhost');
+    $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['reverse_proxy'] = TRUE;
     $settings['reverse_proxy_header'] = 'HTTP_TRUE_CLIENT_IP';
     $settings['trusted_host_patterns'][] = '^.+\.docker\.amazee\.io$';
@@ -521,7 +510,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'][] = '^nginx\-php$';
     $settings['trusted_host_patterns'][] = '^.+\.au\.amazee\.io$';
     $settings['trusted_host_patterns'][] = '^example1\.com|example2/com$';
-    $settings['state_cache'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -546,14 +534,13 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_PROD;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['maintenance_theme'] = 'drevops';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
     $config['system.performance']['js']['preprocess'] = 1;
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_production';
-    $settings['config_exclude_modules'] = [];
+    $settings['config_exclude_modules'] = ['devel'];
     $settings['config_sync_directory'] = static::CONFIG_PATH_TESTING;
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -564,7 +551,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'bower_components',
     ];
     $settings['file_temp_path'] = static::TMP_PATH_TESTING;
-    $settings['hash_salt'] = hash('sha256', getenv('MARIADB_HOST') ?: 'localhost');
+    $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['reverse_proxy'] = TRUE;
     $settings['reverse_proxy_header'] = 'HTTP_TRUE_CLIENT_IP';
     $settings['trusted_host_patterns'][] = '^.+\.docker\.amazee\.io$';
@@ -572,7 +559,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'][] = '^nginx\-php$';
     $settings['trusted_host_patterns'][] = '^.+\.au\.amazee\.io$';
     $settings['trusted_host_patterns'][] = '^example1\.com|example2/com$';
-    $settings['state_cache'] = TRUE;
     $this->assertSettings($settings);
   }
 

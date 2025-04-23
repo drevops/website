@@ -37,7 +37,6 @@ web/sites/default/*
 !web/robots.txt
 !web/update.php
 
-
 # Ignore dependencies cache files.
 /vendor
 /node_modules
@@ -47,9 +46,10 @@ web/themes/**/node_modules
 web/themes/**/build
 .data
 .logs
+.phpunit.cache
 .twig-cs-fixer.cache
 
 # Ignore local override files.
-docker-compose.override.yml
-.env.local
-.ahoy.local.yml
+/docker-compose.override.yml
+/.env.local
+/.ahoy.local.yml

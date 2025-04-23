@@ -11,7 +11,7 @@ parameters:
 
   level: 7
 
-  phpVersion: 80310
+  phpVersion: 80312
 
   paths:
     - web/modules/custom
@@ -25,9 +25,6 @@ parameters:
     - node_modules/*
     - ../*/vendor/*
     - ../*/node_modules/*
-
-  drupal:
-    drupal_root: web
 
   ignoreErrors:
     -
@@ -47,6 +44,7 @@ parameters:
       paths:
         - web/modules/custom/*
         - web/themes/custom/*
+      reportUnmatched: false
     -
       # Included settings files are not aware about global variables.
       message: '#Variable .* might not be defined.#'
