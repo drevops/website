@@ -4,6 +4,8 @@
 #
 # This is a router script to call relevant scripts based on type.
 #
+# IMPORTANT! This script runs outside the container on the host system.
+#
 # shellcheck disable=SC1090,SC1091
 
 t=$(mktemp) && export -p >"${t}" && set -a && . ./.env && if [ -f ./.env.local ]; then . ./.env.local; fi && set +a && . "${t}" && rm "${t}" && unset t
@@ -43,7 +45,7 @@ else
   # Deploy container image.
   # @todo Move deployment into a separate script.
   if [ "${VORTEX_EXPORT_DB_CONTAINER_REGISTRY_DEPLOY_PROCEED:-}" = "1" ]; then
-    VORTEX_DEPLOY_CONTAINER_REGISTRY_MAP=mariadb=${VORTEX_DB_IMAGE} \
+    VORTEX_DEPLOY_CONTAINER_REGISTRY_MAP=database=${VORTEX_DB_IMAGE} \
       ./scripts/vortex/deploy-container-registry.sh
   fi
 fi

@@ -8,6 +8,8 @@ namespace Drupal\Tests\do_core\Traits;
  * Trait ReflectionTrait.
  *
  * Provides methods to work with class reflection.
+ *
+ * @codeCoverageIgnore
  */
 trait ReflectionTrait {
 
@@ -84,7 +86,7 @@ trait ReflectionTrait {
    * @return mixed
    *   Protected property value.
    */
-  protected static function getProtectedValue($object, $property) {
+  protected static function getProtectedValue($object, $property): mixed {
     $class = new \ReflectionClass($object::class);
     $property = $class->getProperty($property);
     $property->setAccessible(TRUE);

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * DrevOps Website Drupal context for Behat testing.
+ * Drupal context for Behat testing.
  */
 
 declare(strict_types=1);

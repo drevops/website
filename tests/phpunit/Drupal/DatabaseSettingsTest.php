@@ -50,11 +50,34 @@ class DatabaseSettingsTest extends SettingsTestCase {
 
       [
         [
-          'MARIADB_DATABASE' => 'test_db_name',
-          'MARIADB_USERNAME' => 'test_db_user',
-          'MARIADB_PASSWORD' => 'test_db_pass',
-          'MARIADB_HOST' => 'test_db_host',
-          'MARIADB_PORT' => 'test_db_port',
+          'DATABASE_NAME' => 'test_db_name',
+          'DATABASE_USERNAME' => 'test_db_user',
+          'DATABASE_PASSWORD' => 'test_db_pass',
+          'DATABASE_HOST' => 'test_db_host',
+          'DATABASE_PORT' => 'test_db_port',
+        ],
+        [
+          'default' => [
+            'default' => [
+              'database' => 'test_db_name',
+              'username' => 'test_db_user',
+              'password' => 'test_db_pass',
+              'host' => 'test_db_host',
+              'port' => 'test_db_port',
+              'driver' => 'mysql',
+              'prefix' => '',
+            ],
+          ],
+        ],
+      ],
+
+      [
+        [
+          'DATABASE_DATABASE' => 'test_db_name',
+          'DATABASE_USERNAME' => 'test_db_user',
+          'DATABASE_PASSWORD' => 'test_db_pass',
+          'DATABASE_HOST' => 'test_db_host',
+          'DATABASE_PORT' => 'test_db_port',
         ],
         [
           'default' => [
