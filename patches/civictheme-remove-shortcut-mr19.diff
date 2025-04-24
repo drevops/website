@@ -1,0 +1,12 @@
+diff --git a/civictheme.info.yml b/civictheme.info.yml
+index b5c4af79a9f4c4b4cf9353da320d2b7a4d2a6ad9..bb03a938be2a18ca96f79901f6f2dc586a2ebfdf 100644
+--- a/civictheme.info.yml
++++ b/civictheme.info.yml
+@@ -25,7 +25,6 @@ dependencies:
+   - drupal:media_library
+   - drupal:options
+   - drupal:rest
+-  - drupal:shortcut
+   - drupal:taxonomy
+   - drupal:user
+   - drupal:views
