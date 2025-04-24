@@ -295,7 +295,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
     $config['system.performance']['js']['preprocess'] = 1;
-    $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
+    $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
     $settings['config_exclude_modules'] = ['devel'];
@@ -339,7 +339,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = 1;
     $config['system.performance']['js']['preprocess'] = 1;
-    $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
+    $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
     $settings['config_exclude_modules'] = ['devel'];

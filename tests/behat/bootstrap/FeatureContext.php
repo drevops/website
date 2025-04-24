@@ -12,6 +12,7 @@ use DrevOps\BehatSteps\FieldTrait;
 use DrevOps\BehatSteps\FileTrait;
 use DrevOps\BehatSteps\ParagraphsTrait;
 use DrevOps\BehatSteps\PathTrait;
+use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\SearchApiTrait;
 use DrevOps\BehatSteps\TaxonomyTrait;
 use DrevOps\BehatSteps\WaitTrait;
@@ -28,6 +29,7 @@ class FeatureContext extends DrupalContext {
   use FileTrait;
   use ParagraphsTrait;
   use PathTrait;
+  use ResponseTrait;
   use SearchApiTrait;
   use TaxonomyTrait;
   use WaitTrait;
