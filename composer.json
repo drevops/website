@@ -17,6 +17,7 @@
         "drupal/core-recommended": "~11.1.6",
         "drupal/devel": "^5.3.1",
         "drupal/environment_indicator": "^4.0.21",
+        "drupal/field_group": "^3.6",
         "drupal/gin": "^4.0.6",
         "drupal/gin_toolbar": "^2",
         "drupal/google_tag": "^2.0",
@@ -167,6 +168,10 @@
             },
             "drupal/environment_indicator": {
                 "Gin vertical toolbar submenu's overlap": "https://www.drupal.org/files/issues/2024-12-03/3487202-gin-vertical-toolbar-9.patch"
+            },
+            "drupal/field_group": {
+                "Duplicated required marks in field tabs with Gin admin theme": "https://www.drupal.org/files/issues/2025-01-15/3395375-field_group-duplicate-require-3.x-24.patch",
+                "Tabs with invalid input are not focused - https://www.drupal.org/project/field_group/issues/2894351": "https://www.drupal.org/files/issues/2024-08-07/field-group-tabs-8.x-3.x.patch"
             }
         }
     },
