@@ -25,7 +25,6 @@ dependencies:
     - media
     - node
     - path
-    - shortcut
     - system
     - taxonomy
     - toolbar
@@ -40,7 +39,6 @@ permissions:
   - 'access contextual links'
   - 'access files overview'
   - 'access media overview'
-  - 'access shortcuts'
   - 'access toolbar'
   - 'administer linkit profiles'
   - 'administer url aliases'
