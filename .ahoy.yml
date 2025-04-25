@@ -135,6 +135,10 @@ commands:
     usage: Provision a site from the database dump or profile.
     cmd: ahoy cli ./scripts/vortex/provision.sh
 
+  import-db:
+    usage: Import database from dump.
+    cmd: VORTEX_PROVISION_POST_OPERATIONS_SKIP=1 ahoy cli ./scripts/vortex/provision.sh
+
   export-db:
     usage: Export database dump or database image (if VORTEX_DB_IMAGE variable is set).
     cmd: ./scripts/vortex/export-db.sh "$@"
