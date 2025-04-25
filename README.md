@@ -14,6 +14,8 @@ Drupal 11 implementation of DrevOps Website for DrevOps
 
 [![Vortex](https://img.shields.io/badge/Vortex-25.4.0-5909A1.svg)](https://github.com/drevops/vortex/tree/25.4.0)
 
+</div>
+
 ## Local environment setup
 
 - Make sure that you have latest versions of all required software installed: [Docker](https://www.docker.com/), [Pygmy](https://github.com/pygmystack/pygmy), [Ahoy](https://github.com/ahoy-cli/ahoy)
