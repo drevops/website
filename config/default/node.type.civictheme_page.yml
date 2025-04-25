@@ -8,6 +8,7 @@ third_party_settings:
   menu_ui:
     available_menus:
       - civictheme-primary-navigation
+      - civictheme-secondary-navigation
     parent: 'civictheme-primary-navigation:'
 _core:
   default_config_hash: IwZ8QoIFmMADmoayLHmWf-MmeApxzgrdAC95SMWyN24

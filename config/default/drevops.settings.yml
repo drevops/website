@@ -32,7 +32,7 @@ components:
   site_slogan:
     content: 'A design system by Salsa Digital'
   header:
-    theme: light
+    theme: dark
     logo_type: default
   footer:
     theme: dark
@@ -59,9 +59,9 @@ components:
   event_card:
     summary_length: '160'
   navigation_card:
-    summary_length: '160'
+    summary_length: '1000'
   promo_card:
-    summary_length: '250'
+    summary_length: '3000'
   publication_card:
     summary_length: '160'
     use_media_name: 1
@@ -76,16 +76,16 @@ colors:
     light:
       brand1: '#42748a'
       brand2: '#f2f5f8'
-      brand3: '#e552a4'
+      brand3: '#d16313'
     dark:
       brand1: '#90cfeb'
       brand2: '#2b3f53'
-      brand3: '#ad1a6b'
+      brand3: '#d16314'
   palette:
     light:
       background: '#f2f5f8'
       border: '#606263'
-      highlight: '#e552a4'
+      highlight: '#d16313'
       heading: '#1a2e37'
       body: '#3d4548'
       background_light: '#fdfefe'
@@ -96,7 +96,7 @@ colors:
       interaction_background: '#42748a'
       interaction_hover_text: '#fcfdfd'
       interaction_hover_background: '#274552'
-      interaction_focus: '#855cd7'
+      interaction_focus: '#ff6b6b'
       information: '#007ebd'
       warning: '#c95100'
       error: '#ce3936'
@@ -104,7 +104,7 @@ colors:
     dark:
       background: '#2b3f53'
       border: '#405264'
-      highlight: '#ad1a6b'
+      highlight: '#d16314'
       heading: '#f9fcfe'
       body: '#eef7fc'
       background_light: '#35485b'
@@ -115,7 +115,7 @@ colors:
       interaction_background: '#90cfeb'
       interaction_hover_text: '#1e2c3a'
       interaction_hover_background: '#bce2f3'
-      interaction_focus: '#8a5cd7'
+      interaction_focus: '#ff6b6b'
       information: '#4dc4fd'
       warning: '#e38444'
       error: '#e85653'
