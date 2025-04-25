@@ -1,0 +1,23 @@
+uuid: ad61b798-e373-41a3-b199-9c7d1936da23
+langcode: en
+status: true
+dependencies: {  }
+id: G-LCQ5CZ3H3W.680a169398dd50.88125398
+label: G-LCQ5CZ3H3W
+weight: 0
+tag_container_ids:
+  - G-LCQ5CZ3H3W
+advanced_settings:
+  consent_mode: false
+dimensions_metrics: {  }
+conditions: {  }
+events:
+  generate_lead:
+    value: ''
+    currency: ''
+  search: {  }
+  custom: {  }
+  login:
+    method: CMS
+  sign_up:
+    method: CMS

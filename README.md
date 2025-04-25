@@ -1,13 +1,9 @@
 # DrevOps Website
 Drupal 11 implementation of DrevOps Website for DrevOps
 
-<div align="center">
-
 [![Database, Build, Test and Deploy](https://github.com/drevops/website/actions/workflows/build-test-deploy.yml/badge.svg)](https://github.com/drevops/website/actions/workflows/build-test-deploy.yml)
-
 ![Drupal 11](https://img.shields.io/badge/Drupal-10-blue.svg)
 [![codecov](https://codecov.io/gh/drevops/website/graph/badge.svg)](https://codecov.io/gh/drevops/website)
-
 ![Automated updates](https://img.shields.io/badge/Automated%20updates-RenovateBot-brightgreen.svg)
 
 [//]: # (DO NOT REMOVE THE BADGE BELOW. IT IS USED BY VORTEX TO TRACK INTEGRATION)

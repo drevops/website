@@ -1,0 +1,50 @@
+seckit_xss:
+  csp:
+    checkbox: true
+    vendor-prefix:
+      x: true
+      webkit: true
+    report-only: false
+    default-src: "'self'"
+    script-src: "'self' https://www.googletagmanager.com https://www.gstatic.com"
+    object-src: "'none'"
+    style-src: "'self' 'unsafe-inline' https://fonts.googleapis.com/"
+    img-src: "'self' data:"
+    media-src: "'self'"
+    frame-src: "'self'"
+    frame-ancestors: "'none'"
+    child-src: ''
+    font-src: "'self' https://fonts.gstatic.com"
+    connect-src: "'self' https://www.googletagmanager.com https://www.google-analytics.com"
+    report-uri: /report-csp-violation
+    upgrade-req: true
+    policy-uri: ''
+  x_xss:
+    select: 1
+seckit_csrf:
+  origin: true
+  origin_whitelist: ''
+seckit_clickjacking:
+  js_css_noscript: true
+  noscript_message: 'Sorry, you need to enable JavaScript to visit this website.'
+  x_frame: '0'
+  x_frame_allow_from: ''
+seckit_ssl:
+  hsts: true
+  hsts_subdomains: true
+  hsts_max_age: 31536000
+  hsts_preload: true
+seckit_ct:
+  expect_ct: true
+  max_age: 86400
+  report_uri: ''
+  enforce: true
+seckit_fp:
+  feature_policy: true
+  feature_policy_policy: "camera 'none'; microphone 'none'; geolocation 'none'; fullscreen 'self'"
+seckit_various:
+  from_origin: true
+  from_origin_destination: same
+  referrer_policy: true
+  referrer_policy_policy: strict-origin-when-cross-origin
+  disable_autocomplete: false

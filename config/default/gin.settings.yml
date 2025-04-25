@@ -1,7 +1,9 @@
 _core:
   default_config_hash: ug4-rUG_KE9H5v1RaDLLpkSZsu70E9HnJp6sqFfjvHk
 favicon:
-  use_default: true
+  mimetype: image/vnd.microsoft.icon
+  path: themes/custom/drevops/dist/assets/favicon.ico
+  use_default: false
 features:
   comment_user_picture: true
   comment_user_verification: true
