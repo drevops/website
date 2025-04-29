@@ -19,7 +19,7 @@ function drevops_preprocess_container(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  *
- * It's a workaround for fixing missing template of the status messages block
+ * A workaround for fixing missing template of the status messages block
  * when the BigPipe module is enabled.
  *
  * @see https://www.drupal.org/project/drupal/issues/3456176#comment-15654729
