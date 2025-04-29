@@ -5,11 +5,12 @@ Feature: Contact form
 
   @api @javascript
   Scenario: Anonymous user can use the Contact link and Contact form.
-    Given I am on "homepage"
+    Given I am an anonymous user
+    When I visit homepage
     Then I should see the link Contact
-    Then I click the link with title Contact
+    And I click the link with title Contact
     Then I should see the heading Contact
-    Then I should see "Contact"
+    And I should see "Contact"
     And I should see "Your Name"
     And I should see "Your Email"
     And I should see "Subject"
@@ -18,9 +19,10 @@ Feature: Contact form
 
   @api
   Scenario: Anonymous user can fill and submit the contact form
-    Given I am on "homepage"
-    Then I click the link with title Contact
-    When I fill in "Name" with "Test User"
+    Given I am an anonymous user
+    When I visit homepage
+    And I click the link with title Contact
+    Then I fill in "Name" with "Test User"
     And I fill in "Email" with "test@example.com"
     And I fill in "Subject" with "Test Contact"
     And I fill in "Message" with "This is a test message for the contact form."
@@ -30,8 +32,9 @@ Feature: Contact form
 
   @api @javascript
   Scenario: Anonymous user gets validation errors on contact form
-    Given I am on "homepage"
-    Then I click the link with title Contact
+    Given I am an anonymous user
+    When I visit homepage
+    And I click the link with title Contact
     And I disable browser validation for the form with selector "form.webform-submission-contact-form"
     When I press "Send message"
     Then I should see the text "Name field is required."
