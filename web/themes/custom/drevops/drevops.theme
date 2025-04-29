@@ -22,7 +22,7 @@ function drevops_preprocess_container(array &$variables): void {
  * It's a workaround for fixing missing template of the status messages block
  * when the BigPipe module is enabled.
  *
- * @link https://www.drupal.org/project/drupal/issues/3456176#comment-15654729
+ * @see https://www.drupal.org/project/drupal/issues/3456176#comment-15654729
  */
 function drevops_preprocess_block__system_messages_block(array &$variables): void {
   $variables['content'] = StatusMessages::renderMessages();
