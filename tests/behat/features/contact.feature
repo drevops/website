@@ -6,7 +6,7 @@ Feature: Contact form
   @api @javascript
   Scenario: Anonymous user can use the Contact link and Contact form.
     Given I am an anonymous user
-    When I visit homepage
+    When I go to homepage
     Then I should see the link Contact
     And I click the link with title Contact
     Then I should see the heading Contact
@@ -20,7 +20,7 @@ Feature: Contact form
   @api
   Scenario: Anonymous user can fill and submit the contact form
     Given I am an anonymous user
-    When I visit homepage
+    When I go to homepage
     And I click the link with title Contact
     Then I fill in "Name" with "Test User"
     And I fill in "Email" with "test@example.com"
@@ -33,7 +33,7 @@ Feature: Contact form
   @api @javascript
   Scenario: Anonymous user gets validation errors on contact form
     Given I am an anonymous user
-    When I visit homepage
+    When I go to homepage
     And I click the link with title Contact
     And I disable browser validation for the form with selector "form.webform-submission-contact-form"
     When I press "Send message"
