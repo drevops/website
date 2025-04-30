@@ -19,6 +19,8 @@ settings:
       - strikethrough
       - style
       - heading
+      - codeBlock
+      - code
       - removeFormat
       - '|'
       - bulletedList
@@ -44,6 +46,50 @@ settings:
         - center
         - left
         - right
+    ckeditor5_codeBlock:
+      languages:
+        -
+          label: 'Plain text'
+          language: plaintext
+        -
+          label: C
+          language: c
+        -
+          label: 'C#'
+          language: cs
+        -
+          label: C++
+          language: cpp
+        -
+          label: CSS
+          language: css
+        -
+          label: Diff
+          language: diff
+        -
+          label: HTML
+          language: html
+        -
+          label: Java
+          language: java
+        -
+          label: JavaScript
+          language: javascript
+        -
+          label: PHP
+          language: php
+        -
+          label: Python
+          language: python
+        -
+          label: Ruby
+          language: ruby
+        -
+          label: TypeScript
+          language: typescript
+        -
+          label: XML
+          language: xml
     ckeditor5_heading:
       enabled_headings:
         - heading2
@@ -76,7 +122,7 @@ settings:
         - '<h5 id>'
         - '<h6 id>'
         - '<drupal-media title>'
-        - '<a hreflang target title class="ct-content-link ct-content-link--external ct-button--button ct-theme-dark">'
+        - '<a hreflang target title>'
     ckeditor5_style:
       styles:
         -
