@@ -32,6 +32,7 @@ class FeatureContext extends DrupalContext {
   use ParagraphsTrait;
   use PathTrait;
   use ResponseTrait;
+  use RobotsTrait;
   use SearchApiTrait;
   use TaxonomyTrait;
   use WaitTrait;
