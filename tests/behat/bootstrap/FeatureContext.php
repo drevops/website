@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use DrevOps\BehatSteps\BigPipeTrait;
 use DrevOps\BehatSteps\ContentTrait;
 use DrevOps\BehatSteps\FieldTrait;
 use DrevOps\BehatSteps\FileTrait;
@@ -25,6 +26,7 @@ use Drupal\DrupalExtension\Context\DrupalContext;
  */
 class FeatureContext extends DrupalContext {
 
+  use BigPipeTrait;
   use ContentTrait;
   use LinkTrait;
   use FieldTrait;
