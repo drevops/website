@@ -166,6 +166,9 @@
             "drupal/civictheme": {
                 "Remove Shortcut from theme dependency": "patches/civictheme-remove-shortcut-mr19.diff"
             },
+            "drupal/core": {
+                "10.3 upgrade now missing status-message theme suggestions": "patches/3456176-bootstrap_barrio-fix-status-message-core-11_1_6-132.patch"
+            },
             "drupal/environment_indicator": {
                 "Gin vertical toolbar submenu's overlap": "https://www.drupal.org/files/issues/2024-12-03/3487202-gin-vertical-toolbar-9.patch"
             },
