@@ -56,26 +56,4 @@ JS;
     $this->getSession()->executeScript($js);
   }
 
-  /**
-   * Wait for the page to completely load.
-   *
-   * Including any BigPipe placeholder replacements.
-   *
-   * @When I wait for the page to complete loading
-   */
-  public function waitForPageLoadComplete(): void {
-    $this->getSession()->wait(5000, "document.readyState === 'complete'");
-
-    // Wait for any BigPipe placeholders to be replaced.
-    $js = "typeof Drupal !== 'undefined' && typeof Drupal.BigPipe !== 'undefined' && Drupal.BigPipe.processedBigPipeResponseCount >= Drupal.BigPipe.totalBigPipeResponseCount";
-    $this->getSession()->wait(10000, $js);
-
-    // Wait for any AJAX requests to complete.
-    $selector = '.ajax-progress';
-    if (isset($this->getDrupalParameter('selectors')['ajax_progress'])) {
-      $selector = $this->getDrupalParameter('selectors')['ajax_progress'];
-    }
-    $this->getSession()->wait(5000, "document.querySelectorAll('" . $selector . "').length === 0");
-  }
-
 }
