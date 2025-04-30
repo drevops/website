@@ -27,9 +27,9 @@ Feature: Contact form
     And I fill in "Subject" with "Test Contact"
     And I fill in "Message" with "This is a test message for the contact form."
     And I press "Send message"
-    And I save screenshot
+    Then I save screenshot
     And I should see the text "Your message has been sent."
-    And I save screenshot
+    Then I save screenshot
 
   @api @javascript
   Scenario: Anonymous user gets validation errors on contact form
