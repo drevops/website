@@ -17,7 +17,7 @@ Feature: Contact form
     And I should see "Message"
     And I should see the button "Send message"
 
-  @api
+  @api @javascript
   Scenario: Anonymous user can fill and submit the contact form
     Given I am an anonymous user
     When I go to homepage
@@ -27,7 +27,8 @@ Feature: Contact form
     And I fill in "Subject" with "Test Contact"
     And I fill in "Message" with "This is a test message for the contact form."
     And I press "Send message"
-    Then I should see the text "Your message has been sent."
+    And I save screenshot
+    And I should see the text "Your message has been sent."
     And I save screenshot
 
   @api @javascript
