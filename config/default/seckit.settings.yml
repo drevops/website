@@ -11,7 +11,7 @@ seckit_xss:
     style-src: "'self' 'unsafe-inline' https://fonts.googleapis.com/"
     img-src: "'self' data:"
     media-src: "'self'"
-    frame-src: "'self'"
+    frame-src: "'self' https://www.youtube.com"
     frame-ancestors: "'none'"
     child-src: ''
     font-src: "'self' https://fonts.gstatic.com"
