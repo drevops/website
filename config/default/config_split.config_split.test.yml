@@ -1,0 +1,17 @@
+uuid: d151f103-bbec-8787-a027-f3c36e1b8479
+langcode: en
+status: false
+dependencies: {  }
+id: test
+label: 'Test Environment'
+description: 'Configuration for test environment'
+weight: 0
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/test
+module: {  }
+theme: {  }
+complete_list: {  }
+partial_list:
+  - robotstxt.settings

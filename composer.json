@@ -25,6 +25,7 @@
         "drupal/pathauto": "^1.13",
         "drupal/redirect": "^1.11",
         "drupal/redis": "^1.9",
+        "drupal/robotstxt": "^1.6",
         "drupal/search_api": "^1.38",
         "drupal/search_api_solr": "^4.3.8",
         "drupal/seckit": "^2.0",
@@ -115,6 +116,7 @@
                 "[web-root]/README.md": false,
                 "[web-root]/README.txt": false,
                 "[web-root]/example.gitignore": false,
+                "[web-root]/robots.txt": false,
                 "[web-root]/sites/example.settings.local.php": false,
                 "[web-root]/sites/example.sites.php": false,
                 "[web-root]/web.config": false

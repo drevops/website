@@ -1,0 +1,17 @@
+uuid: bfbed00b-5974-4f15-9998-1e0d8cecfc86
+langcode: en
+status: false
+dependencies: {  }
+id: dev
+label: 'Development Environment'
+description: 'Configuration for development environment'
+weight: 100
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/dev
+module: {  }
+theme: {  }
+complete_list: {  }
+partial_list:
+  - robotstxt.settings
