@@ -1,0 +1,7 @@
+uuid: 01ef48fc-6bf2-492d-8c4b-7c48fce8e8e5
+langcode: en
+status: false
+dependencies: {  }
+formId: node_civictheme_alert_form
+captchaType: default
+label: node_civictheme_alert_form
