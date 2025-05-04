@@ -6,7 +6,7 @@ seckit_xss:
       webkit: true
     report-only: false
     default-src: "'self'"
-    script-src: "'self' https://www.googletagmanager.com https://www.gstatic.com https://www.recaptcha.net  https://www.google.com"
+    script-src: "'self' https://www.googletagmanager.com https://www.gstatic.com https://www.recaptcha.net https://www.google.com"
     object-src: "'none'"
     style-src: "'self' 'unsafe-inline' https://fonts.googleapis.com/"
     img-src: "'self' data:"
