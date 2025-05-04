@@ -65,6 +65,9 @@ x-environment: &default-environment
   DRUPAL_SHIELD_PASS: ${DRUPAL_SHIELD_PASS:-}
   # Redis integration flag.
   DRUPAL_REDIS_ENABLED: ${DRUPAL_REDIS_ENABLED:-}
+  # ReCaptcha v3 credentials.
+  DRUPAL_RECAPTCHA_SITE_KEY: ${DRUPAL_RECAPTCHA_SITE_KEY:-}
+  DRUPAL_RECAPTCHA_SECRET_KEY: ${DRUPAL_RECAPTCHA_SECRET_KEY:-}
 
 # ------------------------------------------------------------------------------
 # Services.
