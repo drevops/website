@@ -1,7 +1,9 @@
 uuid: ad61b798-e373-41a3-b199-9c7d1936da23
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - user
 id: G-LCQ5CZ3H3W.680a169398dd50.88125398
 label: G-LCQ5CZ3H3W
 weight: 0
@@ -10,14 +12,21 @@ tag_container_ids:
 advanced_settings:
   consent_mode: false
 dimensions_metrics: {  }
-conditions: {  }
+conditions:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous
 events:
+  sign_up:
+    method: CMS
+  search: {  }
+  custom: {  }
   generate_lead:
     value: ''
     currency: ''
-  search: {  }
-  custom: {  }
   login:
-    method: CMS
-  sign_up:
     method: CMS
