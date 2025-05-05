@@ -1,0 +1,11 @@
+uuid: 0f3e028b-564e-41f7-88a0-5e114fc88666
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.civictheme_page
+id: node.civictheme_page
+target_entity_type_id: node
+target_bundle: civictheme_page
+default_langcode: site_default
+language_alterable: false
