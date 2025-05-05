@@ -8,13 +8,13 @@ Feature: Seckit
     Given I am an anonymous user
     When I go to the homepage
     Then the response status code should be 200
-    And response header "Content-Security-Policy" contains "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com;"
+    And response header "Content-Security-Policy" contains "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://www.recaptcha.net https://www.google.com;"
     And response header "Content-Security-Policy" contains "default-src 'self';"
     And response header "Content-Security-Policy" contains "font-src 'self' https://fonts.gstatic.com;"
     And response header "Content-Security-Policy" contains "img-src 'self' data"
     And response header "Content-Security-Policy" contains "media-src 'self'"
     And response header "Content-Security-Policy" contains "report-uri /report-csp-violation"
-    And response header "Content-Security-Policy" contains "script-src 'self' https://www.googletagmanager.com https://www.gstatic.com;"
+    And response header "Content-Security-Policy" contains "script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://www.recaptcha.net https://www.google.com;"
     And response header "Content-Security-Policy" contains "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/;"
     And response header "Strict-Transport-Security" contains "max-age=31536000"
     And response header "Strict-Transport-Security" contains "includeSubDomains"

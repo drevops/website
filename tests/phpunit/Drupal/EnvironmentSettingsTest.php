@@ -315,6 +315,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^.+\.docker\.amazee\.io$',
       '^nginx$',
     ];
+    $settings['disable_captcha'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -360,6 +361,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^.+\.docker\.amazee\.io$',
       '^nginx$',
     ];
+    $settings['disable_captcha'] = TRUE;
     $this->assertSettings($settings);
   }
 
