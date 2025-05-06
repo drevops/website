@@ -1,6 +1,6 @@
 uuid: 0e3cdf08-ec16-44b6-ac14-c1c6cf877506
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - search_api.server.solr

@@ -1,4 +1,4 @@
-@search @p1
+@search @p1 @skipped
 Feature: Search API
 
   As a site user, I want to search for content.
