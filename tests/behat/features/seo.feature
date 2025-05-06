@@ -8,6 +8,6 @@ Feature: Robots.txt file
   Scenario: Verify robots.txt exists and contains appropriate content in production
     Given I am an anonymous user
     When I go to "/robots.txt"
-    Then I should get a 200 HTTP response
+    Then the response status code should be 200
     And the response should contain "User-agent: *"
     And the response should not contain "Disallow: /"

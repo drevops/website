@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8f528f2b7084d4f1ed43be8b11fff6a",
+    "content-hash": "48ddc3a354c8dfc05c125bc414866fc9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10886,16 +10886,16 @@
         },
         {
             "name": "drevops/behat-steps",
-            "version": "2.7.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-steps.git",
-                "reference": "5e3c9adbf63f195111754f9f452a8c268e1a3fa8"
+                "reference": "9fb174729b2fdfeba415545c3f39bd3eb4aadb56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/5e3c9adbf63f195111754f9f452a8c268e1a3fa8",
-                "reference": "5e3c9adbf63f195111754f9f452a8c268e1a3fa8",
+                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/9fb174729b2fdfeba415545c3f39bd3eb4aadb56",
+                "reference": "9fb174729b2fdfeba415545c3f39bd3eb4aadb56",
                 "shasum": ""
             },
             "require": {
@@ -10905,11 +10905,31 @@
                 "drupal/drupal-extension": "^5",
                 "php": ">=8.2"
             },
+            "require-dev": {
+                "alexskrypnyk/phpunit-helpers": "^0.5.1",
+                "cweagans/composer-patches": "^1.7",
+                "dantleech/gherkin-lint": "^0.2.3",
+                "dealerdirect/phpcodesniffer-composer-installer": "^1",
+                "drevops/behat-phpserver": "^2.1.1",
+                "drevops/behat-screenshot": "^2.1",
+                "drupal/coder": "^8.3.28",
+                "dvdoug/behat-code-coverage": "^5.3.2.1",
+                "ergebnis/composer-normalize": "^2.47",
+                "mglaman/phpstan-drupal": "^2.0.0",
+                "php-parallel-lint/php-parallel-lint": "^1.4",
+                "phpcompatibility/php-compatibility": "^9.3.5",
+                "phpspec/prophecy-phpunit": "^2.3",
+                "phpstan/extension-installer": "^1.4.3",
+                "phpstan/phpstan": "^2.0.0",
+                "phpunit/phpunit": "^11",
+                "rector/rector": "^2.0"
+            },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "1.x-dev",
-                    "dev-master": "1.x-dev"
+                "patches": {
+                    "mglaman/phpstan-drupal": {
+                        "Support for custom Drupal root": "https://patch-diff.githubusercontent.com/raw/mglaman/phpstan-drupal/pull/873.diff"
+                    }
                 }
             },
             "autoload": {
@@ -10945,7 +10965,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-03-24T10:33:30+00:00"
+            "time": "2025-05-06T21:45:03+00:00"
         },
         {
             "name": "drupal/coder",
@@ -16585,16 +16605,16 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.31.0",
+            "version": "v1.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "60328e362d4c2c802a54fcbf04f9d3fb892b4cf8"
+                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/60328e362d4c2c802a54fcbf04f9d3fb892b4cf8",
-                "reference": "60328e362d4c2c802a54fcbf04f9d3fb892b4cf8",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
+                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
                 "shasum": ""
             },
             "require": {
@@ -16645,7 +16665,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.31.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.32.0"
             },
             "funding": [
                 {
@@ -16661,7 +16681,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-09T11:45:10+00:00"
+            "time": "2025-01-02T08:10:11+00:00"
         },
         {
             "name": "symfony/polyfill-php82",

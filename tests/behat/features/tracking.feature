@@ -11,6 +11,6 @@ Feature: Google Analytics is injected
 
   @api @javascript
   Scenario: Google Analytics 4 script should not be present for logged in users
-    Given I am logged in as a user with the "administer site configuration, access administration pages" permissions
+    Given I am logged in as a user with the "Administrator" role
     When I am on the homepage
     Then the response should not contain "https://www.googletagmanager.com/gtag/js?id=G-"
