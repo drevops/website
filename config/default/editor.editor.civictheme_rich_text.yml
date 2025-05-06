@@ -127,16 +127,16 @@ settings:
       styles:
         -
           label: 'Primary button'
-          element: '<a class="ct-button ct-theme-light ct-button--primary ct-button--regular">'
+          element: '<a class="ct-button ct-theme-light ct-theme-dark ct-button--primary ct-button--regular">'
         -
           label: 'Secondary button'
-          element: '<a class="ct-button ct-theme-light ct-button--secondary ct-button--regular">'
+          element: '<a class="ct-button ct-theme-light ct-theme-dark ct-button--secondary ct-button--regular">'
         -
           label: 'Large primary button'
-          element: '<a class="ct-button ct-theme-light ct-button--primary ct-button--large">'
+          element: '<a class="ct-button ct-theme-light ct-theme-dark ct-button--primary ct-button--large">'
         -
           label: 'Large secondary large'
-          element: '<a class="ct-button ct-theme-light ct-button--secondary ct-button--large">'
+          element: '<a class="ct-button ct-theme-light ct-theme-dark ct-button--secondary ct-button--large">'
         -
           label: 'Lead paragraph'
           element: '<p class="ct-text-large">'
@@ -145,10 +145,10 @@ settings:
           element: '<p class="ct-text-small">'
         -
           label: Table
-          element: '<table class="ct-theme-light ct-table">'
+          element: '<table class="ct-theme-light ct-theme-dark ct-table">'
         -
           label: 'Table with striped rows'
-          element: '<table class="ct-theme-light ct-table ct-table--striped">'
+          element: '<table class="ct-theme-light ct-theme-dark ct-table ct-table--striped">'
     linkit_extension:
       linkit_enabled: true
       linkit_profile: civictheme
