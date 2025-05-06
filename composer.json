@@ -23,8 +23,10 @@
         "drupal/google_tag": "^2.0",
         "drupal/metatag": "^2.1",
         "drupal/pathauto": "^1.13",
+        "drupal/recaptcha_v3": "^2.0",
         "drupal/redirect": "^1.11",
         "drupal/redis": "^1.9",
+        "drupal/robotstxt": "^1.6",
         "drupal/search_api": "^1.38",
         "drupal/search_api_solr": "^4.3.8",
         "drupal/seckit": "^2.0",
@@ -115,6 +117,7 @@
                 "[web-root]/README.md": false,
                 "[web-root]/README.txt": false,
                 "[web-root]/example.gitignore": false,
+                "[web-root]/robots.txt": false,
                 "[web-root]/sites/example.settings.local.php": false,
                 "[web-root]/sites/example.sites.php": false,
                 "[web-root]/web.config": false
@@ -165,6 +168,9 @@
         "patches": {
             "drupal/civictheme": {
                 "Remove Shortcut from theme dependency": "patches/civictheme-remove-shortcut-mr19.diff"
+            },
+            "drupal/core": {
+                "10.3 upgrade now missing status-message theme suggestions": "https://www.drupal.org/files/issues/2025-04-30/3456176-bootstrap_barrio-fix-status-message-core-11_1_6-132.patch"
             },
             "drupal/environment_indicator": {
                 "Gin vertical toolbar submenu's overlap": "https://www.drupal.org/files/issues/2024-12-03/3487202-gin-vertical-toolbar-9.patch"

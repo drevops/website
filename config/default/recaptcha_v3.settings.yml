@@ -1,0 +1,10 @@
+_core:
+  default_config_hash: 6xvuojdlZ8-8Q7yJyRldPaE0UK_YijOlDo6HvURmW_E
+site_key: ''
+secret_key: ''
+hide_badge: false
+verify_hostname: false
+default_challenge: captcha\Math
+error_message: 'Anti-bot verification failed.'
+cacheable: false
+library_use_recaptcha_net: false

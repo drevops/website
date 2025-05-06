@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.basic_html
     - filter.format.webform_default
   module:
     - contact
@@ -21,6 +20,5 @@ permissions:
   - 'access content'
   - 'access site-wide contact form'
   - 'delete own files'
-  - 'use text format basic_html'
   - 'use text format webform_default'
   - 'view media'
