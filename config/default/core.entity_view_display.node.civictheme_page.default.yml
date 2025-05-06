@@ -81,23 +81,6 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 2
             additional: {  }
-          c1f9f850-f470-4069-8711-9c7edaffde7e:
-            uuid: c1f9f850-f470-4069-8711-9c7edaffde7e
-            region: main
-            configuration:
-              id: 'field_block:node:civictheme_page:field_c_n_custom_last_updated'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: datetime_default
-                label: above
-                settings:
-                  timezone_override: ''
-                  format_type: medium
-                third_party_settings: {  }
-            weight: 3
-            additional: {  }
           50ce2930-effc-42f3-84b1-b4d3618bcb59:
             uuid: 50ce2930-effc-42f3-84b1-b4d3618bcb59
             region: content
