@@ -1,0 +1,8 @@
+uuid: 9510eb68-5939-4944-9151-fe114b68ea88
+langcode: en
+status: true
+dependencies: {  }
+id: node__civictheme_page
+label: 'Content: Page'
+tags:
+  description: '[node:field_c_n_summary:value]'
