@@ -1,0 +1,20 @@
+_core:
+  default_config_hash: ZYD4Zz6IzdUZR-N_MxkJnacUlP94l-qPt--QRY-OdZc
+general_settings:
+  radio_behavior: simple
+  context_lines_leading: 1
+  context_lines_trailing: 1
+  revision_pager_limit: 50
+  layout_plugins:
+    split_fields:
+      enabled: true
+      weight: -50
+    unified_fields:
+      enabled: true
+      weight: -49
+    visual_inline:
+      enabled: true
+      weight: -48
+  visual_default_view_mode: full
+  visual_inline_theme: admin
+  revision_pager: '0'

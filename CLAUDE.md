@@ -74,6 +74,13 @@ This document outlines the development standards and workflows for the DrevOps m
 - For troubleshooting, check screenshots generated after failures in `.logs/screenshots/`
 - Add `And I save screenshot` to debug steps in your feature files
 - Follow BDD principles for feature testing
+  - Feature: A short description of the test
+  - User story: A description of the user story being tested in a format:
+        As a <role>
+        I want <feature>
+        So that <benefit>
+  - Scenario: A specific test case
+  - Refer to the existing Behat tests to make sure you are following the same structure and conventions.
 
 ## Deployment Workflow
 
