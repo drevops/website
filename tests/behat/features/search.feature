@@ -78,7 +78,7 @@ Feature: Search API
 
     And I go to the homepage
     And I click "Search"
-    And I wait 2 seconds
+    And I wait for 2 seconds
     Then I should see "Search" in the ".ct-heading" element
     And I should not see a ".ct-side-navigation" element
 
