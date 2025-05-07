@@ -11029,16 +11029,16 @@
         },
         {
             "name": "drevops/behat-screenshot",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-screenshot.git",
-                "reference": "1a398f5ad6f610be6bbdd6e56551ffda58ce0189"
+                "reference": "c45f73ccd0cdf6df95e8a952fbc482a157ec9c26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-screenshot/zipball/1a398f5ad6f610be6bbdd6e56551ffda58ce0189",
-                "reference": "1a398f5ad6f610be6bbdd6e56551ffda58ce0189",
+                "url": "https://api.github.com/repos/drevops/behat-screenshot/zipball/c45f73ccd0cdf6df95e8a952fbc482a157ec9c26",
+                "reference": "c45f73ccd0cdf6df95e8a952fbc482a157ec9c26",
                 "shasum": ""
             },
             "require": {
@@ -11090,7 +11090,7 @@
             "description": "Behat extension and step definitions to create HTML and image screenshots on demand or when tests fail",
             "support": {
                 "issues": "https://github.com/drevops/behat-screenshot/issues",
-                "source": "https://github.com/drevops/behat-screenshot/tree/2.1.0"
+                "source": "https://github.com/drevops/behat-screenshot/tree/2.1.1"
             },
             "funding": [
                 {
@@ -11102,7 +11102,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-04-08T08:52:52+00:00"
+            "time": "2025-05-07T03:36:14+00:00"
         },
         {
             "name": "drevops/behat-steps",
