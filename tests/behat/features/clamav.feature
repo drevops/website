@@ -1,7 +1,9 @@
 @clamav @p0
 Feature: ClamAV Anti-virus
 
-  Ensure that ClamAV is working correctly.
+  As a site owner
+  I want to ensure that the ClamAV anti-virus scanner is working correctly
+  In order to protect my site from malicious files
 
   This test creates a locally hosted fixture virus EICAR test file. This file is
   harmless and is used to test the anti-virus scanner. The file is created in
@@ -11,8 +13,8 @@ Feature: ClamAV Anti-virus
   https://en.wikipedia.org/wiki/EICAR_test_file
 
   Background:
-    Given unmanaged file "public://eicar_test.txt" created with content "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
-    And unmanaged file "public://test.txt" created with content "some text content"
+    Given the unmanaged file at the URI "public://eicar_test.txt" exists with "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
+    And the unmanaged file at the URI "public://test.txt" exists with "some text content"
 
   @api
   Scenario: Upload EICAR test file to trigger virus detection.

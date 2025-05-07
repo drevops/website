@@ -64,6 +64,8 @@ default:
       dir: '%paths.base%/.logs/screenshots'
       on_failed: true # Change to 'false' (no quotes) to disable screenshots on failure.
       purge: false # Change to 'true' (no quotes) to purge screenshots on each run.
+      always_fullscreen: true # Change to 'false' (no quotes) to disable full-screen screenshots.
+      fullscreen_algorithm: resize # Options: 'stitch' or 'resize'
     # Show explicit fail information and continue the test run.
     DrevOps\BehatFormatProgressFail\FormatExtension: ~
 

@@ -1,20 +1,19 @@
 uuid: 98c18a22-1be3-4603-ba62-c2d4aac4d1c3
 langcode: en
-status: true
+status: false
 dependencies:
   config:
-    - field.storage.node.field_c_n_summary
     - field.storage.node.field_c_n_components
+    - field.storage.node.field_c_n_summary
     - field.storage.paragraph.field_c_p_content
-    - field.storage.paragraph.field_c_p_summary
-    - field.storage.paragraph.field_c_p_title
     - field.storage.paragraph.field_c_p_list_items
     - field.storage.paragraph.field_c_p_subtitle
+    - field.storage.paragraph.field_c_p_summary
+    - field.storage.paragraph.field_c_p_title
     - search_api.server.civictheme_database
   module:
-    - paragraphs
     - node
-    - search_api
+    - paragraphs
     - search_api_solr
 _core:
   default_config_hash: _WexEs0lsXhfF2kiZiaaWhrDzIALnHFE1m9mvqwROiA
@@ -159,6 +158,7 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  auto_aggregated_fulltext_field: {  }
   content_access:
     weights:
       preprocess_query: -30
@@ -181,11 +181,13 @@ processor_settings:
       - title
   language_with_fallback: {  }
   rendered_item: {  }
+  solr_date_range: {  }
 tracker_settings:
   default:
     indexing_order: fifo
 options:
   cron_limit: 50
+  delete_on_fail: true
   index_directly: true
   track_changes_in_references: true
 server: civictheme_database

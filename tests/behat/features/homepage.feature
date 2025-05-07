@@ -1,16 +1,18 @@
 @homepage @smoke
 Feature: Homepage
 
-  Ensure that homepage is displayed as expected.
+  As a site owner
+  I want to ensure that the homepage is accessible
+  In order to provide a good user experience
 
   @api
   Scenario: Anonymous user visits homepage
     Given I go to the homepage
-    And I should be in the "<front>" path
+    And the path should be "/"
     Then I save screenshot
 
   @api @javascript
   Scenario: Anonymous user visits homepage using a real browser
     Given I go to the homepage
-    And I should be in the "<front>" path
+    And the path should be "/"
     Then I save screenshot

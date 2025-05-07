@@ -7,17 +7,18 @@
 
 declare(strict_types=1);
 
-use DrevOps\BehatSteps\ContentTrait;
-use DrevOps\BehatSteps\FieldTrait;
-use DrevOps\BehatSteps\FileTrait;
+use DrevOps\BehatSteps\Drupal\ContentTrait;
+use DrevOps\BehatSteps\Drupal\FieldTrait;
+use DrevOps\BehatSteps\Drupal\FileTrait;
+use DrevOps\BehatSteps\ElementTrait;
 use DrevOps\BehatSteps\LinkTrait;
-use DrevOps\BehatSteps\ParagraphsTrait;
+use DrevOps\BehatSteps\Drupal\ParagraphsTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
-use DrevOps\BehatSteps\SearchApiTrait;
-use DrevOps\BehatSteps\TaxonomyTrait;
+use DrevOps\BehatSteps\Drupal\SearchApiTrait;
+use DrevOps\BehatSteps\Drupal\TaxonomyTrait;
 use DrevOps\BehatSteps\WaitTrait;
-use DrevOps\BehatSteps\WatchdogTrait;
+use DrevOps\BehatSteps\Drupal\WatchdogTrait;
 use Drupal\DrupalExtension\Context\DrupalContext;
 
 /**
@@ -27,6 +28,7 @@ class FeatureContext extends DrupalContext {
 
   use ContentTrait;
   use LinkTrait;
+  use ElementTrait;
   use FieldTrait;
   use FileTrait;
   use ParagraphsTrait;
@@ -54,6 +56,39 @@ class FeatureContext extends DrupalContext {
         }
 JS;
     $this->getSession()->executeScript($js);
+  }
+
+  /**
+   * Visit a revisions page of a type with a specified title.
+   *
+   * @code
+   * When I visit the "article" content revisions page with the title "Test article"
+   * @endcode
+   *
+   * @When I visit the :content_type content revisions page with the title :title
+   */
+  public function visitRevisionsPageWithTitle(string $content_type, string $title): void {
+    $this->contentVisitActionPageWithTitle($content_type, $title, '/revisions');
+  }
+
+  /**
+   * Select a radio button by its ID.
+   *
+   * @code
+   * When I select the radio button with the id "my-radio-button"
+   * @endcode
+   *
+   * @When I select the radio button with the id :id
+   */
+  public function assertSelectRadioByIdOnly(string $id = ''): void {
+    $radiobutton = $this->getSession()->getPage()->findById($id);
+
+    if ($radiobutton === NULL) {
+      throw new \Exception(sprintf('The radio button with id "%s" was not found on the page', $id));
+    }
+
+    $value = $radiobutton->getAttribute('value');
+    $radiobutton->selectOption($value);
   }
 
 }
