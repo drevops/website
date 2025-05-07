@@ -33,6 +33,11 @@ This document outlines the development standards and workflows for the DrevOps m
 - `ahoy reset hard` - Reset environment (hard)
 - `ahoy fetch-db` - Fetch latest database
 
+## Important information
+
+- Never modify .gitignore file unless I ask you explicitly.
+- Never change PHPCS, PHPStan or PHPUnit configuration unless I ask you explicitly.
+
 ## Coding Standards
 
 ### PHP
@@ -97,21 +102,23 @@ This document outlines the development standards and workflows for the DrevOps m
 ## Common Tasks
 
 ### Adding New Features
-1. Create a feature branch from `develop` in the format `feature/name`
-2. Implement the feature
-3. Export configuration changes using `ahoy drush cex -y`
-4. Write appropriate tests
-5. Run coding standards checks
-6. Commit the code with a message in the format `Verb in past tense with a period at the end.`
-7. Do not push to remote.
+1. Switch to `develop` branch and pull the latest changes
+2. Create a feature branch from `develop` in the format `feature/name`
+3. Implement the feature
+4. Export configuration changes using `ahoy drush cex -y`
+5. Write appropriate tests
+6. Run coding standards checks
+7. Commit the code with a message in the format `Verb in past tense with a period at the end.`
+8. Do not push to remote.
 
 ### Bug Fixes
-1. Create a bugfix branch from `develop` in the format `bugfix/name`
-2. Fix the issue
-3. Export configuration changes using `ahoy drush cex -y`
-4. Add tests to prevent regression
-5. Commit the code with a message in the format `Verb in past tense with a period at the end.`
-6. Do not push to remote.
+1. Switch to `develop` branch and pull the latest changes
+2. Create a bugfix branch from `develop` in the format `bugfix/name`
+3. Fix the issue
+4. Export configuration changes using `ahoy drush cex -y`
+5. Add tests to prevent regression
+6. Commit the code with a message in the format `Verb in past tense with a period at the end.`
+7. Do not push to remote.
 
 ### Content Updates
 1. Content added via the Drush deploy hook implementations placed into `web/modules/custom/*_core/` directory.
