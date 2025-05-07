@@ -1,7 +1,9 @@
 @clamav @p0
 Feature: ClamAV Anti-virus
 
-  Ensure that ClamAV is working correctly.
+  As a site owner
+  I want to ensure that the ClamAV anti-virus scanner is working correctly
+  In order to protect my site from malicious files
 
   This test creates a locally hosted fixture virus EICAR test file. This file is
   harmless and is used to test the anti-virus scanner. The file is created in

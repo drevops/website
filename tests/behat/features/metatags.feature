@@ -1,6 +1,9 @@
-@seo @metatags
+@metatags @p0
 Feature: Page content metatags
-  As a site user, I want to verify all default metatags appear for CivicTheme Page content type
+
+  As a site owner
+  I want to ensure that the default metatags are present for all pages
+  In order to improve SEO and social sharing
 
   @api
   Scenario: CivicTheme page content type contains default metatags
