@@ -1,7 +1,9 @@
 @seckit @p2
 Feature: Seckit
 
-  Ensure that security settings are correct.
+  As a site owner
+  I want to ensure that the Seckit module is correctly configured
+  In order to improve security and protect against common vulnerabilities
 
   @api
   Scenario: Check for HSTS and CSP headers

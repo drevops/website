@@ -1,7 +1,9 @@
-@tracking @google
-Feature: Google Analytics is injected
-  As a site user
-  I want to ensure Google Analytics script is present on the page
+@analytics @p2
+Feature: Google Analytics
+
+  As a site owner
+  I want to ensure that Google Analytics is correctly configured
+  In order to track user interactions and gather analytics data
 
   @api @javascript
   Scenario: Check Google Analytics 4 script on homepage

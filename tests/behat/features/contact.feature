@@ -1,7 +1,9 @@
-@contact @form
+@contact @p1
 Feature: Contact form
 
-  Ensure that contact form is reachable and works correctly.
+  As anonymous user
+  I want to ensure that the contact form is accessible
+  In order to be able to contact the site owner
 
   @api
   Scenario: Anonymous user can use the Contact link and Contact form.

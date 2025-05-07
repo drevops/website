@@ -1,7 +1,13 @@
 @search @p1 @skipped
 Feature: Search API
 
-  As a site user, I want to search for content.
+  As a site owner
+  I want to ensure that the search API is correctly configured
+  In order to provide search functionality for my site
+
+  As an anonymous user
+  I want to ensure that the search functionality is accessible
+  In order to be able to search for content on the site
 
   @api
   Scenario: User searches for Page content

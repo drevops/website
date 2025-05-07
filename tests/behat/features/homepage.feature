@@ -1,7 +1,9 @@
 @homepage @smoke
 Feature: Homepage
 
-  Ensure that homepage is displayed as expected.
+  As a site owner
+  I want to ensure that the homepage is accessible
+  In order to provide a good user experience
 
   @api
   Scenario: Anonymous user visits homepage
