@@ -13,3 +13,10 @@ declare(strict_types=1);
 function drevops_preprocess_container(array &$variables): void {
   $variables['modifier_class'] = FALSE;
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function drevops_preprocess_civictheme_tag_list(array &$variables): void {
+  $variables['attributes']['class'][] = 'container';
+}
