@@ -1,0 +1,21 @@
+uuid: 365110a3-f4e0-42c7-9cc9-52fe46f1f500
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_size
+    - paragraphs.paragraphs_type.divider
+  module:
+    - options
+id: paragraph.divider.field_p_size
+field_name: field_p_size
+entity_type: paragraph
+bundle: divider
+label: Size
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
