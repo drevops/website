@@ -1,0 +1,38 @@
+//
+// Divider component.
+//
+
+.ct-divider {
+  $root: &;
+
+  .container {
+    height: 100%;
+  }
+
+  #{$root}__image {
+    @include ct-image-fit();
+    @include ct-image-fit(true);
+
+    img {
+      width: auto;
+    }
+  }
+
+  @include ct-component-theme($root) using($root, $theme) {
+    @include ct-component-property($root, $theme, background-color);
+  }
+}
+
+.ct-size {
+  &--small {
+    height: rem(100px);
+  }
+
+  &--regular {
+    height: rem(200px);
+  }
+
+  &--large {
+    height: rem(500px);
+  }
+}

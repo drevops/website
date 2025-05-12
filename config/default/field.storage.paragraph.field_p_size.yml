@@ -14,6 +14,12 @@ settings:
     -
       value: large
       label: Large
+    -
+      value: regular
+      label: Regular
+    -
+      value: small
+      label: Small
   allowed_values_function: ''
 module: options
 locked: false
