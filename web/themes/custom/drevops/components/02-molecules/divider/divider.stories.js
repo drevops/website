@@ -17,7 +17,7 @@ const meta = {
     },
     alignment: {
       control: { type: 'radio' },
-      options: ['none', 'left', 'right'],
+      options: ['left', 'center', 'right'],
     },
     size: {
       control: { type: 'radio' },
@@ -50,7 +50,7 @@ export const Divider = {
     },
     alignment: {
       control: { type: 'radio' },
-      options: ['none', 'left', 'right'],
+      options: ['left', 'center', 'right'],
     },
     size: {
       control: { type: 'radio' },
