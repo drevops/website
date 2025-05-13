@@ -6,7 +6,7 @@ Feature: Divider render
       | path      | uri                        | status |
       | image.jpg | public://do_test/image.jpg | 1      |
 
-    Given the following media "civictheme_image" exist:
+    And the following media "civictheme_image" exist:
       | name                    | field_c_m_image |
       | [TEST] DO Image | image.jpg  |
 
@@ -18,7 +18,7 @@ Feature: Divider render
   @api @javascript
   Scenario: CivicTheme page content type page can be viewed by anonymous with Divider light with vertical spacing and left image
     Given I am an anonymous user
-    Given the following fields for the paragraph "divider" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Divider test 1":
+    And the following fields for the paragraph "divider" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Divider test 1":
       | field_p_alignment              | left                    |
       | field_p_size                   | large                    |
       | field_c_p_theme                | light                   |

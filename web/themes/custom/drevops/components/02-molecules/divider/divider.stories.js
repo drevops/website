@@ -44,18 +44,9 @@ export const Divider = {
       url: './demo/images/demo6.jpg',
       alt: 'Image alt text',
     },
-    vertical_spacing: {
-      control: { type: 'radio' },
-      options: ['none', 'top', 'bottom', 'both'],
-    },
-    alignment: {
-      control: { type: 'radio' },
-      options: ['left', 'center', 'right'],
-    },
-    size: {
-      control: { type: 'radio' },
-      options: ['none', 'large', 'regular', 'small'],
-    },
+    vertical_spacing: 'both',
+    alignment: 'right',
+    size: 'regular',
     modifier_class: '',
     attributes: '',
   },

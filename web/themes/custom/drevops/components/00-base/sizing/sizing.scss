@@ -1,0 +1,32 @@
+@use 'sass:map';
+
+// Base size definitions
+$ct-size-map: (
+  'small': ct-particle(10),
+  'regular': ct-particle(20),
+  'large': ct-particle(30),
+);
+
+// Breakpoint-specific multipliers
+$ct-size-breakpoints: (
+  'xxs': 0.5,   // 50% of base size on small small screens
+  'l': 1,       // 100% of base size on large screens (default)
+);
+
+// Default sizes (for medium screens and up)
+@each $size, $value in $ct-size-map {
+  .ct-size--#{$size} {
+    min-height: $value;
+  }
+}
+
+// Responsive overrides by breakpoint
+@each $breakpoint, $multiplier in $ct-size-breakpoints {
+  @include ct-breakpoint($breakpoint) {
+    @each $size, $value in $ct-size-map {
+      .ct-size--#{$size} {
+        min-height: $value * $multiplier;
+      }
+    }
+  }
+}
