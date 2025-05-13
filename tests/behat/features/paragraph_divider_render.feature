@@ -29,9 +29,9 @@ Feature: Divider render
     Then I should see an "article .ct-divider" element
     And I should see an "article .ct-divider.ct-theme-light" element
     And I should not see an "article .ct-divider.ct-theme-dark" element
-    And I should see an "article .ct-divider.ct-vertical-spacing-inset--both" element
+    And I should see an "article .ct-divider.ct-vertical-spacing--both" element
     And I should see an "article .ct-divider.ct-text-align-left" element
-    And I should see an "article .ct-divider.ct-size--large" element
+    And I should see an "article .ct-divider.size--large" element
     And save screenshot
 
   @api @javascript
@@ -48,7 +48,7 @@ Feature: Divider render
     Then I should see an "article .ct-divider" element
     And I should see an "article .ct-divider.ct-theme-dark" element
     And I should not see an "article .ct-divider.ct-theme-light" element
-    And I should see an "article .ct-divider.ct-vertical-spacing-inset--both" element
+    And I should see an "article .ct-divider.ct-vertical-spacing--both" element
     And I should see an "article .ct-divider.ct-text-align-right" element
-    And I should see an "article .ct-divider.ct-size--large" element
+    And I should see an "article .ct-divider.size--large" element
     And save screenshot
