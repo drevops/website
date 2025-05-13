@@ -1,0 +1,23 @@
+uuid: aaea2552-2332-4582-9a6d-310aaf45e2d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_theme
+    - paragraphs.paragraphs_type.divider
+  module:
+    - options
+id: paragraph.divider.field_c_p_theme
+field_name: field_c_p_theme
+entity_type: paragraph
+bundle: divider
+label: Theme
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: light
+default_value_callback: ''
+settings: {  }
+field_type: list_string

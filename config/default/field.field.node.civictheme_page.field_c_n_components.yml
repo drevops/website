@@ -18,6 +18,7 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_promo
     - paragraphs.paragraphs_type.civictheme_slider
     - paragraphs.paragraphs_type.civictheme_webform
+    - paragraphs.paragraphs_type.divider
   module:
     - entity_reference_revisions
 _core:
@@ -49,6 +50,7 @@ settings:
       civictheme_promo: civictheme_promo
       civictheme_slider: civictheme_slider
       civictheme_webform: civictheme_webform
+      divider: divider
     negate: 0
     target_bundles_drag_drop:
       civictheme_accordion:
@@ -120,6 +122,12 @@ settings:
       civictheme_slider_slide_ref:
         weight: -32
         enabled: false
+      civictheme_snippet:
+        weight: 54
+        enabled: false
+      civictheme_snippet_ref:
+        weight: 55
+        enabled: false
       civictheme_social_icon:
         weight: -31
         enabled: false
@@ -131,5 +139,8 @@ settings:
         enabled: false
       civictheme_webform:
         weight: -46
+        enabled: true
+      divider:
+        weight: 60
         enabled: true
 field_type: entity_reference_revisions

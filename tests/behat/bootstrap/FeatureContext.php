@@ -10,6 +10,7 @@ declare(strict_types=1);
 use DrevOps\BehatSteps\Drupal\ContentTrait;
 use DrevOps\BehatSteps\Drupal\FieldTrait;
 use DrevOps\BehatSteps\Drupal\FileTrait;
+use DrevOps\BehatSteps\Drupal\MediaTrait;
 use DrevOps\BehatSteps\ElementTrait;
 use DrevOps\BehatSteps\LinkTrait;
 use DrevOps\BehatSteps\Drupal\ParagraphsTrait;
@@ -31,6 +32,7 @@ class FeatureContext extends DrupalContext {
   use ElementTrait;
   use FieldTrait;
   use FileTrait;
+  use MediaTrait;
   use ParagraphsTrait;
   use PathTrait;
   use ResponseTrait;
