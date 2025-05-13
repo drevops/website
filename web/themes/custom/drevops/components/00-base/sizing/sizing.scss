@@ -10,6 +10,7 @@ $ct-size-map: (
 // Breakpoint-specific multipliers
 $ct-size-breakpoints: (
   'xxs': 0.5,   // 50% of base size on small small screens
+  'm': 0.75,    // 75% of base size on medium screens
   'l': 1,       // 100% of base size on large screens (default)
 );
 
