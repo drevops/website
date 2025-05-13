@@ -13,9 +13,11 @@ entity_type: paragraph
 bundle: divider
 label: Size
 description: ''
-required: false
+required: true
 translatable: false
-default_value: {  }
+default_value:
+  -
+    value: regular
 default_value_callback: ''
 settings: {  }
 field_type: list_string
