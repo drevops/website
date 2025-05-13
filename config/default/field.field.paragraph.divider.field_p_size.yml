@@ -12,7 +12,7 @@ field_name: field_p_size
 entity_type: paragraph
 bundle: divider
 label: Size
-description: ''
+description: "Select the visual size variant for the divider component (e.g., small, regular, large).\r\n"
 required: true
 translatable: false
 default_value:

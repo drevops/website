@@ -5,15 +5,30 @@
 .ct-divider {
   $root: &;
 
-  .container {
+  & {
+    border-top: solid ct-particle(0.125);
+    border-bottom: solid ct-particle(0.125);
+  }
+
+  // Set height for all inner element to make an image fit the Divider size.
+  * {
     height: 100%;
   }
 
-  #{$root}__image {
-    @include ct-image-fit();
+  $divider-size-mapping: (
+    'small': ct-particle(10),
+    'regular': ct-particle(20),
+    'large': ct-particle(30)
+  );
+
+  @each $size, $value in $divider-size-mapping {
+    &.size--#{$size} {
+      height: $value;
+    }
   }
 
   @include ct-component-theme($root) using($root, $theme) {
     @include ct-component-property($root, $theme, background-color);
+    @include ct-component-property($root, $theme, border-color);
   }
 }
