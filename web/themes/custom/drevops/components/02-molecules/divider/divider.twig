@@ -16,7 +16,7 @@
  */
 #}
 
-{% set size_class = size in ['large', 'regular', 'small'] ? 'size--%s'|format(size) : 'regular' %}
+{% set size_class = size in ['large', 'regular', 'small'] ? 'size--%s'|format(size) : 'size--regular' %}
 {% set alignment_class = alignment ? 'ct-text-align-%s'|format(alignment) : '' %}
 {% set vertical_spacing_class = vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing--%s'|format(vertical_spacing) : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
