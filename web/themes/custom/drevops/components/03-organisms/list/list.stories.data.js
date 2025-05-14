@@ -21,6 +21,16 @@ export default {
       navigation: () => NavigationCard(NavigationCardData.args('light')),
       snippet: () => Snippet(SnippetData.args(theme)),
     };
+
+    const rowsConfig = {
+      theme,
+      items: [1, 2, 3, 4, 5, 6].map(options.component ? listComponents[options.component] : listComponents.promo),
+      template_column_count: options.columnCount || 3,
+      fill_width: false,
+      with_background: false,
+      row_class: 'row--equal-heights-content row--vertically-spaced',
+    };
+
     return {
       theme,
       title: 'My List Title',
@@ -40,22 +50,8 @@ export default {
         content: 'Example content above rows',
         allow_html: true,
       }),
-      rows_grid: Grid({
-        theme,
-        items: [1, 2, 3, 4, 5, 6].map(options.component ? listComponents[options.component] : listComponents.promo),
-        template_column_count: options.columnCount || 3,
-        fill_width: false,
-        with_background: false,
-        row_class: 'row--equal-heights-content row--vertically-spaced',
-      }),
-      rows_spotlight: Spotlight({
-        theme,
-        items: [1, 2, 3, 4, 5, 6].map(options.component ? listComponents[options.component] : listComponents.promo),
-        template_column_count: options.columnCount || 3,
-        fill_width: false,
-        with_background: false,
-        row_class: 'row--equal-heights-content row--vertically-spaced',
-      }),
+      rows_grid: Grid({ ...rowsConfig }),
+      rows_spotlight: Spotlight({ ...rowsConfig }),
       rows_below: Paragraph({
         theme,
         content: `Example content below rows`,
