@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/paragraphs.inc';
 require_once __DIR__ . '/includes/divider.inc';
+require_once __DIR__ . '/includes/manual_list.inc';
 
 /**
  * Implements hook_preprocess_HOOK() for container templates.

@@ -25,3 +25,10 @@ function _drevops_preprocess_paragraph__paragraph_field__size(array &$variables)
 function _drevops_preprocess_paragraph__paragraph_field__alignment(array &$variables): void {
   $variables['alignment'] = civictheme_get_field_value($variables['paragraph'], 'field_p_alignment');
 }
+
+/**
+ * Pre-process for the Layout paragraph field.
+ */
+function _drevops_preprocess_paragraph__paragraph_field__list_layout(array &$variables): void {
+  $variables['layout'] = civictheme_get_field_value($variables['paragraph'], 'field_p_list_layout');
+}
