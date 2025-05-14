@@ -12,7 +12,7 @@ field_name: field_p_list_layout
 entity_type: paragraph
 bundle: civictheme_manual_list
 label: Layout
-description: ''
+description: 'Select the list layout style for this paragraph (Grid or Spotlight).'
 required: true
 translatable: false
 default_value:
