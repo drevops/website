@@ -1,0 +1,27 @@
+uuid: 6209df82-ac9d-4c57-8e8e-7449ec90d483
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_p_list_layout
+field_name: field_p_list_layout
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: grid
+      label: Grid
+    -
+      value: spotlight
+      label: Spotlight
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

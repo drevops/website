@@ -1,0 +1,23 @@
+uuid: 79660761-22df-4b94-bc6f-da31ef42a164
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_list_layout
+    - paragraphs.paragraphs_type.civictheme_manual_list
+  module:
+    - options
+id: paragraph.civictheme_manual_list.field_p_list_layout
+field_name: field_p_list_layout
+entity_type: paragraph
+bundle: civictheme_manual_list
+label: Layout
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: grid
+default_value_callback: ''
+settings: {  }
+field_type: list_string
