@@ -9,8 +9,8 @@
 {% set layout = layout in ['grid', 'spotlight'] ? layout : 'grid' %}
 
 {% block rows %}
-  {% if rows and -%}
-    <div class="ct-list__rows">
+  {% if rows -%}
+    <div class="ct-list__rows layout-{{ layout }}">
       {% include '@base/' ~ layout ~ '/' ~ layout ~ '.twig' with {
         theme: theme,
         title: title,
