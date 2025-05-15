@@ -30,7 +30,7 @@ export default {
       with_background: false,
       row_class: 'row--equal-heights-content row--vertically-spaced',
     };
-
+    const layoutType = options.layout || 'grid';
     return {
       theme,
       title: 'My List Title',
@@ -44,14 +44,8 @@ export default {
       content: 'Example content',
       filters: options.group ? GroupFilter(GroupFilterData.args(theme)) : SingleFilter(SingleFilterData.args(theme)),
       results_count: 'Showing 1 of 6',
-      layout: 'grid',
-      rows_above: Paragraph({
-        theme,
-        content: 'Example content above rows',
-        allow_html: true,
-      }),
-      rows_grid: Grid({ ...rowsConfig }),
-      rows_spotlight: Spotlight({ ...rowsConfig }),
+      layout: layoutType,
+      rows: layoutType === 'spotlight' ? Spotlight({ ...rowsConfig }) : Grid({ ...rowsConfig }),
       rows_below: Paragraph({
         theme,
         content: `Example content below rows`,

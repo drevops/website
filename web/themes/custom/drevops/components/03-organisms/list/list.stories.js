@@ -1,4 +1,4 @@
-import Component from './list.stories.twig';
+import Component from './list.twig';
 import ListData from './list.stories.data';
 
 const meta = {
@@ -103,4 +103,11 @@ export const ListSnippet = {
     layout: 'padded',
   },
   args: ListData.args('light', { component: 'snippet', columnCount: 1 }),
+};
+
+export const ListSpotlight = {
+  parameters: {
+    layout: 'padded',
+  },
+  args: ListData.args('light', { layout: 'spotlight' }),
 };
