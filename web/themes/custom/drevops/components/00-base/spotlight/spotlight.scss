@@ -13,10 +13,10 @@
   @include ct-container(false);
 }
 
+@include ct-cssgrid();
+
 .row {
   $root: &;
-
-  @include ct-row($ct-grid-gutters);
 
   &#{$root}--no-gutters {
     margin-right: 0;
@@ -29,24 +29,15 @@
     }
   }
 
-  &#{$root}--reverse {
-    flex-direction: row-reverse;
-  }
-
   &#{$root}--no-grow {
     > .col,
     > [class*='col-'] {
-      flex-grow: initial;
-      flex-basis: auto;
+      width: auto;
     }
   }
 
   &#{$root}--fill-width {
-    > .col,
-    > [class*='col-'] {
-      max-width: 100%;
-      flex-grow: 1;
-    }
+    // @todo
   }
 
   &#{$root}--equal-heights-content {
@@ -84,6 +75,8 @@
 ul.row {
   margin-top: 0;
   margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
 }
 
 .col {
@@ -94,25 +87,33 @@ ul.row {
 
   $next-bp: ct-map-get-next($ct-breakpoints, $ct-grid-lowest-breakpoint, map.get($ct-breakpoints, 'xxs'), key);
 
-  // Spawn columns to fit into as single row for larger breakpoints.
   @include ct-breakpoint($next-bp) {
-    @include _ct-grid-col();
+    grid-column: span 1;
   }
 }
 
-// Generate column classes.
+// Generate column classes for CSS Grid
 @each $breakpoint, $value in $ct-breakpoints {
   @if $breakpoint == $ct-grid-lowest-breakpoint {
-    @include _ct-col-factory($breakpoint);
+    @for $i from 1 through $ct-grid-columns {
+      .col-#{$breakpoint}-#{$i} {
+        grid-column: span $i;
+      }
+    }
   }
   @else {
     @include ct-breakpoint($breakpoint) {
-      @include _ct-col-factory($breakpoint);
+      @for $i from 1 through $ct-grid-columns {
+        .col-#{$breakpoint}-#{$i} {
+          grid-column: span $i;
+        }
+        @include _ct-col-factory($breakpoint);
+      }
     }
   }
 }
 
-// Utilities for fixed and auto columns.
+// Utilities for columns
 .col,
 [class*='col-'] {
   box-sizing: border-box;
@@ -123,24 +124,18 @@ ul.row {
   }
 
   &.col--no-grow {
-    flex-grow: initial;
-    flex-basis: auto;
+    width: auto;
   }
 
   &.col--no-gap {
-    // Remove the offsets starting from the next breakpoint from the lowest one.
+    // Isolate this column from grid gaps
     @include ct-breakpoint($ct-grid-responsive-breakpoint) {
-      &:not(:first-child) {
-        padding-left: 0;
-      }
-
-      &:not(:last-child) {
-        padding-right: 0;
-      }
+      margin: 0 -#{map.get($ct-grid-gutters, $ct-grid-responsive-breakpoint) / 2};
     }
   }
 }
 
+// Order utilities
 @each $breakpoint, $value in $ct-breakpoints {
   @if $breakpoint == $ct-grid-lowest-breakpoint {
     .first {

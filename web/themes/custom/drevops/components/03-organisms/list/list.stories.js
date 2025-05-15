@@ -17,17 +17,10 @@ const meta = {
     results_count: {
       control: { type: 'text' },
     },
-    layout: {
-      control: { type: 'radio' },
-      options: ['grid', 'spotlight'],
-    },
     rows_above: {
       control: { type: 'text' },
     },
     rows: {
-      control: { type: 'text' },
-    },
-    spotlight_rows: {
       control: { type: 'text' },
     },
     rows_below: {

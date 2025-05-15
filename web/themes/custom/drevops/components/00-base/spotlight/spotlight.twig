@@ -36,13 +36,12 @@
 
 {% if template_column_count > 0 %}
   {% set column_class = column_class|default('') %}
-  {% set template_column_count = template_column_count in [1, 2, 3, 4, 6, 12] ? template_column_count : 12 %}
-  {% set column_class = 'col-xxs-12 col-m-%s %s'|format(12 // template_column_count, column_class)|trim %}
-{% else %}
-  {% set column_class = ('col ' ~ column_class|default(''))|trim %}
+  {% set template_column_count = template_column_count in [1, 2, 3, 4, 6, 12] ? template_column_count : 3 %}
 {% endif %}
+{% set column_class = ('col ' ~ column_class|default(''))|trim %}
 
-{% set row_classes = ['row'] %}
+{% set grid_class = 'grid-%s-%s'|format(template_column_count, 5)|trim %}
+{% set row_classes = ['row', 'spotlight', grid_class] %}
 {% if fill_width %}
   {% set row_classes = row_classes|merge(['row--fill-width']) %}
 {% endif %}
