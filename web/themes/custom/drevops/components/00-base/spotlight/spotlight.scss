@@ -64,6 +64,7 @@
     }
   }
 
+  .last-row-grid,
   &#{$root}--vertically-spaced {
     @each $bp, $gutter in $ct-grid-vertical-gutters {
       @if $bp == $ct-grid-lowest-breakpoint {
@@ -77,6 +78,10 @@
         }
       }
     }
+  }
+
+  .last-row-grid {
+    padding: 0;
   }
 }
 
@@ -120,6 +125,7 @@ ul.row {
         .col-#{$breakpoint}-#{$i} {
           grid-column: span $i;
         }
+
         @include _ct-col-factory($breakpoint);
       }
     }

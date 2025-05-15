@@ -14,4 +14,56 @@ declare(strict_types=1);
  */
 function drevops_preprocess_paragraph__civictheme_manual_list(array &$variables): void {
   _drevops_preprocess_paragraph__paragraph_field__list_layout($variables);
+
+  // Extra calculations for the Spotlight layout.
+  if ($variables['layout'] === 'spotlight'
+    && $variables['column_count'] > 1
+    && $variables['fill_width']
+  ) {
+    $columns_count = $variables['column_count'];
+    $cells = &$variables['rows'];
+
+    // The first item occupies two cells.
+    $occupied_cells_amount = count($cells) + 1;
+
+    // Checks "hanging" items presence.
+    if ($occupied_cells_amount % $columns_count) {
+      $hanged_items = $occupied_cells_amount % $columns_count;
+      $last_line_items = array_splice($cells, $hanged_items * -1);
+      $last_line_items_count = count($last_line_items);
+
+      // Wraps "hanging" items with a "col" element before adding them to a
+      // separate grid row.
+      array_walk($last_line_items, function (&$item) use ($variables) {
+        $item = [
+          '#type' => 'html_tag',
+          '#tag' => $variables['column_element'] ?? 'div',
+          '#attributes' => [
+            'class' => [
+              'col',
+              $variables['column_class'] ?? '',
+            ],
+          ],
+          0 => $item,
+        ];
+      });
+
+      // Prepares last row element with hanging items.
+      $last_line_render = $last_line_items +
+        [
+          '#row_classes' => implode(
+            ' ',
+            [
+              'last-row-grid',
+              'grid-l-' . $last_line_items_count . '-1',
+              'grid-xxs-1-1',
+              'col-l-' . $columns_count,
+              'col-xxs-' . 1,
+            ]),
+        ];
+
+      // Adds the "last row" to the Items list.
+      $cells[] = $last_line_render;
+    }
+  }
 }

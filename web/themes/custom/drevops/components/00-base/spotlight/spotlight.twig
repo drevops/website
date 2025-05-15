@@ -68,7 +68,7 @@
   {% if row_attributes is not empty %}{{ row_attributes|raw }}{% endif %}>
   {% for item in items %}
     {% if item is not empty %}
-      <{{ column_element }} class="{{ column_class }}" {% if column_attributes is not empty %}{{ column_attributes|raw }}{% endif %}>
+      <{{ column_element }} class="{{ column_class }} {% if item['#row_classes'] is not empty %}{{ item['#row_classes'] }}{% endif %}" {% if column_attributes is not empty %}{{ column_attributes|raw }}{% endif %}>
       {{ item|raw }}
       </{{ column_element }}>
     {% endif %}
