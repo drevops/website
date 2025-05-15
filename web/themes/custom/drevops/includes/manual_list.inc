@@ -18,6 +18,9 @@ function drevops_preprocess_paragraph__civictheme_manual_list(array &$variables)
   // Extra calculations for the Spotlight layout.
   if ($variables['layout'] === 'spotlight'
     && $variables['column_count'] > 1
+    // There must be more items than are needed for two grid row. Two - because
+    // first element always occupies height on two rows.
+    && ($variables['column_count'] * 2) <= count($variables['rows'])
     && $variables['fill_width']
   ) {
     $columns_count = $variables['column_count'];
@@ -27,14 +30,14 @@ function drevops_preprocess_paragraph__civictheme_manual_list(array &$variables)
     $occupied_cells_amount = count($cells) + 1;
 
     // Checks "hanging" items presence.
-    if ($occupied_cells_amount % $columns_count) {
+    if ($occupied_cells_amount % $columns_count !== 0) {
       $hanged_items = $occupied_cells_amount % $columns_count;
       $last_line_items = array_splice($cells, $hanged_items * -1);
       $last_line_items_count = count($last_line_items);
 
       // Wraps "hanging" items with a "col" element before adding them to a
       // separate grid row.
-      array_walk($last_line_items, function (&$item) use ($variables) {
+      array_walk($last_line_items, function (&$item) use ($variables): void {
         $item = [
           '#type' => 'html_tag',
           '#tag' => $variables['column_element'] ?? 'div',
