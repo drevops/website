@@ -13,10 +13,18 @@
   @include ct-container(false);
 }
 
-@include ct-cssgrid();
+@each $breakpoint, $value in $ct-breakpoints {
+  @include ct-breakpoint($breakpoint) {
+    @include ct-cssgrid($breakpoint);
+  }
+}
 
 .row {
   $root: &;
+
+  &.spotlight {
+    display: grid;
+  }
 
   &#{$root}--no-gutters {
     margin-right: 0;
@@ -90,6 +98,11 @@ ul.row {
   @include ct-breakpoint($next-bp) {
     grid-column: span 1;
   }
+
+  // Makes the first cell always two rows high.
+  &:first-child {
+    grid-row: span 2;
+  }
 }
 
 // Generate column classes for CSS Grid
@@ -109,28 +122,6 @@ ul.row {
         }
         @include _ct-col-factory($breakpoint);
       }
-    }
-  }
-}
-
-// Utilities for columns
-.col,
-[class*='col-'] {
-  box-sizing: border-box;
-
-  &.col--reverse {
-    display: flex;
-    flex-direction: column-reverse;
-  }
-
-  &.col--no-grow {
-    width: auto;
-  }
-
-  &.col--no-gap {
-    // Isolate this column from grid gaps
-    @include ct-breakpoint($ct-grid-responsive-breakpoint) {
-      margin: 0 -#{map.get($ct-grid-gutters, $ct-grid-responsive-breakpoint) / 2};
     }
   }
 }

@@ -102,5 +102,5 @@ export const ListSpotlight = {
   parameters: {
     layout: 'padded',
   },
-  args: ListData.args('light', { layout: 'spotlight' }),
+  args: ListData.args('light', { layout: 'spotlight', columnCount: 2 }),
 };

@@ -40,8 +40,8 @@
 {% endif %}
 {% set column_class = ('col ' ~ column_class|default(''))|trim %}
 
-{% set grid_class = 'grid-%s-%s'|format(template_column_count, 5)|trim %}
-{% set row_classes = ['row', 'spotlight', grid_class] %}
+{% set grid_classes = ['grid-l-%s-%s'|format(template_column_count, 5), 'grid-xxs-%s-%s'|format(1, 5)] %}
+{% set row_classes = ['row', 'spotlight']|merge(grid_classes) %}
 {% if fill_width %}
   {% set row_classes = row_classes|merge(['row--fill-width']) %}
 {% endif %}
