@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Automated list paragraph component.
+ * Manual list paragraph component.
  */
 
 declare(strict_types=1);
@@ -16,6 +16,8 @@ function drevops_preprocess_paragraph__civictheme_manual_list(array &$variables)
   _drevops_preprocess_paragraph__paragraph_field__list_layout($variables);
 
   // Extra calculations for the Spotlight layout.
+  // Last "hanging" items must be stretched full width if the "fill_width"
+  // option is enabled.
   if ($variables['layout'] === 'spotlight'
     && $variables['column_count'] > 1
     // There must be more items than are needed for two grid row. Two - because
@@ -24,15 +26,16 @@ function drevops_preprocess_paragraph__civictheme_manual_list(array &$variables)
     && $variables['fill_width']
   ) {
     $columns_count = $variables['column_count'];
-    $cells = &$variables['rows'];
+    $rows = &$variables['rows'];
 
-    // The first item occupies two cells.
-    $occupied_cells_amount = count($cells) + 1;
+    // The first item spans two rows in the spotlight layout, which affects cell
+    // counting.
+    $occupied_cells_amount = count($rows) + 1;
 
     // Checks "hanging" items presence.
     if ($occupied_cells_amount % $columns_count !== 0) {
       $hanged_items = $occupied_cells_amount % $columns_count;
-      $last_line_items = array_splice($cells, $hanged_items * -1);
+      $last_line_items = array_splice($rows, $hanged_items * -1);
       $last_line_items_count = count($last_line_items);
 
       // Wraps "hanging" items with a "col" element before adding them to a
@@ -66,7 +69,7 @@ function drevops_preprocess_paragraph__civictheme_manual_list(array &$variables)
         ];
 
       // Adds the "last row" to the Items list.
-      $cells[] = $last_line_render;
+      $rows[] = $last_line_render;
     }
   }
 }
