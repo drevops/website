@@ -4,6 +4,7 @@
 
 .ct-banner {
   $root: &;
+  $featured_image_wrapper: #{$root}__featured-image__wrapper;
 
   position: relative;
 
@@ -14,10 +15,8 @@
   #{$root}__inner {
     @include ct-background();
 
-    & {
-      padding-top: ct-spacing(3);
-      padding-bottom: ct-spacing(10);
-    }
+    padding-top: ct-spacing(3);
+    padding-bottom: ct-spacing(10);
 
     @include ct-print() {
       padding-top: ct-spacing(2);
@@ -29,14 +28,12 @@
     margin-top: ct-spacing(2);
   }
 
-  #{$root}__featured-image__wrapper {
+  #{$featured_image_wrapper} {
     @include ct-image-fit();
 
-    & {
-      box-sizing: border-box;
-      width: $ct-banner-featured-image-width;
-      display: none;
-    }
+    box-sizing: border-box;
+    width: $ct-banner-featured-image-width;
+    display: none;
 
     @include ct-breakpoint(m) {
       display: block;
@@ -67,7 +64,7 @@
       margin-top: -1 * ct-spacing(2);
     }
 
-    #{$root}__featured-image__wrapper {
+    #{$featured_image_wrapper} {
       @include ct-breakpoint(m) {
         bottom: 0;
         top: auto;
@@ -110,7 +107,7 @@
     }
 
     &#{$root}--decorative {
-      #{$root}__featured-image__wrapper {
+      #{$featured_image_wrapper} {
         @include ct-breakpoint(m) {
           @include ct-image-shadow(ct-component-var($root, $theme, featured-image, shadow-color), 'up-left');
         }
