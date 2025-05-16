@@ -117,4 +117,12 @@
       }
     }
   }
+
+  &.ct-banner-type--intro {
+    .ct-banner__title {
+      @include ct-typography('heading-large');
+    }
+
+    text-align: center;
+  }
 }

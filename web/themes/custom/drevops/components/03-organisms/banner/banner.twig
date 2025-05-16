@@ -30,7 +30,8 @@
 
 {% set is_decorative_class = is_decorative ? 'ct-banner--decorative' : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
-{% set modifier_class = '%s %s %s'|format(theme_class, is_decorative_class, modifier_class|default('')) %}
+{% set banner_type_class = 'ct-banner-type--%s'|format(banner_type|default('default')) %}
+{% set modifier_class = '%s %s %s %s'|format(theme_class, is_decorative_class, banner_type_class, modifier_class|default('')) %}
 
 {% if content_top1 is not empty or content_top2 is not empty or content_top3 is not empty or site_section is not empty or title is not empty or content_middle is not empty or content is not empty or content_below is not empty or content_bottom is not empty %}
   <div class="ct-banner {{ modifier_class -}}" id="main-content" tabindex="-1" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %}>

@@ -8,6 +8,7 @@ import Grid from '../../00-base/grid/grid.twig';
 export default {
   args: (theme = 'light') => ({
     theme,
+    banner_type: 'inherit',
     breadcrumb: {
       links: [
         {

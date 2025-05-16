@@ -10,6 +10,10 @@ const meta = {
       control: { type: 'radio' },
       options: ['light', 'dark'],
     },
+    banner_type: {
+      control: { type: 'radio' },
+      options: ['inherit', 'default', 'large', 'intro'],
+    },
     content_top1: {
       control: { type: 'text' },
     },
