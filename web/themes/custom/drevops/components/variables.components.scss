@@ -9,3 +9,11 @@
 // Example to override component's variable - Back to Top should have a
 // 'custom1' colour background.
 $ct-back-to-top-light-background-color: ct-color-light('custom1');
+
+//
+// Divider.
+//
+$ct-divider-light-background-color: ct-color-light('background-light') !default;
+$ct-divider-dark-background-color: ct-color-dark('background') !default;
+$ct-divider-light-border-color: ct-color-light('border-light') !default;
+$ct-divider-dark-border-color: ct-color-dark('border') !default;

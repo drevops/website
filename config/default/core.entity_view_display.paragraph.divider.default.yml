@@ -1,0 +1,56 @@
+uuid: 78b141dc-3190-46db-8dc3-1d65fb0b7706
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.divider.field_c_p_image
+    - field.field.paragraph.divider.field_c_p_theme
+    - field.field.paragraph.divider.field_c_p_vertical_spacing
+    - field.field.paragraph.divider.field_p_alignment
+    - field.field.paragraph.divider.field_p_size
+    - paragraphs.paragraphs_type.divider
+  module:
+    - options
+id: paragraph.divider.default
+targetEntityType: paragraph
+bundle: divider
+mode: default
+content:
+  field_c_p_image:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_p_vertical_spacing:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_p_alignment:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_p_size:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

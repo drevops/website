@@ -1,0 +1,10 @@
+uuid: 1224f603-56ef-406f-bf85-90788db9828f
+langcode: en
+status: true
+dependencies: {  }
+id: divider
+label: Divider
+icon_uuid: null
+icon_default: null
+description: 'Visually separate content.'
+behavior_plugins: {  }
