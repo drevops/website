@@ -5,7 +5,10 @@ const meta = {
   component: Component,
   argTypes: {
     items: {
-      control: { type: 'object' },
+      control: false,
+      table: {
+        disable: true,
+      },
     },
     row_element: {
       control: { type: 'text' },
@@ -32,7 +35,7 @@ const meta = {
       control: { type: 'boolean' },
     },
     template_column_count: {
-      control: { type: 'number' },
+      control: { type: 'range', min: 1, max: 12, step: 1 },
     },
     fill_width: {
       control: { type: 'boolean' },
@@ -75,7 +78,7 @@ export const Spotlight = {
     column_attributes: '',
     use_container: true,
     is_fluid: false,
-    template_column_count: 0,
+    template_column_count: 3,
     fill_width: false,
     attributes: '',
     modifier_class: '',
