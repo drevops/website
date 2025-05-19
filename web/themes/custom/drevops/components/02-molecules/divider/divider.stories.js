@@ -36,7 +36,7 @@ export default meta;
 
 export const Divider = {
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   args: {
     theme: 'light',
