@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/includes/banner.inc';
 require_once __DIR__ . '/includes/paragraphs.inc';
 require_once __DIR__ . '/includes/divider.inc';
 require_once __DIR__ . '/includes/manual_list.inc';
@@ -23,4 +24,11 @@ function drevops_preprocess_container(array &$variables): void {
  */
 function drevops_preprocess_civictheme_tag_list(array &$variables): void {
   $variables['attributes']['class'][] = 'container';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function drevops_preprocess_block(array &$variables): void {
+  _drevops_preprocess_block__civictheme_banner($variables);
 }

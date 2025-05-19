@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7615caf3aa14590d0ed424beeeb3e471",
+    "content-hash": "a1d5cdd5bcb903a664d473e67877dc67",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -11106,16 +11106,16 @@
         },
         {
             "name": "drevops/behat-steps",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-steps.git",
-                "reference": "9fb174729b2fdfeba415545c3f39bd3eb4aadb56"
+                "reference": "5e5083e649ac02731272c69bd41c2b7072b82afe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/9fb174729b2fdfeba415545c3f39bd3eb4aadb56",
-                "reference": "9fb174729b2fdfeba415545c3f39bd3eb4aadb56",
+                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/5e5083e649ac02731272c69bd41c2b7072b82afe",
+                "reference": "5e5083e649ac02731272c69bd41c2b7072b82afe",
                 "shasum": ""
             },
             "require": {
@@ -11185,7 +11185,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-05-06T21:45:03+00:00"
+            "time": "2025-05-14T00:04:07+00:00"
         },
         {
             "name": "drupal/coder",
@@ -17178,16 +17178,16 @@
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
-            "version": "3.6.0",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
-                "reference": "a9bad45d581f51766b76c47370bdd3748ecf7486"
+                "reference": "a71515e8d1b105e85602ecdafd550b0e17b2b48a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/a9bad45d581f51766b76c47370bdd3748ecf7486",
-                "reference": "a9bad45d581f51766b76c47370bdd3748ecf7486",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/a71515e8d1b105e85602ecdafd550b0e17b2b48a",
+                "reference": "a71515e8d1b105e85602ecdafd550b0e17b2b48a",
                 "shasum": ""
             },
             "require": {
@@ -17243,7 +17243,7 @@
             "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
             "support": {
                 "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
-                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/3.6.0"
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/3.7.0"
             },
             "funding": [
                 {
@@ -17251,7 +17251,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-05T07:30:52+00:00"
+            "time": "2025-05-15T17:19:20+00:00"
         },
         {
             "name": "webmozart/assert",
