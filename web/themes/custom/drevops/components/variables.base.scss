@@ -114,7 +114,7 @@ $ct-particle: 8px;
 $ct-font-base-size: $ct-particle * 2 !default;
 $ct-font-base-line-height: $ct-font-base-size !default;
 $ct-typography: (
-  'heading-large': (
+  'display-large': (
     'xxs': ($ct-font-base-size * 3, $ct-font-base-line-height * 3.5, 'bold', 'primary', -0.6px),
     'm': ($ct-font-base-size * 4, $ct-font-base-line-height * 4.75, 'bold', 'primary', -1px)
   )

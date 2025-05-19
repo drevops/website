@@ -7,10 +7,9 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/includes/banner.inc';
 require_once __DIR__ . '/includes/paragraphs.inc';
 require_once __DIR__ . '/includes/divider.inc';
-
-use Drupal\civictheme\CivicthemeConstants;
 
 /**
  * Implements hook_preprocess_HOOK() for container templates.
@@ -31,39 +30,4 @@ function drevops_preprocess_civictheme_tag_list(array &$variables): void {
  */
 function drevops_preprocess_block(array &$variables): void {
   _drevops_preprocess_block__civictheme_banner($variables);
-}
-
-/**
- * Pre-process for Banner block.
- *
- * 3 parts:
- * 1. Properties from the block.
- * 2. Properties from the node that may override properties from the block.
- * 3. Cache tags.
- *
- * @SuppressWarnings(PHPMD.StaticAccess)
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @SuppressWarnings(PHPMD.NPathComplexity)
- *
- * @see _civictheme_preprocess_block__civictheme_banner()
- */
-function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
-  if ($variables['base_plugin_id'] !== 'block_content') {
-    return;
-  }
-
-  $block = $variables['elements']['content']['#block_content'];
-  if ($block->bundle() !== 'civictheme_banner' || ($block->hasField('field_c_b_type') && $block->field_c_b_type->isEmpty())) {
-    return;
-  }
-
-  // Finds a banner type.
-  $banner_type = civictheme_get_field_value($block, 'field_c_b_banner_type', TRUE, CivicthemeConstants::BANNER_TYPE_DEFAULT);
-  $route_match = \Drupal::routeMatch();
-  $node = $route_match->getParameter('node_revision') ?: $route_match->getParameter('node');
-  if (!empty($node)) {
-    $banner_type = civictheme_get_field_value($node, 'field_c_n_banner_type', TRUE, CivicthemeConstants::INHERIT);
-  }
-
-  $variables['banner_type'] = $banner_type;
 }

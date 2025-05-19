@@ -8,7 +8,7 @@ import Grid from '../../00-base/grid/grid.twig';
 export default {
   args: (theme = 'light') => ({
     theme,
-    banner_type: 'inherit',
+    type: 'default',
     breadcrumb: {
       links: [
         {
@@ -21,7 +21,7 @@ export default {
         },
         {
           text: 'Link 3',
-          url: 'https://example.com/breadcrumb-2',
+          url: 'https://example.com/breadcrumb-3',
         },
       ],
       active_is_link: false,

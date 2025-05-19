@@ -10,9 +10,9 @@ const meta = {
       control: { type: 'radio' },
       options: ['light', 'dark'],
     },
-    banner_type: {
+    type: {
       control: { type: 'radio' },
-      options: ['inherit', 'default', 'large', 'intro'],
+      options: ['default', 'large', 'intro'],
     },
     content_top1: {
       control: { type: 'text' },
