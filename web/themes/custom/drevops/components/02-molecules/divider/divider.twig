@@ -32,7 +32,8 @@
               {% include '@atoms/image/image.twig' with {
                 theme: theme,
                 url: image.url,
-                alt: image.alt,
+                alt: "",
+                attributes: 'role="presentation"',
               } only %}
             </div>
           {% endif %}
