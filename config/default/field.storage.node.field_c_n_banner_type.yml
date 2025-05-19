@@ -22,6 +22,9 @@ settings:
     -
       value: large
       label: Large
+    -
+      value: intro
+      label: Intro
   allowed_values_function: ''
 module: options
 locked: false
