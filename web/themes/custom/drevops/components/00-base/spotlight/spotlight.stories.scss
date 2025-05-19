@@ -1,0 +1,19 @@
+//
+// Spotlight component stories.
+//
+
+@use 'sass:math';
+
+.row.spotlight {
+  display: grid;
+  grid-gap: 40px 10px;
+
+  .col {
+    padding: 0;
+
+    .story-placeholder {
+      display: block;
+      height: 100%;
+    }
+  }
+}
