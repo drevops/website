@@ -60,19 +60,47 @@
 
 {% set row_class_string = row_classes|join(' ')|trim %}
 
+{# Extra calculations for the Spotlight layout. #}
+{# Last "hanging" items must be stretched full width if the "fill_width" option is enabled. #}
+{% set spotlight_mode = template_column_count > 1 and fill_width %}
+{% set total_items = items|length %}
+{% set occupied_cells = total_items + 1 %}
+{% set hanging_items = occupied_cells % template_column_count %}
+
+{# Split rows: main_rows and hanging_rows #}
+{% if spotlight_mode and (template_column_count * 2 <= total_items) and hanging_items > 0 %}
+  {% set main_rows = items|slice(0, total_items - hanging_items) %}
+  {% set hanging_rows = items|slice(hanging_items * -1) %}
+{% else %}
+  {% set main_rows = items %}
+  {% set hanging_rows = [] %}
+{% endif %}
+
 {% if items is not empty %}
   {% if use_container %}
     <div class="{{ container_class }}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %} aria-live="polite">
   {% endif %}
   <{{ row_element }} class="{{ row_class_string }}"
   {% if row_attributes is not empty %}{{ row_attributes|raw }}{% endif %}>
-  {% for item in items %}
-    {% if item is not empty %}
-      <{{ column_element }} class="{{ column_class }} {% if item['#row_classes'] is not empty %}{{ item['#row_classes'] }}{% endif %}" {% if column_attributes is not empty %}{{ column_attributes|raw }}{% endif %}>
-      {{ item|raw }}
-      </{{ column_element }}>
-    {% endif %}
+
+  {% for row in main_rows %}
+    <{{ column_element }} class="{{ column_class }}">
+    {{ row }}
+    </{{ column_element }}>
   {% endfor %}
+
+  {#  Render hanging row #}
+  {% if hanging_rows is not empty %}
+    {% set hanging_count = hanging_rows|length %}
+    <{{ column_element }} class="{{ column_class }} last-row-grid grid-l-{{ hanging_count }}-1 grid-xxs-1-1 col-l-{{ template_column_count }} col-xxs-1">
+    {% for row in hanging_rows %}
+      <{{ column_element }} class="{{ column_class }} hanging">
+      {{ row }}
+      </{{ column_element }}>
+    {% endfor %}
+    </{{ column_element }}>
+  {% endif %}
+
   </{{ row_element }}>
   {% if use_container %}
     </div>
