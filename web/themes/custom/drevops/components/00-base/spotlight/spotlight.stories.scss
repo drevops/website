@@ -2,12 +2,10 @@
 // Spotlight component stories.
 //
 
-@use 'sass:math';
-
 .row.spotlight,
 .row.spotlight .last-row-grid {
   display: grid;
-  grid-gap: 40px 10px;
+  gap: 40px 10px;
 
   .col {
     padding: 0;

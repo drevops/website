@@ -67,13 +67,14 @@
 {% set occupied_cells = total_items + 1 %}
 {% set hanging_items = occupied_cells % template_column_count %}
 
-{# Split rows: main_rows and hanging_rows #}
+{# Only apply special spotlight hanging layout if we have at least 2 full rows of content #}
+{# Split items: main_items and hanging_items #}
 {% if spotlight_mode and (template_column_count * 2 <= total_items) and hanging_items > 0 %}
-  {% set main_rows = items|slice(0, total_items - hanging_items) %}
-  {% set hanging_rows = items|slice(hanging_items * -1) %}
+  {% set main_items = items|slice(0, total_items - hanging_items) %}
+  {% set hanging_items = items|slice(hanging_items * -1) %}
 {% else %}
-  {% set main_rows = items %}
-  {% set hanging_rows = [] %}
+  {% set main_items = items %}
+  {% set hanging_items = [] %}
 {% endif %}
 
 {% if items is not empty %}
@@ -83,19 +84,25 @@
   <{{ row_element }} class="{{ row_class_string }}"
   {% if row_attributes is not empty %}{{ row_attributes|raw }}{% endif %}>
 
-  {% for row in main_rows %}
+  {% for cell in main_items %}
     <{{ column_element }} class="{{ column_class }}">
-    {{ row }}
+    {{ cell }}
     </{{ column_element }}>
   {% endfor %}
 
-  {#  Render hanging row #}
-  {% if hanging_rows is not empty %}
-    {% set hanging_count = hanging_rows|length %}
+  {# Render hanging items #}
+  {% if hanging_items is not empty %}
+    {% set hanging_count = hanging_items|length %}
+    {# Container for hanging rows with responsive grid classes:
+      - last-row-grid: Marks this as the container for hanging items
+      - grid-l-*: Large screen grid configuration based on number of hanging items
+      - grid-xxs-*: Extra small screen grid configuration (single column)
+      - col-*: Column span classes for responsive layout
+    #}
     <{{ column_element }} class="{{ column_class }} last-row-grid grid-l-{{ hanging_count }}-1 grid-xxs-1-1 col-l-{{ template_column_count }} col-xxs-1">
-    {% for row in hanging_rows %}
+    {% for cell in hanging_items %}
       <{{ column_element }} class="{{ column_class }} hanging">
-      {{ row }}
+      {{ cell }}
       </{{ column_element }}>
     {% endfor %}
     </{{ column_element }}>

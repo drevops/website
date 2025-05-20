@@ -69,7 +69,7 @@ export const Spotlight = {
       '<div class="story-placeholder" contenteditable="true">Item 10</div>',
       '<div class="story-placeholder" contenteditable="true">Item 11</div>',
       '<div class="story-placeholder" contenteditable="true">Item 12</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 12</div>',
+      '<div class="story-placeholder" contenteditable="true">Item 13</div>',
     ],
     row_element: 'div',
     row_class: 'row',

@@ -44,10 +44,6 @@
     }
   }
 
-  &#{$root}--fill-width {
-    // @todo
-  }
-
   &#{$root}--equal-heights-content {
     > .col,
     > [class*='col-'] {
