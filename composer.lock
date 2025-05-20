@@ -12272,16 +12272,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "1.3.7",
+            "version": "1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "91cb3860d816316dd98503ef258bc386f5fc22b7"
+                "reference": "17bb121e35d90cc7d233b6f5adbcd569ae75d9c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/91cb3860d816316dd98503ef258bc386f5fc22b7",
-                "reference": "91cb3860d816316dd98503ef258bc386f5fc22b7",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/17bb121e35d90cc7d233b6f5adbcd569ae75d9c5",
+                "reference": "17bb121e35d90cc7d233b6f5adbcd569ae75d9c5",
                 "shasum": ""
             },
             "require": {
@@ -12356,7 +12356,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.3.7"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.3.8"
             },
             "funding": [
                 {
@@ -12372,7 +12372,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-15T16:10:17+00:00"
+            "time": "2025-05-20T20:18:13+00:00"
         },
         {
             "name": "micheh/phpcs-gitlab",
@@ -17178,16 +17178,16 @@
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
-            "version": "3.7.0",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
-                "reference": "a71515e8d1b105e85602ecdafd550b0e17b2b48a"
+                "reference": "d216db67b63d78cfdefca6a9a7acef4fd0d304bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/a71515e8d1b105e85602ecdafd550b0e17b2b48a",
-                "reference": "a71515e8d1b105e85602ecdafd550b0e17b2b48a",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/d216db67b63d78cfdefca6a9a7acef4fd0d304bb",
+                "reference": "d216db67b63d78cfdefca6a9a7acef4fd0d304bb",
                 "shasum": ""
             },
             "require": {
@@ -17243,7 +17243,7 @@
             "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
             "support": {
                 "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
-                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/3.7.0"
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/3.7.1"
             },
             "funding": [
                 {
@@ -17251,7 +17251,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-15T17:19:20+00:00"
+            "time": "2025-05-19T12:24:50+00:00"
         },
         {
             "name": "webmozart/assert",
