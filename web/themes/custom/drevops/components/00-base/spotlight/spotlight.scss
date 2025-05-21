@@ -19,9 +19,9 @@
 }
 
 .ct-spotlight {
-  > * {
-    > * {
-      height: 100%;
-    }
+  > * > *,
+  > .grid-xxs-1-1 > * > *,
+  > [class^='grid'] > * > * {
+    height: 100%;
   }
 }
