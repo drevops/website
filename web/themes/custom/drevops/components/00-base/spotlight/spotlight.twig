@@ -74,7 +74,7 @@
 
   {% if hanging_items|length > 0 %}
     {% set hanging_row_width = (total_items <= two_row_capacity) ? row2_capacity : template_column_count %}
-    {% set hanging_items_class = 'grid-xxs-1-1 grid-l-%s-1 g-col-xxs-1 g-col-l-%s'|format(hanging_items|length, hanging_row_width) %}
+    {% set hanging_items_class = 'grid-xxs-1-1 grid-l-%s-1 g-col-xxs-1 g-col-l-%s g-gap-xxs'|format(hanging_items|length, hanging_row_width) %}
   {% endif %}
 {% endif %}
 

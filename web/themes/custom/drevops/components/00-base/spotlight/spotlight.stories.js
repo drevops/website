@@ -78,7 +78,7 @@ export const Spotlight = {
     layout: 'padded',
   },
   render: (args) => {
-    const { itemsCount, ...componentArgs } = args;
+    const { items_count: itemsCount, ...componentArgs } = args;
 
     const items = Array.from({ length: itemsCount }, (_, i) => {
       const brCount = Math.floor(Math.random() * 10) + 1; // Random int from 1 to 10
