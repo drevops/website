@@ -45,6 +45,11 @@ export default {
       filters: options.group ? GroupFilter(GroupFilterData.args(theme)) : SingleFilter(SingleFilterData.args(theme)),
       results_count: 'Showing 1 of 6',
       layout: layoutType,
+      rows_above: Paragraph({
+        theme,
+        content: 'Example content above rows',
+        allow_html: true,
+      }),
       rows: layoutType === 'spotlight' ? Spotlight({ ...rowsConfig }) : Grid({ ...rowsConfig }),
       rows_below: Paragraph({
         theme,

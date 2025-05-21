@@ -4,149 +4,23 @@
 
 @use 'sass:map';
 
-// Container class should wrap every row.
-.container {
-  @include ct-container();
-}
-
-.container-fluid {
-  @include ct-container(false);
-}
-
 @each $breakpoint, $value in $ct-breakpoints {
   @include ct-breakpoint($breakpoint) {
     @include ct-cssgrid($breakpoint);
-  }
-}
-
-.row {
-  $root: &;
-
-  &.spotlight {
-    display: grid;
-  }
-
-  &#{$root}--no-gutters {
-    margin-right: 0;
-    margin-left: 0;
-
-    > .col,
-    > [class*='col-'] {
-      padding-right: 0;
-      padding-left: 0;
-    }
-  }
-
-  &#{$root}--no-grow {
-    > .col,
-    > [class*='col-'] {
-      width: auto;
-    }
-  }
-
-  &#{$root}--equal-heights-content {
-    > .col,
-    > [class*='col-'] {
-      > * {
-        height: 100%;
-      }
-    }
-  }
-
-  &#{$root}--unequal-heights {
-    > .col,
-    > [class*='col-'] {
-      margin-bottom: auto;
-    }
-  }
-
-  .last-row-grid,
-  &#{$root}--vertically-spaced {
-    @each $bp, $gutter in $ct-grid-vertical-gutters {
-      @if $bp == $ct-grid-lowest-breakpoint {
-        row-gap: $gutter;
-        margin-bottom: $gutter;
-      }
-      @else {
-        @include ct-breakpoint($bp) {
-          row-gap: $gutter;
-          margin-bottom: $gutter;
-        }
-      }
-    }
-  }
-
-  .last-row-grid {
-    padding: 0;
-  }
-}
-
-ul.row {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 0;
-  list-style: none;
-}
-
-.col {
-  $root: &;
-
-  // Make columns at the lowest breakpoint to act as a single column per row.
-  @include _ct-grid-col($ct-grid-lowest-breakpoint, $ct-grid-columns);
-
-  $next-bp: ct-map-get-next($ct-breakpoints, $ct-grid-lowest-breakpoint, map.get($ct-breakpoints, 'xxs'), key);
-
-  @include ct-breakpoint($next-bp) {
-    grid-column: span 1;
-  }
-
-  // Makes the first cell always two rows high.
-  &:first-child:not(.hanging) {
-    grid-row: span 2;
-  }
-}
-
-// Generate column classes for CSS Grid
-@each $breakpoint, $value in $ct-breakpoints {
-  @if $breakpoint == $ct-grid-lowest-breakpoint {
-    @for $i from 1 through $ct-grid-columns {
-      .col-#{$breakpoint}-#{$i} {
-        grid-column: span $i;
-      }
-    }
-  }
-  @else {
-    @include ct-breakpoint($breakpoint) {
-      @for $i from 1 through $ct-grid-columns {
-        .col-#{$breakpoint}-#{$i} {
-          grid-column: span $i;
-        }
-
-        @include _ct-col-factory($breakpoint);
-      }
+    @include ct-cssgrid-row($breakpoint);
+    @include ct-cssgrid-col($breakpoint);
+    @include ct-cssgrid-gap($breakpoint);
+    .ct-spotlight {
+      // Force a minimum of 2 rows for the spotlight component.
+      grid-template-rows: 1fr 1fr;
     }
   }
 }
 
-// Order utilities
-@each $breakpoint, $value in $ct-breakpoints {
-  @if $breakpoint == $ct-grid-lowest-breakpoint {
-    .first {
-      order: -1;
-    }
-
-    .last {
-      order: 1;
-    }
-  }
-  @else {
-    @include ct-breakpoint($breakpoint) {
-      .first-#{$breakpoint} {
-        order: -1;
-      }
-      .last-#{$breakpoint} {
-        order: 1;
-      }
+.ct-spotlight {
+  > * {
+    > * {
+      height: 100%;
     }
   }
 }

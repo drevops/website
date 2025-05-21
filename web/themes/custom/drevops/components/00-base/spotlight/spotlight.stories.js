@@ -4,11 +4,24 @@ const meta = {
   title: 'Base/Spotlight',
   component: Component,
   argTypes: {
-    items: {
-      control: false,
-      table: {
-        disable: true,
+    items_count: {
+      control: {
+        type: 'range',
+        min: 0,
+        max: 20,
+        step: 1,
       },
+    },
+    template_column_count: {
+      control: {
+        type: 'range',
+        min: 0,
+        max: 12,
+        step: 1,
+      },
+    },
+    fill_width: {
+      control: { type: 'boolean' },
     },
     row_element: {
       control: { type: 'text' },
@@ -34,12 +47,6 @@ const meta = {
     is_fluid: {
       control: { type: 'boolean' },
     },
-    template_column_count: {
-      control: { type: 'range', min: 1, max: 12, step: 1 },
-    },
-    fill_width: {
-      control: { type: 'boolean' },
-    },
     attributes: {
       control: { type: 'text' },
     },
@@ -52,36 +59,34 @@ const meta = {
 export default meta;
 
 export const Spotlight = {
-  parameters: {
-    layout: 'centered',
-  },
   args: {
-    items: [
-      '<div class="story-placeholder" contenteditable="true">Item 1</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 2</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 3</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 4</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 5</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 6</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 7</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 8</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 9</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 10</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 11</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 12</div>',
-      '<div class="story-placeholder" contenteditable="true">Item 13</div>',
-    ],
+    items_count: 3,
+    template_column_count: 3,
+    fill_width: false,
     row_element: 'div',
-    row_class: 'row',
+    row_class: '',
     row_attributes: '',
     column_element: 'div',
-    column_class: 'col',
+    column_class: '',
     column_attributes: '',
     use_container: true,
     is_fluid: false,
-    template_column_count: 3,
-    fill_width: false,
     attributes: '',
     modifier_class: '',
+  },
+  parameters: {
+    layout: 'padded',
+  },
+  render: (args) => {
+    const { items_count, ...componentArgs } = args;
+
+    const items = Array.from({ length: items_count }, (_, i) =>
+      `<div class="story-placeholder" contenteditable="true">Item ${i + 1}</div>`
+    );
+
+    return Component({
+      ...componentArgs,
+      items,
+    });
   },
 };

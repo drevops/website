@@ -2,17 +2,9 @@
 // Spotlight component stories.
 //
 
-.row.spotlight,
-.row.spotlight .last-row-grid {
-  display: grid;
-  gap: 40px 10px;
-
-  .col {
-    padding: 0;
-
-    .story-placeholder {
-      display: block;
-      height: 100%;
-    }
+.ct-spotlight {
+  .story-placeholder {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
