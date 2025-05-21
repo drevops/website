@@ -27,6 +27,7 @@ module:
   do_core: 0
   dynamic_page_cache: 0
   editor: 0
+  entity_clone: 0
   entity_reference_revisions: 0
   environment_indicator: 0
   field: 0

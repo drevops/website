@@ -17,6 +17,7 @@
         "drupal/core-recommended": "~11.1.6",
         "drupal/devel": "^5.3.1",
         "drupal/diff": "^1.8",
+        "drupal/entity_clone": "^2.1@beta",
         "drupal/environment_indicator": "^4.0.21",
         "drupal/field_group": "^3.6",
         "drupal/gin": "^4.0.6",
