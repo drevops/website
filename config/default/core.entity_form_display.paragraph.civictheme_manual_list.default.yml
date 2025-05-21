@@ -13,6 +13,7 @@ dependencies:
     - field.field.paragraph.civictheme_manual_list.field_c_p_theme
     - field.field.paragraph.civictheme_manual_list.field_c_p_title
     - field.field.paragraph.civictheme_manual_list.field_c_p_vertical_spacing
+    - field.field.paragraph.civictheme_manual_list.field_p_list_layout
     - paragraphs.paragraphs_type.civictheme_manual_list
   module:
     - field_group
@@ -103,6 +104,7 @@ third_party_settings:
         required_fields: true
     group_columns:
       children:
+        - field_p_list_layout
         - field_c_p_list_column_count
         - field_c_p_list_fill_width
       label: Columns
@@ -141,7 +143,7 @@ content:
     third_party_settings: {  }
   field_c_p_list_column_count:
     type: options_select
-    weight: 5
+    weight: 54
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -153,7 +155,7 @@ content:
     third_party_settings: {  }
   field_c_p_list_fill_width:
     type: boolean_checkbox
-    weight: 6
+    weight: 55
     region: content
     settings:
       display_label: true
@@ -255,6 +257,12 @@ content:
   field_c_p_vertical_spacing:
     type: options_select
     weight: 47
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_p_list_layout:
+    type: options_buttons
+    weight: 53
     region: content
     settings: {  }
     third_party_settings: {  }

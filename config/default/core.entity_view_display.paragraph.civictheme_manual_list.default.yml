@@ -13,6 +13,7 @@ dependencies:
     - field.field.paragraph.civictheme_manual_list.field_c_p_theme
     - field.field.paragraph.civictheme_manual_list.field_c_p_title
     - field.field.paragraph.civictheme_manual_list.field_c_p_vertical_spacing
+    - field.field.paragraph.civictheme_manual_list.field_p_list_layout
     - paragraphs.paragraphs_type.civictheme_manual_list
   module:
     - entity_reference_revisions
@@ -114,6 +115,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
+    region: content
+  field_p_list_layout:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 20
     region: content
 hidden:
   search_api_excerpt: true

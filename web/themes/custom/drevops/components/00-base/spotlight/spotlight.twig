@@ -1,0 +1,102 @@
+{#
+/**
+ * @file
+ * Spotlight component.
+ *
+ * Variables:
+ * - items: [array] Array of column items.
+ * - row_element: [string] Row element.
+ * - column_element: [string] Column element.
+ * - column_class: [string] Optional column class override. Defaults to 'col' if
+ *   column auto-generation is not required (template_column_count is 0),
+ *   otherwise it is appended to the auto-generated column class list.
+ * - column_attributes: [string] Additional column attributes.
+ * - use_container: [boolean] Whether to use container or not.
+ * - is_fluid: [boolean] Whether the grid is fluid or not. Defaults to false.
+ *   Applies only if `use_container` is true.
+ * - template_column_count: [number] Number of columns in the row. If 0 - the
+ *   auto columns will be used where column width will be calculated
+ *   automatically. Defaults to 0.
+ * - fill_width: [boolean] Stretch "hanging" items to the full width of the row.
+ * - attributes: [string] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ */
+#}
+
+{% set use_container = use_container|default(true) %}
+{% set is_fluid = is_fluid|default(false) %}
+{% set row_element = row_element|default('div') %}
+{% set column_element = column_element|default('div') %}
+{% set column_class = column_class|default('') %}
+{% set modifier_class = modifier_class|default('') %}
+{% set template_column_count = template_column_count|default(1) %}
+{% set fill_width = template_column_count > 1 and fill_width|default(false) %}
+
+{% set row_classes = ['ct-spotlight', 'grid-xxs-%s-%s'|format(1, 5), 'grid-l-%s-%s'|format(template_column_count, 5), 'g-gap-xxs'] %}
+{% if use_container %}
+  {% set row_classes = row_classes|merge([is_fluid ? 'container-fluid' : 'container']) %}
+{% endif %}
+{% set row_classes = row_classes|merge([modifier_class]) %}
+{% set row_class_string = row_classes|join(' ')|trim %}
+
+{% set main_items = items %}
+{% set hanging_items = [] %}
+{% set hanging_items_class = '' %}
+
+{% if fill_width %}
+  {% set total_items = items|length %}
+  {% set row1_capacity = template_column_count %}
+  {% set row2_capacity = template_column_count - 1 %}
+  {% set two_row_capacity = row1_capacity + row2_capacity %}
+
+  {% if total_items <= row1_capacity %}
+    {# Only fits in first row #}
+    {% if total_items % template_column_count != 0 %}
+      {% set main_items = items|slice(0, 1) %}
+      {% set hanging_items = items|slice(1) %}
+    {% endif %}
+  {% elseif total_items <= two_row_capacity %}
+    {# Fits in first two rows #}
+    {% if total_items % two_row_capacity != 0 %}
+      {% set main_items = items|slice(0, row1_capacity) %}
+      {% set hanging_items = items|slice(row1_capacity) %}
+    {% endif %}
+  {% else %}
+    {# Items overflow into 3rd+ rows #}
+    {% set other_rows = items|slice(two_row_capacity) %}
+    {% set hanging_count = other_rows|length % template_column_count %}
+    {% if hanging_count != 0 %}
+      {% set main_items_count = total_items - hanging_count %}
+      {% set main_items = items|slice(0, main_items_count) %}
+      {% set hanging_items = items|slice(main_items_count) %}
+    {% endif %}
+  {% endif %}
+
+  {% if hanging_items|length > 0 %}
+    {% set hanging_row_width = (total_items <= two_row_capacity) ? row2_capacity : template_column_count %}
+    {% set hanging_items_class = 'grid-xxs-1-1 grid-l-%s-1 g-col-xxs-1 g-col-l-%s'|format(hanging_items|length, hanging_row_width) %}
+  {% endif %}
+{% endif %}
+
+{% if main_items is not empty %}
+  <{{ row_element }} class="{{ row_class_string }}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %} data-grid data-grid-cols="{{ template_column_count }}" data-responsive="=m" aria-live="polite">
+
+  {% for cell in main_items %}
+    <{{ column_element }} class="{{ column_class }} {{ loop.first ? 'g-row-m-2' : '' }}">
+    {{ cell }}
+    </{{ column_element }}>
+  {% endfor %}
+
+  {% if hanging_items is not empty %}
+    {% set hanging_count = hanging_items|length %}
+    <{{ row_element }} class="{{ hanging_items_class }} {{ column_class }}">
+    {% for cell in hanging_items %}
+      <{{ column_element }} class="{{ column_class }}">
+      {{ cell }}
+      </{{ column_element }}>
+    {% endfor %}
+    </{{ column_element }}>
+  {% endif %}
+
+  </{{ row_element }}>
+{% endif %}
