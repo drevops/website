@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use DrevOps\BehatSteps\Drupal\ContentTrait;
 use DrevOps\BehatSteps\Drupal\FileTrait;
 use DrevOps\BehatSteps\Drupal\MediaTrait;
@@ -21,6 +22,7 @@ use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\WaitTrait;
 use Drupal\DrupalExtension\Context\DrupalContext;
+use Symfony\Component\Process\Process;
 
 /**
  * Defines application features from the specific context.
@@ -91,6 +93,27 @@ JS;
 
     $value = $radiobutton->getAttribute('value');
     $radiobutton->selectOption($value);
+  }
+
+  /**
+   * Generate sitemap before scenario.
+   *
+   * @BeforeScenario
+   */
+  public function generateSitemapBeforeScenario(BeforeScenarioScope $scope): void {
+    if ($scope->getScenario()->hasTag('behat-steps-skip:' . __FUNCTION__)) {
+      return;
+    }
+
+    if ($scope->getScenario()->hasTag('sitemap')) {
+      $command = ['sh', '-c', 'drush simple-sitemap:generate && drush cr'];
+      $process = new Process($command);
+      $process->run();
+
+      if (!$process->isSuccessful()) {
+        throw new \RuntimeException('Sitemap generation failed: ' . $process->getErrorOutput());
+      }
+    }
   }
 
 }
