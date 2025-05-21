@@ -32,6 +32,7 @@
         "drupal/search_api_solr": "^4.3.8",
         "drupal/seckit": "^2.0",
         "drupal/shield": "^1.8",
+        "drupal/simple_sitemap": "^4.2",
         "drupal/stage_file_proxy": "^3.1.5",
         "drupal/views_bulk_operations": "^4.3",
         "drush/drush": "^13.6",
@@ -179,6 +180,9 @@
             "drupal/field_group": {
                 "Duplicated required marks in field tabs with Gin admin theme": "https://www.drupal.org/files/issues/2025-01-15/3395375-field_group-duplicate-require-3.x-24.patch",
                 "Tabs with invalid input are not focused - https://www.drupal.org/project/field_group/issues/2894351": "https://www.drupal.org/files/issues/2024-08-07/field-group-tabs-8.x-3.x.patch"
+            },
+            "drupal/seckit": {
+                "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252": "https://www.drupal.org/files/issues/2025-05-07/3219252-9.patch"
             }
         }
     },

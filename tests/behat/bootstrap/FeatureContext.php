@@ -42,6 +42,11 @@ class FeatureContext extends DrupalContext {
   use WatchdogTrait;
 
   /**
+   * Keep track of drush output.
+   */
+  protected string|bool $drushOutput;
+
+  /**
    * Disable browser validation for the form for validating errors.
    *
    * @When I disable browser validation for the form with selector :selector
@@ -91,6 +96,31 @@ JS;
 
     $value = $radiobutton->getAttribute('value');
     $radiobutton->selectOption($value);
+  }
+
+  /**
+   * Step to run drush commands.
+   *
+   * @Given I run drush :command :arguments
+   */
+  public function assertDrushCommandWithArgument(string $command, string $arguments): void {
+    $this->drushOutput = $this->getDriver('drush')->$command($this->fixStepArgument($arguments));
+    if (!empty($this->drushOutput)) {
+      $this->drushOutput = TRUE;
+    }
+  }
+
+  /**
+   * Returns fixed step argument (with \\" replaced back to ").
+   *
+   * @param string $argument
+   *   Argument to update.
+   *
+   * @return string
+   *   Modified step argument.
+   */
+  protected function fixStepArgument(string $argument): string {
+    return str_replace('\\"', '"', $argument);
   }
 
 }
