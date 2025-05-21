@@ -78,11 +78,14 @@ export const Spotlight = {
     layout: 'padded',
   },
   render: (args) => {
-    const { items_count, ...componentArgs } = args;
+    const { itemsCount, ...componentArgs } = args;
 
-    const items = Array.from({ length: items_count }, (_, i) =>
-      `<div class="story-placeholder" contenteditable="true">Item ${i + 1}</div>`
-    );
+    const items = Array.from({ length: itemsCount }, (_, i) => {
+      const brCount = Math.floor(Math.random() * 10) + 1; // Random int from 1 to 10
+      return `<div class="story-placeholder" contenteditable="true">
+            Item ${i + 1}${'<br>'.repeat(brCount)}
+          </div>`;
+    });
 
     return Component({
       ...componentArgs,

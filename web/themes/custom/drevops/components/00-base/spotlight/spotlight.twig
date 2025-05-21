@@ -79,7 +79,7 @@
 {% endif %}
 
 {% if main_items is not empty %}
-  <{{ row_element }} class="{{ row_class_string }}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %} aria-live="polite">
+  <{{ row_element }} class="{{ row_class_string }}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %} data-grid data-grid-cols="{{ template_column_count }}" data-responsive="=m" aria-live="polite">
 
   {% for cell in main_items %}
     <{{ column_element }} class="{{ column_class }} {{ loop.first ? 'g-row-m-2' : '' }}">
