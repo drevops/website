@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use DrevOps\BehatSteps\Drupal\ContentTrait;
 use DrevOps\BehatSteps\Drupal\FileTrait;
 use DrevOps\BehatSteps\Drupal\MediaTrait;
@@ -22,7 +21,6 @@ use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\WaitTrait;
 use Drupal\DrupalExtension\Context\DrupalContext;
-use Symfony\Component\Process\Process;
 
 /**
  * Defines application features from the specific context.
@@ -42,6 +40,11 @@ class FeatureContext extends DrupalContext {
   use TaxonomyTrait;
   use WaitTrait;
   use WatchdogTrait;
+
+  /**
+   * Keep track of drush output.
+   */
+  protected string|bool $drushOutput;
 
   /**
    * Disable browser validation for the form for validating errors.
@@ -96,24 +99,28 @@ JS;
   }
 
   /**
-   * Generate sitemap before scenario.
+   * Step to run drush commands.
    *
-   * @BeforeScenario
+   * @Given I run drush :command :arguments
    */
-  public function generateSitemapBeforeScenario(BeforeScenarioScope $scope): void {
-    if ($scope->getScenario()->hasTag('behat-steps-skip:' . __FUNCTION__)) {
-      return;
+  public function assertDrushCommandWithArgument(string $command, string $arguments): void {
+    $this->drushOutput = $this->getDriver('drush')->$command($this->fixStepArgument($arguments));
+    if (!empty($this->drushOutput)) {
+      $this->drushOutput = TRUE;
     }
+  }
 
-    if ($scope->getScenario()->hasTag('sitemap')) {
-      $command = ['sh', '-c', 'drush simple-sitemap:generate && drush cr'];
-      $process = new Process($command);
-      $process->run();
-
-      if (!$process->isSuccessful()) {
-        throw new \RuntimeException('Sitemap generation failed: ' . $process->getErrorOutput());
-      }
-    }
+  /**
+   * Returns fixed step argument (with \\" replaced back to ").
+   *
+   * @param string $argument
+   *   Argument to update.
+   *
+   * @return string
+   *   Modified step argument.
+   */
+  protected function fixStepArgument(string $argument): string {
+    return str_replace('\\"', '"', $argument);
   }
 
 }
