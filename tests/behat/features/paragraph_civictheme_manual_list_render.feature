@@ -19,8 +19,8 @@ Feature: Manual list render
       | title                   | status |
       | [TEST] Referenced Event | 1      |
 
-  @api @javascript
-  Scenario: Manual list, Cards
+  @api
+  Scenario: Manual list, Cards, Spotlight
     Given I am an anonymous user
     And the following fields for the paragraph "civictheme_manual_list" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Manual list content":
       | field_c_p_title             | [TEST] Manual list title |
@@ -58,7 +58,7 @@ Feature: Manual list render
     And I should see 4 ".ct-promo-card" elements
     And I should see 3 ".ct-promo-card.ct-theme-light" element
     And I should see 1 ".ct-promo-card.ct-theme-dark" elements
-    And I should see 1 ".spotlight" elements
+    And I should see 1 ".ct-spotlight" elements
 
     And I should see the text "Card title 1"
     And I should see the text "Card summary 1"
