@@ -18,27 +18,12 @@
 
 {% set size_class = size in ['large', 'regular', 'small'] ? 'size--%s'|format(size) : 'size--regular' %}
 {% set alignment_class = alignment ? 'ct-text-align-%s'|format(alignment) : '' %}
-{% set vertical_spacing_class = vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing--%s'|format(vertical_spacing) : '' %}
+{% set vertical_spacing_class = vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s %s'|format(theme_class, vertical_spacing_class, size_class, alignment_class, modifier_class|default('')) %}
 
 <div class="ct-divider {{ modifier_class -}}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %}>
-  <div class="container">
-    <div class="row">
-      <div class="col-xxs-12">
-        {% block image %}
-          {% if image is not empty %}
-            <div class="ct-divider__image">
-              {% include '@atoms/image/image.twig' with {
-                theme: theme,
-                url: image.url,
-                alt: '',
-                attributes: 'role="presentation"',
-              } only %}
-            </div>
-          {% endif %}
-        {% endblock %}
-      </div>
-    </div>
-  </div>
+  {% block image %}
+    <img src="{{ image.url }}" alt="" role="presentation">
+  {% endblock %}
 </div>

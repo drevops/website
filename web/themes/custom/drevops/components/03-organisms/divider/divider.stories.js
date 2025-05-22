@@ -1,7 +1,7 @@
 import Component from './divider.twig';
 
 const meta = {
-  title: 'Molecules/Divider',
+  title: 'Organisms/Divider',
   component: Component,
   argTypes: {
     theme: {

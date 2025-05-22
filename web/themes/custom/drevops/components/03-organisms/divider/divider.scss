@@ -8,20 +8,20 @@
   border-top: solid ct-particle(0.125);
   border-bottom: solid ct-particle(0.125);
 
-  // Set height for all inner element to make an image fit the Divider size.
-  * {
+  img {
     height: 100%;
+    max-width: 100%;
   }
 
-  $divider-size-mapping: (
-    'small': ct-particle(10),
-    'regular': ct-particle(20),
-    'large': ct-particle(30)
-  );
-
-  @each $size, $value in $divider-size-mapping {
-    &.size--#{$size} {
-      height: $value;
+  @each $breakpoint, $values in $ct-divider-size-mapping {
+    @each $size, $value in $values {
+      @include ct-breakpoint($breakpoint) {
+        &.size--#{$size} {
+          img {
+            max-height: $value;
+          }
+        }
+      }
     }
   }
 
