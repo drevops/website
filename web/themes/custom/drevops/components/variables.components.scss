@@ -11,14 +11,6 @@
 $ct-back-to-top-light-background-color: ct-color-light('custom1');
 
 //
-// Divider.
-//
-$ct-divider-light-background-color: ct-color-light('background-light') !default;
-$ct-divider-dark-background-color: ct-color-dark('background') !default;
-$ct-divider-light-border-color: ct-color-light('border-light') !default;
-$ct-divider-dark-border-color: ct-color-dark('border') !default;
-
-//
 // Banner.
 //
 $ct-banner-intro-min-height: 50vh !default;
@@ -30,3 +22,33 @@ $ct-banner-light-background-color: ct-color-light('background') !default;
 $ct-banner-light-featured-image-shadow-color: ct-color-light('background-light') !default;
 $ct-banner-dark-background-color: ct-color-dark('background') !default;
 $ct-banner-dark-featured-image-shadow-color: ct-color-dark('background') !default;
+
+//
+// Divider.
+//
+$ct-divider-size-mapping: (
+  'xxs': (
+    'small': ct-particle(4),
+    'regular': ct-particle(8),
+    'large': ct-particle(12)
+  ),
+  's': (
+    'small': ct-particle(6),
+    'regular': ct-particle(11),
+    'large': ct-particle(17)
+  ),
+  'm': (
+    'small': ct-particle(7),
+    'regular': ct-particle(14),
+    'large': ct-particle(21)
+  ),
+  'l': (
+    'small': ct-particle(10),
+    'regular': ct-particle(20),
+    'large': ct-particle(30)
+  ),
+);
+$ct-divider-light-background-color: ct-color-light('background-light');
+$ct-divider-dark-background-color: ct-color-dark('background');
+$ct-divider-light-border-color: transparent;
+$ct-divider-dark-border-color: transparent;
