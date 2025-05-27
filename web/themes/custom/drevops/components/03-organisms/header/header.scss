@@ -10,7 +10,7 @@
     width: 100%;
     top: 0;
     z-index: 1000;
-    opacity: 0.8;
+    opacity: 80%;
   }
 
   &__content-top2 {
@@ -63,11 +63,9 @@
   &__content-middle3 {
     @include ct-print-hide();
 
-    & {
-      height: 100%;
-      display: flex;
-      justify-content: flex-end;
-    }
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
 
     .ct-navigation {
       $root-drawer: '.ct-navigation';
