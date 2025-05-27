@@ -13,13 +13,22 @@
 
   #{$root}__inner {
     @include ct-background();
-
-    padding-top: ct-spacing(3);
+    $_banner_inner_padding_top_multiplier: 3;
+    padding-top: ct-spacing($_banner_inner_padding_top_multiplier);
     padding-bottom: ct-spacing(10);
 
     @include ct-print() {
       padding-top: ct-spacing(2);
       padding-bottom: ct-spacing(3);
+    }
+
+    &#{$root}__inner__top-offset {
+      // Adds header height to the initial padding-top.
+      padding-top: ct-spacing($_banner_inner_padding_top_multiplier + 11);
+
+      @include ct-breakpoint(xxs) {
+        padding-top: ct-spacing($_banner_inner_padding_top_multiplier + 10);
+      }
     }
   }
 
