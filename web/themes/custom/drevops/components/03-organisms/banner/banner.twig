@@ -42,7 +42,7 @@
   <div class="ct-banner {{ modifier_class -}}" id="main-content" tabindex="-1" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %}>
     <div class="ct-banner__wrapper">
       <div
-        class="ct-banner__inner {{ inner_top_offset_class}} {% if background_image_blend_mode %}ct-background--{{ background_image_blend_mode|default('normal') }}{% endif %}"
+        class="ct-banner__inner {{ inner_top_offset_class }} {% if background_image_blend_mode %}ct-background--{{ background_image_blend_mode|default('normal') }}{% endif %}"
         {% if background_image and background_image.url is defined and background_image.url is not empty %}style="background-image: url('{{ background_image.url }}');"{% endif %}
       >
         {% if background_image and background_image.alt is defined and background_image.alt is not empty %}
