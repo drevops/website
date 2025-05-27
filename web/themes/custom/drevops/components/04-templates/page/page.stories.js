@@ -155,3 +155,10 @@ export const PageDark = {
   },
   args: PageData.args('dark'),
 };
+
+export const PageStickyHeader = {
+  parameters: {
+    layout: 'fullscreen',
+  },
+  args: PageData.args('light', true),
+};
