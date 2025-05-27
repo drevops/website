@@ -10,7 +10,6 @@
     width: 100%;
     top: 0;
     z-index: 1000;
-    opacity: 80%;
   }
 
   &__content-top2 {
@@ -185,6 +184,16 @@
     #{$root}__middle {
       @include ct-component-property($root, $theme, middle, background-color);
       @include ct-component-property($root, $theme, middle, border-color);
+    }
+
+    &#{$root}--position-sticky {
+      #{$root}__top {
+        background-color: color-mix(in srgb, ct-component-var($root, $theme, top, background-color) 80%, transparent);
+      }
+
+      #{$root}__middle {
+        background-color: color-mix(in srgb, ct-component-var($root, $theme, middle, background-color) 80%, transparent);
+      }
     }
   }
 }
