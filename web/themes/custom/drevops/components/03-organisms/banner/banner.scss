@@ -13,6 +13,7 @@
 
   #{$root}__inner {
     @include ct-background();
+
     padding-top: ct-spacing(3);
     padding-bottom: ct-spacing(10);
 

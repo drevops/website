@@ -32,7 +32,7 @@
 {% set type = type in ['default', 'large', 'intro'] ? type : 'default' %}
 {% set type_class = 'ct-banner-type--%s'|format(type) %}
 {% set inner_top_offset_class = header_sticky ? 'ct-banner__inner__top-offset' : '' %}
-{% set modifier_class = '%s %s %s %s %s'|format(theme_class, is_decorative_class, type_class, top_offset_class, modifier_class|default('')) %}
+{% set modifier_class = '%s %s %s %s'|format(theme_class, is_decorative_class, type_class, modifier_class|default('')) %}
 
 {% if type == 'intro' %}
   {% set featured_image = null %}

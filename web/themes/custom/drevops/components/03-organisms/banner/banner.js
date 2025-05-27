@@ -32,13 +32,18 @@ CivicThemeBanner.prototype.adjustTopOffset = function () {
     return;
   }
 
-  const header = document.querySelector('.ct-header');
+  const header = document.querySelector('.ct-header.ct-header--position-sticky');
   if (!header) {
     return;
   }
 
   // Get the actual height of the header.
   const headerHeight = header.offsetHeight;
+
+  // Handle edge case where header might be hidden or have no height.
+  if (headerHeight <= 0) {
+    return;
+  }
 
   // Apply the header height as padding-top to each top-offset element.
   topOffsetElements.forEach((element) => {

@@ -22,7 +22,7 @@ function drevops_form_system_theme_settings_alter(array &$form, FormStateInterfa
   if (isset($form['components']['header'])) {
     $form['components']['header']['sticky'] = [
       '#title' => t('Sticky'),
-      '#description' => t('Make the header sticky and semitransparent.'),
+      '#description' => t('Make the header sticky and semi-transparent.'),
       '#type' => 'checkbox',
       '#default_value' => $theme_config_manager->load('components.header.sticky', FALSE),
     ];
