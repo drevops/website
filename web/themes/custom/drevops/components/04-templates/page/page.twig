@@ -14,8 +14,6 @@
 
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
-{{ devel_breakpoint() }}
-
 
 <div class="ct-page {{ modifier_class -}}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %}>
   <a id="top" tab-index="-1" aria-hidden="true"></a>
@@ -23,7 +21,6 @@
   {% block header %}
     {% include '@organisms/header/header.twig' with {
       theme: header_theme,
-      header_sticky: header_sticky,
       content_top1: header_top_1,
       content_top2: header_top_2,
       content_top3: header_top_3,
