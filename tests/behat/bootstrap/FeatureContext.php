@@ -8,18 +8,17 @@
 declare(strict_types=1);
 
 use DrevOps\BehatSteps\Drupal\ContentTrait;
-use DrevOps\BehatSteps\Drupal\FileTrait;
-use DrevOps\BehatSteps\Drupal\MediaTrait;
-use DrevOps\BehatSteps\Drupal\ParagraphsTrait;
-use DrevOps\BehatSteps\Drupal\SearchApiTrait;
-use DrevOps\BehatSteps\Drupal\TaxonomyTrait;
-use DrevOps\BehatSteps\Drupal\WatchdogTrait;
-use DrevOps\BehatSteps\ElementTrait;
 use DrevOps\BehatSteps\FieldTrait;
+use DrevOps\BehatSteps\Drupal\FileTrait;
+use DrevOps\BehatSteps\ElementTrait;
 use DrevOps\BehatSteps\LinkTrait;
+use DrevOps\BehatSteps\Drupal\ParagraphsTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
+use DrevOps\BehatSteps\Drupal\SearchApiTrait;
+use DrevOps\BehatSteps\Drupal\TaxonomyTrait;
 use DrevOps\BehatSteps\WaitTrait;
+use DrevOps\BehatSteps\Drupal\WatchdogTrait;
 use Drupal\DrupalExtension\Context\DrupalContext;
 
 /**
@@ -28,11 +27,10 @@ use Drupal\DrupalExtension\Context\DrupalContext;
 class FeatureContext extends DrupalContext {
 
   use ContentTrait;
+  use LinkTrait;
   use ElementTrait;
   use FieldTrait;
   use FileTrait;
-  use LinkTrait;
-  use MediaTrait;
   use ParagraphsTrait;
   use PathTrait;
   use ResponseTrait;
@@ -40,11 +38,6 @@ class FeatureContext extends DrupalContext {
   use TaxonomyTrait;
   use WaitTrait;
   use WatchdogTrait;
-
-  /**
-   * Keep track of drush output.
-   */
-  protected string|bool $drushOutput;
 
   /**
    * Disable browser validation for the form for validating errors.
@@ -96,31 +89,6 @@ JS;
 
     $value = $radiobutton->getAttribute('value');
     $radiobutton->selectOption($value);
-  }
-
-  /**
-   * Step to run drush commands.
-   *
-   * @Given I run drush :command :arguments
-   */
-  public function assertDrushCommandWithArgument(string $command, string $arguments): void {
-    $this->drushOutput = $this->getDriver('drush')->$command($this->fixStepArgument($arguments));
-    if (!empty($this->drushOutput)) {
-      $this->drushOutput = TRUE;
-    }
-  }
-
-  /**
-   * Returns fixed step argument (with \\" replaced back to ").
-   *
-   * @param string $argument
-   *   Argument to update.
-   *
-   * @return string
-   *   Modified step argument.
-   */
-  protected function fixStepArgument(string $argument): string {
-    return str_replace('\\"', '"', $argument);
   }
 
 }

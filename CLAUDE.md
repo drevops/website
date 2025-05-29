@@ -1,147 +1,142 @@
-# Website Developer Guidelines based on Vortex Drupal project template
+# CLAUDE.md
 
-This document outlines the development standards and workflows for the DrevOps marketing website. It builds upon the foundation provided by the Vortex Drupal project template, which is DrevOps' standardized starter kit for Drupal projects.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
-- **Project Type**: Drupal 11 website
-- **Purpose**: Marketing website for DrevOps organization
-- **Repository**: Part of drevops/website repository
-- **Base Template**: Built on [Vortex](https://vortex.drevops.com), a standardized Drupal starter kit with built-in CI/CD capabilities
+# DrevOps Website Developer Guidelines
 
-## Development Environment
+This is a Drupal 11 marketing website for DrevOps organization, built on the Vortex template - a standardized Drupal starter kit with built-in CI/CD capabilities.
 
-### Local Setup
-- Use Docker-based local environment
-- Setup with Ahoy commands:
-  ```bash
-  ahoy build    # Build the site
-  ahoy up       # Start containers
-  ahoy down     # Stop containers
-  ```
+## Architecture Overview
 
-### Key Development Commands
-- `ahoy provision` - Provision the site. Already runs as a part of `ahoy build`. Used to re-import the database and run all the necessary update, cache clear and deploy commands. Should be used when a database becomes "dirty" and needs to be re-imported.
-- `ahoy drush <command>` - Run Drush commands (e.g., `ahoy drush status`, `ahoy drush cex`, `ahoy drush cr`)
-- `ahoy composer <command>` - Run Composer commands (e.g., `ahoy composer show package/name`, `ahoy composer update package/name`)
-- `ahoy cli <command>` - Execute commands in the CLI container (e.g., `ahoy cli vendor/bin/behat -- --help`)
-- `ahoy lint` - Check coding standards
-- `ahoy lint-fix` - Fix coding standards issues
-- `ahoy test-unit` - Run unit tests
-- `ahoy test-bdd` - Run BDD tests
-- `ahoy provision` - Provision the site
-- `ahoy reset` - Reset environment (soft)
-- `ahoy reset hard` - Reset environment (hard)
-- `ahoy fetch-db` - Fetch latest database
+### Project Structure
+- **Base Framework**: Drupal 11 with Docker-based development environment
+- **Theme**: CivicTheme as base theme with custom "drevops" subtheme
+- **Custom Code**: Single custom module `do_core` in `web/modules/custom/do_core/`
+- **Configuration**: Drupal configuration management in `config/default/`
+- **Database**: MySQL 8.4 with Redis caching and Solr search
 
-## Important information
+### Key Components
+- **Frontend**: CivicTheme component library with custom Sass/JS in `web/themes/custom/drevops/`
+- **Content Types**: CivicTheme Page (standard), CivicTheme Alert (site alerts), CivicTheme Event (events)
+- **Services**: nginx-php-fpm, database (MySQL), redis, solr, clamav for file scanning
+- **Build System**: Composer for PHP dependencies, npm for frontend assets
 
-- Never modify .gitignore file unless I ask you explicitly.
-- Never change PHPCS, PHPStan or PHPUnit configuration unless I ask you explicitly.
+## Essential Development Commands
 
-## Coding Standards
+### Environment Management
+- `ahoy build` - Full build: reset, start containers, install dependencies, provision site
+- `ahoy up` - Start containers (with optional `--build --force-recreate`)
+- `ahoy down` - Stop and remove containers (removes database!)
+- `ahoy provision` - Re-import database and run update/cache/deploy commands
+- `ahoy reset [hard]` - Reset environment (soft) or to last commit (hard)
 
-### PHP
+### Daily Development
+- `ahoy cli [command]` - Execute commands in CLI container
+- `ahoy drush [command]` - Run Drush commands (e.g., `ahoy drush cr`, `ahoy drush cex`)
+- `ahoy composer [command]` - Run Composer commands
+- `ahoy login` - Generate one-time login link
+
+### Database Operations
+- `ahoy download-db` / `ahoy fetch-db` - Download database from remote
+- `ahoy import-db` - Import database dump
+- `ahoy export-db` - Export database dump
+- `ahoy reload-db` - Rebuild database container
+
+### Frontend Development
+- `ahoy fei` - Install frontend dependencies (npm ci)
+- `ahoy fe` - Build production frontend assets
+- `ahoy fed` - Build development frontend assets  
+- `ahoy few` - Watch frontend assets during development
+
+### Code Quality
+- `ahoy lint` - Run all linting (backend + frontend + tests)
+- `ahoy lint-be` - PHPCS, PHPStan, Rector, PHPMD checks
+- `ahoy lint-fe` - Twig CS Fixer and npm lint
+- `ahoy lint-fix` - Fix auto-fixable linting issues
+- Code must pass all linting with exit code 0
+
+### Testing
+- `ahoy test` - Run all tests (unit, kernel, functional, BDD)
+- `ahoy test-unit` - PHPUnit unit tests
+- `ahoy test-bdd [file]` - Behat tests (e.g., `ahoy test-bdd tests/behat/features/test.feature`)
+- `ahoy test-bdd -- --tags="@smoke"` - Run tests with specific tags
+- `ahoy test-bdd -- --tags="~@skipped"` - Skip tests with @skipped tag
+- Screenshots saved to `.logs/screenshots/` on test failures
+
+### Behat Testing Details
+- Available step definitions: `ahoy cli vendor/bin/behat -- --definitions=i`
+- Verbose test output: `ahoy test-bdd [file] -v`
+- Debug with screenshots: Add `And I save screenshot` step
+- Test profiles: default, p0 (non-smoke), p1 (smoke/@p1 tests)
+
+## Configuration Management
+
+### Drupal Configuration
+- Export config: `ahoy drush cex -y` (required after config changes)
+- Import config: `ahoy drush cim -y`
+- Config stored in: `config/default/`
+- Config splits: dev (`config/ci/`) and test environments
+
+### Content Deployment
+- Deploy hooks: `web/modules/custom/do_core/do_core.deploy.php`
+- Run deployment hooks: `ahoy drush deploy:hook`
+- Sequential hook naming: `hook_deploy_1`, `hook_deploy_2`, etc.
+- If deployment fails, update hook name with next sequence number
+
+## Development Workflow
+
+### Feature Development
+1. Create feature branch: `feature/short-name` (max 20 chars)
+2. Implement changes
+3. Export configuration: `ahoy drush cex -y`
+4. Write tests (unit and/or BDD)
+5. Run linting: `ahoy lint` (must pass with exit code 0)
+6. Commit with format: "Verb in past tense with period."
+
+### Git Branch Naming
+- Features: `feature/add-user-auth`, `feature/fix-email-valid`
+- Bugfixes: `bugfix/fix-form-validation`
+- Hotfixes: `hotfix/security-patch`
+- Convert human names to machine-readable: lowercase, hyphens, remove articles
+
+### Branch Workflow
+- Main development: `develop` branch
+- Features branch from `develop`
+- Main branch: Used for production deployments
+- Current working branch: `hotfix/25.5.5`
+
+## Code Standards
+
+### PHP Standards
 - Follow Drupal coding standards
-- Use snake_case for local variables and method arguments
-- Use camelCase for method names and class properties
-- Use single quotes for strings unless they contain single quotes
-- Code must pass PHPCS, PHPMD, and PHPStan checks. No warnings or errors should be present in the output of `ahoy lint` and it should exit with code 0.
+- snake_case for local variables and method arguments
+- camelCase for method names and class properties
+- Single quotes for strings (double quotes if containing single quotes)
+- All code must pass PHPCS, PHPStan, Rector, PHPMD
 
-### Drupal
-- Use Drupal configuration management practices
-- All configuration should be exportable
+### Drupal Conventions
+- Custom module namespace: `do_core`
+- Use Drupal configuration management
 - Follow Drupal module development best practices
+- All configuration must be exportable
 
-## Content Management
+### Testing Requirements
+- Unit tests in `tests/src/Unit/`
+- Kernel tests in `tests/src/Kernel/`
+- Functional tests in `tests/src/Functional/`
+- BDD tests in `tests/behat/features/`
+- Use existing Behat step definitions when possible
 
-### Content Types
-- CivicTheme Page - For standard content pages
-- CivicTheme Alert - For site-wide alerts
-- CivicTheme Event - For event pages
+## Important Constraints
 
-### Theme
-- Uses CivicTheme as the base theme
-- Custom subtheme for site-specific styling
+- **Never modify**: `.gitignore`, PHPCS config, PHPStan config, PHPUnit config
+- **Never change**: Configuration files for linting tools without explicit request
+- **Always export**: Drupal configuration after changes (`ahoy drush cex -y`)
+- **No remote push**: Do not push to remote repositories unless explicitly requested
+- **Clean database**: Use `ahoy provision` if database becomes "dirty"
 
-## Testing
+## External Resources
 
-### Test Execution
-- Unit Tests: `ahoy test-unit`
-- BDD Tests: `ahoy test-bdd`
-- BDD Tests using a single test: `ahoy test-bdd tests/behat/features/test.feature`
-- BDD Tests skipping tagged tests: `ahoy test-bdd -- --tags="~@skipped"` (skips tests with @skipped tag)
-- BDD Tests with specific tags: `ahoy test-bdd -- --tags="@smoke"` (runs only tests with @smoke tag)
-
-### Test Writing Guidelines
-- Use Behat for user journey testing. Try to avoid creating extra steps in Behat and use what is already available in the system.
-- List all available step definitions: `ahoy cli vendor/bin/behat -- --definitions=i`
-- To test if a step works: `ahoy test-bdd tests/behat/features/test.feature -v` (verbose mode shows additional details)
-- For troubleshooting, check screenshots generated after failures in `.logs/screenshots/`
-- Add `And I save screenshot` to debug steps in your feature files
-- Follow BDD principles for feature testing
-  - Feature: A short description of the test
-  - User story: A description of the user story being tested in a format:
-        As a <role>
-        I want <feature>
-        So that <benefit>
-  - Scenario: A specific test case
-  - Refer to the existing Behat tests to make sure you are following the same structure and conventions.
-
-## Deployment Workflow
-
-### CI/CD Pipeline
-- Tests run on all Pull Requests
-- Deployments occur after successful tests
-- Deployments trigger via webhooks
-
-### Environments
-- Development: Feature branch deployments
-- Staging: Develop branch deployments
-- Production: Main branch deployments
-
-## Common Tasks
-
-### Adding New Features
-1. Switch to `develop` branch and pull the latest changes
-2. Create a feature branch from `develop` in the format `feature/name`
-3. Implement the feature
-4. Export configuration changes using `ahoy drush cex -y`
-5. Write appropriate tests
-6. Run coding standards checks
-7. Commit the code with a message in the format `Verb in past tense with a period at the end.`
-8. Do not push to remote.
-
-### Bug Fixes
-1. Switch to `develop` branch and pull the latest changes
-2. Create a bugfix branch from `develop` in the format `bugfix/name`
-3. Fix the issue
-4. Export configuration changes using `ahoy drush cex -y`
-5. Add tests to prevent regression
-6. Commit the code with a message in the format `Verb in past tense with a period at the end.`
-7. Do not push to remote.
-
-### Content Updates
-1. Content added via the Drush deploy hook implementations placed into `web/modules/custom/*_core/` directory.
-2. Once the deployment hook is created, run `ahoy drush deploy:hook` to apply the changes.
-3. If the hook deployment fails:
-   a. Run assess the output
-   b. Fix the code
-   c. Update the hook name by adding a next sequence number to the hook name, e.g. `hook_deploy_1`, `hook_deploy_2`, etc.
-   d. Run `ahoy drush deploy:hook` again.
-   e. If the database becomes "dirty" and needs to be re-imported, run `ahoy provision` to re-import the database and run all the necessary update, cache clear and deploy commands.
-
-## Documentation Resources
-- Vortex Documentation: https://vortex.drevops.com - Reference for the underlying project template and architecture
-- Drupal Documentation: https://www.drupal.org/documentation - General Drupal platform documentation
-- CivicTheme Documentation: https://docs.civictheme.io/ - Documentation for the theme used in this project
-
-## Purpose of This Document
-
-This document serves as:
-
-1. A quick reference guide for developers working on the DrevOps website
-2. Documentation of project-specific standards and processes
-3. A central collection of common commands and workflows
-4. A reference for testing procedures and CI/CD processes
-
-The guidelines in this document ensure consistent development practices across the team and maintain the quality standards expected of DrevOps projects.
+- [Vortex Documentation](https://vortex.drevops.com) - Project template reference
+- [CivicTheme Documentation](https://docs.civictheme.io/) - Theme component library
+- [Drupal Documentation](https://www.drupal.org/documentation) - Platform documentation
