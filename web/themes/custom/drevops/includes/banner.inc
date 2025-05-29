@@ -39,6 +39,6 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
 
   $variables['type'] = $type;
 
-  // Adds extra padding for the banner in the case the header is sticky.
-  $variables['header_sticky'] = civictheme_get_theme_config_manager()->load('components.header.sticky', FALSE);
+  // Adds extra top padding for the banner when additional spacing is needed.
+  $variables['extra_top_offset'] = civictheme_get_theme_config_manager()->load('components.header.is_sticky', FALSE);
 }

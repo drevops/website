@@ -10,15 +10,15 @@ import BasicContent from '../../02-molecules/basic-content/basic-content.twig';
 import BasicContentData from '../../02-molecules/basic-content/basic-content.stories.data';
 
 export default {
-  args: (theme = 'light', headerSticky = false) => {
-    const headerData = HeaderData.args(theme, { header_sticky: headerSticky });
+  args: (theme = 'light', headerIsSticky = false) => {
+    const headerData = HeaderData.args(theme, { is_sticky: headerIsSticky });
     const footerData = FooterData.args(theme);
 
     return {
       theme,
       vertical_spacing: 'both',
       header_theme: theme,
-      header_sticky: headerData.header_sticky,
+      header_is_sticky: headerData.is_sticky,
       header_top_1: headerData.content_top1,
       header_top_2: headerData.content_top2,
       header_top_3: headerData.content_top3,
@@ -26,7 +26,7 @@ export default {
       header_middle_2: headerData.content_middle2,
       header_middle_3: headerData.content_middle3,
       header_bottom_1: headerData.content_bottom1,
-      banner: Banner(BannerData.args(theme, headerSticky)),
+      banner: Banner(BannerData.args(theme, headerIsSticky)),
       highlighted: '',
       content_top: '',
       hide_sidebar_left: false,

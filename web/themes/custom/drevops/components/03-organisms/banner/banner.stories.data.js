@@ -6,7 +6,7 @@ import NavigationCard from '../../02-molecules/navigation-card/navigation-card.t
 import Grid from '../../00-base/grid/grid.twig';
 
 export default {
-  args: (theme = 'light', headerSticky = false) => ({
+  args: (theme = 'light', extraTopOffset = false) => ({
     theme,
     type: 'default',
     breadcrumb: {
@@ -84,7 +84,7 @@ export default {
       ],
       row_class: 'row--equal-heights-content row--vertically-spaced',
     }).trim(),
-    header_sticky: headerSticky,
+    extra_top_offset: extraTopOffset,
     modifier_class: '',
     attributes: '',
   }),

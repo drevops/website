@@ -11,7 +11,7 @@ import MobileNavigationTrigger from '../mobile-navigation/mobile-navigation-trig
 export default {
   args: (theme = 'light', options = {}) => ({
     theme,
-    header_sticky: (options && options.header_sticky) || false,
+    is_sticky: (options && options.is_sticky) || false,
     content_top1: '',
     content_top2: Paragraph({
       theme,

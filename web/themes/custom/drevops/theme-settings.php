@@ -20,11 +20,11 @@ function drevops_form_system_theme_settings_alter(array &$form, FormStateInterfa
   // @todo Move to CivicthemeSettingsFormSectionComponents::form.
   $theme_config_manager = \Drupal::service('class_resolver')->getInstanceFromDefinition(CivicthemeConfigManager::class);
   if (isset($form['components']['header'])) {
-    $form['components']['header']['sticky'] = [
+    $form['components']['header']['is_sticky'] = [
       '#title' => t('Sticky'),
       '#description' => t('Make the header sticky and semi-transparent.'),
       '#type' => 'checkbox',
-      '#default_value' => $theme_config_manager->load('components.header.sticky', FALSE),
+      '#default_value' => $theme_config_manager->load('components.header.is_sticky', FALSE),
     ];
   }
 }

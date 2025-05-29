@@ -2,14 +2,19 @@
 // Header component.
 //
 
+$ct-sticky-zindex: 500;
+
+@mixin ct-sticky() {
+  position: fixed;
+  width: 100%;
+  z-index: $ct-sticky-zindex;
+}
+
 .ct-header {
   $root: &;
 
-  &--position-sticky {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
+  &--sticky {
+    @include ct-sticky();
   }
 
   &__content-top2 {
@@ -186,7 +191,7 @@
       @include ct-component-property($root, $theme, middle, border-color);
     }
 
-    &#{$root}--position-sticky {
+    &#{$root}--sticky {
       #{$root}__top {
         background-color: color-mix(in srgb, ct-component-var($root, $theme, top, background-color) 80%, transparent);
       }

@@ -5,7 +5,7 @@
  *
  * Variables:
  * - theme: [string] Theme: light, dark.
- * - header_sticky: [boolean] Header is sticky or not.
+ * - is_sticky: [boolean] Header is sticky or not.
  * - content_top1: [string] Content slot.
  * - content_top2: [string] Content slot.
  * - content_top3: [string] Content slot.
@@ -18,7 +18,7 @@
 #}
 
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
-{% set sticky_class = header_sticky ? 'ct-header--position-sticky' : '' %}
+{% set sticky_class = is_sticky ? 'ct-header--sticky' : '' %}
 {% set modifier_class = '%s %s %s'|format(theme_class, sticky_class, modifier_class|default('')) %}
 
 {% if content_top1 is not empty or content_top2 is not empty or content_top3 is not empty or content_middle1 is not empty or content_middle2 is not empty or content_middle3 is not empty or content_bottom1 is not empty %}

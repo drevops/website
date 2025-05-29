@@ -2,6 +2,9 @@
 // Banner component.
 //
 
+$ct-banner-header-offset: ct-spacing(11);
+$ct-banner-header-offset-xxs: ct-spacing(10);
+
 .ct-banner {
   $root: &;
 
@@ -76,6 +79,25 @@
     #{$root}__featured-image {
       @if $ct-banner-featured-image-clip-path != false {
         clip-path: $ct-banner-featured-image-clip-path;
+      }
+    }
+  }
+
+  &#{$root}__top-offset {
+    #{$root}__inner {
+      // Adds fixed header height offset to the initial padding-top.
+      padding-top: calc(#{ct-spacing(3)} + #{$ct-banner-header-offset});
+
+      @include ct-breakpoint(xxs) {
+        padding-top: calc(#{ct-spacing(3)} + #{$ct-banner-header-offset-xxs});
+      }
+    }
+
+    &#{$root}--decorative {
+      #{$root}__inner {
+        @include ct-breakpoint(m) {
+          padding-top: calc(#{ct-spacing(8)} + #{$ct-banner-header-offset});
+        }
       }
     }
   }
