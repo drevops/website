@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use DrevOps\BehatSteps\Drupal\ContentTrait;
-use DrevOps\BehatSteps\Drupal\FieldTrait;
+use DrevOps\BehatSteps\FieldTrait;
 use DrevOps\BehatSteps\Drupal\FileTrait;
 use DrevOps\BehatSteps\ElementTrait;
 use DrevOps\BehatSteps\LinkTrait;
