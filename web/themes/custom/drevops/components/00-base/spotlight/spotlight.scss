@@ -1,0 +1,27 @@
+//
+// Spotlight component.
+//
+
+@use 'sass:map';
+
+@each $breakpoint, $value in $ct-breakpoints {
+  @include ct-breakpoint($breakpoint) {
+    @include ct-cssgrid($breakpoint);
+    @include ct-cssgrid-row($breakpoint);
+    @include ct-cssgrid-col($breakpoint);
+    @include ct-cssgrid-gap($breakpoint);
+
+    .ct-spotlight {
+      // Force a minimum of 2 rows for the spotlight component.
+      grid-template-rows: 1fr 1fr;
+    }
+  }
+}
+
+.ct-spotlight {
+  > * > *,
+  > .grid-xxs-1-1 > * > *,
+  > [class^='grid'] > * > * {
+    height: 100%;
+  }
+}

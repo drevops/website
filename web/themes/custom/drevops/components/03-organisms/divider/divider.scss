@@ -1,0 +1,32 @@
+//
+// Divider component.
+//
+
+.ct-divider {
+  $root: &;
+
+  border-top: solid ct-particle(0.125);
+  border-bottom: solid ct-particle(0.125);
+
+  img {
+    height: 100%;
+    max-width: 100%;
+  }
+
+  @each $breakpoint, $values in $ct-divider-size-mapping {
+    @each $size, $value in $values {
+      @include ct-breakpoint($breakpoint) {
+        &.size--#{$size} {
+          img {
+            max-height: $value;
+          }
+        }
+      }
+    }
+  }
+
+  @include ct-component-theme($root) using($root, $theme) {
+    @include ct-component-property($root, $theme, background-color);
+    @include ct-component-property($root, $theme, border-color);
+  }
+}

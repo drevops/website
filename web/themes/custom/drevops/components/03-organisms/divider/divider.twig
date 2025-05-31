@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Divider component.
+ *
+ * Variables:
+ * - image: [object] Image object:
+ *   - url: [string] Image URL.
+ *   - alt: [string] Image alt text.
+ * - theme: [string] Theme: light, dark.
+ * - size: [string] Size of the divider. Large, regular, small.
+ * - alignment: [string] Left, right, center.
+ * - vertical_spacing: [string] With top, bottom or both vertical spaces.
+ * - attributes: [string] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ */
+#}
+
+{% set size_class = size in ['large', 'regular', 'small'] ? 'size--%s'|format(size) : 'size--regular' %}
+{% set alignment_class = alignment ? 'ct-text-align-%s'|format(alignment) : '' %}
+{% set vertical_spacing_class = vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
+{% set modifier_class = '%s %s %s %s %s'|format(theme_class, vertical_spacing_class, size_class, alignment_class, modifier_class|default('')) %}
+
+<div class="ct-divider {{ modifier_class -}}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %}>
+  {% block image %}
+    <img src="{{ image.url }}" alt="" role="presentation">
+  {% endblock %}
+</div>

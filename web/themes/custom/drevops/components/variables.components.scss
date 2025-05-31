@@ -9,3 +9,54 @@
 // Example to override component's variable - Back to Top should have a
 // 'custom1' colour background.
 $ct-back-to-top-light-background-color: ct-color-light('custom1');
+
+//
+// Banner.
+//
+$ct-banner-intro-min-height: 50vh !default;
+$ct-banner-decorative-mobile-clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - #{ct-spacing(2)}), 0% 100%) !default;
+$ct-banner-decorative-desktop-clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - #{ct-spacing(6)}), 0% 100%) !default;
+$ct-banner-featured-image-width: 40% !default;
+$ct-banner-featured-image-clip-path: polygon(13% 10%, 100% 0, 100% 100%, 0% 100%) !default;
+$ct-banner-offset: ct-particle(11);
+$ct-banner-offset-xxs: ct-particle(10);
+$ct-banner-light-background-color: ct-color-light('background') !default;
+$ct-banner-light-featured-image-shadow-color: ct-color-light('background-light') !default;
+$ct-banner-dark-background-color: ct-color-dark('background') !default;
+$ct-banner-dark-featured-image-shadow-color: ct-color-dark('background') !default;
+
+//
+// Divider.
+//
+$ct-divider-size-mapping: (
+  'xxs': (
+    'small': ct-particle(4),
+    'regular': ct-particle(8),
+    'large': ct-particle(12)
+  ),
+  's': (
+    'small': ct-particle(6),
+    'regular': ct-particle(11),
+    'large': ct-particle(17)
+  ),
+  'm': (
+    'small': ct-particle(7),
+    'regular': ct-particle(14),
+    'large': ct-particle(21)
+  ),
+  'l': (
+    'small': ct-particle(10),
+    'regular': ct-particle(20),
+    'large': ct-particle(30)
+  ),
+);
+$ct-divider-light-background-color: ct-color-light('background-light');
+$ct-divider-dark-background-color: ct-color-dark('background');
+$ct-divider-light-border-color: transparent;
+$ct-divider-dark-border-color: transparent;
+
+//
+// Header.
+//
+
+$ct-header-sticky-zindex: 500;

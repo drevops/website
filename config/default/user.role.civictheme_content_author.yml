@@ -18,6 +18,7 @@ dependencies:
   module:
     - content_moderation
     - contextual
+    - entity_clone
     - file
     - filter
     - linkit
@@ -41,6 +42,9 @@ permissions:
   - 'access toolbar'
   - 'administer linkit profiles'
   - 'administer url aliases'
+  - 'clone node entity'
+  - 'clone paragraph entity'
+  - 'clone taxonomy_term entity'
   - 'create civictheme_alert content'
   - 'create civictheme_audio media'
   - 'create civictheme_document media'

@@ -1,0 +1,30 @@
+uuid: 18ad2bc0-7581-4864-ad79-b4927757c12c
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_p_size
+field_name: field_p_size
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: large
+      label: Large
+    -
+      value: regular
+      label: Regular
+    -
+      value: small
+      label: Small
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

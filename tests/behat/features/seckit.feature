@@ -16,7 +16,7 @@ Feature: Seckit
     And the response header "Content-Security-Policy" should contain the value "img-src 'self' data"
     And the response header "Content-Security-Policy" should contain the value "media-src 'self'"
     And the response header "Content-Security-Policy" should contain the value "report-uri /report-csp-violation"
-    And the response header "Content-Security-Policy" should contain the value "script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://www.recaptcha.net https://www.google.com;"
+    And the response header "Content-Security-Policy" should contain the value "script-src 'self' https://www.googletagmanager.com https://www.gstatic.com https://www.recaptcha.net https://www.google.com https://cdnjs.cloudflare.com;"
     And the response header "Content-Security-Policy" should contain the value "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/;"
     And the response header "Strict-Transport-Security" should contain the value "max-age=31536000"
     And the response header "Strict-Transport-Security" should contain the value "includeSubDomains"

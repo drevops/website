@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Theme implementation for Manual list.
+ */
+#}
+{% extends '@organisms/list/list.twig' %}
+
+{% set layout = layout in ['grid', 'spotlight'] ? layout : 'grid' %}
+
+{% block rows %}
+  {% if rows -%}
+    <div class="ct-list__rows layout-{{ layout }}">
+      {% include '@base/' ~ layout ~ '/' ~ layout ~ '.twig' with {
+        theme: theme,
+        title: title,
+        template_column_count: column_count,
+        fill_width: fill_width,
+        items: rows,
+        with_background: with_background,
+        row_class: 'row--equal-heights-content row--vertically-spaced',
+      } only %}
+    </div>
+  {% endif %}
+{% endblock %}
