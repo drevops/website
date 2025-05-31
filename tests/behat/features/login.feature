@@ -16,3 +16,11 @@ Feature: Login
     Given I am logged in as a user with the "Administrator" role
     When I go to "admin"
     Then I save screenshot
+
+  Scenario: Login page has correct vertical spacing class
+    Given I go to "/user/login"
+    Then I should see a ".block-system-main-block.ct-vertical-spacing--both" element
+
+  Scenario: Password reset page has correct vertical spacing class
+    Given I go to "/user/password"
+    Then I should see a ".block-system-main-block.ct-vertical-spacing--both" element

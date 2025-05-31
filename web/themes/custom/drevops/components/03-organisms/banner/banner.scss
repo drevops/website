@@ -34,7 +34,7 @@
     width: $ct-banner-featured-image-width;
     display: none;
 
-    @include ct-breakpoint(m) {
+    @include ct-breakpoint($ct-grid-responsive-breakpoint) {
       display: block;
       position: absolute;
       bottom: 0;
@@ -47,7 +47,7 @@
     #{$root}__inner {
       clip-path: $ct-banner-decorative-mobile-clip-path;
 
-      @include ct-breakpoint(m) {
+      @include ct-breakpoint($ct-grid-responsive-breakpoint) {
         padding-top: ct-spacing(8);
         padding-bottom: ct-spacing(8);
         clip-path: $ct-banner-decorative-desktop-clip-path;
@@ -64,7 +64,7 @@
     }
 
     #{$root}__featured-image__wrapper {
-      @include ct-breakpoint(m) {
+      @include ct-breakpoint($ct-grid-responsive-breakpoint) {
         bottom: 0;
         top: auto;
         height: 100%;
@@ -82,18 +82,17 @@
 
   &#{$root}--with-offset {
     #{$root}__inner {
-      // Adds fixed header height offset to the initial padding-top.
-      padding-top: calc(#{ct-spacing(3)} + #{$ct-banner-offset});
+      padding-top: ct-spacing(3) + $ct-banner-offset-xxs;
 
-      @include ct-breakpoint(xxs) {
-        padding-top: calc(#{ct-spacing(3)} + #{$ct-banner-offset-xxs});
+      @include ct-breakpoint($ct-grid-responsive-breakpoint) {
+        padding-top: ct-spacing(8) + $ct-banner-offset;
       }
     }
 
     &#{$root}--decorative {
       #{$root}__inner {
-        @include ct-breakpoint(m) {
-          padding-top: calc(#{ct-spacing(8)} + #{$ct-banner-offset});
+        @include ct-breakpoint($ct-grid-responsive-breakpoint) {
+          padding-top: ct-spacing(8) + $ct-banner-offset;
         }
       }
     }
@@ -102,7 +101,7 @@
   #{$root}__breadcrumb {
     margin-bottom: ct-spacing(4);
 
-    @include ct-breakpoint(m) {
+    @include ct-breakpoint($ct-grid-responsive-breakpoint) {
       margin-bottom: ct-spacing(6);
     }
   }
@@ -114,7 +113,7 @@
   #{$root}__title {
     margin-bottom: ct-spacing(2);
 
-    @include ct-breakpoint(m) {
+    @include ct-breakpoint($ct-grid-responsive-breakpoint) {
       margin-bottom: ct-spacing(3);
     }
   }
@@ -126,7 +125,7 @@
 
     &#{$root}--decorative {
       #{$root}__featured-image__wrapper {
-        @include ct-breakpoint(m) {
+        @include ct-breakpoint($ct-grid-responsive-breakpoint) {
           @include ct-image-shadow(ct-component-var($root, $theme, featured-image, shadow-color), 'up-left');
         }
       }
@@ -139,6 +138,23 @@
       display: flex;
       align-items: center;
       text-align: center;
+      padding-top: ct-spacing(3);
+      padding-bottom: ct-spacing(3);
+
+      @include ct-breakpoint($ct-grid-responsive-breakpoint) {
+        padding-top: ct-spacing(8);
+        padding-bottom: ct-spacing(8);
+      }
+    }
+
+    &#{$root}--with-offset {
+      #{$root}__inner {
+        padding-top: ct-spacing(3) + $ct-banner-offset-xxs;
+
+        @include ct-breakpoint($ct-grid-responsive-breakpoint) {
+          padding-top: ct-spacing(8) + $ct-banner-offset;
+        }
+      }
     }
 
     .ct-banner__title {
