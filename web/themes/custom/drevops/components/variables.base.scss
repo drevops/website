@@ -119,12 +119,12 @@ $ct-fonts: (
 $ct-particle: 8px;
 
 // Base font sizes defined in CivicTheme base variables.
-$ct-font-base-size: $ct-particle * 2 !default;
-$ct-font-base-line-height: $ct-font-base-size !default;
+$ct-font-base-size: $ct-particle * 2;
+$ct-font-base-line-height: $ct-font-base-size;
 $ct-typography: (
   'display-large': (
-    'xxs': ($ct-font-base-size * 3, $ct-font-base-line-height * 3.5, 'bold', 'secondary', -0.6px),
-    'm': ($ct-font-base-size * 4, $ct-font-base-line-height * 4.75, 'bold', 'secondary', -1px)
+    'xxs': ($ct-font-base-size * 3, $ct-font-base-line-height * 3.5, 'bold', 'primary', -0.6px),
+    'm': ($ct-font-base-size * 4, $ct-font-base-line-height * 4.75, 'bold', 'primary', -1px)
   ),
   // Text.
   'text-extra-large': (
