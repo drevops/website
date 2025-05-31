@@ -80,6 +80,25 @@
     }
   }
 
+  &#{$root}--with-offset {
+    #{$root}__inner {
+      // Adds fixed header height offset to the initial padding-top.
+      padding-top: calc(#{ct-spacing(3)} + #{$ct-banner-offset});
+
+      @include ct-breakpoint(xxs) {
+        padding-top: calc(#{ct-spacing(3)} + #{$ct-banner-offset-xxs});
+      }
+    }
+
+    &#{$root}--decorative {
+      #{$root}__inner {
+        @include ct-breakpoint(m) {
+          padding-top: calc(#{ct-spacing(8)} + #{$ct-banner-offset});
+        }
+      }
+    }
+  }
+
   #{$root}__breadcrumb {
     margin-bottom: ct-spacing(4);
 

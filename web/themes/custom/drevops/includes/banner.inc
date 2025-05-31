@@ -38,4 +38,7 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
   }
 
   $variables['type'] = $type;
+
+  // Adds extra top padding for the banner when additional spacing is needed.
+  $variables['with_offset'] = civictheme_get_theme_config_manager()->load('components.header.is_sticky', FALSE);
 }

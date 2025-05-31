@@ -34,6 +34,7 @@ components:
   header:
     theme: dark
     logo_type: default
+    is_sticky: 1
   footer:
     theme: dark
     logo_type: default
