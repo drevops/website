@@ -24,7 +24,7 @@ function drevops_form_system_theme_settings_alter(array &$form, FormStateInterfa
       '#title' => t('Sticky'),
       '#description' => t('Make the header sticky and semi-transparent.'),
       '#type' => 'checkbox',
-      '#default_value' => $theme_config_manager->load('components.header.is_sticky', FALSE),
+      '#default_value' => (bool) $theme_config_manager->load('components.header.is_sticky', FALSE),
     ];
   }
 }
