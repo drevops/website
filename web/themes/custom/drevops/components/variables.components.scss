@@ -18,6 +18,8 @@ $ct-banner-decorative-mobile-clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% -
 $ct-banner-decorative-desktop-clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - #{ct-spacing(6)}), 0% 100%) !default;
 $ct-banner-featured-image-width: 40% !default;
 $ct-banner-featured-image-clip-path: polygon(13% 10%, 100% 0, 100% 100%, 0% 100%) !default;
+$ct-banner-offset: ct-particle(11);
+$ct-banner-offset-xxs: ct-particle(10);
 $ct-banner-light-background-color: ct-color-light('background') !default;
 $ct-banner-light-featured-image-shadow-color: ct-color-light('background-light') !default;
 $ct-banner-dark-background-color: ct-color-dark('background') !default;
@@ -52,3 +54,9 @@ $ct-divider-light-background-color: ct-color-light('background-light');
 $ct-divider-dark-background-color: ct-color-dark('background');
 $ct-divider-light-border-color: transparent;
 $ct-divider-dark-border-color: transparent;
+
+//
+// Header.
+//
+
+$ct-header-sticky-zindex: 500;

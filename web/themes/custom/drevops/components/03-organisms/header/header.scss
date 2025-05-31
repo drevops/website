@@ -2,19 +2,13 @@
 // Header component.
 //
 
-$ct-sticky-zindex: 500;
-
-@mixin ct-sticky() {
-  position: fixed;
-  width: 100%;
-  z-index: $ct-sticky-zindex;
-}
-
 .ct-header {
   $root: &;
 
   &--sticky {
-    @include ct-sticky();
+    position: fixed;
+    width: 100%;
+    z-index: $ct-header-sticky-zindex;
   }
 
   &__content-top2 {

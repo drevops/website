@@ -22,6 +22,7 @@
  *   - url: [string] Source.
  *   - alt: [string] Alt text.
  * - background_image_blend_mode: [string] Type of the background image blending. Defaults to 'normal'.
+ * - with_offset: [boolean] Whether to add top offset.
  * - theme: [string] Theme: light, dark.
  * - modifier_class: [string] Additional classes.
  * - attributes: [string] Banner attributes.
@@ -31,8 +32,8 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set type = type in ['default', 'large', 'intro'] ? type : 'default' %}
 {% set type_class = 'ct-banner-type--%s'|format(type) %}
-{% set top_offset_class = extra_top_offset ? 'ct-banner__top-offset' : '' %}
-{% set modifier_class = '%s %s %s %s %s'|format(theme_class, is_decorative_class, type_class, top_offset_class, modifier_class|default('')) %}
+{% set with_offset_class = with_offset ? 'ct-banner--with-offset' : '' %}
+{% set modifier_class = '%s %s %s %s %s'|format(theme_class, is_decorative_class, type_class, with_offset_class, modifier_class|default('')) %}
 
 {% if type == 'intro' %}
   {% set featured_image = null %}
