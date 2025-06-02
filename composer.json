@@ -29,6 +29,7 @@
         "drupal/redirect": "^1.11",
         "drupal/redis": "^1.9",
         "drupal/robotstxt": "^1.6",
+        "drupal/scheduled_transitions": "^2.8",
         "drupal/search_api": "^1.38",
         "drupal/search_api_solr": "^4.3.8",
         "drupal/seckit": "^2.0",

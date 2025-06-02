@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb850cdf66a9a07fbb95c55cdd7e5fff",
+    "content-hash": "9d567d808586e630b36da17af8f044de",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2653,6 +2653,69 @@
             }
         },
         {
+            "name": "drupal/dynamic_entity_reference",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/dynamic_entity_reference.git",
+                "reference": "3.2.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/dynamic_entity_reference-3.2.1.zip",
+                "reference": "3.2.1",
+                "shasum": "051c565f6580f512cbc7ddc3f49fdd6ba8d406af"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "drupal/diff": "*",
+                "mglaman/phpstan-drupal": "^1.1",
+                "phpstan/phpstan": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.2.1",
+                    "datestamp": "1740521060",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Lee Rowlands",
+                    "homepage": "https://www.drupal.org/u/larowlan",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jibran Ijaz",
+                    "homepage": "https://www.drupal.org/u/jibran",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "larowlan",
+                    "homepage": "https://www.drupal.org/user/395439"
+                }
+            ],
+            "description": "Provides a field that allows an entity-reference field to reference more than one entity type.",
+            "homepage": "http://drupal.org/project/dynamic_entity_reference",
+            "support": {
+                "source": "http://cgit.drupalcode.org/dynamic_entity_reference",
+                "issues": "http://drupal.org/project/dynamic_entity_reference",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
             "name": "drupal/entity_clone",
             "version": "2.1.0-beta1",
             "source": {
@@ -3860,6 +3923,75 @@
             "support": {
                 "source": "https://git.drupal.org/project/robotstxt.git",
                 "issues": "https://www.drupal.org/project/issues/robotstxt"
+            }
+        },
+        {
+            "name": "drupal/scheduled_transitions",
+            "version": "2.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/scheduled_transitions.git",
+                "reference": "2.8.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/scheduled_transitions-2.8.0.zip",
+                "reference": "2.8.0",
+                "shasum": "2b8182b42541386c57105a5eb35a5631e0386755"
+            },
+            "require": {
+                "drupal/core": "^11",
+                "drupal/dynamic_entity_reference": "^3.0 || ^4.0",
+                "php": ">=8.3"
+            },
+            "require-dev": {
+                "composer/installers": "^2",
+                "drupal/core-dev": ">=11",
+                "drush/drush": ">=11",
+                "mockery/mockery": "^1.5",
+                "phpstan/extension-installer": "^1.3",
+                "phpstan/phpstan": "^1.11",
+                "phpstan/phpstan-deprecation-rules": "*",
+                "phpstan/phpstan-mockery": "^1.1",
+                "phpstan/phpstan-strict-rules": "^1@stable",
+                "previousnext/coding-standard": "^1"
+            },
+            "suggest": {
+                "drupal/token": "Shows Token UI on Add Scheduled Transitions form."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.8.0",
+                    "datestamp": "1730723796",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "installer-paths": {
+                    "web/core": [
+                        "type:drupal-core"
+                    ],
+                    "web/modules/contrib/{$name}": [
+                        "type:drupal-module"
+                    ]
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "dpi",
+                    "homepage": "https://www.drupal.org/user/81431"
+                }
+            ],
+            "description": "Allows users to schedule a revision to change state.",
+            "homepage": "https://www.drupal.org/project/scheduled_transitions",
+            "support": {
+                "source": "https://git.drupalcode.org/project/scheduled_transitions"
             }
         },
         {

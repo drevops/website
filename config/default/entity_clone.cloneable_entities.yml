@@ -59,3 +59,4 @@ cloneable_entities:
   - entity_view_display
   - entity_view_mode
   - entity_form_display
+  - scheduled_transition
