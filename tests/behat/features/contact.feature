@@ -39,9 +39,9 @@ Feature: Contact form
   Scenario: Anonymous user gets validation errors on contact form
     Given I am an anonymous user
     When I go to "/contact"
+    And browser validation for the form ".webform-submission-contact-form" is disabled
     Then I should see the heading Contact
-    When I disable browser validation for the form with selector "form.webform-submission-contact-form"
-    And I press "Send message"
+    When I press "Send message"
     Then I should see the text "Name field is required."
     And I should see the text "Email field is required."
     And I should see the text "Subject field is required."

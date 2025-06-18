@@ -72,38 +72,6 @@ class FeatureContext extends DrupalContext {
   use WatchdogTrait;
 
   /**
-   * Disable browser validation for the form for validating errors.
-   *
-   * @When I disable browser validation for the form with selector :selector
-   */
-  public function disableFormBrowserValidation(string $selector): void {
-    $escapedSelector = addslashes($selector);
-
-    $js = <<<JS
-        var form = document.querySelector("{$escapedSelector}");
-        if (form) {
-            form.setAttribute('novalidate', 'novalidate');
-        } else {
-            throw new Error("Form with selector {$escapedSelector} not found");
-        }
-JS;
-    $this->getSession()->executeScript($js);
-  }
-
-  /**
-   * Visit a revisions page of a type with a specified title.
-   *
-   * @code
-   * When I visit the "article" content revisions page with the title "Test article"
-   * @endcode
-   *
-   * @When I visit the :content_type content revisions page with the title :title
-   */
-  public function visitRevisionsPageWithTitle(string $content_type, string $title): void {
-    $this->contentVisitActionPageWithTitle($content_type, $title, '/revisions');
-  }
-
-  /**
    * Select a radio button by its ID.
    *
    * @code
