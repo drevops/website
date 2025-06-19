@@ -7,15 +7,30 @@
 
 declare(strict_types=1);
 
+use DrevOps\BehatSteps\CookieTrait;
+use DrevOps\BehatSteps\DateTrait;
+use DrevOps\BehatSteps\Drupal\BigPipeTrait;
+use DrevOps\BehatSteps\Drupal\BlockTrait;
+use DrevOps\BehatSteps\Drupal\ContentBlockTrait;
 use DrevOps\BehatSteps\Drupal\ContentTrait;
+use DrevOps\BehatSteps\Drupal\DraggableviewsTrait;
+use DrevOps\BehatSteps\Drupal\EckTrait;
+use DrevOps\BehatSteps\Drupal\EmailTrait;
 use DrevOps\BehatSteps\Drupal\FileTrait;
 use DrevOps\BehatSteps\Drupal\MediaTrait;
+use DrevOps\BehatSteps\Drupal\MenuTrait;
+use DrevOps\BehatSteps\Drupal\MetatagTrait;
+use DrevOps\BehatSteps\Drupal\OverrideTrait;
 use DrevOps\BehatSteps\Drupal\ParagraphsTrait;
 use DrevOps\BehatSteps\Drupal\SearchApiTrait;
 use DrevOps\BehatSteps\Drupal\TaxonomyTrait;
+use DrevOps\BehatSteps\Drupal\TestmodeTrait;
+use DrevOps\BehatSteps\Drupal\UserTrait;
 use DrevOps\BehatSteps\Drupal\WatchdogTrait;
 use DrevOps\BehatSteps\ElementTrait;
 use DrevOps\BehatSteps\FieldTrait;
+use DrevOps\BehatSteps\FileDownloadTrait;
+use DrevOps\BehatSteps\KeyboardTrait;
 use DrevOps\BehatSteps\LinkTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
@@ -27,51 +42,34 @@ use Drupal\DrupalExtension\Context\DrupalContext;
  */
 class FeatureContext extends DrupalContext {
 
+  use BigPipeTrait;
+  use BlockTrait;
+  use ContentBlockTrait;
   use ContentTrait;
+  use CookieTrait;
+  use DateTrait;
+  use DraggableviewsTrait;
+  use EckTrait;
   use ElementTrait;
+  use EmailTrait;
   use FieldTrait;
+  use FileDownloadTrait;
   use FileTrait;
+  use KeyboardTrait;
   use LinkTrait;
   use MediaTrait;
+  use MenuTrait;
+  use MetatagTrait;
+  use OverrideTrait;
   use ParagraphsTrait;
   use PathTrait;
   use ResponseTrait;
   use SearchApiTrait;
   use TaxonomyTrait;
+  use TestmodeTrait;
+  use UserTrait;
   use WaitTrait;
   use WatchdogTrait;
-
-  /**
-   * Disable browser validation for the form for validating errors.
-   *
-   * @When I disable browser validation for the form with selector :selector
-   */
-  public function disableFormBrowserValidation(string $selector): void {
-    $escapedSelector = addslashes($selector);
-
-    $js = <<<JS
-        var form = document.querySelector("{$escapedSelector}");
-        if (form) {
-            form.setAttribute('novalidate', 'novalidate');
-        } else {
-            throw new Error("Form with selector {$escapedSelector} not found");
-        }
-JS;
-    $this->getSession()->executeScript($js);
-  }
-
-  /**
-   * Visit a revisions page of a type with a specified title.
-   *
-   * @code
-   * When I visit the "article" content revisions page with the title "Test article"
-   * @endcode
-   *
-   * @When I visit the :content_type content revisions page with the title :title
-   */
-  public function visitRevisionsPageWithTitle(string $content_type, string $title): void {
-    $this->contentVisitActionPageWithTitle($content_type, $title, '/revisions');
-  }
 
   /**
    * Select a radio button by its ID.

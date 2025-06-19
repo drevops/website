@@ -64,13 +64,12 @@ tasks:
     - run:
         name: Provision site
         command: |
-
           if [ "$LAGOON_ENVIRONMENT_TYPE" = "production" ] || [ "$LAGOON_GIT_BRANCH" = "${VORTEX_LAGOON_PRODUCTION_BRANCH:-main}" ]; then
             echo "==> Running in PRODUCTION environment."
             # Never overwrite existing DB when production site already exists.
             export VORTEX_PROVISION_OVERRIDE_DB=0
             # Never unblock admin user in production.
-            export DRUPAL_UNBLOCK_ADMIN=0
+            export VORTEX_UNBLOCK_ADMIN=0
             # Never sanitize DB in production.
             export VORTEX_PROVISION_SANITIZE_DB_SKIP=1
           fi

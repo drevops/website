@@ -3,8 +3,17 @@ langcode: en
 status: true
 dependencies:
   module:
+    - content_moderation
     - menu_ui
 third_party_settings:
+  content_moderation:
+    enabled: true
+    allowed_moderation_states:
+      - draft
+      - needs_review
+      - published
+      - archived
+    default_moderation_state: published
   menu_ui:
     available_menus:
       - civictheme-primary-navigation
