@@ -1,142 +1,266 @@
-# CLAUDE.md
+# Vortex Drupal Project - Development Guide
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Project Overview
 
-# DrevOps Website Developer Guidelines
+This is a Drupal project built with **Vortex** - a comprehensive Drupal project template by DrevOps that provides production-ready development and deployment workflows.
 
-This is a Drupal 11 marketing website for DrevOps organization, built on the Vortex template - a standardized Drupal starter kit with built-in CI/CD capabilities.
+## Quick Start
 
-## Architecture Overview
+```bash
+# Build the site locally
+ahoy build
 
-### Project Structure
-- **Base Framework**: Drupal 11 with Docker-based development environment
-- **Theme**: CivicTheme as base theme with custom "drevops" subtheme
-- **Custom Code**: Single custom module `do_core` in `web/modules/custom/do_core/`
-- **Configuration**: Drupal configuration management in `config/default/`
-- **Database**: MySQL 8.4 with Redis caching and Solr search
+# Start development environment
+ahoy up
 
-### Key Components
-- **Frontend**: CivicTheme component library with custom Sass/JS in `web/themes/custom/drevops/`
-- **Content Types**: CivicTheme Page (standard), CivicTheme Alert (site alerts), CivicTheme Event (events)
-- **Services**: nginx-php-fpm, database (MySQL), redis, solr, clamav for file scanning
-- **Build System**: Composer for PHP dependencies, npm for frontend assets
+# Access the site
+ahoy info
+```
 
-## Essential Development Commands
+## Local Development Commands (Ahoy)
 
-### Environment Management
-- `ahoy build` - Full build: reset, start containers, install dependencies, provision site
-- `ahoy up` - Start containers (with optional `--build --force-recreate`)
-- `ahoy down` - Stop and remove containers (removes database!)
-- `ahoy provision` - Re-import database and run update/cache/deploy commands
-- `ahoy reset [hard]` - Reset environment (soft) or to last commit (hard)
+### Environment management
 
-### Daily Development
-- `ahoy cli [command]` - Execute commands in CLI container
-- `ahoy drush [command]` - Run Drush commands (e.g., `ahoy drush cr`, `ahoy drush cex`)
-- `ahoy composer [command]` - Run Composer commands
-- `ahoy login` - Generate one-time login link
+```bash
+ahoy up                    # Start Docker containers
+ahoy down                  # Stop Docker containers
+ahoy restart               # Restart containers
+ahoy info                  # Show project information and URLs
+```
 
-### Database Operations
-- `ahoy download-db` / `ahoy fetch-db` - Download database from remote
-- `ahoy import-db` - Import database dump
-- `ahoy export-db` - Export database dump
-- `ahoy reload-db` - Rebuild database container
+### Site building and provisioning
 
-### Frontend Development
-- `ahoy fei` - Install frontend dependencies (npm ci)
-- `ahoy fe` - Build production frontend assets
-- `ahoy fed` - Build development frontend assets  
-- `ahoy few` - Watch frontend assets during development
+```bash
+ahoy build                 # Build site from scratch
+ahoy provision             # Provision site (install/import DB)
+ahoy reset                 # Reset to clean state
+```
+
+### Database operations
+
+```bash
+ahoy download-db           # Download fresh database
+ahoy export-db             # Export current database
+ahoy import-db             # Import database from file
+```
+
+### Development tools
+
+```bash
+ahoy drush [command]       # Run Drush commands
+ahoy composer [command]    # Run Composer commands
+ahoy phpcs                 # Run code style checks
+ahoy phpcbf                # Fix code style issues
+```
 
 ### Code Quality
-- `ahoy lint` - Run all linting (backend + frontend + tests)
-- `ahoy lint-be` - PHPCS, PHPStan, Rector, PHPMD checks
-- `ahoy lint-fe` - Twig CS Fixer and npm lint
-- `ahoy lint-fix` - Fix auto-fixable linting issues
-- Code must pass all linting with exit code 0
+
+```bash
+ahoy lint                  # Run all linting checks
+ahoy lint-fix              # Fix automatically fixable issues
+```
 
 ### Testing
-- `ahoy test` - Run all tests (unit, kernel, functional, BDD)
-- `ahoy test-unit` - PHPUnit unit tests
-- `ahoy test-bdd [file]` - Behat tests (e.g., `ahoy test-bdd tests/behat/features/test.feature`)
-- `ahoy test-bdd -- --tags="@smoke"` - Run tests with specific tags
-- `ahoy test-bdd -- --tags="~@skipped"` - Skip tests with @skipped tag
-- Screenshots saved to `.logs/screenshots/` on test failures
 
-### Behat Testing Details
-- Available step definitions: `ahoy cli vendor/bin/behat -- --definitions=i`
-- Verbose test output: `ahoy test-bdd [file] -v`
-- Debug with screenshots: Add `And I save screenshot` step
-- Test profiles: default, p0 (non-smoke), p1 (smoke/@p1 tests)
+```bash
+ahoy test-unit             # Run PHPUnit tests
+ahoy test-bdd              # Run Behat (BDD) tests
+ahoy test                  # Run all tests
+```
+
+#### Behat Feature Writing Standards
+
+When creating or updating Behat feature files, follow these conventions:
+
+- **User Story Format**: All features must use the standard user story format:
+  ```gherkin
+  As a [user type]
+  I want to [action]
+  So that [benefit]
+  ```
+
+- **User Types**: Use consistent user types across features:
+  - `site visitor` - for anonymous users and general site access
+  - `site administrator` - for users with administrative privileges
+  - `content editor` - for users managing content
+
+- **No Punctuation**: Do not use commas or periods in user story statements
+
+- **Example**:
+  ```gherkin
+  Feature: Homepage
+
+    As a site visitor
+    I want to access the homepage
+    So that I can view the main landing page and navigate the site
+  ```
+
+## Project Structure
+
+```
+├── config/                # Drupal configuration (exported)
+│   ├── default/           # Default configuration
+│   ├── dev/               # Development-specific config
+│   ├── stage/             # Staging-specific config
+│   └── ci/                # CI-specific config
+├── scripts/
+│   ├── vortex/            # Core Vortex deployment scripts
+│   └── custom/            # Project-specific custom scripts
+├── web/                   # Drupal webroot
+│   ├── modules/custom/    # Custom modules
+│   ├── themes/custom/     # Custom themes
+│   └── sites/default/     # Drupal site configuration
+├── tests/
+│   ├── behat/             # Behavioral tests (BDD)
+│   └── phpunit/           # Unit/integration tests
+├── docker-compose.yml     # Local development environment
+└── .env                   # Environment configuration
+```
 
 ## Configuration Management
 
-### Drupal Configuration
-- Export config: `ahoy drush cex -y` (required after config changes)
-- Import config: `ahoy drush cim -y`
-- Config stored in: `config/default/`
-- Config splits: dev (`config/ci/`) and test environments
+### Exporting Configuration
 
-### Content Deployment
-- Deploy hooks: `web/modules/custom/do_core/do_core.deploy.php`
-- Run deployment hooks: `ahoy drush deploy:hook`
-- Sequential hook naming: `hook_deploy_1`, `hook_deploy_2`, etc.
-- If deployment fails, update hook name with next sequence number
+```bash
+# Export all configuration changes
+ahoy drush config:export
 
-## Development Workflow
+# Export specific configuration
+ahoy drush config:export --diff
+```
 
-### Feature Development
-1. Create feature branch: `feature/short-name` (max 20 chars)
-2. Implement changes
-3. Export configuration: `ahoy drush cex -y`
-4. Write tests (unit and/or BDD)
-5. Run linting: `ahoy lint` (must pass with exit code 0)
-6. Commit with format: "Verb in past tense with period."
+### Importing Configuration
 
-### Git Branch Naming
-- Features: `feature/add-user-auth`, `feature/fix-email-valid`
-- Bugfixes: `bugfix/fix-form-validation`
-- Hotfixes: `hotfix/security-patch`
-- Convert human names to machine-readable: lowercase, hyphens, remove articles
+```bash
+# Import configuration (usually part of deployment)
+ahoy drush config:import
 
-### Branch Workflow
-- Main development: `develop` branch
-- Features branch from `develop`
-- Main branch: Used for production deployments
-- Current working branch: `hotfix/25.5.5`
+# Import with specific source
+ahoy drush config:import --source=../config/stage
+```
 
-## Code Standards
+### Theme Development
 
-### PHP Standards
-- Follow Drupal coding standards
-- snake_case for local variables and method arguments
-- camelCase for method names and class properties
-- Single quotes for strings (double quotes if containing single quotes)
-- All code must pass PHPCS, PHPStan, Rector, PHPMD
+```bash
+# Navigate to custom theme
+cd web/themes/custom/website_theme
 
-### Drupal Conventions
-- Custom module namespace: `do_core`
-- Use Drupal configuration management
-- Follow Drupal module development best practices
-- All configuration must be exportable
+# Install theme dependencies (if using npm/yarn)
+yarn install
 
-### Testing Requirements
-- Unit tests in `tests/src/Unit/`
-- Kernel tests in `tests/src/Kernel/`
-- Functional tests in `tests/src/Functional/`
-- BDD tests in `tests/behat/features/`
-- Use existing Behat step definitions when possible
+# Build theme assets
+yarn run build
 
-## Important Constraints
+# Watch for changes during development
+yarn run watch
+```
 
-- **Never modify**: `.gitignore`, PHPCS config, PHPStan config, PHPUnit config
-- **Never change**: Configuration files for linting tools without explicit request
-- **Always export**: Drupal configuration after changes (`ahoy drush cex -y`)
-- **No remote push**: Do not push to remote repositories unless explicitly requested
-- **Clean database**: Use `ahoy provision` if database becomes "dirty"
+## Database and Content
 
-## External Resources
+### Content Management
 
-- [Vortex Documentation](https://vortex.drevops.com) - Project template reference
-- [CivicTheme Documentation](https://docs.civictheme.io/) - Theme component library
-- [Drupal Documentation](https://www.drupal.org/documentation) - Platform documentation
+- Use Configuration Management for structure (content types, fields, views)
+- Use database imports for content in non-production environments
+- Use migration modules for structured content imports in production
+
+## Services Integration
+
+## Deployment
+
+### CI/CD Pipeline
+The project includes automated deployment via:
+
+- **GitHub Actions** for CI/CD
+
+- **Lagoon** for hosting
+
+- **Container Registry** deployments for containerized environments
+
+## Common Tasks
+
+### Adding Dependencies
+
+```bash
+# Add Drupal modules
+ahoy composer require drupal/module_name
+
+# Add development dependencies
+ahoy composer require --dev drupal/devel
+```
+
+### Add theme build tools
+
+```bash
+cd web/themes/custom/website_theme && npm install [package]
+```
+
+### Dependency Management
+
+Dependencies are automatically updated via RenovateBot:
+- **Composer dependencies**: Updated automatically with compatibility checks
+- **Node.js dependencies**: Updated in theme directories
+- **Docker images**: Base image updates for containers
+
+To manually check for updates:
+```bash
+ahoy composer outdated
+```
+
+### Debugging
+
+```bash
+# Enable development modules
+ahoy drush pm:install devel webprofiler
+
+# View logs
+ahoy drush watchdog:show
+
+# Clear caches
+ahoy drush cache:rebuild
+```
+
+### Performance
+
+```bash
+# Enable caching
+ahoy drush config:set system.performance css.preprocess 1
+ahoy drush config:set system.performance js.preprocess 1
+
+# Clear specific caches
+ahoy drush cache:rebuild-external
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Site not loading locally:**
+```bash
+ahoy down && ahoy up
+ahoy info  # Check URLs and container status
+```
+
+**Database connection issues:**
+```bash
+# Check database container
+docker-compose ps
+ahoy reset  # Rebuild if needed
+```
+
+## Resources
+
+- **Vortex Documentation**: https://www.vortextemplate.com
+- **Drupal Documentation**: https://www.drupal.org/docs
+- **Drush Documentation**: https://www.drush.org
+- **Ahoy Documentation**: https://github.com/ahoy-cli/ahoy
+
+## Getting Help
+
+- Check `ahoy --help` for available commands
+- Use `ahoy [command] --help` for specific command help
+- Review project-specific documentation in `/docs` (if available)
+- Check environment logs: `ahoy logs`
+
+---
+
+*This guide covers the essentials for working with your Vortex-powered Drupal project. As your project grows, consider expanding this guide with project-specific workflows and conventions.*
