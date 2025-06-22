@@ -1,9 +1,9 @@
 @login @smoke
 Feature: Login
 
-  As a site owner
-  I want to be able to log in
-  So that I can manage my site
+  As a site administrator
+  I want to log into the system
+  So that I can access administrative functions and manage the site
 
   @api
   Scenario: Administrator user logs in

@@ -1,9 +1,9 @@
 @homepage @smoke
 Feature: Homepage
 
-  As a site owner
-  I want to ensure that the homepage is accessible
-  In order to provide a good user experience
+  As a site visitor
+  I want to access the homepage
+  So that I can view the main landing page and navigate the site
 
   @api
   Scenario: Anonymous user visits homepage
