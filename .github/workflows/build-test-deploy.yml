@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: drevops/ci-runner:25.5.0
+      image: drevops/ci-runner:canary
 
       env:
         TZ: Australia/Melbourne
@@ -156,7 +156,7 @@ jobs:
       fail-fast: false
 
     container:
-      image: drevops/ci-runner:25.5.0
+      image: drevops/ci-runner:canary
 
       env:
         TZ: Australia/Melbourne
@@ -346,7 +346,7 @@ jobs:
     if: ${{ github.event_name != 'schedule' && !startsWith(github.head_ref || github.ref_name, 'deps/') }}
 
     container:
-      image: drevops/ci-runner:25.5.0
+      image: drevops/ci-runner:canary
       env:
         TZ: Australia/Melbourne
         TERM: xterm-256color
