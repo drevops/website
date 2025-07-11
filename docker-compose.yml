@@ -106,6 +106,8 @@ services:
       args:
         CLI_IMAGE: *cli-image
         WEBROOT: "${WEBROOT:-web}"
+      additional_contexts:
+        cli: "service:cli"
     <<: [*default-volumes, *default-user]
     environment:
       <<: *default-environment
@@ -127,6 +129,8 @@ services:
       dockerfile: .docker/php.dockerfile
       args:
         CLI_IMAGE: *cli-image
+      additional_contexts:
+        cli: "service:cli"
     <<: [*default-volumes, *default-user]
     environment:
       <<: *default-environment
@@ -163,6 +167,8 @@ services:
       dockerfile: .docker/solr.dockerfile
       args:
         CLI_IMAGE: *cli-image
+      additional_contexts:
+        cli: "service:cli"
     environment:
       <<: *default-environment
     depends_on:
