@@ -143,7 +143,7 @@ ahoy drush config:import --source=../config/stage
 
 ```bash
 # Navigate to custom theme
-cd web/themes/custom/website_theme
+cd web/themes/custom/drevops
 
 # Install theme dependencies (if using npm/yarn)
 yarn install
@@ -164,6 +164,39 @@ yarn run watch
 - Use migration modules for structured content imports in production
 
 ## Services Integration
+
+### Solr Search
+
+```bash
+# Check Solr status
+ahoy drush search-api:status
+
+# Index content
+ahoy drush search-api:index
+
+# Clear Solr index
+ahoy drush search-api:clear
+```
+
+### Valkey (Redis-compatible caching)
+
+```bash
+# Check cache status
+ahoy drush cache:rebuild
+
+# Clear Redis/Valkey cache
+ahoy drush php-eval "\Drupal\redis\Client\ClientInterface::flushAll();"
+```
+
+### ClamAV Virus Scanning
+
+```bash
+# Test virus scanning functionality
+ahoy drush clamav:scan
+
+# Check ClamAV status
+ahoy drush clamav:status
+```
 
 ## Deployment
 
@@ -191,7 +224,7 @@ ahoy composer require --dev drupal/devel
 ### Add theme build tools
 
 ```bash
-cd web/themes/custom/website_theme && npm install [package]
+cd web/themes/custom/drevops && npm install [package]
 ```
 
 ### Dependency Management
