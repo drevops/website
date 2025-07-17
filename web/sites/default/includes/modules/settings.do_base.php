@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Settings for the DrevOps Website Core module.
+ * Settings for the DrevOps Website Base module.
  */
 
 declare(strict_types=1);

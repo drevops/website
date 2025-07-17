@@ -50,10 +50,10 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: drevops/ci-runner:25.5.0
+      image: drevops/ci-runner:25.7.0
 
       env:
-        TZ: Australia/Melbourne
+        TZ: ${{ vars.TZ || 'UTC' }}
         TERM: xterm-256color
         VORTEX_SSH_DISABLE_STRICT_HOST_KEY_CHECKING: "1"
         VORTEX_SSH_REMOVE_ALL_KEYS: "1"
@@ -112,11 +112,11 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: .data
-          key: v25.6.1-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v25.7.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-${{ hashFiles('db_cache_timestamp') }}
           # Fallback to caching by default branch name only. Allows to use
           # cache from the branch build on the previous day.
           restore-keys: |
-            v25.6.1-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-
+            v25.7.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-
 
       - name: Download DB
         run: |
@@ -143,7 +143,7 @@ jobs:
         if: env.db_hash != hashFiles('.data')
         with:
           path: .data
-          key: v25.6.1-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v25.7.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
 
   build:
     runs-on: ubuntu-latest
@@ -156,10 +156,10 @@ jobs:
       fail-fast: false
 
     container:
-      image: drevops/ci-runner:25.5.0
+      image: drevops/ci-runner:25.7.0
 
       env:
-        TZ: Australia/Melbourne
+        TZ: ${{ vars.TZ || 'UTC' }}
         TERM: xterm-256color
         # Disable strict host key checking for SSH connections.
         VORTEX_SSH_DISABLE_STRICT_HOST_KEY_CHECKING: "1"
@@ -197,7 +197,7 @@ jobs:
           date "${VORTEX_CI_DB_CACHE_TIMESTAMP}" | tee db_cache_timestamp
 
       - name: Show cache key for database caching
-        run: echo 'v25.6.1-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}'
+        run: echo 'v25.7.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}'
 
       # Restore DB cache based on the cache strategy set by the cache keys below.
       # Change 'v1' to 'v2', 'v3' etc., commit and push to force cache reset.
@@ -209,9 +209,9 @@ jobs:
           path: .data
           fail-on-cache-miss: true
           # Use cached database from previous builds of this branch.
-          key: v25.6.1-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v25.7.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
           restore-keys: |
-            v25.6.1-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-
+            v25.7.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-
 
       - name: Login to container registry
         run: ./scripts/vortex/login-container-registry.sh
@@ -238,8 +238,9 @@ jobs:
           docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c " \
             if [ -n \"${GITHUB_TOKEN:-}\" ]; then export COMPOSER_AUTH='{\"github-oauth\": {\"github.com\": \"${GITHUB_TOKEN-}\"}}'; fi && \
             COMPOSER_MEMORY_LIMIT=-1 composer --ansi install --prefer-dist"
+          docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c "yarn install --frozen-lockfile"
 
-      - name: Validate Composer configuration normalized
+      - name: Validate Composer configuration is normalized
         run: docker compose exec -T cli composer normalize --dry-run
         continue-on-error: ${{ vars.VORTEX_CI_COMPOSER_NORMALIZE_IGNORE_FAILURE == '1' }}
 
@@ -267,7 +268,11 @@ jobs:
         run: docker compose exec -T cli vendor/bin/gherkinlint lint tests/behat/features
         continue-on-error: ${{ vars.VORTEX_CI_GHERKIN_LINT_IGNORE_FAILURE == '1' }}
 
-      - name: Lint code with NodeJS linters
+      - name: Lint module code with NodeJS linters
+        run: docker compose exec -T cli bash -c "yarn run lint"
+        continue-on-error: ${{ vars.VORTEX_CI_NODEJS_LINT_IGNORE_FAILURE == '1' }}
+
+      - name: Lint theme code with NodeJS linters
         run: docker compose exec -T cli bash -c "yarn --cwd=\${WEBROOT}/themes/custom/\${DRUPAL_THEME} run lint"
         continue-on-error: ${{ vars.VORTEX_CI_NODEJS_LINT_IGNORE_FAILURE == '1' }}
 
@@ -346,9 +351,9 @@ jobs:
     if: ${{ github.event_name != 'schedule' && !startsWith(github.head_ref || github.ref_name, 'deps/') }}
 
     container:
-      image: drevops/ci-runner:25.5.0
+      image: drevops/ci-runner:25.7.0
       env:
-        TZ: Australia/Melbourne
+        TZ: ${{ vars.TZ || 'UTC' }}
         TERM: xterm-256color
         VORTEX_SSH_DISABLE_STRICT_HOST_KEY_CHECKING: "1"
         VORTEX_DEBUG: ${{ vars.VORTEX_DEBUG }}
