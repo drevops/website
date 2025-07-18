@@ -86,7 +86,7 @@ COPY ${WEBROOT}/themes/custom/${DRUPAL_THEME}/patches /app/${WEBROOT}/themes/cus
 # Install NodeJS dependencies.
 # Since Drupal does not use NodeJS in production, installing development
 # dependencies here is fine — they are not exposed in any way.
-RUN npm --prefix /app/${WEBROOT}/themes/custom/${DRUPAL_THEME} ci --no-audit --no-progress --unsafe-perm
+RUN yarn --cwd="/app/${WEBROOT}/themes/custom/${DRUPAL_THEME}" install --frozen-lockfile --no-progress && yarn cache clean
 
 # Copy all files into the application source directory. Existing files are
 # always overwritten.
@@ -99,6 +99,6 @@ RUN mkdir -p "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/${DRUPAL_
 # Compile front-end assets. This runs after copying all files, as source files
 # are needed for compilation.
 WORKDIR /app/${WEBROOT}/themes/custom/${DRUPAL_THEME}
-RUN npm run build
+RUN yarn run build
 
 WORKDIR /app
