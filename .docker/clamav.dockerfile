@@ -12,12 +12,15 @@
 
 FROM uselagoon/commons:25.6.0 AS commons
 
-FROM clamav/clamav:1.4.3
+FROM clamav/clamav-debian:1.0.9
 
 COPY --from=commons /lagoon /lagoon
 COPY --from=commons /bin/fix-permissions /bin/ep /bin/docker-sleep /bin/wait-for /bin/
 
-RUN apk add --no-cache tzdata
+# hadolint ignore=DL3008
+RUN apt-get update -qq && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY .docker/config/clamav/clamav.conf /tmp/clamav.conf
 
