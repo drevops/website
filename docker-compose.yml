@@ -83,12 +83,14 @@ services:
       dockerfile: .docker/cli.dockerfile
       args:
         WEBROOT: "${WEBROOT:-web}"
-        GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
+        PACKAGE_TOKEN: "${PACKAGE_TOKEN:-}"
         DRUPAL_PUBLIC_FILES: ${DRUPAL_PUBLIC_FILES:-sites/default/files}
         DRUPAL_PRIVATE_FILES: ${DRUPAL_PRIVATE_FILES:-sites/default/files/private}
         DRUPAL_TEMPORARY_FILES: ${DRUPAL_TEMPORARY_FILES:-/tmp}
         DRUPAL_THEME: ${DRUPAL_THEME:-}
         VORTEX_FRONTEND_BUILD_SKIP: ${VORTEX_FRONTEND_BUILD_SKIP:-}
+      secrets:
+        - package_token
     image: &cli-image ${COMPOSE_PROJECT_NAME:-example_site}
     user: root
     <<: *default-volumes
@@ -231,3 +233,7 @@ volumes:
   app: {}
   files: {}
   solr: {}
+
+secrets:
+  package_token:
+    environment: PACKAGE_TOKEN

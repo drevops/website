@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d0e426a17a2cacf8e87a1d5d102a0c3",
+    "content-hash": "46a06e2eff7c834c8485984f3f7e5d0d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1473,6 +1473,38 @@
                 }
             ],
             "time": "2024-11-01T21:49:07+00:00"
+        },
+        {
+            "name": "drevops/generic-private-package",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:drevops/generic-private-package.git",
+                "reference": "50b1b98a5b455fd52607c061c14ff3fa545ed9e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drevops/generic-private-package/zipball/50b1b98a5b455fd52607c061c14ff3fa545ed9e8",
+                "reference": "50b1b98a5b455fd52607c061c14ff3fa545ed9e8",
+                "shasum": ""
+            },
+            "type": "library",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Skrypnyk",
+                    "email": "alex@drevops.com"
+                }
+            ],
+            "description": "A generic private package used to test GitHub authentication via Composer.",
+            "homepage": "https://github.com/drevops/generic-private-package",
+            "support": {
+                "source": "https://github.com/drevops/generic-private-package/tree/1.0.0",
+                "issues": "https://github.com/drevops/generic-private-package/issues"
+            },
+            "time": "2025-07-23T01:47:05+00:00"
         },
         {
             "name": "drupal/admin_toolbar",
