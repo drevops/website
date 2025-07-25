@@ -12,9 +12,9 @@ use Drupal\civictheme\CivicthemeConstants;
 /**
  * Pre-process for Banner block.
  *
- * @SuppressWarnings(PHPMD.StaticAccess)
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings("PHPMD.StaticAccess")
+ * @SuppressWarnings("PHPMD.CyclomaticComplexity")
+ * @SuppressWarnings("PHPMD.NPathComplexity")
  *
  * @see _civictheme_preprocess_block__civictheme_banner()
  * @see https://www.drupal.org/project/civictheme/issues/3525185
