@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eff61557c08434c3c59230e4e52e68b6",
+    "content-hash": "be90228cc6547aa7297532b7f30a7558",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1473,6 +1473,34 @@
                 }
             ],
             "time": "2024-11-01T21:49:07+00:00"
+        },
+        {
+            "name": "drevops/test-private-package",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:drevops/test-private-package.git",
+                "reference": "96940dde055c2a1d336ff0757b09d9bbed812dbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drevops/test-private-package/zipball/96940dde055c2a1d336ff0757b09d9bbed812dbe",
+                "reference": "96940dde055c2a1d336ff0757b09d9bbed812dbe",
+                "shasum": ""
+            },
+            "type": "library",
+            "authors": [
+                {
+                    "name": "Alex Skrypnyk",
+                    "email": "alex@drevops.com"
+                }
+            ],
+            "description": "Private package used for testing",
+            "support": {
+                "source": "https://github.com/drevops/test-private-package/tree/1.0.0",
+                "issues": "https://github.com/drevops/test-private-package/issues"
+            },
+            "time": "2023-04-10T00:06:49+00:00"
         },
         {
             "name": "drupal/admin_toolbar",
