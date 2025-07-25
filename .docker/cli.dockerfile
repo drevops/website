@@ -7,7 +7,7 @@
 # @see https://hub.docker.com/r/uselagoon/php-8.3-cli-drupal/tags
 # @see https://github.com/uselagoon/lagoon-images/tree/main/images/php-cli-drupal
 
-FROM uselagoon/php-8.3-cli-drupal:25.6.0
+FROM uselagoon/php-8.3-cli-drupal:25.7.0
 
 # Add missing variables.
 # @todo Remove once https://github.com/uselagoon/lagoon/issues/3121 is resolved.
@@ -19,8 +19,7 @@ ENV LAGOON_PR_HEAD_SHA=${LAGOON_PR_HEAD_SHA}
 ARG WEBROOT=web
 ENV WEBROOT=${WEBROOT}
 
-ARG GITHUB_TOKEN=""
-ENV GITHUB_TOKEN=${GITHUB_TOKEN}
+ARG PACKAGE_TOKEN=""
 
 ARG DRUPAL_PUBLIC_FILES="sites/default/files"
 ENV DRUPAL_PUBLIC_FILES=${DRUPAL_PUBLIC_FILES}
@@ -34,7 +33,7 @@ ENV DRUPAL_TEMPORARY_FILES=${DRUPAL_TEMPORARY_FILES}
 ARG DRUPAL_THEME="drevops"
 ENV DRUPAL_THEME=${DRUPAL_THEME}
 
-ARG VORTEX_FRONTEND_BUILD_SKIP
+ARG VORTEX_FRONTEND_BUILD_SKIP="0"
 ENV VORTEX_FRONTEND_BUILD_SKIP=${VORTEX_FRONTEND_BUILD_SKIP}
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
@@ -69,10 +68,12 @@ COPY scripts /app/scripts
 # may be needed by Composer scripts to access additional variables.
 COPY composer.json composer.* .env* auth* /app/
 
-# Install PHP dependencies without development packages.
-# This is crucial to avoid exposing potential security vulnerabilities
-# in the production environment.
-RUN if [ -n "${GITHUB_TOKEN}" ]; then export COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"${GITHUB_TOKEN}\"}}"; fi && \
+# Install PHP dependencies without development packages to avoid exposing
+# potential security vulnerabilities in the production environment.
+# hadolint ignore=SC2155
+RUN --mount=type=secret,id=package_token \
+    token=$(if [ -s /run/secrets/package_token ]; then cat /run/secrets/package_token; else echo "${PACKAGE_TOKEN}"; fi) && \
+    if [ -n "${token}" ]; then export COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"${token}\"}}"; fi && \
     COMPOSER_MEMORY_LIMIT=-1 composer install -n --no-dev --ansi --prefer-dist --optimize-autoloader
 
 # Copy all files into the application source directory. Existing files are

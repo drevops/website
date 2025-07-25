@@ -13,8 +13,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Implements hook_form_system_theme_settings_alter().
  *
- * @SuppressWarnings(PHPMD.StaticAccess)
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings("PHPMD.StaticAccess")
+ * @SuppressWarnings("PHPMD.UnusedFormalParameter")
  */
 function drevops_form_system_theme_settings_alter(array &$form, FormStateInterface &$form_state): void {
   // @todo Move to CivicthemeSettingsFormSectionComponents::form.
