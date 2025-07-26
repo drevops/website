@@ -224,7 +224,7 @@ ahoy composer require --dev drupal/devel
 ### Add theme build tools
 
 ```bash
-cd web/themes/custom/drevops && yarn add [package]
+cd web/themes/custom/drevops && yarn install [package]
 ```
 
 ### Dependency Management
