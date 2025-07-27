@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Preprocess for system_main_block block.
  *
- * @SuppressWarnings(PHPMD.StaticAccess)
+ * @SuppressWarnings("PHPMD.StaticAccess")
  */
 function _drevops_preprocess_block__system_main_block(array &$variables): void {
   if (!isset($variables['elements']['#base_plugin_id']) || $variables['elements']['#base_plugin_id'] != 'system_main_block') {

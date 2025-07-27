@@ -145,7 +145,7 @@ ahoy drush config:import --source=../config/stage
 # Navigate to custom theme
 cd web/themes/custom/drevops
 
-# Install theme dependencies (if using npm/yarn)
+# Install theme dependencies
 yarn install
 
 # Build theme assets
@@ -224,7 +224,7 @@ ahoy composer require --dev drupal/devel
 ### Add theme build tools
 
 ```bash
-cd web/themes/custom/drevops && npm install [package]
+cd web/themes/custom/drevops && yarn install [package]
 ```
 
 ### Dependency Management

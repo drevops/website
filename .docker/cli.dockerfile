@@ -7,7 +7,7 @@
 # @see https://hub.docker.com/r/uselagoon/php-8.3-cli-drupal/tags
 # @see https://github.com/uselagoon/lagoon-images/tree/main/images/php-cli-drupal
 
-FROM uselagoon/php-8.3-cli-drupal:25.6.0
+FROM uselagoon/php-8.3-cli-drupal:25.7.0
 
 # Add missing variables.
 # @todo Remove once https://github.com/uselagoon/lagoon/issues/3121 is resolved.
@@ -19,8 +19,9 @@ ENV LAGOON_PR_HEAD_SHA=${LAGOON_PR_HEAD_SHA}
 ARG WEBROOT=web
 ENV WEBROOT=${WEBROOT}
 
-ARG GITHUB_TOKEN=""
-ENV GITHUB_TOKEN=${GITHUB_TOKEN}
+# Token is used to access private repositories. Not exposed as an environment
+# variable within an image to avoid baking it into the image.
+ARG PACKAGE_TOKEN=""
 
 ARG DRUPAL_PUBLIC_FILES="sites/default/files"
 ENV DRUPAL_PUBLIC_FILES=${DRUPAL_PUBLIC_FILES}
@@ -33,6 +34,9 @@ ENV DRUPAL_TEMPORARY_FILES=${DRUPAL_TEMPORARY_FILES}
 
 ARG DRUPAL_THEME="drevops"
 ENV DRUPAL_THEME=${DRUPAL_THEME}
+
+ARG VORTEX_FRONTEND_BUILD_SKIP="0"
+ENV VORTEX_FRONTEND_BUILD_SKIP=${VORTEX_FRONTEND_BUILD_SKIP}
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_CACHE_DIR=/tmp/.composer/cache \
@@ -47,11 +51,11 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 \
 # earlier in the build process (near the top of this file).
 
 # Add more tools.
-RUN apk add --no-cache ncurses pv tzdata autoconf g++ make \
-  && pecl install pcov \
-  && docker-php-ext-enable pcov \
-  && docker-php-ext-install pcntl \
-  && apk del g++ make autoconf
+RUN apk add --no-cache ncurses pv tzdata autoconf g++ make && \
+    pecl install pcov && \
+    docker-php-ext-enable pcov && \
+    docker-php-ext-install pcntl && \
+    apk del g++ make autoconf
 
 # Add patches and scripts.
 COPY patches /app/patches
@@ -66,27 +70,13 @@ COPY scripts /app/scripts
 # may be needed by Composer scripts to access additional variables.
 COPY composer.json composer.* .env* auth* /app/
 
-# Install PHP dependencies without development packages.
-# This is crucial to avoid exposing potential security vulnerabilities
-# in the production environment.
-RUN if [ -n "${GITHUB_TOKEN}" ]; then export COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"${GITHUB_TOKEN}\"}}"; fi && \
+# Install PHP dependencies without development packages to avoid exposing
+# potential security vulnerabilities in the production environment.
+# hadolint ignore=SC2155
+RUN --mount=type=secret,id=package_token \
+    token=$(if [ -s /run/secrets/package_token ]; then cat /run/secrets/package_token; else echo "${PACKAGE_TOKEN}"; fi) && \
+    if [ -n "${token}" ]; then export COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"${token}\"}}"; fi && \
     COMPOSER_MEMORY_LIMIT=-1 composer install -n --no-dev --ansi --prefer-dist --optimize-autoloader
-
-# Install NodeJS dependencies.
-# Install NodeJS dependencies.
-# Note that package-lock.json is not explicitly copied, allowing to run the
-# stack without existing lock file (this is not advisable, but allows to build
-# using latest versions of packages). package-lock.json should be comitted to
-# the repository.
-# File Gruntfile.js is copied into image as it is required to generate
-# front-end assets.
-COPY ${WEBROOT}/themes/custom/${DRUPAL_THEME}/package.json ${WEBROOT}/themes/custom/${DRUPAL_THEME}/package* /app/${WEBROOT}/themes/custom/${DRUPAL_THEME}/
-COPY ${WEBROOT}/themes/custom/${DRUPAL_THEME}/patches /app/${WEBROOT}/themes/custom/${DRUPAL_THEME}/patches
-
-# Install NodeJS dependencies.
-# Since Drupal does not use NodeJS in production, installing development
-# dependencies here is fine — they are not exposed in any way.
-RUN npm --prefix /app/${WEBROOT}/themes/custom/${DRUPAL_THEME} ci --no-audit --no-progress --unsafe-perm
 
 # Copy all files into the application source directory. Existing files are
 # always overwritten.
@@ -94,11 +84,13 @@ COPY . /app
 
 # Create file directories and set correct permissions.
 RUN mkdir -p "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/${DRUPAL_PRIVATE_FILES}" "${DRUPAL_TEMPORARY_FILES}" && \
- chmod 0770 "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/${DRUPAL_PRIVATE_FILES}" "${DRUPAL_TEMPORARY_FILES}"
+    chmod 0770 "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/${DRUPAL_PRIVATE_FILES}" "${DRUPAL_TEMPORARY_FILES}"
 
-# Compile front-end assets. This runs after copying all files, as source files
-# are needed for compilation.
-WORKDIR /app/${WEBROOT}/themes/custom/${DRUPAL_THEME}
-RUN npm run build
+RUN if [ "${VORTEX_FRONTEND_BUILD_SKIP}" != "1" ]; then \
+      theme_path="/app/${WEBROOT}/themes/custom/${DRUPAL_THEME}"; \
+      yarn --cwd="${theme_path}" install --frozen-lockfile --no-progress && \
+      yarn --cwd="${theme_path}" run build && \
+      yarn cache clean; \
+    fi
 
 WORKDIR /app

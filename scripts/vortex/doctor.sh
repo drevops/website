@@ -73,7 +73,7 @@ fail() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\03
 warn() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[33m[WARN] %s\033[0m\n" "${1}" || printf "[WARN] %s\n" "${1}"; }
 # @formatter:on
 
-for cmd in docker pygmy ahoy; do command -v ${cmd} >/dev/null || {
+for cmd in docker pygmy ahoy; do command -v "${cmd}" >/dev/null || {
   fail "Command ${cmd} is not available"
   exit 1
 }; done
@@ -203,7 +203,7 @@ main() {
 
       if [ "${VORTEX_DOCTOR_CHECK_BOOTSTRAP}" = "1" ]; then
         if ! curl -L -s -N "${local_dev_url}" | grep -q -i "charset="; then
-          fail "Website is running, but cannot be bootstrapped. Try pulling latest container images with 'ahoy pull'."
+          fail "Website is running, but cannot be bootstrapped. Check web-server configuration."
           exit 1
         fi
         pass "Bootstrapped website at http://${local_dev_url}."

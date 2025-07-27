@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * Class EnvironmentSettingsTest.
  *
@@ -12,20 +15,18 @@ namespace Drupal;
  * The main purpose of these tests is to ensure that the settings and configs
  * appear in every environment as expected.
  *
- * @group drupal_settings
- *
  * phpcs:disable Squiz.WhiteSpace.FunctionSpacing.Before
  * phpcs:disable Squiz.WhiteSpace.FunctionSpacing.After
  * phpcs:disable Squiz.WhiteSpace.FunctionSpacing.AfterLast
  * phpcs:disable Drupal.Classes.ClassDeclaration.CloseBraceAfterBody
  */
+#[Group('drupal_settings')]
 class EnvironmentSettingsTest extends SettingsTestCase {
 
   /**
    * Test the detection of the resulting environment type.
-   *
-   * @dataProvider dataProviderEnvironmentTypeDetection
    */
+  #[DataProvider('dataProviderEnvironmentTypeDetection')]
   public function testEnvironmentTypeDetection(array $vars, string $expected_env): void {
     $this->setEnvVars($vars);
 
@@ -376,6 +377,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['config_exclude_modules'] = ['devel'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
+    $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_LOCAL;
     $settings['file_public_path'] = 'sites/default/files';
@@ -391,7 +393,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'] = [
       '^localhost$',
     ];
-    $settings['disable_captcha'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -420,6 +421,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['config_exclude_modules'] = ['devel'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
+    $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_LOCAL;
     $settings['file_public_path'] = 'sites/default/files';
@@ -437,7 +439,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^example-site\.docker\.amazee\.io$',
       '^nginx$',
     ];
-    $settings['disable_captcha'] = TRUE;
     $this->assertSettings($settings);
   }
 
@@ -465,6 +466,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['config_exclude_modules'] = ['devel'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
+    $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_CI;
     $settings['file_public_path'] = 'sites/default/files';
@@ -481,7 +483,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'] = [
       '^localhost$',
     ];
-    $settings['disable_captcha'] = TRUE;
     $this->assertSettings($settings);
   }
 
