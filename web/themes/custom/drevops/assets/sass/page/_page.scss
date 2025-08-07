@@ -5,6 +5,13 @@
 html {
   // stylelint-disable property-no-vendor-prefix
   -webkit-text-size-adjust: 100%;
+
+  scroll-padding-top: ct-spacing(12);
+  scroll-behavior: smooth;
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
 }
 
 body {
