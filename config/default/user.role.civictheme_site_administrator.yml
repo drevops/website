@@ -24,13 +24,16 @@ dependencies:
   module:
     - block
     - block_content
+    - coffee
     - content_moderation
     - contextual
+    - environment_indicator
     - file
     - filter
     - linkit
     - media
     - node
+    - paragraphs_library
     - path
     - pathauto
     - redirect
@@ -49,8 +52,10 @@ permissions:
   - 'access administration pages'
   - 'access any webform configuration'
   - 'access block library'
+  - 'access coffee'
   - 'access content overview'
   - 'access contextual links'
+  - 'access environment indicator'
   - 'access files overview'
   - 'access media overview'
   - 'access own webform configuration'
@@ -65,11 +70,13 @@ permissions:
   - 'administer account settings'
   - 'administer block content'
   - 'administer blocks'
+  - 'administer environment indicator settings'
   - 'administer linkit profiles'
   - 'administer media'
   - 'administer media types'
   - 'administer menu'
   - 'administer nodes'
+  - 'administer paragraphs library'
   - 'administer redirects'
   - 'administer scheduled transitions'
   - 'administer taxonomy'
@@ -95,6 +102,7 @@ permissions:
   - 'create civictheme_social_links block content'
   - 'create civictheme_video media'
   - 'create media'
+  - 'create paragraph library item'
   - 'create terms in civictheme_media_tags'
   - 'create terms in civictheme_topics'
   - 'create url aliases'
@@ -166,6 +174,7 @@ permissions:
   - 'edit own civictheme_video media'
   - 'edit own webform'
   - 'edit own webform submission'
+  - 'edit paragraph library item'
   - 'edit terms in civictheme_media_tags'
   - 'edit terms in civictheme_topics'
   - 'edit webform assets'
