@@ -1,0 +1,16 @@
+diff --git a/config/drupal-phpunit-bootstrap-file.php b/config/drupal-phpunit-bootstrap-file.php
+index 3bb781d..5513fa3 100644
+--- a/config/drupal-phpunit-bootstrap-file.php
++++ b/config/drupal-phpunit-bootstrap-file.php
+@@ -46,6 +46,11 @@ function drupal_phpunit_find_extension_directories($scan_directory) {
+         ->getRealPath();
+     }
+   }
++
++  // @see https://www.drupal.org/project/rector/issues/3540378
++  // @see https://www.drupal.org/project/webform/issues/3441905
++  unset($extensions['webform_cards']);
++
+   return $extensions;
+ }
+ 
