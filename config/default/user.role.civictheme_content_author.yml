@@ -16,6 +16,7 @@ dependencies:
     - taxonomy.vocabulary.civictheme_media_tags
     - workflows.workflow.civictheme_editorial
   module:
+    - ai_image_alt_text
     - content_moderation
     - contextual
     - entity_clone
@@ -103,6 +104,7 @@ permissions:
   - 'edit own civictheme_remote_video media'
   - 'edit own civictheme_video media'
   - 'edit terms in civictheme_media_tags'
+  - 'generate ai alt tags'
   - 'revert all revisions'
   - 'revert civictheme_alert revisions'
   - 'revert civictheme_event revisions'

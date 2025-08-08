@@ -61,3 +61,5 @@ cloneable_entities:
   - entity_form_display
   - scheduled_transition
   - paragraphs_library_item
+  - key
+  - key_config_override
