@@ -42,7 +42,7 @@ components:
       path: ''
   navigation:
     primary_navigation:
-      dropdown: drawer
+      dropdown: dropdown
       dropdown_columns: '4'
       dropdown_columns_fill: 0
       is_animated: 1
