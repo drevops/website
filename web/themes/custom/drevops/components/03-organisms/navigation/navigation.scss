@@ -1,0 +1,9 @@
+//
+// Navigation component.
+//
+
+@import '../../../../../contrib/civictheme/components/03-organisms/navigation/navigation';
+
+.ct-navigation.ct-navigation--dropdown .ct-navigation__items .ct-navigation__menu .ct-menu__item .ct-link {
+  padding: 1em;
+}
