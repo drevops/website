@@ -114,7 +114,9 @@ commands:
   download-db:
     usage: Download database.
     aliases: ['fetch-db']
-    cmd: ./scripts/vortex/download-db.sh
+    cmd: |
+      [ "$1" = refresh ] && export VORTEX_DB_DOWNLOAD_REFRESH=1
+      ./scripts/vortex/download-db.sh
 
   reload-db:
     usage: Reload the database container using local database image.
