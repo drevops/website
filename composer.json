@@ -55,7 +55,7 @@
         "drupal/drupal-extension": "^5.1",
         "ergebnis/composer-normalize": "^2.47",
         "mglaman/phpstan-drupal": "^2.0",
-        "palantirnet/drupal-rector": "^0.21",
+        "palantirnet/drupal-rector": "^0.21.0",
         "phpcompatibility/php-compatibility": "^9.3.5",
         "phpmd/phpmd": "^2.15",
         "phpspec/prophecy-phpunit": "^2.3",
@@ -186,6 +186,9 @@
             },
             "drupal/seckit": {
                 "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252": "https://www.drupal.org/files/issues/2025-05-07/3219252-9.patch"
+            },
+            "palantirnet/drupal-rector": {
+                "Improve error handling for incorrect test namespaces - https://www.drupal.org/project/rector/issues/3540378": "patches/3540378-rector-skip-webform-cards-tests.patch"
             }
         }
     },
