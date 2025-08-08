@@ -6,7 +6,7 @@ Feature: Diff module for revision comparison
   So that I can track changes and understand what was modified
 
   Scenario: Content author can access and use revision comparison
-    Given I am logged in as a user with the "Administrator" role
+    Given I am logged in as a user with the "civictheme_site_administrator" role
     When I visit "node/add/civictheme_page"
     And I fill in "Title" with "[TEST] Page for Diff"
     And I fill in "Summary" with "Initial summary"

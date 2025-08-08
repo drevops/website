@@ -6,7 +6,6 @@ dependencies:
     - filter.format.webform_default
   module:
     - contact
-    - diff
     - file
     - filter
     - media
@@ -20,8 +19,6 @@ is_admin: false
 permissions:
   - 'access content'
   - 'access site-wide contact form'
-  - 'compare revisions'
   - 'delete own files'
   - 'use text format webform_default'
   - 'view media'
-  - 'view revisions'
