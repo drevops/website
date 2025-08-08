@@ -6,6 +6,7 @@ dependencies:
     - filter.format.civictheme_rich_text
     - workflows.workflow.civictheme_editorial
   module:
+    - ai_image_alt_text
     - content_moderation
     - contextual
     - file
@@ -30,6 +31,7 @@ permissions:
   - 'access toolbar'
   - 'administer linkit profiles'
   - 'administer scheduled transitions'
+  - 'generate ai alt tags'
   - 'use civictheme_editorial transition archive'
   - 'use civictheme_editorial transition create_new_draft'
   - 'use civictheme_editorial transition needs_review'

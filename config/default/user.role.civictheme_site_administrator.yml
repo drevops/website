@@ -22,6 +22,7 @@ dependencies:
     - taxonomy.vocabulary.civictheme_topics
     - workflows.workflow.civictheme_editorial
   module:
+    - ai_image_alt_text
     - block
     - block_content
     - coffee
@@ -181,6 +182,7 @@ permissions:
   - 'edit webform source'
   - 'edit webform twig'
   - 'edit webform variants'
+  - 'generate ai alt tags'
   - 'link to any page'
   - 'notify of path changes'
   - 'revert all revisions'
