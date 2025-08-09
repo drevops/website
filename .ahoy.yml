@@ -172,7 +172,7 @@ commands:
     usage: Watch front-end assets during development.
     cmd: |
       ahoy cli "pkill -9 -f grunt" || true
-      ahoy cli "cd ${WEBROOT}/themes/custom/${DRUPAL_THEME} && yarn run watch"
+      ahoy cli "cd ${WEBROOT}/themes/custom/${DRUPAL_THEME} && yarn run dist:watch drush cc css-js"
 
   lint:
     usage: Lint back-end and front-end code.
