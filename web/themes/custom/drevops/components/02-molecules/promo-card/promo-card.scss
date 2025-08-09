@@ -1,0 +1,35 @@
+//
+// Promo Card component.
+//
+
+@import '../../../../../contrib/civictheme/components/02-molecules/promo-card/promo-card';
+
+.ct-promo-card {
+  $root: &;
+
+  display: flex;
+  flex-direction: column;
+
+  #{$root}__content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  #{$root}__summary {
+    flex-grow: 1;
+  }
+
+  #{$root}__tags__link {
+    display: flex;
+    padding-right: 0;
+
+    @include ct-link-cover-parent();
+
+    .ct-link__icon {
+      @include ct-icon-size('large');
+
+      align-self: flex-end;
+    }
+  }
+}

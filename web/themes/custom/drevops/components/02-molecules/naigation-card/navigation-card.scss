@@ -1,0 +1,22 @@
+//
+// Navigation Card component.
+//
+
+@import '../../../../../contrib/civictheme/components/02-molecules/navigation-card/navigation-card';
+
+.ct-navigation-card {
+  $root: &;
+
+  #{$root}__title__link {
+    display: flex;
+    padding-right: 0;
+
+    @include ct-link-cover-parent();
+
+    .ct-link__icon {
+      @include ct-icon-size('large');
+
+      align-self: flex-start;
+    }
+  }
+}

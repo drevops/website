@@ -44,6 +44,15 @@ const config = {
 }
 
 const flags = process.argv.slice(2)
+let watchCustomCommand = null
+
+const watchIndex = flags.indexOf('watch')
+if (watchIndex >= 0 && flags.length > watchIndex + 1) {
+  config.watch = true
+  watchCustomCommand = flags.slice(watchIndex + 1).join(' ')
+  flags.splice(watchIndex + 1)
+}
+
 if (['cli', 'lintex'].indexOf(flags[0]) >= 0) {
   config[flags[0]] = true
 } else {
@@ -349,16 +358,38 @@ async function build() {
 }
 
 function watch() {
-  console.log(`Watching: ${path.relative(PATH, DIR_COMPONENTS_IN)}/`)
-  const supportedExtensions = ['scss', 'js', 'twig']
-  let timeout = null
-  const watcher = fs.watch(DIR_COMPONENTS_IN, { recursive: true }, (event, filename) => {
-    const ext = filename.split('.').pop()
-    if (supportedExtensions.indexOf(ext) >= 0) {
-      clearTimeout(timeout)
-      timeout = setTimeout(build, 300)
-    }
-  })
+  const dirsToWatch = [
+    DIR_COMPONENTS_IN,
+    DIR_ASSETS_IN,
+  ];
+  const supportedExtensions = ['scss', 'js', 'twig'];
+  let timeout = null;
+
+  dirsToWatch.forEach((dir) => {
+    console.log(`Watching: ${path.relative(PATH, dir)}/`);
+
+    fs.watch(dir, { recursive: true }, (event, filename) => {
+      if (!filename) return;
+
+      const ext = filename.split('.').pop();
+      if (supportedExtensions.includes(ext)) {
+        clearTimeout(timeout);
+        timeout = setTimeout(async () => {
+          await build();
+
+          if (watchCustomCommand) {
+            console.log(`Running custom command: ${watchCustomCommand}`);
+            try {
+              execSync(watchCustomCommand, { stdio: 'inherit' });
+              successReporter(`Custom command executed ${time()}`);
+            } catch (err) {
+              errorReporter(err);
+            }
+          }
+        }, 300);
+      }
+    });
+  });
 }
 
 function cli() {
