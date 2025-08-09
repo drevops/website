@@ -6,6 +6,13 @@
 //
 // stylelint-disable scss/dollar-variable-pattern
 
+$ct-icon-sizes: (
+  'large': (
+    'xxs': (ct-particle-px(3.5), ct-particle-px(3.5)),
+    'm': (ct-particle-px(3.5), ct-particle-px(3.5)),
+  ),
+);
+
 // Example to override component's variable - Back to Top should have a
 // 'custom1' colour background.
 $ct-back-to-top-light-background-color: ct-color-light('custom1');
