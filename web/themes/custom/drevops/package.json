@@ -25,7 +25,7 @@
     "dist:dev": "yarn run dist",
     "dist:watch": "node build.js build watch",
     "lint": "eslint --no-error-on-unmatched-pattern ./components ./.storybook && stylelint 'components/**/*.scss'",
-    "lint-fix": "eslint ./components ./.storybook --fix && stylelint 'components/**/*.scss' --fix",
+    "lint-fix": "eslint --no-error-on-unmatched-pattern ./components ./.storybook --fix && stylelint 'components/**/*.scss' --fix",
     "storybook": "yarn run dist && node build.js cli \"dist:watch\" \"storybook-dev\"",
     "storybook-dev": "storybook dev -p 6006"
   },
