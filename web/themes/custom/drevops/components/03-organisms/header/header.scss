@@ -192,6 +192,7 @@
 
       #{$root}__middle {
         background-color: color-mix(in srgb, ct-component-var($root, $theme, middle, background-color) 80%, transparent);
+        backdrop-filter: blur(0.5rem);
       }
     }
   }
