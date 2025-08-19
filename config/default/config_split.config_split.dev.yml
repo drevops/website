@@ -13,5 +13,4 @@ folder: ../config/dev
 module: {  }
 theme: {  }
 complete_list: {  }
-partial_list:
-  - robotstxt.settings
+partial_list: {  }
