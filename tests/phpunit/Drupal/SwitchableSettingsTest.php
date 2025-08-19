@@ -559,6 +559,51 @@ class SwitchableSettingsTest extends SettingsTestCase {
   }
 
   /**
+   * Test Cloudflare config.
+   */
+  #[DataProvider('dataProviderCloudflare')]
+  public function testCloudflare(array $vars, array $expected_present, array $expected_absent = []): void {
+    $this->setEnvVars($vars);
+
+    $this->requireSettingsFile();
+
+    $this->assertConfigContains($expected_present);
+    $this->assertConfigNotContains($expected_absent);
+  }
+
+  /**
+   * Data provider for testCloudflare().
+   */
+  public static function dataProviderCloudflare(): array {
+    return [
+      // Test with DRUPAL_CLOUDFLARE_API_TOKEN set in local environment.
+      [
+        [
+          'DRUPAL_CLOUDFLARE_API_TOKEN' => 'test-api-token-12345',
+          'DRUPAL_ENVIRONMENT' => static::ENVIRONMENT_LOCAL,
+        ],
+        [
+          'cloudflare.settings' => ['api_token' => 'test-api-token-12345', 'auth_using' => 'token'],
+          'purge_control.settings' => ['disable_purge' => TRUE, 'purge_auto_control' => FALSE],
+        ],
+        [],
+      ],
+      // Test without DRUPAL_CLOUDFLARE_API_TOKEN set in local environment.
+      [
+        [
+          'DRUPAL_ENVIRONMENT' => static::ENVIRONMENT_LOCAL,
+        ],
+        [
+          'purge_control.settings' => ['disable_purge' => TRUE, 'purge_auto_control' => FALSE],
+        ],
+        [
+          'cloudflare.settings' => ['api_token' => 'test-api-token-12345', 'auth_using' => 'token'],
+        ],
+      ],
+    ];
+  }
+
+  /**
    * Test Stage File Proxy config.
    */
   #[DataProvider('dataProviderStageFileProxy')]

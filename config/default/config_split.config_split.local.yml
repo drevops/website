@@ -1,0 +1,18 @@
+uuid: a1b2c3d4-5e6f-7890-abcd-123456789012
+langcode: en
+status: false
+dependencies: {  }
+id: local
+label: 'Local Environment'
+description: 'Configuration for local development environment'
+weight: 50
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/local
+module:
+  purge_control: 0
+theme: {  }
+complete_list:
+  - purge_control.settings
+partial_list: {  }

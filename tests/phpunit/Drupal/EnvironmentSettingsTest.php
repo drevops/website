@@ -261,7 +261,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_SUT;
@@ -331,7 +331,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     // Verify settings overrides.
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['config_sync_directory'] = 'custom_config';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -369,13 +369,15 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_LOCAL;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -413,13 +415,15 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_LOCAL;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -459,12 +463,14 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_CI;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -512,7 +518,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_test_branch';
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_DEV;
@@ -562,7 +568,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_develop';
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_DEV;
@@ -612,7 +618,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_master';
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_STAGE;
@@ -663,7 +669,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_production';
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_PROD;

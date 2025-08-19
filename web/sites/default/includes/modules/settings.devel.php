@@ -7,4 +7,4 @@
 
 declare(strict_types=1);
 
-$settings['config_exclude_modules'] = ['devel'];
+$settings['config_exclude_modules'][] = 'devel';
