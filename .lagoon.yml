@@ -107,18 +107,6 @@ environments:
         schedule: '*/15 * * * *'
         command: drush cron --root=/app
         service: cli
-    # Uncomment to enable installing a custom SSL certificate.
-    # By default, Lagoon installs Let's Encrypt certificates for all environments.
-    routes:
-      - nginx-php:
-          - drevops.com:
-              tls-acme: 'true'
-              insecure: Redirect
-          - www.drevops.com:
-              tls-acme: 'true'
-              insecure: Redirect
-    monitoring_urls:
-      - www.drevops.com
   # Branch name that represents development environment.
   develop:
     cronjobs:
@@ -126,15 +114,3 @@ environments:
         schedule: '*/15 * * * *'
         command: drush cron --root=/app
         service: cli
-    # Uncomment to enable installing a custom SSL certificate.
-    # By default, Lagoon installs Let's Encrypt certificates for all environments.
-    routes:
-      - nginx-php:
-         - dev.drevops.com:
-             tls-acme: 'true'
-             insecure: Redirect
-    monitoring_urls:
-      - dev.drevops.com
-
-routes:
-  insecure: Redirect
