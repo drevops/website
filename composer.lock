@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fca9607e3a26397a069e6d4fe6ea02ec",
+    "content-hash": "914ff86a3ba341d5caadb0d610aad89b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -183,6 +183,57 @@
                 "source": "https://github.com/Chi-teck/drupal-code-generator/tree/4.2.0"
             },
             "time": "2025-06-01T13:48:30+00:00"
+        },
+        {
+            "name": "cloudflare/sdk",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andresgmh/cloudflare-php.git",
+                "reference": "2cb793bc18cd530e9140af308b3627c814294a7d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andresgmh/cloudflare-php/zipball/2cb793bc18cd530e9140af308b3627c814294a7d",
+                "reference": "2cb793bc18cd530e9140af308b3627c814294a7d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.7.0",
+                "php": ">=7.2.5|^8.0",
+                "psr/http-message": "^2.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.6",
+                "phpmd/phpmd": "@stable",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cloudflare\\API\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "classmap": [
+                    "tests/"
+                ]
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Junade Ali",
+                    "email": "junade@cloudflare.com"
+                }
+            ],
+            "description": "PHP binding for v4 of the Cloudflare Client API.",
+            "support": {
+                "source": "https://github.com/andresgmh/cloudflare-php/tree/1.3.0"
+            },
+            "time": "2023-07-30T19:48:58+00:00"
         },
         {
             "name": "composer/installers",
@@ -2031,6 +2082,94 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/clamav",
                 "issues": "https://www.drupal.org/project/issues/clamav"
+            }
+        },
+        {
+            "name": "drupal/cloudflare",
+            "version": "2.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/cloudflare.git",
+                "reference": "2.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/cloudflare-2.0.0-beta1.zip",
+                "reference": "2.0.0-beta1",
+                "shasum": "01315dda78ac645d7d7e70b23cf6f0eef67e8bf9"
+            },
+            "require": {
+                "cloudflare/sdk": "^1",
+                "drupal/core": "^10 || ^11",
+                "drupal/ctools": "^3.0 || ^4.0",
+                "ext-json": "*"
+            },
+            "require-dev": {
+                "drupal/purge": "^3.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-beta1",
+                    "datestamp": "1713212694",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "adam.weingarten",
+                    "homepage": "https://www.drupal.org/user/2677413"
+                },
+                {
+                    "name": "Brian294",
+                    "homepage": "https://www.drupal.org/user/348040"
+                },
+                {
+                    "name": "Chris Charlton",
+                    "homepage": "https://www.drupal.org/user/17089"
+                },
+                {
+                    "name": "dietric@gmail.com",
+                    "homepage": "https://www.drupal.org/user/611306"
+                },
+                {
+                    "name": "it-cru",
+                    "homepage": "https://www.drupal.org/user/324945"
+                },
+                {
+                    "name": "mandclu",
+                    "homepage": "https://www.drupal.org/user/52136"
+                },
+                {
+                    "name": "phayes",
+                    "homepage": "https://www.drupal.org/user/47098"
+                },
+                {
+                    "name": "rosk0",
+                    "homepage": "https://www.drupal.org/user/325151"
+                },
+                {
+                    "name": "vijaycs85",
+                    "homepage": "https://www.drupal.org/user/93488"
+                }
+            ],
+            "description": "Drupal module for interacting with CloudFlare's SDK. CloudFlare is a copyright of CloudFlare, Inc.  The authors of this tool has no association with CloudFlare, Inc.",
+            "homepage": "https://www.drupal.org/project/cloudflare",
+            "keywords": [
+                "CDN",
+                "Cloud Flare",
+                "CloudFlare",
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/cloudflare"
             }
         },
         {
@@ -4156,6 +4295,123 @@
                 "source": "https://cgit.drupalcode.org/pathauto",
                 "issues": "https://www.drupal.org/project/issues/pathauto",
                 "documentation": "https://www.drupal.org/docs/8/modules/pathauto"
+            }
+        },
+        {
+            "name": "drupal/purge",
+            "version": "3.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/purge.git",
+                "reference": "8.x-3.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/purge-8.x-3.6.zip",
+                "reference": "8.x-3.6",
+                "shasum": "f01d53c5a1d34301e86371c70a1d237a517b2897"
+            },
+            "require": {
+                "drupal/core": "^9.5 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.6",
+                    "datestamp": "1719557519",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-3.x": "3.x-dev"
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": ">=10"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Niels van Mourik",
+                    "homepage": "http://www.nielsvm.org"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "nielsvm",
+                    "homepage": "https://www.drupal.org/user/163285"
+                }
+            ],
+            "description": "Provides a generic external cache invalidation API and queue service.",
+            "homepage": "https://www.drupal.org/project/purge",
+            "support": {
+                "source": "https://git.drupalcode.org/project/purge"
+            }
+        },
+        {
+            "name": "drupal/purge_control",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/purge_control.git",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/purge_control-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "a86e013411327d094c2ae5cd57b1f8f9dd327470"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11",
+                "drupal/purge": "^3.0.0",
+                "php": ">=8.1"
+            },
+            "conflict": {
+                "drush/drush": "<12.5.1"
+            },
+            "require-dev": {
+                "drupal/core-recommended": "^10 || ^11",
+                "drush/drush": "^12 || ^13"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.0",
+                    "datestamp": "1738838659",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "arrowsmith",
+                    "homepage": "https://www.drupal.org/user/2739247"
+                },
+                {
+                    "name": "guptahemant",
+                    "homepage": "https://www.drupal.org/user/3278073"
+                }
+            ],
+            "description": "Provides the mechanism to pause and restart purging.",
+            "homepage": "https://www.drupal.org/project/purge_control",
+            "support": {
+                "source": "https://git.drupalcode.org/project/purge_control"
             }
         },
         {
@@ -18721,6 +18977,7 @@
     "aliases": [],
     "minimum-stability": "beta",
     "stability-flags": {
+        "drupal/cloudflare": 10,
         "drupal/config_update": 15,
         "drupal/core-dev": 10,
         "drupal/entity_clone": 10,
