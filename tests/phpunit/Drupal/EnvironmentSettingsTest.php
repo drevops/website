@@ -252,6 +252,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_SUT;
@@ -321,6 +322,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertEquals($databases, $this->databases);
 
     // Verify key config overrides.
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_SUT;
@@ -363,6 +365,8 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->requireSettingsFile();
 
     $config['automated_cron.settings']['interval'] = 0;
+    $config['cloudflare.settings']['bypass_host'] = 'localhost';
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.local']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
@@ -409,6 +413,8 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->requireSettingsFile();
 
     $config['automated_cron.settings']['interval'] = 0;
+    $config['cloudflare.settings']['bypass_host'] = 'https://example-site.docker.amazee.io';
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.local']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
@@ -457,6 +463,8 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->requireSettingsFile();
 
     $config['automated_cron.settings']['interval'] = 0;
+    $config['cloudflare.settings']['bypass_host'] = 'localhost';
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.ci']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
@@ -507,6 +515,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.dev']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#4caf50';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
@@ -557,6 +566,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.dev']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#4caf50';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
@@ -607,6 +617,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.stage']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#fff176';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
@@ -658,6 +669,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['environment_indicator.indicator']['bg_color'] = '#ef5350';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_PROD;
