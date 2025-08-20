@@ -41,6 +41,10 @@ if (getenv('DRUPAL_SHIELD_PRINT')) {
   $config['shield.settings']['print'] = getenv('DRUPAL_SHIELD_PRINT');
 }
 
+// Allow ACME challenge path for Let's Encrypt certificate generation.
+$config['shield.settings']['method'] = 0;
+$config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
+
 // Allow to disable Shield completely in the environment.
 if (!empty(getenv('DRUPAL_SHIELD_DISABLED'))) {
   $config['shield.settings']['shield_enable'] = FALSE;

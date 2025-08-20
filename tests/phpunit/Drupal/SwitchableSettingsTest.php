@@ -348,7 +348,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
         static::ENVIRONMENT_LOCAL,
         [],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
         [
           'shield.settings' => ['credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
@@ -360,7 +360,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_USER' => 'drupal_shield_user',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
         [
           'shield.settings' => ['credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
@@ -374,7 +374,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -386,7 +386,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -398,7 +398,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -410,7 +410,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -422,7 +422,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
         [
           'shield.settings' => ['shield_enable' => FALSE],
@@ -437,7 +437,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -450,7 +450,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => '',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -463,7 +463,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => 0,
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
       [
@@ -475,7 +475,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => 1,
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -488,7 +488,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => '0',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
       [
@@ -500,7 +500,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => '1',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
       [
@@ -512,7 +512,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => 'false',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
       [
@@ -524,7 +524,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => 'true',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -534,7 +534,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => TRUE,
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
       ],
       [
@@ -543,7 +543,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => TRUE,
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
       ],
       [
@@ -552,7 +552,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => TRUE,
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
       ],
     ];
