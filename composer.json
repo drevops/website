@@ -13,6 +13,7 @@
         "drupal/ai_provider_openai": "^1.1",
         "drupal/civictheme": "~1.10.0",
         "drupal/clamav": "^2.1",
+        "drupal/cloudflare": "^2@beta",
         "drupal/coffee": "^2.0.1",
         "drupal/config_split": "^2.0.2",
         "drupal/config_update": "^2@alpha",
@@ -30,6 +31,8 @@
         "drupal/lagoon_logs": "^3.0",
         "drupal/metatag": "^2.1",
         "drupal/pathauto": "^1.13",
+        "drupal/purge": "^3.6",
+        "drupal/purge_control": "^2.1",
         "drupal/recaptcha_v3": "^2.0",
         "drupal/redirect": "^1.11",
         "drupal/redis": "^1.9",
@@ -77,6 +80,13 @@
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/andresgmh/cloudflare-php.git",
+            "options": {
+                "reference": "2cb793bc18cd530e9140af308b3627c814294a7d"
+            }
         },
         {
             "type": "vcs",

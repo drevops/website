@@ -252,16 +252,20 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_SUT;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['robots_txt.settings']['content'] = "User-agent: *\r\nDisallow:";
     $config['shield.settings']['shield_enable'] = TRUE;
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_SUT;
@@ -321,17 +325,21 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertEquals($databases, $this->databases);
 
     // Verify key config overrides.
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_SUT;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['robots_txt.settings']['content'] = "User-agent: *\r\nDisallow:";
     $config['shield.settings']['shield_enable'] = TRUE;
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.performance']['cache']['page']['max_age'] = 1800;
     $this->assertConfig($config);
 
     // Verify settings overrides.
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['config_sync_directory'] = 'custom_config';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -363,19 +371,26 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->requireSettingsFile();
 
     $config['automated_cron.settings']['interval'] = 0;
+    $config['cloudflare.settings']['bypass_host'] = 'localhost';
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.local']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_LOCAL;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
+    $config['robots_txt.settings']['content'] = "User-agent: *\r\nDisallow:";
     $config['shield.settings']['shield_enable'] = FALSE;
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -407,19 +422,26 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->requireSettingsFile();
 
     $config['automated_cron.settings']['interval'] = 0;
+    $config['cloudflare.settings']['bypass_host'] = 'https://example-site.docker.amazee.io';
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.local']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_LOCAL;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
+    $config['robots_txt.settings']['content'] = "User-agent: *\r\nDisallow:";
     $config['shield.settings']['shield_enable'] = FALSE;
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -453,18 +475,25 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->requireSettingsFile();
 
     $config['automated_cron.settings']['interval'] = 0;
+    $config['cloudflare.settings']['bypass_host'] = 'localhost';
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.ci']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#006600';
     $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_CI;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
+    $config['robots_txt.settings']['content'] = "User-agent: *\r\nDisallow:";
     $config['shield.settings']['shield_enable'] = FALSE;
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -501,18 +530,22 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.dev']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#4caf50';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_DEV;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['robots_txt.settings']['content'] = "User-agent: *\r\nDisallow:";
     $config['shield.settings']['shield_enable'] = TRUE;
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_test_branch';
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_DEV;
@@ -551,18 +584,22 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.dev']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#4caf50';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_DEV;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['robots_txt.settings']['content'] = "User-agent: *\r\nDisallow:";
     $config['shield.settings']['shield_enable'] = TRUE;
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_develop';
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_DEV;
@@ -601,18 +638,22 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['config_split.config_split.stage']['status'] = TRUE;
     $config['environment_indicator.indicator']['bg_color'] = '#fff176';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_STAGE;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['robots_txt.settings']['content'] = "User-agent: *\r\nDisallow:";
     $config['shield.settings']['shield_enable'] = TRUE;
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_master';
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_STAGE;
@@ -652,18 +693,21 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $this->requireSettingsFile();
 
+    $config['cloudflare.settings']['valid_credentials'] = FALSE;
     $config['environment_indicator.indicator']['bg_color'] = '#ef5350';
     $config['environment_indicator.indicator']['fg_color'] = '#000000';
     $config['environment_indicator.indicator']['name'] = static::ENVIRONMENT_PROD;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
+    $config['shield.settings']['method'] = 0;
+    $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = TRUE;
     $config['system.performance']['js']['preprocess'] = TRUE;
     $this->assertConfig($config);
 
     $settings['cache_prefix']['default'] = 'test_project_production';
-    $settings['config_exclude_modules'] = ['devel'];
+    $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_PROD;

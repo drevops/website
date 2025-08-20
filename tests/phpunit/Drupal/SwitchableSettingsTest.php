@@ -348,7 +348,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
         static::ENVIRONMENT_LOCAL,
         [],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
         [
           'shield.settings' => ['credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
@@ -360,7 +360,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_USER' => 'drupal_shield_user',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
         [
           'shield.settings' => ['credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
@@ -374,7 +374,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -386,7 +386,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -398,7 +398,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -410,7 +410,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -422,7 +422,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
         [
           'shield.settings' => ['shield_enable' => FALSE],
@@ -437,7 +437,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_PRINT' => 'drupal_shield_print',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -450,7 +450,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => '',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -463,7 +463,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => 0,
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
       [
@@ -475,7 +475,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => 1,
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -488,7 +488,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => '0',
         ],
         [
-          'shield.settings' => ['shield_enable' => TRUE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => TRUE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
       [
@@ -500,7 +500,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => '1',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
       [
@@ -512,7 +512,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => 'false',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
       [
@@ -524,7 +524,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => 'true',
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE, 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*', 'credentials' => ['shield' => ['user' => 'drupal_shield_user', 'pass' => 'drupal_shield_pass']], 'print' => 'drupal_shield_print'],
         ],
       ],
 
@@ -534,7 +534,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => TRUE,
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
       ],
       [
@@ -543,7 +543,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => TRUE,
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
         ],
       ],
       [
@@ -552,7 +552,52 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'DRUPAL_SHIELD_DISABLED' => TRUE,
         ],
         [
-          'shield.settings' => ['shield_enable' => FALSE],
+          'shield.settings' => ['shield_enable' => FALSE, 'method' => 0, 'paths' => '/.well-known/acme-challenge/*'],
+        ],
+      ],
+    ];
+  }
+
+  /**
+   * Test Cloudflare config.
+   */
+  #[DataProvider('dataProviderCloudflare')]
+  public function testCloudflare(array $vars, array $expected_present, array $expected_absent = []): void {
+    $this->setEnvVars($vars);
+
+    $this->requireSettingsFile();
+
+    $this->assertConfigContains($expected_present);
+    $this->assertConfigNotContains($expected_absent);
+  }
+
+  /**
+   * Data provider for testCloudflare().
+   */
+  public static function dataProviderCloudflare(): array {
+    return [
+      // Test with DRUPAL_CLOUDFLARE_API_TOKEN set in local environment.
+      [
+        [
+          'DRUPAL_CLOUDFLARE_API_TOKEN' => 'test-api-token-12345',
+          'DRUPAL_ENVIRONMENT' => static::ENVIRONMENT_LOCAL,
+        ],
+        [
+          'cloudflare.settings' => ['api_token' => 'test-api-token-12345', 'auth_using' => 'token'],
+          'purge_control.settings' => ['disable_purge' => TRUE, 'purge_auto_control' => FALSE],
+        ],
+        [],
+      ],
+      // Test without DRUPAL_CLOUDFLARE_API_TOKEN set in local environment.
+      [
+        [
+          'DRUPAL_ENVIRONMENT' => static::ENVIRONMENT_LOCAL,
+        ],
+        [
+          'purge_control.settings' => ['disable_purge' => TRUE, 'purge_auto_control' => FALSE],
+        ],
+        [
+          'cloudflare.settings' => ['api_token' => 'test-api-token-12345', 'auth_using' => 'token'],
         ],
       ],
     ];
@@ -681,6 +726,102 @@ class SwitchableSettingsTest extends SettingsTestCase {
           'stage_file_proxy.settings' => ['hotlink' => FALSE, 'origin' => 'https://drupal_shield_user:drupal_shield_pass@example.com/'],
         ],
         [],
+      ],
+    ];
+  }
+
+  /**
+   * Test trusted host patterns settings.
+   */
+  #[DataProvider('dataProviderTrustedHostPatterns')]
+  public function testTrustedHostPatterns(array $vars, array $expected_patterns): void {
+    $this->setEnvVars($vars);
+
+    $this->requireSettingsFile();
+
+    $this->assertSame($expected_patterns, $this->settings['trusted_host_patterns']);
+  }
+
+  /**
+   * Data provider for testTrustedHostPatterns().
+   */
+  public static function dataProviderTrustedHostPatterns(): array {
+    return [
+      'empty environment variable' => [
+        [],
+        [
+          '^localhost$',
+        ],
+      ],
+      'single domain' => [
+        ['DRUPAL_TRUSTED_HOSTS' => 'example.com'],
+        [
+          '^localhost$',
+          '^example\.com$',
+        ],
+      ],
+      'multiple domains' => [
+        ['DRUPAL_TRUSTED_HOSTS' => 'example.com,www.example.com,cdn.example.org'],
+        [
+          '^localhost$',
+          '^example\.com$',
+          '^www\.example\.com$',
+          '^cdn\.example\.org$',
+        ],
+      ],
+      'whitespace and empty values' => [
+        ['DRUPAL_TRUSTED_HOSTS' => ' example.com , , www.example.com '],
+        [
+          '^localhost$',
+          '^example\.com$',
+          '^www\.example\.com$',
+        ],
+      ],
+      'special regex characters' => [
+        ['DRUPAL_TRUSTED_HOSTS' => 'sub-domain.example.com,test.example-site.org'],
+        [
+          '^localhost$',
+          '^sub\-domain\.example\.com$',
+          '^test\.example\-site\.org$',
+        ],
+      ],
+      'complex domains' => [
+        ['DRUPAL_TRUSTED_HOSTS' => 'api.v2.example.com,cdn-assets.example-site.co.uk'],
+        [
+          '^localhost$',
+          '^api\.v2\.example\.com$',
+          '^cdn\-assets\.example\-site\.co\.uk$',
+        ],
+      ],
+      'duplicates' => [
+        ['DRUPAL_TRUSTED_HOSTS' => 'example.com,test.org,example.com,another.com,test.org'],
+        [
+          '^localhost$',
+          '^example\.com$',
+          '^test\.org$',
+          '^example\.com$',
+          '^another\.com$',
+          '^test\.org$',
+        ],
+      ],
+      'uppercase hosts' => [
+        ['DRUPAL_TRUSTED_HOSTS' => 'EXAMPLE.COM,Test.ORG,www.EXAMPLE-SITE.CO.UK'],
+        [
+          '^localhost$',
+          '^example\.com$',
+          '^test\.org$',
+          '^www\.example\-site\.co\.uk$',
+        ],
+      ],
+      'explicit localhost' => [
+        ['DRUPAL_TRUSTED_HOSTS' => 'localhost,example.com,localhost,test.org'],
+        [
+          '^localhost$',
+          '^localhost$',
+          '^example\.com$',
+          '^localhost$',
+          '^test\.org$',
+        ],
       ],
     ];
   }
