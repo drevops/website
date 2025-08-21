@@ -1,0 +1,97 @@
+//
+// Spacing component stories.
+//
+
+@use 'sass:map';
+@use 'sass:string';
+@use 'sass:list';
+@import '../../../../../contrib/civictheme/components/00-base/spacing/spacing';
+
+$_all-sizes: map.merge($ct-spacing-sizes-default, $ct-spacing-sizes);
+
+// Spacing utility class generator.
+// Generates classes for padding and margin with responsive breakpoint support.
+//
+// Class naming convention:
+// [property][direction]-[breakpoint]-[size]
+//
+// Examples:
+// ct-p-0 - padding 0
+// ct-m-1 - margin 1
+// ct-p-xs-2 - padding 2 on extra small screens and up
+// ct-mx-xl-2 - margin x-axis (left/right) 2 on extra large screens and up
+// ct-mb-m-1 - margin-bottom 1 on medium screens and up
+// ct-mt-m-1 - margin-top 1 on medium screens and up
+
+// Define spacing properties and their CSS counterparts
+$_spacing-properties: (
+  'm': 'margin',
+  'p': 'padding'
+);
+
+// Define directional modifiers
+$_spacing-directions: (
+  '': '',
+  't': '-top',
+  'r': '-right',
+  'b': '-bottom',
+  'l': '-left',
+  'x': ('x', '-left', '-right'),
+  'y': ('y', '-top', '-bottom')
+);
+
+// Generate spacing utilities - single loop for both base and responsive classes
+@each $breakpoint-name, $breakpoint-sizes in $_all-sizes {
+  @if $breakpoint-name == 'xxs' {
+    // Generate base classes (no breakpoint prefix) from xxs only
+    @each $size-name, $size-value in $breakpoint-sizes {
+      @each $prop-key, $prop-name in $_spacing-properties {
+        @each $dir-key, $dir-value in $_spacing-directions {
+          @if $dir-key == 'x' or $dir-key == 'y' {
+            // Handle x and y axis spacing
+            $axis: list.nth($dir-value, 1);
+            $dir1: list.nth($dir-value, 2);
+            $dir2: list.nth($dir-value, 3);
+
+            .ct-#{$prop-key}#{$dir-key}-#{$size-name} {
+              #{$prop-name}#{$dir1}: $size-value#{if($ct-spacing-use-important, ' !important', '')};
+              #{$prop-name}#{$dir2}: $size-value#{if($ct-spacing-use-important, ' !important', '')};
+            }
+          }
+          @else {
+            .ct-#{$prop-key}#{$dir-key}-#{$size-name} {
+              #{$prop-name}#{$dir-value}: $size-value#{if($ct-spacing-use-important, ' !important', '')};
+            }
+          }
+        }
+      }
+    }
+  }
+  @else {
+    // Generate responsive classes
+    @include ct-breakpoint($breakpoint-name) {
+      @each $size-name, $size-value in $breakpoint-sizes {
+        @each $prop-key, $prop-name in $_spacing-properties {
+          @each $dir-key, $dir-value in $_spacing-directions {
+            @if $dir-key == 'x' or $dir-key == 'y' {
+              // Handle x and y axis spacing
+              $axis: list.nth($dir-value, 1);
+              $dir1: list.nth($dir-value, 2);
+              $dir2: list.nth($dir-value, 3);
+
+              .ct-#{$prop-key}#{$dir-key}-#{$breakpoint-name}-#{$size-name} {
+                #{$prop-name}#{$dir1}: $size-value#{if($ct-spacing-use-important, ' !important', '')};
+                #{$prop-name}#{$dir2}: $size-value#{if($ct-spacing-use-important, ' !important', '')};
+              }
+            }
+            @else {
+              .ct-#{$prop-key}#{$dir-key}-#{$breakpoint-name}-#{$size-name} {
+                #{$prop-name}#{$dir-value}: $size-value#{if($ct-spacing-use-important, ' !important', '')};
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

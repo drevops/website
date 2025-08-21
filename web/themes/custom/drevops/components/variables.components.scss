@@ -6,6 +6,59 @@
 //
 // stylelint-disable scss/dollar-variable-pattern
 
+$ct-spacing-sizes: () !default;
+$ct-spacing-sizes-default: (
+  'xxs': (
+    0: 0,
+    1: ct-particle(1),
+    2: ct-particle(2),
+    3: ct-particle(3),
+    4: ct-particle(4),
+    5: ct-particle(5),
+    'auto': unset,
+  ),
+  's': (
+    0: 0,
+    1: ct-particle(2),
+    2: ct-particle(4),
+    3: ct-particle(6),
+    4: ct-particle(8),
+    5: ct-particle(10),
+    'auto': unset,
+  ),
+  'm': (
+    0: 0,
+    1: ct-particle(3),
+    2: ct-particle(6),
+    3: ct-particle(9),
+    4: ct-particle(12),
+    5: ct-particle(15),
+    'auto': unset,
+  ),
+  'l': (
+    0: 0,
+    1: ct-particle(4),
+    2: ct-particle(8),
+    3: ct-particle(12),
+    4: ct-particle(16),
+    5: ct-particle(20),
+    'auto': unset,
+  ),
+  'xl': (
+    0: 0,
+    1: ct-particle(5),
+    2: ct-particle(10),
+    3: ct-particle(15),
+    4: ct-particle(20),
+    5: ct-particle(25),
+    'auto': unset,
+  ),
+) !default;
+
+// Configuration flag to control if !important will be used with spacing utilities.
+$ct-spacing-use-important: true !default;
+
+// Additional spacing sizes.
 $ct-icon-sizes: (
   'large': (
     'xxs': (ct-particle-px(3.5), ct-particle-px(3.5)),
