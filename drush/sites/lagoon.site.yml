@@ -1,9 +1,27 @@
+# Drush alias file for Lagoon-hosted environments.
+#
+# This can run on host or from within a container.
+#
+# Your SHH key must be loaded in your ssh-agent for SSH client to work:
+# - on host: ssh-add ~/.ssh/path/to/key
+# - in container: pygmy addkey --key ~/.ssh/path/to/key
+#
+# @usage:
+#   drush @lagoon.<branch-or-pr> status      # From host
+#   ahoy drush @lagoon.<branch-or-pr> status # From within a container using Ahoy
+#
+# @example:
+#   drush @lagoon.develop status  # Show status of the develop environment
+#   drush @lagoon.pr-123 ssh      # SSH into the web container of the PR-123 environment
+#
+# Note: Drush does not support loading variable from .env files, so in order to
+# make this configuration work in the identical way on host and in container,
+# we hardcoded the project name here.
+#
 '*':
   host: ssh.lagoon.amazeeio.cloud
-  paths:
-    files: /app/web/sites/default/files
-    drush-script: /app/vendor/bin/drush
-  user: ${env-name}
+  user: drevops-website-${env-name}
+  uri: https://nginx-php.${env-name}.drevops-website.au2.amazee.io
   ssh:
     options: '-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=FATAL -p 32222'
     tty: false
