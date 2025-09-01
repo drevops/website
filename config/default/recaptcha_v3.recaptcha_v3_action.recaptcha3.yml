@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: recaptcha3
 label: reCaptcha3
-threshold: 0.5
-challenge: default
+threshold: 0.7
+challenge: image_captcha/Image
