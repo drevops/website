@@ -6,9 +6,9 @@ seckit_xss:
       webkit: true
     report-only: false
     default-src: "'self'"
-    script-src: "'self' https://www.googletagmanager.com https://www.gstatic.com https://www.recaptcha.net https://www.google.com https://cdnjs.cloudflare.com"
+    script-src: "'self' https://www.googletagmanager.com https://www.gstatic.com https://www.recaptcha.net https://www.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net/gh/cferdinandi/tabby@12.0.3/dist/js/tabby.min.js https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.js https://unpkg.com/tippy.js@6.3.7/dist/tippy.umd.js"
     object-src: "'none'"
-    style-src: "'self' 'unsafe-inline' https://fonts.googleapis.com/"
+    style-src: "'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/gh/cferdinandi/tabby@12.0.3/dist/css/tabby-ui.min.css https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.css https://unpkg.com/tippy.js@6.3.7/dist/tippy.css https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
     img-src: "'self' data:"
     media-src: "'self'"
     frame-src: "'self' https://www.youtube.com https://www.recaptcha.net https://www.google.com"
