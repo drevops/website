@@ -120,7 +120,7 @@
         },
         "discard-changes": true,
         "platform": {
-            "php": "8.3.12"
+            "php": "8.3.24"
         },
         "sort-packages": true
     },
@@ -144,6 +144,7 @@
                 "[web-root]/robots.txt": false,
                 "[web-root]/sites/example.settings.local.php": false,
                 "[web-root]/sites/example.sites.php": false,
+                "[web-root]/update.php": false,
                 "[web-root]/web.config": false
             },
             "locations": {
@@ -164,6 +165,9 @@
             ],
             "web/profiles/contrib/{$name}": [
                 "type:drupal-profile"
+            ],
+            "recipes/{$name}": [
+                "type:drupal-recipe"
             ],
             "web/themes/contrib/{$name}": [
                 "type:drupal-theme"

@@ -276,6 +276,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'node_modules',
       'bower_components',
     ];
+    $settings['config_sync_directory'] = '../config/default';
     $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['maintenance_theme'] = 'claro';
     $settings['trusted_host_patterns'] = [
@@ -402,6 +403,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'node_modules',
       'bower_components',
     ];
+    $settings['config_sync_directory'] = '../config/default';
     $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['maintenance_theme'] = 'claro';
     $settings['skip_permissions_hardening'] = TRUE;
@@ -453,6 +455,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       'node_modules',
       'bower_components',
     ];
+    $settings['config_sync_directory'] = '../config/default';
     $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['maintenance_theme'] = 'claro';
     $settings['skip_permissions_hardening'] = TRUE;
@@ -508,6 +511,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['hash_salt'] = hash('sha256', getenv('DATABASE_HOST') ?: 'localhost');
     $settings['maintenance_theme'] = 'claro';
     $settings['skip_permissions_hardening'] = TRUE;
+    $settings['config_sync_directory'] = '../config/default';
     $settings['suspend_mail_send'] = TRUE;
     $settings['trusted_host_patterns'] = [
       '^localhost$',
@@ -546,6 +550,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['cache_prefix']['default'] = 'test_project_test_branch';
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
+    $settings['config_sync_directory'] = '../config/default';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_DEV;
@@ -600,6 +605,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['cache_prefix']['default'] = 'test_project_develop';
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
+    $settings['config_sync_directory'] = '../config/default';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_DEV;
@@ -654,6 +660,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['cache_prefix']['default'] = 'test_project_master';
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
+    $settings['config_sync_directory'] = '../config/default';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_STAGE;
@@ -708,6 +715,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['cache_prefix']['default'] = 'test_project_production';
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
+    $settings['config_sync_directory'] = '../config/default';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = static::ENVIRONMENT_PROD;

@@ -11,7 +11,7 @@ parameters:
 
   level: 7
 
-  phpVersion: 80323
+  phpVersion: 80324
 
   paths:
     - web/modules/custom
@@ -25,6 +25,9 @@ parameters:
     - node_modules/*
     - ../*/vendor/*
     - ../*/node_modules/*
+
+  # Prefer type checking over docblocks, which can easily become outdated.
+  treatPhpDocTypesAsCertain: false
 
   ignoreErrors:
     -

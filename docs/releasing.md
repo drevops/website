@@ -27,11 +27,11 @@ Release versions are numbered according to [CalVer Versioning](https://calver.or
 
 Given a version number `YY.M.Z`:
 
-* `YY` = Short year. No leading zeroes.
-* `M` = Short month. No leading zeroes.
-* `Z` = Hotfix/patch version. No leading zeroes.
+- `YY` = Short year. No leading zeroes.
+- `M` = Short month. No leading zeroes.
+- `Z` = Hotfix/patch version. No leading zeroes.
 
 Examples:
 
-* Correct: `24.1.0`, `24.11.1` , `24.1.10`, `24.0.1`, `9.12.0`
-* Incorrect: `24.0.0`, `2024.1.1` , `24` , `24.1.00` , `24.01.0` , `01.1.0`
+- Correct: `24.1.0`, `24.11.1` , `24.1.10`, `24.0.1`, `9.12.0`
+- Incorrect: `24.0.0`, `2024.1.1` , `24` , `24.1.00` , `24.01.0` , `01.1.0`

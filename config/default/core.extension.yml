@@ -49,6 +49,7 @@ module:
   help: 0
   history: 0
   image: 0
+  image_captcha: 0
   inline_form_errors: 0
   key: 0
   lagoon_logs: 0
