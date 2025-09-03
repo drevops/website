@@ -492,6 +492,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['shield.settings']['method'] = 0;
     $config['shield.settings']['paths'] = '/.well-known/acme-challenge/*';
+    $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
