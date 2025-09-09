@@ -49,7 +49,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_c_p_vertical_spacing:
-    type: options_select
+    type: options_buttons
     weight: 4
     region: content
     settings: {  }
