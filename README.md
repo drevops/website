@@ -1,6 +1,10 @@
 <div align="center">
 
-# DrevOps Website
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="web/themes/custom/drevops/assets/logos/logo_primary_dark_desktop.svg" />
+  <img width="300" src="web/themes/custom/drevops/assets/logos/logo_primary_light_desktop.svg" alt="Vortex Logo" />
+</picture>
+
 Drupal 11 implementation of DrevOps Website for DrevOps
 
 [![Database, Build, Test and Deploy](https://github.com/drevops/website/actions/workflows/build-test-deploy.yml/badge.svg)](https://github.com/drevops/website/actions/workflows/build-test-deploy.yml)
