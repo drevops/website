@@ -306,7 +306,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_c_p_vertical_spacing:
-    type: options_select
+    type: options_buttons
     weight: 2
     region: content
     settings: {  }
