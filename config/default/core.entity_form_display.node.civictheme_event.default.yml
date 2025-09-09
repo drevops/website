@@ -245,7 +245,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_c_n_vertical_spacing:
-    type: options_select
+    type: options_buttons
     weight: 7
     region: content
     settings: {  }
