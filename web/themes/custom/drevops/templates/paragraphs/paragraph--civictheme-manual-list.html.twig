@@ -11,7 +11,7 @@
 {% block rows %}
   {% if rows -%}
     <div class="ct-list__rows layout-{{ layout }}">
-      {% include '@base/' ~ layout ~ '/' ~ layout ~ '.twig' with {
+      {{ include('@base/' ~ layout ~ '/' ~ layout ~ '.twig', {
         theme: theme,
         title: title,
         template_column_count: column_count,
@@ -19,7 +19,7 @@
         items: rows,
         with_background: with_background,
         row_class: 'row--equal-heights-content row--vertically-spaced',
-      } only %}
+      }, false) }}
     </div>
   {% endif %}
 {% endblock %}

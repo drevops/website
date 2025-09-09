@@ -18,7 +18,7 @@
   <a id="top" tab-index="-1" aria-hidden="true"></a>
 
   {% block header %}
-    {% include '@organisms/header/header.twig' with {
+    {{ include('@organisms/header/header.twig', {
       theme: header_theme,
       is_sticky: header_is_sticky,
       content_top1: header_top_1,
@@ -28,7 +28,7 @@
       content_middle2: header_middle_2,
       content_middle3: header_middle_3,
       content_bottom1: header_bottom_1,
-    } only %}
+    }, false) }}
   {% endblock %}
 
   {% block banner %}
@@ -50,7 +50,7 @@
   {% endif %}
 
   {% block content %}
-    {% include '@base/layout/layout.twig' with {
+    {{ include('@base/layout/layout.twig', {
       content_top: content_top,
       hide_sidebar_left: hide_sidebar_left,
       hide_sidebar_right: hide_sidebar_right,
@@ -68,11 +68,11 @@
       content_bottom: content_bottom,
       vertical_spacing: vertical_spacing,
       attributes: (banner is empty) ? 'id="main-content" tabindex="-1"' : '',
-    } only %}
+    }, false) }}
   {% endblock %}
 
   {% block footer %}
-    {% include '@organisms/footer/footer.twig' with {
+    {{ include('@organisms/footer/footer.twig', {
       theme: footer_theme,
       logo: footer_logo,
       background_image: footer_background_image,
@@ -84,10 +84,10 @@
       content_middle4: footer_middle_4,
       content_bottom1: footer_bottom_1,
       content_bottom2: footer_bottom_2,
-    } only %}
+    }, false) }}
   {% endblock %}
 
   {% block back_to_top %}
-    {% include '@molecules/back-to-top/back-to-top.twig' %}
+    {{ include('@molecules/back-to-top/back-to-top.twig') }}
   {% endblock %}
 </div>

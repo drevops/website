@@ -69,12 +69,12 @@
               {% block breadcrumb %}
                 {% if breadcrumb is not empty and type != 'intro' %}
                   <div class="{% if featured_image is not empty %}col-xxs-12 col-m-6{% else %}col-xxs-12{% endif %}">
-                    {% include '@molecules/breadcrumb/breadcrumb.twig' with {
+                    {{ include('@molecules/breadcrumb/breadcrumb.twig', {
                       theme: theme,
                       links: breadcrumb.links,
                       active_is_link: breadcrumb.active_is_link,
                       modifier_class: 'ct-banner__breadcrumb',
-                    } only %}
+                    }, false) }}
                   </div>
                 {% endif %}
               {% endblock %}
@@ -107,12 +107,12 @@
             <div class="row">
               {%- block site_section %}
                 <div class="col-xxs-12">
-                  {% include '@atoms/heading/heading.twig' with {
+                  {{ include('@atoms/heading/heading.twig', {
                     theme: theme,
                     content: site_section,
                     level: 5,
                     modifier_class: 'ct-banner__site-section',
-                  } only %}
+                  }, false) }}
                 </div>
               {% endblock -%}
             </div>
@@ -122,12 +122,12 @@
             <div class="row">
               {%- block title %}
                 <div class="{% if featured_image is not empty %}col-xxs-12 col-m-6{% else %}col-xxs-12{% endif %}">
-                  {% include '@atoms/heading/heading.twig' with {
+                  {{ include('@atoms/heading/heading.twig', {
                     theme: theme,
                     content: title,
                     level: 1,
                     modifier_class: 'ct-banner__title',
-                  } only %}
+                  }, false) }}
                 </div>
               {% endblock -%}
             </div>
@@ -163,12 +163,12 @@
       {% block featured_image %}
         {% if featured_image is not empty %}
           <div class="ct-banner__featured-image__wrapper">
-            {% include '@atoms/image/image.twig' with {
+            {{ include('@atoms/image/image.twig', {
               theme: theme,
               url: featured_image.url,
               alt: featured_image.alt,
               modifier_class: 'ct-banner__featured-image',
-            } only %}
+            }, false) }}
           </div>
         {% endif %}
       {% endblock %}
