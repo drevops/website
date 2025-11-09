@@ -2,12 +2,12 @@
 #
 # All CLI operations performed in this container.
 #
-# hadolint global ignore=DL3018
+# hadolint global ignore=DL3018,SC2174
 #
 # @see https://hub.docker.com/r/uselagoon/php-8.3-cli-drupal/tags
 # @see https://github.com/uselagoon/lagoon-images/tree/main/images/php-cli-drupal
 
-FROM uselagoon/php-8.3-cli-drupal:25.8.0
+FROM uselagoon/php-8.3-cli-drupal:25.10.0
 
 # Add missing variables.
 # @todo Remove once https://github.com/uselagoon/lagoon/issues/3121 is resolved.
@@ -83,8 +83,7 @@ RUN --mount=type=secret,id=package_token \
 COPY . /app
 
 # Create file directories and set correct permissions.
-RUN mkdir -p "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/${DRUPAL_PRIVATE_FILES}" "${DRUPAL_TEMPORARY_FILES}" && \
-    chmod 0770 "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/${DRUPAL_PRIVATE_FILES}" "${DRUPAL_TEMPORARY_FILES}"
+RUN mkdir -p -m 2775 "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/${DRUPAL_PRIVATE_FILES}" "${DRUPAL_TEMPORARY_FILES}"
 
 RUN if [ "${VORTEX_FRONTEND_BUILD_SKIP}" != "1" ]; then \
       theme_path="/app/${WEBROOT}/themes/custom/${DRUPAL_THEME}"; \

@@ -9,13 +9,15 @@ Feature: Login
   Scenario: Administrator user logs in
     Given I am logged in as a user with the "Administrator" role
     When I go to "admin"
-    Then I save screenshot
+    Then the path should be "/admin"
+    And I save screenshot
 
   @api @javascript
   Scenario: Administrator user logs in using a real browser
     Given I am logged in as a user with the "Administrator" role
     When I go to "admin"
-    Then I save screenshot
+    Then the path should be "/admin"
+    And I save screenshot
 
   Scenario: Login page has correct vertical spacing class
     Given I go to "/user/login"
