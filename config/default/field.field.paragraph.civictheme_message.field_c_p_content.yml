@@ -1,0 +1,22 @@
+uuid: 87a4c32c-edbe-4c73-b615-9f8362cb7607
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_content
+    - paragraphs.paragraphs_type.civictheme_message
+  module:
+    - text
+id: paragraph.civictheme_message.field_c_p_content
+field_name: field_c_p_content
+entity_type: paragraph
+bundle: civictheme_message
+label: Content
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

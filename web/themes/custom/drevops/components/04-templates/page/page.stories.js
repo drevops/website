@@ -1,3 +1,8 @@
+// phpcs:ignoreFile
+/**
+ * CivicTheme Page Template component stories.
+ */
+
 import Component from './page.twig';
 import PageData from './page.stories.data';
 
@@ -156,6 +161,7 @@ export const PageDark = {
   args: PageData.args('dark'),
 };
 
+// Custom: Add sticky header variant.
 export const PageStickyHeader = {
   parameters: {
     layout: 'fullscreen',

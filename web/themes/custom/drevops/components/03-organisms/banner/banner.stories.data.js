@@ -1,3 +1,4 @@
+// phpcs:ignoreFile
 import Constants from '../../../dist/constants.json'; // eslint-disable-line import/no-unresolved
 
 import Paragraph from '../../01-atoms/paragraph/paragraph.twig';
@@ -6,8 +7,10 @@ import NavigationCard from '../../02-molecules/navigation-card/navigation-card.t
 import Grid from '../../00-base/grid/grid.twig';
 
 export default {
+  // Custom: Add withOffset parameter for offset support.
   args: (theme = 'light', withOffset = false) => ({
     theme,
+    // Custom: Add type property for banner type variants.
     type: 'default',
     breadcrumb: {
       links: [
@@ -21,6 +24,7 @@ export default {
         },
         {
           text: 'Link 3',
+          // Custom: Fix URL to breadcrumb-3.
           url: 'https://example.com/breadcrumb-3',
         },
       ],
@@ -84,6 +88,7 @@ export default {
       ],
       row_class: 'row--equal-heights-content row--vertically-spaced',
     }).trim(),
+    // Custom: Add with_offset property.
     with_offset: withOffset,
     modifier_class: '',
     attributes: '',

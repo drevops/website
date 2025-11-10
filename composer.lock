@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1d0a7d8287ead57db3bceb98645b017",
+    "content-hash": "8fab0262dfac726fe13fa4ea079d99f2",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1954,22 +1954,22 @@
         },
         {
             "name": "drupal/civictheme",
-            "version": "1.10.0",
+            "version": "1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/civictheme.git",
-                "reference": "1.10.0"
+                "reference": "1.12.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/civictheme-1.10.0.zip",
-                "reference": "1.10.0",
-                "shasum": "3ec8c5c087153128b6b7a803acd29194efafccc8"
+                "url": "https://ftp.drupal.org/files/projects/civictheme-1.12.1.zip",
+                "reference": "1.12.1",
+                "shasum": "b7fd7a600c9c9d4c170e90334c03fdcd917fd345"
             },
             "require": {
-                "drupal/components": "^3@beta",
-                "drupal/core": "^10 || ^11",
-                "drupal/field_group": "^3.4",
+                "drupal/components": "^3.1",
+                "drupal/core": "^10.2 || ^11",
+                "drupal/field_group": "^4.0",
                 "drupal/focal_point": "^2.0",
                 "drupal/layout_builder_restrictions": "^3",
                 "drupal/linkit": "^7",
@@ -1988,8 +1988,8 @@
             "type": "drupal-theme",
             "extra": {
                 "drupal": {
-                    "version": "1.10.0",
-                    "datestamp": "1743392193",
+                    "version": "1.12.1",
+                    "datestamp": "1761991424",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3408,20 +3408,20 @@
         },
         {
             "name": "drupal/field_group",
-            "version": "3.6.0",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/field_group.git",
-                "reference": "8.x-3.6"
+                "reference": "4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-3.6.zip",
-                "reference": "8.x-3.6",
-                "shasum": "427c0a65dc1936e69e60c120776056cfe5b43e86"
+                "url": "https://ftp.drupal.org/files/projects/field_group-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "d3ff81d8a64b6ac392989b668cfa417be5101642"
             },
             "require": {
-                "drupal/core": "^9.2 || ^10 || ^11"
+                "drupal/core": "^10.3 || ^11"
             },
             "require-dev": {
                 "drupal/jquery_ui_accordion": "*"
@@ -3429,8 +3429,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.6",
-                    "datestamp": "1722672510",
+                    "version": "4.0.0",
+                    "datestamp": "1745478894",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

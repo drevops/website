@@ -1,3 +1,8 @@
+// phpcs:ignoreFile
+/**
+ * CivicTheme Banner component stories.
+ */
+
 import Component from './banner.twig';
 import BannerData from './banner.stories.data';
 import Constants from '../../../dist/constants.json'; // eslint-disable-line import/no-unresolved
@@ -10,6 +15,7 @@ const meta = {
       control: { type: 'radio' },
       options: ['light', 'dark'],
     },
+    // Custom: Add type control for banner type variants.
     type: {
       control: { type: 'radio' },
       options: ['default', 'large', 'intro'],

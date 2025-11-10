@@ -8,8 +8,37 @@
 
 {% set layout = layout in ['grid', 'spotlight'] ? layout : 'grid' %}
 
-{% block rows %}
+{% block rows_block %}
   {% if rows -%}
+    {% block rows_above_block %}
+      {% if rows_above -%}
+        <div class="container ct-list__rows-above">
+          <div class="row">
+            <div class="col-xxs-12">
+              {% if rows_above is not iterable %}
+                {% set rows_above = [rows_above] %}
+              {% endif %}
+              {% for rows_above_row in rows_above %}
+                {{- rows_above_row|raw -}}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endblock %}
+
+    {% block results_count_block %}
+      {% if results_count -%}
+        <div class="container">
+          <div class="row">
+            <div class="col-xxs-12">
+              <div class="ct-list__results-count">{{ results_count }}</div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endblock %}
+
     <div class="ct-list__rows layout-{{ layout }}">
       {{ include('@base/' ~ layout ~ '/' ~ layout ~ '.twig', {
         theme: theme,
@@ -21,5 +50,22 @@
         row_class: 'row--equal-heights-content row--vertically-spaced',
       }, false) }}
     </div>
+
+    {% block rows_below_block %}
+      {% if rows_below %}
+        <div class="container ct-list__rows-below">
+          <div class="row">
+            <div class="col-xxs-12">
+              {% if rows_below is not iterable %}
+                {% set rows_below = [rows_below] %}
+              {% endif %}
+              {% for rows_below_row in rows_below %}
+                {{- rows_below_row|raw -}}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endblock %}
   {% endif %}
 {% endblock %}

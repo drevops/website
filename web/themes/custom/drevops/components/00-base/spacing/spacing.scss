@@ -1,13 +1,33 @@
 //
-// Spacing component stories.
+// Space component stories.
 //
 
 @use 'sass:map';
 @use 'sass:string';
 @use 'sass:list';
-@import '../../../../../contrib/civictheme/components/00-base/spacing/spacing';
 
-$_all-sizes: map.merge($ct-spacing-sizes-default, $ct-spacing-sizes);
+$ct-spacing-map: (
+  'xxs': (
+    'top': ct-spacing(3),
+    'bottom':ct-spacing(3),
+  ),
+  'l': (
+    'top': ct-spacing(6),
+    'bottom':ct-spacing(6),
+  ),
+);
+
+@each $type in (top, bottom, both, none) {
+  @each $suffix in ('', '-inset') {
+    .ct-vertical-spacing#{$suffix}--#{$type} {
+      @each $breakpoint, $values in $ct-spacing-map {
+        @include ct-breakpoint($breakpoint) {
+          @include ct-component-with-vertical-spacing($type, map.get($values, 'top'), map.get($values, 'bottom'), string.length($suffix) != 0);
+        }
+      }
+    }
+  }
+}
 
 // Spacing utility class generator.
 // Generates classes for padding and margin with responsive breakpoint support.
@@ -22,6 +42,8 @@ $_all-sizes: map.merge($ct-spacing-sizes-default, $ct-spacing-sizes);
 // ct-mx-xl-2 - margin x-axis (left/right) 2 on extra large screens and up
 // ct-mb-m-1 - margin-bottom 1 on medium screens and up
 // ct-mt-m-1 - margin-top 1 on medium screens and up
+
+$_all-sizes: map.merge($ct-spacing-sizes-default, $ct-spacing-sizes);
 
 // Define spacing properties and their CSS counterparts
 $_spacing-properties: (

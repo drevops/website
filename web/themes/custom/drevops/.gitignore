@@ -2,3 +2,4 @@
 components_combined
 dist
 storybook-static
+*.css
