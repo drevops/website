@@ -1,3 +1,4 @@
+// phpcs:ignoreFile
 /**
  * @file
  * CivicTheme Spotlight component.

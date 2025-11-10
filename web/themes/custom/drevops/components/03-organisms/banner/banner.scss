@@ -1,5 +1,5 @@
 //
-// Banner component.
+// CivicTheme Banner component styles.
 //
 
 .ct-banner {
@@ -14,6 +14,7 @@
   #{$root}__inner {
     @include ct-background();
 
+    // Custom: Remove unnecessary wrapper for padding.
     padding-top: ct-spacing(3);
     padding-bottom: ct-spacing(10);
 
@@ -30,8 +31,9 @@
   #{$root}__featured-image__wrapper {
     @include ct-image-fit();
 
+    // Custom: Remove unnecessary wrapper and use responsive breakpoint variable.
     box-sizing: border-box;
-    width: $ct-banner-featured-image-width;
+    width: var(--ct-banner-featured-image-width);
     display: none;
 
     @include ct-breakpoint($ct-grid-responsive-breakpoint) {
@@ -45,12 +47,13 @@
 
   &#{$root}--decorative {
     #{$root}__inner {
-      clip-path: $ct-banner-decorative-mobile-clip-path;
+      clip-path: var(--ct-banner-decorative-mobile-clip-path);
 
+      // Custom: Use responsive breakpoint variable.
       @include ct-breakpoint($ct-grid-responsive-breakpoint) {
         padding-top: ct-spacing(8);
         padding-bottom: ct-spacing(8);
-        clip-path: $ct-banner-decorative-desktop-clip-path;
+        clip-path: var(--ct-banner-decorative-desktop-clip-path);
       }
 
       @include ct-print() {
@@ -64,6 +67,7 @@
     }
 
     #{$root}__featured-image__wrapper {
+      // Custom: Use responsive breakpoint variable.
       @include ct-breakpoint($ct-grid-responsive-breakpoint) {
         bottom: 0;
         top: auto;
@@ -74,12 +78,11 @@
     }
 
     #{$root}__featured-image {
-      @if $ct-banner-featured-image-clip-path != false {
-        clip-path: $ct-banner-featured-image-clip-path;
-      }
+      clip-path: var(--ct-banner-featured-image-clip-path);
     }
   }
 
+  // Custom: Add with-offset modifier for custom top spacing.
   &#{$root}--with-offset {
     #{$root}__inner {
       padding-top: ct-spacing(3) + $ct-banner-offset-xxs;
@@ -101,6 +104,7 @@
   #{$root}__breadcrumb {
     margin-bottom: ct-spacing(4);
 
+    // Custom: Use responsive breakpoint variable.
     @include ct-breakpoint($ct-grid-responsive-breakpoint) {
       margin-bottom: ct-spacing(6);
     }
@@ -113,6 +117,7 @@
   #{$root}__title {
     margin-bottom: ct-spacing(2);
 
+    // Custom: Use responsive breakpoint variable.
     @include ct-breakpoint($ct-grid-responsive-breakpoint) {
       margin-bottom: ct-spacing(3);
     }
@@ -125,6 +130,7 @@
 
     &#{$root}--decorative {
       #{$root}__featured-image__wrapper {
+        // Custom: Use responsive breakpoint variable.
         @include ct-breakpoint($ct-grid-responsive-breakpoint) {
           @include ct-image-shadow(ct-component-var($root, $theme, featured-image, shadow-color), 'up-left');
         }
@@ -132,6 +138,7 @@
     }
   }
 
+  // Custom: Add intro banner type with centered layout and custom typography.
   &.ct-banner-type--intro {
     .ct-banner__inner {
       min-height: $ct-banner-intro-min-height;

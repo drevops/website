@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * DrevOps override to display a promo card with HTML-enabled summary.
+ *
+ * Override to preserve HTML in summary field. CivicTheme's preprocessing
+ * uses text_summary() which strips HTML. This template gets the raw field
+ * value and passes it with allow_html: true to preserve formatting.
+ */
+#}
+
+{# Override summary with raw field value to preserve HTML #}
+{% if paragraph.field_c_p_summary.value is not empty %}
+  {% set summary = paragraph.field_c_p_summary.value %}
+{% endif %}
+
+{# Include the promo-card component with our HTML-preserved summary #}
+{% include 'civictheme:promo-card' %}

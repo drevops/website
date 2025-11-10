@@ -11,7 +11,7 @@
         "drupal/admin_toolbar": "^3.6.2",
         "drupal/ai_image_alt_text": "^1.0.1",
         "drupal/ai_provider_openai": "^1.2",
-        "drupal/civictheme": "~1.10.0",
+        "drupal/civictheme": "~1.12.0",
         "drupal/clamav": "^2.1",
         "drupal/cloudflare": "^2@beta",
         "drupal/coffee": "^2.0.1",
@@ -24,7 +24,7 @@
         "drupal/entity_clone": "^2.1@beta",
         "drupal/entity_usage": "^2.0@beta",
         "drupal/environment_indicator": "^4.0.25",
-        "drupal/field_group": "^3.6",
+        "drupal/field_group": "^4",
         "drupal/gin": "^4.0.6",
         "drupal/gin_toolbar": "^2",
         "drupal/google_tag": "^2.0.9",
@@ -197,10 +197,6 @@
         "patches": {
             "drupal/civictheme": {
                 "Remove Shortcut from theme dependency": "patches/civictheme-remove-shortcut-mr19.diff"
-            },
-            "drupal/field_group": {
-                "Duplicated required marks in field tabs with Gin admin theme": "https://www.drupal.org/files/issues/2025-01-15/3395375-field_group-duplicate-require-3.x-24.patch",
-                "Tabs with invalid input are not focused - https://www.drupal.org/project/field_group/issues/2894351": "https://www.drupal.org/files/issues/2024-08-07/field-group-tabs-8.x-3.x.patch"
             },
             "drupal/seckit": {
                 "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252": "https://www.drupal.org/files/issues/2025-05-07/3219252-9.patch"

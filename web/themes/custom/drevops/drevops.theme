@@ -36,6 +36,7 @@ function drevops_preprocess_civictheme_tag_list(array &$variables): void {
 function drevops_preprocess_block(array &$variables): void {
   _drevops_preprocess_block__system_main_block($variables);
   _drevops_preprocess_block__civictheme_banner($variables);
+  _drevops_preprocess_block__civictheme_banner__breadcrumb($variables);
   _drevops_preprocess_block__content_moderation_control($variables);
 }
 

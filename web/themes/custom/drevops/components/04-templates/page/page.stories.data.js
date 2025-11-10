@@ -1,3 +1,4 @@
+// phpcs:ignoreFile
 import Banner from '../../03-organisms/banner/banner.twig';
 import BannerData from '../../03-organisms/banner/banner.stories.data';
 import HeaderData from '../../03-organisms/header/header.stories.data';
@@ -10,6 +11,7 @@ import BasicContent from '../../02-molecules/basic-content/basic-content.twig';
 import BasicContentData from '../../02-molecules/basic-content/basic-content.stories.data';
 
 export default {
+  // Custom: Add headerIsSticky parameter for sticky header support.
   args: (theme = 'light', headerIsSticky = false) => {
     const headerData = HeaderData.args(theme, { is_sticky: headerIsSticky });
     const footerData = FooterData.args(theme);
@@ -18,6 +20,7 @@ export default {
       theme,
       vertical_spacing: 'both',
       header_theme: theme,
+      // Custom: Add header_is_sticky property.
       header_is_sticky: headerData.is_sticky,
       header_top_1: headerData.content_top1,
       header_top_2: headerData.content_top2,
@@ -26,6 +29,7 @@ export default {
       header_middle_2: headerData.content_middle2,
       header_middle_3: headerData.content_middle3,
       header_bottom_1: headerData.content_bottom1,
+      // Custom: Pass headerIsSticky to banner for offset support.
       banner: Banner(BannerData.args(theme, headerIsSticky)),
       highlighted: '',
       content_top: '',
