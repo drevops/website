@@ -63,3 +63,5 @@ cloneable_entities:
   - paragraphs_library_item
   - key
   - key_config_override
+  - ai_prompt_type
+  - ai_prompt

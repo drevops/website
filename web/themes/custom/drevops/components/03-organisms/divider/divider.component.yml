@@ -1,0 +1,67 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/modules/sdc/src/metadata.schema.json
+name: Divider
+status: stable
+description: A divider component with image and configurable styling.
+props:
+  type: object
+  properties:
+    image:
+      type: object
+      title: Image
+      description: Image object with url and alt text.
+      properties:
+        url:
+          type: string
+          title: Image URL
+          description: URL to the image file.
+        alt:
+          type: string
+          title: Image alt text
+          description: Alternative text for the image.
+      required:
+        - url
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: light
+    size:
+      type: string
+      title: Size
+      description: Size of the divider.
+      enum:
+        - large
+        - regular
+        - small
+      default: regular
+    alignment:
+      type: string
+      title: Alignment
+      description: Horizontal alignment of the divider.
+      enum:
+        - left
+        - center
+        - right
+    vertical_spacing:
+      type: string
+      title: Vertical spacing
+      description: Controls vertical spacing (top, bottom, or both).
+      enum:
+        - top
+        - bottom
+        - both
+    attributes:
+      type: string
+      title: Additional HTML attributes
+      description: Additional HTML attributes to add to the component.
+    modifier_class:
+      type: string
+      title: Additional CSS classes
+      description: Additional CSS classes to add to the component.
+slots:
+  image:
+    title: Image slot
+    description: Custom image content.

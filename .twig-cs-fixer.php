@@ -5,6 +5,8 @@ declare(strict_types=1);
 $ruleset = new TwigCsFixer\Ruleset\Ruleset();
 $ruleset->addStandard(new TwigCsFixer\Standard\TwigCsFixer());
 $ruleset->overrideRule(new TwigCsFixer\Rules\Whitespace\IndentRule(2));
+// @todo Remove when https://www.drupal.org/project/civictheme/issues/3556899 is fixed.
+$ruleset->removeRule(TwigCsFixer\Rules\Function\IncludeFunctionRule::class);
 
 $finder = new TwigCsFixer\File\Finder();
 $finder->in(__DIR__ . '/web/modules/custom');

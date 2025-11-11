@@ -1,3 +1,4 @@
+// phpcs:ignoreFile
 import Component from './divider.twig';
 
 const meta = {

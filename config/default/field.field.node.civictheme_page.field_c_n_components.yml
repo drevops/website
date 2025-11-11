@@ -53,6 +53,7 @@ settings:
       civictheme_webform: civictheme_webform
       divider: divider
       from_library: from_library
+      civictheme_message: civictheme_message
     negate: 0
     target_bundles_drag_drop:
       civictheme_accordion:
@@ -90,6 +91,9 @@ settings:
         enabled: true
       civictheme_map:
         weight: -51
+        enabled: true
+      civictheme_message:
+        weight: -52
         enabled: true
       civictheme_navigation_card:
         weight: -43

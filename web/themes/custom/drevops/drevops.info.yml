@@ -41,9 +41,11 @@ libraries-override:
   civictheme/global:
     css:
       theme:
-        dist/civictheme.css: dist/styles.css
+        dist/civictheme.base.css: dist/styles.base.css
+        dist/civictheme.theme.css: dist/styles.theme.css
+        dist/civictheme.variables.css: dist/styles.variables.css
     js:
-      dist/civictheme.js: dist/scripts.js
+      dist/civictheme.drupal.base.js: dist/scripts.drupal.base.js
 
   civictheme/css-variables:
     css:
@@ -71,7 +73,7 @@ components:
     templates:
       - components/04-templates
 
-# Information added by Drupal.org packaging script on 2025-03-25
-version: '1.10.0'
+# Information added by Drupal.org packaging script on 2025-11-01
+version: '1.12.1'
 project: 'civictheme'
-datestamp: 1742872350
+datestamp: 1761981947

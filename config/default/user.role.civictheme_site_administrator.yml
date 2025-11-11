@@ -86,6 +86,7 @@ permissions:
   - 'administer users'
   - 'administer webform'
   - 'administer webform element access'
+  - 'administer webform overview'
   - 'administer webform submission'
   - 'bypass node access'
   - 'create civictheme_alert content'
