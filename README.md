@@ -21,6 +21,7 @@ Drupal 11 implementation of DrevOps Website for DrevOps
 
 - DEV: https://dev.drevops.com
 - PROD: https://www.drevops.com
+- TEST ENV
 
 ## Local environment setup
 
