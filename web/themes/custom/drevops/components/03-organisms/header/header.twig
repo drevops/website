@@ -6,7 +6,7 @@
  * Props:
  * - theme: [string] Theme variation (light or dark).
  * - is_sticky: [boolean] Whether header is sticky.
- * - attributes: [string] Additional HTML attributes.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
  * - modifier_class: [string] Additional CSS classes.
  *
  * Slots:
@@ -35,7 +35,7 @@
 {% set modifier_class = '%s %s %s'|format(theme_class, sticky_class, modifier_class|default('')) %}
 
 {% if content_top1 is not empty or content_top2 is not empty or content_top3 is not empty or content_middle1 is not empty or content_middle2 is not empty or content_middle3 is not empty or content_bottom1 is not empty %}
-  <header class="ct-header {{ modifier_class -}}" role="banner" {% if attributes %}{{ attributes|raw }}{% endif %}>
+  <header class="ct-header {{ modifier_class -}}" role="banner" {% if attributes %}{{ attributes }}{% endif %}>
 
     {% if content_top1 is not empty or content_top2 is not empty or content_top3 is not empty %}
       <div class="ct-header__top hide-xxs show-m">

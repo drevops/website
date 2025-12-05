@@ -10,7 +10,7 @@
  * - column_class: [string] Optional column class override. Defaults to 'col' if
  *   column auto-generation is not required (template_column_count is 0),
  *   otherwise it is appended to the auto-generated column class list.
- * - column_attributes: [string] Additional column attributes.
+ * - column_attributes: [Drupal\Core\Template\Attribute] Additional column attributes.
  * - use_container: [boolean] Whether to use container or not.
  * - is_fluid: [boolean] Whether the grid is fluid or not. Defaults to false.
  *   Applies only if `use_container` is true.
@@ -18,7 +18,7 @@
  *   auto columns will be used where column width will be calculated
  *   automatically. Defaults to 0.
  * - fill_width: [boolean] Stretch "hanging" items to the full width of the row.
- * - attributes: [string] Additional attributes.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
  * - modifier_class: [string] Additional classes.
  */
 #}
@@ -79,7 +79,7 @@
 {% endif %}
 
 {% if main_items is not empty %}
-  <{{ row_element }} class="{{ row_class_string }}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %} data-grid data-grid-cols="{{ template_column_count }}" data-responsive="=m" aria-live="polite">
+  <{{ row_element }} class="{{ row_class_string }}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %} data-grid data-grid-cols="{{ template_column_count }}" data-responsive="=m" aria-live="polite">
 
   {% for cell in main_items %}
     <{{ column_element }} class="{{ column_class }} {{ loop.first ? 'g-row-m-2' : '' }}">
