@@ -44,7 +44,9 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
   // CivicTheme uses Xss::filter() on the title, which escapes HTML entities.
   // When Twig outputs this with {{ title }}, it escapes again.
   // Wrap in Markup to prevent double escaping.
-  if (!empty($variables['title']) && !($variables['title'] instanceof MarkupInterface)) {
+  // Only process if title is a string (not an array or object).
+  // @phpstan-ignore-next-line instanceof.alwaysFalse
+  if (!empty($variables['title']) && is_string($variables['title']) && !($variables['title'] instanceof MarkupInterface)) {
     $variables['title'] = Markup::create($variables['title']);
   }
 }
@@ -68,8 +70,10 @@ function _drevops_preprocess_block__civictheme_banner__breadcrumb(array &$variab
   }
 
   // Wrap breadcrumb link text in Markup to prevent double escaping.
+  // Only process if text is a string (not an array or object).
   foreach ($variables['breadcrumb']['links'] as &$link) {
-    if (!empty($link['text']) && !($link['text'] instanceof MarkupInterface)) {
+    // @phpstan-ignore-next-line instanceof.alwaysFalse
+    if (!empty($link['text']) && is_string($link['text']) && !($link['text'] instanceof MarkupInterface)) {
       $link['text'] = Markup::create($link['text']);
     }
   }
