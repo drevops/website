@@ -1,0 +1,60 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Spotlight
+status: stable
+description: Spotlight grid component for displaying items in a responsive grid layout
+props:
+  type: object
+  properties:
+    items:
+      type: array
+      title: Items
+      description: Array of column items to display in the grid.
+      items:
+        type: string
+        description: Content for each grid item.
+    row_element:
+      type: string
+      title: Row Element
+      description: HTML element to use for the row wrapper.
+      default: div
+    column_element:
+      type: string
+      title: Column Element
+      description: HTML element to use for each column wrapper.
+      default: div
+    column_class:
+      type: string
+      title: Column Class
+      description: Optional column class override. Defaults to 'col' if column auto-generation is not required.
+    column_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Column Attributes
+      description: Additional HTML attributes for columns.
+    use_container:
+      type: boolean
+      title: Use Container
+      description: Whether to wrap the grid in a container.
+      default: true
+    is_fluid:
+      type: boolean
+      title: Is Fluid
+      description: Whether the grid container is fluid. Only applies if use_container is true.
+      default: false
+    template_column_count:
+      type: integer
+      title: Template Column Count
+      description: Number of columns in the row. If 0, auto columns will be used with automatic width calculation.
+      default: 1
+    fill_width:
+      type: boolean
+      title: Fill Width
+      description: Stretch hanging items to the full width of the row.
+      default: false
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes for the component.
+    modifier_class:
+      type: string
+      title: Modifier Class
+      description: Additional CSS classes for the component.
