@@ -1,0 +1,41 @@
+{
+    "_hash": "10e1bc80605a2b3b5337445a09432074b7acda4664717c69fcc759e33683800e",
+    "patches": {
+        "drupal/civictheme": [
+            {
+                "package": "drupal/civictheme",
+                "description": "Remove Shortcut from theme dependency",
+                "url": "patches/civictheme-remove-shortcut-mr19.diff",
+                "sha256": "c9e5dca969c253d74dc05371df40ef722603c46a65a3ef706b6de5e70a901f05",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ],
+        "drupal/seckit": [
+            {
+                "package": "drupal/seckit",
+                "description": "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252",
+                "url": "https://www.drupal.org/files/issues/2025-05-07/3219252-9.patch",
+                "sha256": "c6fd4c7575655a964045258cab48928ebc2efee89f0ad13d2775acff5b33751f",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ],
+        "palantirnet/drupal-rector": [
+            {
+                "package": "palantirnet/drupal-rector",
+                "description": "Improve error handling for incorrect test namespaces - https://www.drupal.org/project/rector/issues/3540378",
+                "url": "patches/3540378-rector-skip-webform-cards-tests.patch",
+                "sha256": "09aae6ea30b230619745f33718c1752317b53d81d7e7d99e957fe34b31337f24",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ]
+    }
+}

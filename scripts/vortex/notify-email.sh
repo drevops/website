@@ -8,7 +8,7 @@
 # VORTEX_NOTIFY_PROJECT="Site Name" \
 # DRUPAL_SITE_EMAIL="from@example.com" \
 # VORTEX_NOTIFY_EMAIL_RECIPIENTS="to1@example.com|Jane Doe, to2@example.com|John Doe" \
-# VORTEX_NOTIFY_REF="git-branch" \
+# VORTEX_NOTIFY_LABEL="main" \
 # VORTEX_NOTIFY_ENVIRONMENT_URL="https://environment-url-example.com" \
 # ./notify-email.sh
 #
@@ -19,27 +19,34 @@ t=$(mktemp) && export -p >"${t}" && set -a && . ./.env && if [ -f ./.env.local ]
 set -eu
 [ "${VORTEX_DEBUG-}" = "1" ] && set -x
 
-# Project name to notify.
+# Email notification project name.
 VORTEX_NOTIFY_EMAIL_PROJECT="${VORTEX_NOTIFY_EMAIL_PROJECT:-${VORTEX_NOTIFY_PROJECT:-}}"
 
-# Email address to send notifications from.
+# Email notification sender address.
 VORTEX_NOTIFY_EMAIL_FROM="${VORTEX_NOTIFY_EMAIL_FROM:-${DRUPAL_SITE_EMAIL:-}}"
 
-# Email address(es) to send notifications to.
+# Email notification recipients.
 #
 # Multiple names can be specified as a comma-separated list of email addresses
 # with optional names in the format "email|name".
 # Example: "to1@example.com|Jane Doe, to2@example.com|John Doe"
 VORTEX_NOTIFY_EMAIL_RECIPIENTS="${VORTEX_NOTIFY_EMAIL_RECIPIENTS:-}"
 
-# Git reference to notify about.
-VORTEX_NOTIFY_EMAIL_REF="${VORTEX_NOTIFY_EMAIL_REF:-${VORTEX_NOTIFY_REF:-}}"
+# Email notification deployment label (branch name, PR number, or custom identifier).
+VORTEX_NOTIFY_EMAIL_LABEL="${VORTEX_NOTIFY_EMAIL_LABEL:-${VORTEX_NOTIFY_LABEL:-}}"
 
-# Git reference to notify about.
-VORTEX_NOTIFY_EMAIL_PR_NUMBER="${VORTEX_NOTIFY_EMAIL_PR_NUMBER:-${VORTEX_NOTIFY_PR_NUMBER:-}}"
-
-# Environment URL to notify about.
+# Email notification environment URL.
 VORTEX_NOTIFY_EMAIL_ENVIRONMENT_URL="${VORTEX_NOTIFY_EMAIL_ENVIRONMENT_URL:-${VORTEX_NOTIFY_ENVIRONMENT_URL:-}}"
+
+# Email notification login URL.
+VORTEX_NOTIFY_EMAIL_LOGIN_URL="${VORTEX_NOTIFY_EMAIL_LOGIN_URL:-${VORTEX_NOTIFY_LOGIN_URL:-}}"
+
+# Email notification message template.
+# Available tokens: %project%, %label%, %timestamp%, %environment_url%, %login_url%
+VORTEX_NOTIFY_EMAIL_MESSAGE="${VORTEX_NOTIFY_EMAIL_MESSAGE:-}"
+
+# Email notification event type. Can be 'pre_deployment' or 'post_deployment'.
+VORTEX_NOTIFY_EMAIL_EVENT="${VORTEX_NOTIFY_EMAIL_EVENT:-${VORTEX_NOTIFY_EVENT:-post_deployment}}"
 
 #-------------------------------------------------------------------------------
 
@@ -54,10 +61,26 @@ fail() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\03
 [ -z "${VORTEX_NOTIFY_EMAIL_PROJECT}" ] && fail "Missing required value for VORTEX_NOTIFY_EMAIL_PROJECT." && exit 1
 [ -z "${VORTEX_NOTIFY_EMAIL_FROM}" ] && fail "Missing required value for VORTEX_NOTIFY_EMAIL_FROM." && exit 1
 [ -z "${VORTEX_NOTIFY_EMAIL_RECIPIENTS}" ] && fail "Missing required value for VORTEX_NOTIFY_EMAIL_RECIPIENTS." && exit 1
-[ -z "${VORTEX_NOTIFY_EMAIL_REF}" ] && fail "Missing required value for VORTEX_NOTIFY_EMAIL_REF." && exit 1
+[ -z "${VORTEX_NOTIFY_EMAIL_LABEL}" ] && fail "Missing required value for VORTEX_NOTIFY_EMAIL_LABEL." && exit 1
 [ -z "${VORTEX_NOTIFY_EMAIL_ENVIRONMENT_URL}" ] && fail "Missing required value for VORTEX_NOTIFY_EMAIL_ENVIRONMENT_URL." && exit 1
+[ -z "${VORTEX_NOTIFY_EMAIL_LOGIN_URL}" ] && fail "Missing required value for VORTEX_NOTIFY_EMAIL_LOGIN_URL." && exit 1
 
 info "Started email notification."
+
+# Set default message template if not provided.
+if [ -z "${VORTEX_NOTIFY_EMAIL_MESSAGE}" ]; then
+  VORTEX_NOTIFY_EMAIL_MESSAGE="## This is an automated message ##
+
+Site %project% %label% has been deployed at %timestamp% and is available at %environment_url%.
+
+Login at: %login_url%"
+fi
+
+# Skip if this is a pre-deployment event (email only for post-deployment).
+if [ "${VORTEX_NOTIFY_EMAIL_EVENT}" = "pre_deployment" ]; then
+  pass "Skipping email notification for pre_deployment event."
+  exit 0
+fi
 
 has_sendmail=0
 has_mail=0
@@ -72,18 +95,27 @@ else
   exit 1
 fi
 
-ref_info="\"${VORTEX_NOTIFY_EMAIL_REF}\" branch"
-if [ -n "${VORTEX_NOTIFY_EMAIL_PR_NUMBER}" ]; then
-  ref_info="\"PR-${VORTEX_NOTIFY_EMAIL_PR_NUMBER}\""
-fi
-
+# Build message by replacing tokens.
 timestamp=$(date '+%d/%m/%Y %H:%M:%S %Z')
-subject="${VORTEX_NOTIFY_EMAIL_PROJECT} deployment notification of ${ref_info}"
-content="## This is an automated message ##
+subject="${VORTEX_NOTIFY_EMAIL_PROJECT} deployment notification of ${VORTEX_NOTIFY_EMAIL_LABEL}"
 
-Site ${VORTEX_NOTIFY_EMAIL_PROJECT} ${ref_info} has been deployed at ${timestamp} and is available at ${VORTEX_NOTIFY_EMAIL_ENVIRONMENT_URL}.
+# Replace tokens in message template.
+content="${VORTEX_NOTIFY_EMAIL_MESSAGE}"
+content=$(REPLACEMENT="${VORTEX_NOTIFY_EMAIL_PROJECT}" TEMPLATE="${content}" php -r 'echo str_replace("%project%", getenv("REPLACEMENT"), getenv("TEMPLATE"));')
+content=$(REPLACEMENT="${VORTEX_NOTIFY_EMAIL_LABEL}" TEMPLATE="${content}" php -r 'echo str_replace("%label%", getenv("REPLACEMENT"), getenv("TEMPLATE"));')
+content=$(REPLACEMENT="${timestamp}" TEMPLATE="${content}" php -r 'echo str_replace("%timestamp%", getenv("REPLACEMENT"), getenv("TEMPLATE"));')
+content=$(REPLACEMENT="${VORTEX_NOTIFY_EMAIL_ENVIRONMENT_URL}" TEMPLATE="${content}" php -r 'echo str_replace("%environment_url%", getenv("REPLACEMENT"), getenv("TEMPLATE"));')
+content=$(REPLACEMENT="${VORTEX_NOTIFY_EMAIL_LOGIN_URL}" TEMPLATE="${content}" php -r 'echo str_replace("%login_url%", getenv("REPLACEMENT"), getenv("TEMPLATE"));')
 
-Login at: ${VORTEX_NOTIFY_EMAIL_ENVIRONMENT_URL}/user/login"
+info "Email notification summary:"
+note "Project        : ${VORTEX_NOTIFY_EMAIL_PROJECT}"
+note "Deployment     : ${VORTEX_NOTIFY_EMAIL_LABEL}"
+note "Environment URL: ${VORTEX_NOTIFY_EMAIL_ENVIRONMENT_URL}"
+note "Login URL      : ${VORTEX_NOTIFY_EMAIL_LOGIN_URL}"
+note "From           : ${VORTEX_NOTIFY_EMAIL_FROM}"
+note "Recipients     : ${VORTEX_NOTIFY_EMAIL_RECIPIENTS}"
+note "Subject        : ${subject}"
+note "Content        : ${content}"
 
 sent=""
 IFS=","
@@ -120,7 +152,7 @@ for email_with_name; do
       echo "From: ${VORTEX_NOTIFY_EMAIL_FROM}"
       echo
       echo "${content}"
-    ) | sendmail -t
+    ) | sendmail -t -f "${VORTEX_NOTIFY_EMAIL_FROM}"
     sent="${sent} ${email}"
   elif [ "${has_mail}" = "1" ]; then
     mail -s "${subject}" "${to}" <<-EOF
