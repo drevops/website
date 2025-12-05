@@ -11,7 +11,7 @@
  * - size: [string] Size of the divider. Large, regular, small.
  * - alignment: [string] Left, right, center.
  * - vertical_spacing: [string] With top, bottom or both vertical spaces.
- * - attributes: [string] Additional attributes.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
  * - modifier_class: [string] Additional classes.
  */
 #}
@@ -22,7 +22,7 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s %s'|format(theme_class, vertical_spacing_class, size_class, alignment_class, modifier_class|default('')) %}
 
-<div class="ct-divider {{ modifier_class -}}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %}>
+<div class="ct-divider {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
   {% block image %}
     <img src="{{ image.url }}" alt="" role="presentation">
   {% endblock %}

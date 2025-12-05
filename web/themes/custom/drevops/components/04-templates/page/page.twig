@@ -5,7 +5,7 @@
  *
  * Props:
  * - theme: [string] Theme variation (light or dark).
- * - attributes: [string] Additional HTML attributes.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
  * - modifier_class: [string] Additional CSS classes.
  * - header_theme: [string] Theme variation for header (light or dark).
  * - header_is_sticky: [boolean] Whether header is sticky.
@@ -61,7 +61,7 @@
 
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
-<div class="ct-page {{ modifier_class -}}" {% if attributes is not empty %}{{- attributes|raw -}}{% endif %}>
+<div class="ct-page {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
   <a id="top" tab-index="-1" aria-hidden="true"></a>
 
   {% block header_block %}
