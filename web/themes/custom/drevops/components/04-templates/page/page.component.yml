@@ -2,7 +2,7 @@ $schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schema
 name: Page Template
 status: stable
 description: Main page template with configurable layout regions
-replaces: civictheme:page-template
+replaces: civictheme:page
 props:
   type: object
   properties:
@@ -14,7 +14,7 @@ props:
         - light
         - dark
     attributes:
-      type: string
+      type: Drupal\Core\Template\Attribute
       title: Attributes
       description: Additional HTML attributes.
     modifier_class:

@@ -54,7 +54,7 @@ props:
         - bottom
         - both
     attributes:
-      type: string
+      type: Drupal\Core\Template\Attribute
       title: Additional HTML attributes
       description: Additional HTML attributes to add to the component.
     modifier_class:
