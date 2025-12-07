@@ -132,7 +132,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-xxs-12">
-                  {{ filters|raw }}
+                  {{ filters }}
                 </div>
               </div>
             </div>
@@ -152,7 +152,7 @@
                       {% set rows_above = [rows_above] %}
                     {% endif %}
                     {% for rows_above_row in rows_above %}
-                      {{- rows_above_row|raw -}}
+                      {{- rows_above_row -}}
                     {% endfor %}
                   </div>
                 </div>
@@ -173,7 +173,7 @@
           {% endblock %}
 
           <div class="ct-list__rows">
-            {{ rows|raw }}
+            {{ rows }}
           </div>
 
           {% block rows_below_block %}
@@ -185,7 +185,7 @@
                       {% set rows_below = [rows_below] %}
                     {% endif %}
                     {% for rows_below_row in rows_below %}
-                      {{- rows_below_row|raw -}}
+                      {{- rows_below_row -}}
                     {% endfor %}
                   </div>
                 </div>
@@ -238,7 +238,7 @@
               <div class="row">
                 <div class="col-xxs-12">
                   <div class="ct-list__pagination">
-                    {{ pagination|raw }}
+                    {{ pagination }}
                   </div>
                 </div>
               </div>
@@ -254,7 +254,7 @@
           <div class="container">
             <div class="row">
               <div class="col-xxs-12">
-                {{ footer|raw }}
+                {{ footer }}
               </div>
             </div>
           </div>

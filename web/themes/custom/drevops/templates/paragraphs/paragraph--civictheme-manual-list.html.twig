@@ -19,7 +19,7 @@
                 {% set rows_above = [rows_above] %}
               {% endif %}
               {% for rows_above_row in rows_above %}
-                {{- rows_above_row|raw -}}
+                {{- rows_above_row -}}
               {% endfor %}
             </div>
           </div>
@@ -60,7 +60,7 @@
                 {% set rows_below = [rows_below] %}
               {% endif %}
               {% for rows_below_row in rows_below %}
-                {{- rows_below_row|raw -}}
+                {{- rows_below_row -}}
               {% endfor %}
             </div>
           </div>

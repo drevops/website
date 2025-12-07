@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Node related functions.
+ * Card paragraphs related functions.
  */
 
 declare(strict_types=1);
