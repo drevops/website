@@ -186,6 +186,7 @@ permissions:
   - 'generate ai alt tags'
   - 'link to any page'
   - 'notify of path changes'
+  - 'rebuild node access permissions'
   - 'revert all revisions'
   - 'revert any civictheme_banner block content revisions'
   - 'revert any civictheme_component_block block content revisions'

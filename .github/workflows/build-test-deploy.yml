@@ -54,7 +54,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:25.11.0@sha256:634a9ccdc4889dd7f0f571ac3ba1ada7a1289bd6d4c88199d252092a9db6c1cc
+      image: drevops/ci-runner:25.12.0@sha256:b6e416998c03da657006e7c1c2b0f5532f6117990049351a89789227b4941093
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -113,14 +113,14 @@ jobs:
       # Lookup cache based on the default branch and a timestamp. Allows
       # to use cache from the very first build on the day (sanitized database dump, for example).
       - name: Restore DB cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5
         with:
           path: .data
-          key: v25.11.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v26.1.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-${{ hashFiles('db_cache_timestamp') }}
           # Fallback to caching by default branch name only. Allows to use
           # cache from the branch build on the previous day.
           restore-keys: |
-            v25.11.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-
+            v26.1.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-
 
       - name: Download DB
         run: |
@@ -143,11 +143,11 @@ jobs:
       # Note that the cache fallback flag is enabled for this case in order
       # to save cache even if the fallback is not used when restoring it.
       - name: Save DB cache
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/save@9255dc7a253b0ccc959486e2bca901246202afeb # v5
         if: env.db_hash != hashFiles('.data')
         with:
           path: .data
-          key: v25.11.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v26.1.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
 
   build:
     runs-on: ubuntu-latest
@@ -162,7 +162,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:25.11.0@sha256:634a9ccdc4889dd7f0f571ac3ba1ada7a1289bd6d4c88199d252092a9db6c1cc
+      image: drevops/ci-runner:25.12.0@sha256:b6e416998c03da657006e7c1c2b0f5532f6117990049351a89789227b4941093
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -206,21 +206,21 @@ jobs:
           date "${VORTEX_CI_DB_CACHE_TIMESTAMP}" | tee db_cache_timestamp
 
       - name: Show cache key for database caching
-        run: echo 'v25.11.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}'
+        run: echo 'v26.1.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}'
 
       # Restore DB cache based on the cache strategy set by the cache keys below.
       # Change 'v1' to 'v2', 'v3' etc., commit and push to force cache reset.
       # Lookup cache based on the default branch and a timestamp. Allows
       # to use cache from the very first build on the day (sanitized database dump, for example).
       - name: Restore DB cache
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5
         with:
           path: .data
           fail-on-cache-miss: true
           # Use cached database from previous builds of this branch.
-          key: v25.11.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v26.1.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
           restore-keys: |
-            v25.11.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-
+            v26.1.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-
 
       - name: Login to container registry
         run: ./scripts/vortex/login-container-registry.sh
@@ -334,7 +334,7 @@ jobs:
           fi
 
       - name: Upload test artifacts
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
           name: test-artifacts-${{ matrix.instance }}
@@ -342,8 +342,32 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
 
+      - name: Check code coverage threshold
+        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
+        run: |
+          RATE=$(grep -o 'line-rate="[0-9.]*"' .logs/coverage/phpunit/cobertura.xml | head -1 | tr -cd '0-9.')
+          PERCENT=$(awk "BEGIN {printf \"%.2f\", $RATE*100}")
+          echo "Coverage: $PERCENT% (threshold: $VORTEX_CI_CODE_COVERAGE_THRESHOLD%)"
+          if [ "${PERCENT//./}" -lt "$((VORTEX_CI_CODE_COVERAGE_THRESHOLD*100))" ]; then
+            echo "FAIL: coverage too low"
+            exit 1
+          fi
+          { echo "COVERAGE_CONTENT<<EOF"; sed '/./,$!d' .logs/coverage/phpunit/coverage.txt; echo "EOF"; } >> "$GITHUB_ENV"
+        env:
+          VORTEX_CI_CODE_COVERAGE_THRESHOLD: ${{ vars.VORTEX_CI_CODE_COVERAGE_THRESHOLD || '90' }}
+
+      - name: Post coverage summary as PR comment
+        if: ${{ github.event_name == 'pull_request' && (matrix.instance == 0 || strategy.job-total == 1) && vars.VORTEX_CI_CODE_COVERAGE_PR_COMMENT_SKIP != '1' }}
+        uses: marocchino/sticky-pull-request-comment@773744901bac0e8cbb5a0dc842800d45e9b2b405 # v2
+        with:
+          message: |
+            ```
+            ${{ env.COVERAGE_CONTENT }}
+            ```
+          hide_and_recreate: true
+
       - name: Upload coverage report to Codecov
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5
         if: ${{ env.CODECOV_TOKEN != '' }}
         with:
           directory: .logs/coverage
@@ -353,7 +377,7 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload exported codebase as an artifact
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: ${{ matrix.instance == 0 && !startsWith(github.head_ref || github.ref_name, 'deps/') && contains(env.VORTEX_DEPLOY_TYPES, 'artifact') }}
         with:
           name: code-artifact
@@ -376,7 +400,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:25.11.0@sha256:634a9ccdc4889dd7f0f571ac3ba1ada7a1289bd6d4c88199d252092a9db6c1cc
+      image: drevops/ci-runner:25.12.0@sha256:b6e416998c03da657006e7c1c2b0f5532f6117990049351a89789227b4941093
       env:
         TZ: ${{ vars.TZ || 'UTC' }}
         TERM: xterm-256color
@@ -401,7 +425,7 @@ jobs:
         run: t=$(mktemp) && export -p >"${t}" && set -a && . ./.env && set +a && . "${t}" && env >> "$GITHUB_ENV"
 
       - name: Download exported codebase as an artifact
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         if: ${{ contains(env.VORTEX_DEPLOY_TYPES, 'artifact') }}
         with:
           name: code-artifact
