@@ -101,6 +101,7 @@ settings:
       properties:
         reversed: false
         startIndex: true
+        styles: true
       multiBlock: true
     ckeditor5_sourceEditing:
       allowed_tags:
@@ -114,8 +115,6 @@ settings:
         - '<svg role viewBox aria-hidden width height class="ct-icon">'
         - '<path d>'
         - '<blockquote cite>'
-        - '<ul type>'
-        - '<ol type>'
         - '<h2 id class>'
         - '<h3 id>'
         - '<h4 id>'

@@ -16,8 +16,8 @@ Feature: Diff module for revision comparison
     And I press "Save"
 
     When I visit the "civictheme_page" content revisions page with the title "[TEST] Page for Diff"
-    And I select the radio button with the id "edit-node-revisions-table-0-select-column-two"
-    And I select the radio button with the id "edit-node-revisions-table-1-select-column-one"
+    And I choose the radio button "edit-node-revisions-table-0-select-column-two"
+    And I choose the radio button "edit-node-revisions-table-1-select-column-one"
     And I press "Compare selected revisions"
     Then I should see "Changes to [TEST] Page for Diff"
     And I should see "Initial summary"

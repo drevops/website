@@ -73,24 +73,4 @@ class FeatureContext extends DrupalContext {
   use WaitTrait;
   use WatchdogTrait;
 
-  /**
-   * Select a radio button by its ID.
-   *
-   * @code
-   * When I select the radio button with the id "my-radio-button"
-   * @endcode
-   *
-   * @When I select the radio button with the id :id
-   */
-  public function assertSelectRadioByIdOnly(string $id = ''): void {
-    $radiobutton = $this->getSession()->getPage()->findById($id);
-
-    if ($radiobutton === NULL) {
-      throw new \Exception(sprintf('The radio button with id "%s" was not found on the page', $id));
-    }
-
-    $value = $radiobutton->getAttribute('value');
-    $radiobutton->selectOption($value);
-  }
-
 }
