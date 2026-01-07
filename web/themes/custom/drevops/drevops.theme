@@ -15,6 +15,7 @@ require_once __DIR__ . '/includes/manual_list.inc';
 require_once __DIR__ . '/includes/page.inc';
 require_once __DIR__ . '/includes/node.inc';
 require_once __DIR__ . '/includes/cards.inc';
+require_once __DIR__ . '/includes/sidebar_navigation.inc';
 require_once __DIR__ . '/includes/content_moderation.inc';
 
 /**

@@ -30,7 +30,7 @@ settings:
   expand_all_items: false
   parent: 'civictheme-primary-navigation:'
   render_parent: false
-  suggestion: civictheme_primary_navigation
+  suggestion: civictheme_sidebar_navigation
   hide_on_nonactive: false
 visibility:
   request_path:

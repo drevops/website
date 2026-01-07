@@ -265,6 +265,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -340,6 +341,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     // Verify settings overrides.
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['config_sync_directory'] = 'custom_config';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
@@ -391,6 +393,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
@@ -443,6 +446,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
@@ -497,6 +501,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
@@ -549,6 +554,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['cache_prefix']['default'] = 'test_project_test_branch';
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['config_sync_directory'] = '../config/default';
@@ -604,6 +610,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['cache_prefix']['default'] = 'test_project_develop';
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['config_sync_directory'] = '../config/default';
@@ -659,6 +666,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $this->assertConfig($config);
 
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['cache_prefix']['default'] = 'test_project_master';
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['config_sync_directory'] = '../config/default';
@@ -714,6 +722,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['js']['preprocess'] = TRUE;
     $this->assertConfig($config);
 
+    $settings['auto_create_htaccess'] = FALSE;
     $settings['cache_prefix']['default'] = 'test_project_production';
     $settings['config_exclude_modules'] = ['devel', 'purge_control'];
     $settings['config_sync_directory'] = '../config/default';

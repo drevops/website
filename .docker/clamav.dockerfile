@@ -10,9 +10,9 @@
 # @see https://hub.docker.com/r/uselagoon/commons/tags
 # @see https://github.com/uselagoon/lagoon-images/tree/main/images/commons
 
-FROM uselagoon/commons:25.11.0 AS commons
+FROM uselagoon/commons:25.12.1 AS commons
 
-FROM clamav/clamav-debian:1.5.1
+FROM clamav/clamav-debian:1.5.1-22
 
 COPY --from=commons /lagoon /lagoon
 COPY --from=commons /bin/fix-permissions /bin/ep /bin/docker-sleep /bin/wait-for /bin/
