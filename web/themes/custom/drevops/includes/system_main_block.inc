@@ -17,9 +17,20 @@ function _drevops_preprocess_block__system_main_block(array &$variables): void {
 
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  if ($route_name !== 'user.login' && $route_name !== 'user.pass') {
-    return;
-  }
 
-  $variables['attributes']['class'][] = 'ct-vertical-spacing--both';
+  $routes = [
+    'user.cancel_confirm',
+    'user.login',
+    'user.logout',
+    'user.logout.confirm',
+    'user.pass',
+    'user.register',
+    'user.reset',
+    'user.reset.form',
+    'user.reset.login',
+  ];
+
+  if (in_array($route_name, $routes, TRUE)) {
+    $variables['attributes']['class'][] = 'ct-vertical-spacing--both';
+  }
 }
