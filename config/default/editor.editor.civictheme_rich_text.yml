@@ -67,6 +67,9 @@ settings:
           label: Diff
           language: diff
         -
+          label: Gherkin
+          language: gherkin
+        -
           label: HTML
           language: html
         -
