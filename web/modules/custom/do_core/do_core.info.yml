@@ -1,5 +1,0 @@
-name: DrevOps Website Core
-type: module
-description: Core feature for DrevOps Website site.
-core_version_requirement: ^11
-package: website

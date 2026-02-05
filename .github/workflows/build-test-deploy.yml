@@ -54,7 +54,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:25.12.0@sha256:b6e416998c03da657006e7c1c2b0f5532f6117990049351a89789227b4941093
+      image: drevops/ci-runner:26.1.0@sha256:1fd1a2bc6311ae1c8b726fa2326dc509f6c8918b7d394bceb10d3aada1c7afcb
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -78,7 +78,7 @@ jobs:
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
       - name: Check out code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           # Do not keep SSH credentials after checkout to allow adding custom SSH keys.
           persist-credentials: false
@@ -113,7 +113,7 @@ jobs:
       # Lookup cache based on the default branch and a timestamp. Allows
       # to use cache from the very first build on the day (sanitized database dump, for example).
       - name: Restore DB cache
-        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+        uses: actions/cache/restore@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
         with:
           path: .data
           key: v26.1.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-${{ hashFiles('db_cache_timestamp') }}
@@ -143,7 +143,7 @@ jobs:
       # Note that the cache fallback flag is enabled for this case in order
       # to save cache even if the fallback is not used when restoring it.
       - name: Save DB cache
-        uses: actions/cache/save@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+        uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
         if: env.db_hash != hashFiles('.data')
         with:
           path: .data
@@ -162,7 +162,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:25.12.0@sha256:b6e416998c03da657006e7c1c2b0f5532f6117990049351a89789227b4941093
+      image: drevops/ci-runner:26.1.0@sha256:1fd1a2bc6311ae1c8b726fa2326dc509f6c8918b7d394bceb10d3aada1c7afcb
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -187,7 +187,7 @@ jobs:
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
       - name: Check out code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Process the codebase to run in CI
         run: find . -name "docker-compose.yml" -print0 | xargs -0 -I {} sh -c "sed -i -e '/###/d' {} && sed -i -e 's/##//' {}"
@@ -213,7 +213,7 @@ jobs:
       # Lookup cache based on the default branch and a timestamp. Allows
       # to use cache from the very first build on the day (sanitized database dump, for example).
       - name: Restore DB cache
-        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+        uses: actions/cache/restore@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
         with:
           path: .data
           fail-on-cache-miss: true
@@ -277,7 +277,7 @@ jobs:
 
       - name: Lint code with Rector
         if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker compose exec -T cli vendor/bin/rector --clear-cache --dry-run
+        run: docker compose exec -T cli vendor/bin/rector --dry-run
         continue-on-error: ${{ vars.VORTEX_CI_RECTOR_IGNORE_FAILURE == '1' }}
 
       - name: Lint code with Twig CS Fixer
@@ -400,7 +400,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:25.12.0@sha256:b6e416998c03da657006e7c1c2b0f5532f6117990049351a89789227b4941093
+      image: drevops/ci-runner:26.1.0@sha256:1fd1a2bc6311ae1c8b726fa2326dc509f6c8918b7d394bceb10d3aada1c7afcb
       env:
         TZ: ${{ vars.TZ || 'UTC' }}
         TERM: xterm-256color
@@ -412,7 +412,7 @@ jobs:
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
       - name: Checkout code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           # Fetch all history for git repository.
           fetch-depth: 0
