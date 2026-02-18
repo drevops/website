@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.media.embedded
   module:
     - editor
+    - highlight_js
     - linkit
     - media
 _core:
@@ -44,9 +45,15 @@ filters:
     status: true
     weight: -50
     settings:
-      allowed_html: '<br> <p class="ct-text-large ct-text-small text-align-left text-align-center text-align-right"> <h2 id class> <h3 id class="text-align-left text-align-center text-align-right"> <h4 id class="text-align-left text-align-center text-align-right"> <h5 id class="text-align-left text-align-center text-align-right"> <h6 id class="text-align-left text-align-center text-align-right"> <a class="ct-button ct-theme-light ct-theme-dark ct-button--primary ct-button--regular ct-button--secondary ct-button--large" hreflang target title href data-entity-type data-entity-uuid data-entity-substitution> <table class="ct-theme-light ct-theme-dark ct-table ct-table--striped"> <cite> <dl> <dt> <dd> <img src alt data-entity-type data-entity-uuid> <drupal-entity alt title data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button> <span class="ct-visually-hidden"> <svg role viewBox aria-hidden width height class="ct-icon"> <path d> <blockquote cite> <drupal-media title data-entity-type data-entity-uuid alt data-caption data-align> <strong> <em> <u> <code class="language-*"> <pre class="text-align-left text-align-center text-align-right"> <s> <sub> <sup> <ul type> <ol type start> <li> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption>'
+      allowed_html: '<br> <p class="ct-text-large ct-text-small text-align-left text-align-center text-align-right"> <h2 id class> <h3 id class="text-align-left text-align-center text-align-right"> <h4 id class="text-align-left text-align-center text-align-right"> <h5 id class="text-align-left text-align-center text-align-right"> <h6 id class="text-align-left text-align-center text-align-right"> <a class="ct-button ct-theme-light ct-theme-dark ct-button--primary ct-button--regular ct-button--secondary ct-button--large" hreflang target title href data-entity-type data-entity-uuid data-entity-substitution> <table class="ct-theme-light ct-theme-dark ct-table ct-table--striped"> <cite> <dl> <dt> <dd> <img src alt data-entity-type data-entity-uuid> <drupal-entity alt title data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button> <span class="ct-visually-hidden"> <svg role viewBox aria-hidden width height class="ct-icon"> <path d> <blockquote cite> <drupal-media title data-entity-type data-entity-uuid alt data-caption data-align> <strong> <em> <u> <code class="language-*"> <pre class="text-align-left text-align-center text-align-right"> <s> <sub> <sup> <ul type> <ol type start> <li> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption> <highlight-js data-plugin-config data-plugin-id>'
       filter_html_help: true
       filter_html_nofollow: false
+  highlight_js:
+    id: highlight_js
+    provider: highlight_js
+    status: true
+    weight: -40
+    settings: {  }
   filter_html_escape:
     id: filter_html_escape
     provider: filter
