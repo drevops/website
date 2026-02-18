@@ -1,0 +1,5 @@
+highlight_js.gherkin:
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gherkin.min.js: { type: external, minified: true }
+  dependencies:
+    - highlight_js/highlight_js.js
