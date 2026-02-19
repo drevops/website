@@ -6,6 +6,7 @@ dependencies:
     - filter.format.civictheme_rich_text
   module:
     - ckeditor5
+    - highlight_js
 _core:
   default_config_hash: SztHd9Hrw3-1EuKex-O6V-Kc5EpxLGsSam2HEDXSgDM
 format: civictheme_rich_text
@@ -40,6 +41,8 @@ settings:
       - subscript
       - '|'
       - sourceEditing
+      - '|'
+      - highlightJs
   plugins:
     ckeditor5_alignment:
       enabled_alignments:
