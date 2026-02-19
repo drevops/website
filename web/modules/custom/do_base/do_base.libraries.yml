@@ -1,3 +1,10 @@
+recaptcha_v3_guard:
+  js:
+    js/do_base.recaptcha_v3_guard.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 highlight_js.gherkin:
   js:
     https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gherkin.min.js: { type: external, minified: true }
