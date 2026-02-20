@@ -50,7 +50,7 @@ commands:
   up:
     usage: Build and start containers.
     cmd: |
-      docker compose up -d "$@"
+      docker compose up --detach "$@"
       if docker compose logs | grep -q "\[Error\]"; then exit 1; fi
 
   down:
@@ -115,7 +115,7 @@ commands:
     usage: Download database. Run with "--fresh" option to force fresh database backup.
     aliases: [fetch-db]
     cmd: |
-      case " $* " in *" --fresh "*) export VORTEX_DB_DOWNLOAD_FRESH=1;; esac
+      case " $* " in *" --fresh "*) export VORTEX_DOWNLOAD_DB_FRESH=1;; esac
       ./scripts/vortex/download-db.sh
 
   reload-db:
@@ -233,6 +233,11 @@ commands:
   test-functional:
     usage: Run PHPUnit functional tests.
     cmd: ahoy cli vendor/bin/phpunit --testsuite=functional "$@"
+
+  test-functional-javascript:
+    aliases: [test-js]
+    usage: Run PHPUnit functional JavaScript tests.
+    cmd: ahoy cli vendor/bin/phpunit --testsuite=functional-javascript "$@"
 
   test-bdd:
     usage: Run BDD tests.

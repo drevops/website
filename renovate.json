@@ -10,11 +10,12 @@
     "ignorePresets": [
         ":prHourlyLimit2"
     ],
-    "rangeStrategy": "update-lockfile",
+    "rangeStrategy": "bump",
     "timezone": "Australia/Melbourne",
     "configMigration": true,
     "enabledManagers": [
         "composer",
+        "npm",
         "dockerfile",
         "docker-compose",
         "github-actions",
@@ -25,12 +26,18 @@
             "matchDepNames": [
                 "php"
             ],
+            "matchFileNames": [
+                "composer.json"
+            ],
             "enabled": false
         },
         {
             "groupName": "Major all - skipped to update manually",
             "matchDatasources": [
                 "packagist"
+            ],
+            "matchFileNames": [
+                "composer.json"
             ],
             "matchUpdateTypes": [
                 "major"
@@ -45,6 +52,9 @@
             "groupSlug": "drupal-minor-patch-contrib",
             "matchDatasources": [
                 "packagist"
+            ],
+            "matchFileNames": [
+                "composer.json"
             ],
             "separateMinorPatch": false,
             "schedule": [
@@ -61,6 +71,9 @@
         {
             "groupName": "Minor and Patch Core",
             "groupSlug": "drupal-minor-patch-core",
+            "matchFileNames": [
+                "composer.json"
+            ],
             "schedule": [
                 "before 2am"
             ],
@@ -79,8 +92,57 @@
             ]
         },
         {
+            "groupName": "Non-root npm - skipped",
+            "matchDatasources": [
+                "npm"
+            ],
+            "matchFileNames": [
+                "!package.json"
+            ],
+            "enabled": false,
+            "matchPackageNames": [
+                "/.*/"
+            ]
+        },
+        {
+            "groupName": "Major npm - skipped to update manually",
+            "matchDatasources": [
+                "npm"
+            ],
+            "matchFileNames": [
+                "package.json"
+            ],
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "enabled": false,
+            "matchPackageNames": [
+                "/.*/"
+            ]
+        },
+        {
+            "groupName": "Minor and Patch npm",
+            "groupSlug": "npm-minor-patch",
+            "matchDatasources": [
+                "npm"
+            ],
+            "matchFileNames": [
+                "package.json"
+            ],
+            "separateMinorPatch": false,
+            "schedule": [
+                "before 2am on Sunday"
+            ],
+            "matchPackageNames": [
+                "/.*/"
+            ]
+        },
+        {
             "groupName": "Container images",
             "groupSlug": "docker",
+            "matchFileNames": [
+                ".docker/**"
+            ],
             "schedule": [
                 "before 3am"
             ],
