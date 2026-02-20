@@ -13,7 +13,7 @@ Drupal 11 implementation of DrevOps Website for DrevOps
 
 [//]: # (DO NOT REMOVE THE BADGE BELOW. IT IS USED BY VORTEX TO TRACK INTEGRATION)
 
-[![Vortex](https://img.shields.io/badge/Vortex-1.35.3-65ACBC.svg)](https://github.com/drevops/vortex/tree/1.35.3)
+[![Vortex](https://img.shields.io/badge/Vortex-1.36.0-65ACBC.svg)](https://github.com/drevops/vortex/tree/1.36.0)
 
 </div>
 
@@ -30,7 +30,7 @@ Drupal 11 implementation of DrevOps Website for DrevOps
 - Authenticate with Lagoon
   1. Create an SSH key and add it to your account in the [Lagoon Dashboard](https://ui-lagoon-master.ch.amazee.io/).
   2. Copy `.env.local.example` to `.env.local`.
-  3. Update `$VORTEX_DB_DOWNLOAD_SSH_FILE` environment variable in `.env.local` file
+  3. Update `$VORTEX_DOWNLOAD_DB_SSH_FILE` environment variable in `.env.local` file
      with the path to the SSH key.
 - `ahoy download-db`
 - `pygmy up`
