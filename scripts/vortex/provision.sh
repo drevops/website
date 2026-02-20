@@ -19,6 +19,9 @@ VORTEX_PROVISION_SKIP="${VORTEX_PROVISION_SKIP:-}"
 # Provision type: database or profile.
 VORTEX_PROVISION_TYPE="${VORTEX_PROVISION_TYPE:-database}"
 
+# Fallback to profile installation if the database dump is not available.
+VORTEX_PROVISION_FALLBACK_TO_PROFILE="${VORTEX_PROVISION_FALLBACK_TO_PROFILE:-0}"
+
 # Flag to always overwrite existing database. Usually set to 0 in deployed
 # environments.
 VORTEX_PROVISION_OVERRIDE_DB="${VORTEX_PROVISION_OVERRIDE_DB:-0}"
@@ -34,6 +37,12 @@ VORTEX_PROVISION_USE_MAINTENANCE_MODE="${VORTEX_PROVISION_USE_MAINTENANCE_MODE:-
 # perform any additional operations. For example, when need to capture database
 # state before any updates ran (for example, DB caching in CI).
 VORTEX_PROVISION_POST_OPERATIONS_SKIP="${VORTEX_PROVISION_POST_OPERATIONS_SKIP:-0}"
+
+# Verify that configuration was not changed by database updates.
+# If enabled and config files are present, the provision will fail if
+# database update hooks modify active configuration, preventing
+# drush config:import from silently overwriting those changes.
+VORTEX_PROVISION_VERIFY_CONFIG_UNCHANGED_AFTER_UPDATE="${VORTEX_PROVISION_VERIFY_CONFIG_UNCHANGED_AFTER_UPDATE:-0}"
 
 # Provision database dump file.
 # If not set, it will be auto-discovered from the VORTEX_DB_DIR directory using
@@ -56,13 +65,13 @@ DRUPAL_SITE_EMAIL="${DRUPAL_SITE_EMAIL:-webmaster@example.com}"
 DRUPAL_PROFILE="${DRUPAL_PROFILE:-standard}"
 
 # Directory with database dump file.
-VORTEX_DB_DIR="${VORTEX_DB_DIR:-./.data}"
+VORTEX_PROVISION_DB_DIR="${VORTEX_PROVISION_DB_DIR:-${VORTEX_DB_DIR:-./.data}}"
 
 # Database dump file name.
-VORTEX_DB_FILE="${VORTEX_DB_FILE:-db.sql}"
+VORTEX_PROVISION_DB_FILE="${VORTEX_PROVISION_DB_FILE:-${VORTEX_DB_FILE:-db.sql}}"
 
 # Name of the pre-built database container image.
-VORTEX_DB_IMAGE="${VORTEX_DB_IMAGE:-}"
+VORTEX_PROVISION_DB_IMAGE="${VORTEX_PROVISION_DB_IMAGE:-${VORTEX_DB_IMAGE:-}}"
 
 # ------------------------------------------------------------------------------
 
@@ -90,10 +99,10 @@ if [ "${VORTEX_PROVISION_SKIP}" = "1" ]; then
 fi
 
 # Convert DB dir starting with './' to a full path.
-[ "${VORTEX_DB_DIR#./}" != "${VORTEX_DB_DIR}" ] && VORTEX_DB_DIR="$(pwd)${VORTEX_DB_DIR#.}"
+[ "${VORTEX_PROVISION_DB_DIR#./}" != "${VORTEX_PROVISION_DB_DIR}" ] && VORTEX_PROVISION_DB_DIR="$(pwd)${VORTEX_PROVISION_DB_DIR#.}"
 
 if [ -z "${VORTEX_PROVISION_DB}" ]; then
-  VORTEX_PROVISION_DB="${VORTEX_PROVISION_DB:-"${VORTEX_DB_DIR}/${VORTEX_DB_FILE}"}"
+  VORTEX_PROVISION_DB="${VORTEX_PROVISION_DB:-"${VORTEX_PROVISION_DB_DIR}/${VORTEX_PROVISION_DB_FILE}"}"
 fi
 
 drush_version="$(drush --version | cut -d' ' -f4)"
@@ -122,8 +131,8 @@ note "Private files path             : ${DRUPAL_PRIVATE_FILES-<empty>}"
 note "Temporary files path           : ${DRUPAL_TEMPORARY_FILES-<empty>}"
 note "Config files path              : ${config_path}"
 note "DB dump file path              : ${VORTEX_PROVISION_DB} ($([ -f "${VORTEX_PROVISION_DB}" ] && echo "present" || echo "absent"))"
-if [ -n "${VORTEX_DB_IMAGE:-}" ]; then
-  note "DB dump container image        : ${VORTEX_DB_IMAGE-}"
+if [ -n "${VORTEX_PROVISION_DB_IMAGE:-}" ]; then
+  note "DB dump container image        : ${VORTEX_PROVISION_DB_IMAGE-}"
 fi
 echo
 note "Profile                        : ${DRUPAL_PROFILE}"
@@ -131,22 +140,38 @@ note "Configuration files present    : $(yesno "${site_has_config_files}")"
 note "Existing site found            : $(yesno "${site_is_installed}")"
 echo
 note "Provision type                 : ${VORTEX_PROVISION_TYPE}"
+note "Fallback to profile            : $(yesno "${VORTEX_PROVISION_FALLBACK_TO_PROFILE}")"
 note "Overwrite existing DB          : $(yesno "${VORTEX_PROVISION_OVERRIDE_DB}")"
 note "Skip DB sanitization           : $(yesno "${VORTEX_PROVISION_SANITIZE_DB_SKIP}")"
 note "Skip post-provision operations : $(yesno "${VORTEX_PROVISION_POST_OPERATIONS_SKIP}")"
+note "Verify config after update     : $(yesno "${VORTEX_PROVISION_VERIFY_CONFIG_UNCHANGED_AFTER_UPDATE}")"
 note "Use maintenance mode           : $(yesno "${VORTEX_PROVISION_USE_MAINTENANCE_MODE}")"
 echo
 ################################################################################
+
+if [ "${VORTEX_PROVISION_VERIFY_CONFIG_UNCHANGED_AFTER_UPDATE}" = "1" ]; then
+  for cmd in diff mktemp; do command -v "${cmd}" >/dev/null || {
+    fail "Command ${cmd} is not available"
+    exit 1
+  }; done
+fi
 
 #
 # Provision site by importing the database from the dump file.
 #
 provision_from_db() {
   if [ ! -f "${VORTEX_PROVISION_DB}" ]; then
+    if [ "${VORTEX_PROVISION_FALLBACK_TO_PROFILE}" = "1" ]; then
+      info "Database dump file is not available. Falling back to profile installation."
+      provision_from_profile
+      return
+    fi
+
     echo
     fail "Unable to import database from file."
     note "Dump file ${VORTEX_PROVISION_DB} does not exist."
     note "Site content was not changed."
+
     exit 1
   fi
 
@@ -196,7 +221,7 @@ if [ "${VORTEX_PROVISION_TYPE}" = "database" ]; then
   if [ "${site_is_installed}" = "1" ]; then
     note "Existing site was found."
 
-    if [ -n "${VORTEX_DB_IMAGE-}" ]; then
+    if [ -n "${VORTEX_PROVISION_DB_IMAGE-}" ]; then
       note "Database is baked into the container image."
       note "Site content will be preserved."
       # Container image restarts with a fresh database. Let the downstream
@@ -213,17 +238,23 @@ if [ "${VORTEX_PROVISION_TYPE}" = "database" ]; then
   else
     note "Existing site was not found."
 
-    if [ -n "${VORTEX_DB_IMAGE-}" ]; then
+    if [ -n "${VORTEX_PROVISION_DB_IMAGE-}" ]; then
       note "Database is baked into the container image."
-      note "Looks like the database in the container image is corrupted."
-      note "Site content was not changed."
-      exit 1
+      if [ "${VORTEX_PROVISION_FALLBACK_TO_PROFILE}" = "1" ]; then
+        info "Database in the container image is not available. Falling back to profile installation."
+        provision_from_profile
+        export VORTEX_PROVISION_OVERRIDE_DB=1
+      else
+        note "Looks like the database in the container image is corrupted."
+        note "Site content was not changed."
+        exit 1
+      fi
+    else
+      note "Fresh site content will be imported from the database dump file."
+      provision_from_db
+      # Let the downstream scripts know that the database is fresh.
+      export VORTEX_PROVISION_OVERRIDE_DB=1
     fi
-
-    note "Fresh site content will be imported from the database dump file."
-    provision_from_db
-    # Let the downstream scripts know that the database is fresh.
-    export VORTEX_PROVISION_OVERRIDE_DB=1
   fi
 else
   info "Provisioning site from the profile."
@@ -271,7 +302,7 @@ if [ "${VORTEX_PROVISION_USE_MAINTENANCE_MODE}" = "1" ]; then
   echo
 fi
 
-# Use 'drush deploy' if configuration files are present or use standalone commands otherwise.
+# Set site UUID from configuration if config files are present.
 if [ "${site_has_config_files}" = "1" ]; then
   if [ -f "${config_path}/system.site.yml" ]; then
     config_uuid="$(cat "${config_path}/system.site.yml" | grep uuid | tail -c +7 | head -c 36)"
@@ -279,10 +310,46 @@ if [ "${site_has_config_files}" = "1" ]; then
     pass "Updated site UUID from the configuration with ${config_uuid}."
     echo
   fi
+fi
 
-  task "Running deployment operations via 'drush deploy'."
-  drush deploy
-  pass "Completed deployment operations via 'drush deploy'."
+task "Running database updates."
+
+if [ "${VORTEX_PROVISION_VERIFY_CONFIG_UNCHANGED_AFTER_UPDATE}" = "1" ] && [ "${site_has_config_files}" = "1" ]; then
+  config_before=$(mktemp -d)
+  drush config:export --destination="${config_before}"
+
+  drush updatedb --no-cache-clear
+
+  config_after=$(mktemp -d)
+  drush config:export --destination="${config_after}"
+
+  config_diff=$(diff -rq "${config_before}" "${config_after}" || true)
+
+  if [ -n "${config_diff}" ]; then
+    fail "Configuration was changed by database updates."
+    note "The following configuration files were changed:"
+    echo "${config_diff}"
+    note "Configuration before updates: ${config_before}"
+    note "Configuration after updates:  ${config_after}"
+    note "Review the update hooks and manually export updated configuration."
+    exit 1
+  fi
+
+  rm -rf "${config_before}" "${config_after}"
+
+  pass "Verified that database updates did not change configuration."
+else
+  drush updatedb --no-cache-clear
+fi
+
+pass "Completed running database updates."
+echo
+
+# Import configuration if config files are present.
+if [ "${site_has_config_files}" = "1" ]; then
+  task "Importing configuration."
+  drush config:import
+  pass "Completed configuration import."
   echo
 
   # Import config_split configuration if the module is installed.
@@ -295,22 +362,17 @@ if [ "${site_has_config_files}" = "1" ]; then
     pass "Completed config_split configuration import."
     echo
   fi
-else
-  task "Running database updates."
-  drush updatedb --no-cache-clear
-  pass "Completed running database updates."
-  echo
-
-  task "Rebuilding cache."
-  drush cache:rebuild
-  pass "Cache was rebuilt."
-  echo
-
-  task "Running deployment operations via 'drush deploy:hook'."
-  drush deploy:hook
-  pass "Completed deployment operations via 'drush deploy:hook'."
-  echo
 fi
+
+task "Rebuilding cache."
+drush cache:rebuild
+pass "Cache was rebuilt."
+echo
+
+task "Running deployment hooks."
+drush deploy:hook
+pass "Completed deployment hooks."
+echo
 
 # Sanitize database.
 if [ "${VORTEX_PROVISION_SANITIZE_DB_SKIP}" != "1" ]; then

@@ -39,10 +39,12 @@ ARG VORTEX_FRONTEND_BUILD_SKIP="0"
 ENV VORTEX_FRONTEND_BUILD_SKIP=${VORTEX_FRONTEND_BUILD_SKIP}
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
-    COMPOSER_CACHE_DIR=/tmp/.composer/cache \
-    SIMPLETEST_DB=mysql://drupal:drupal@database/drupal \
-    SIMPLETEST_BASE_URL=http://nginx:8080 \
-    SYMFONY_DEPRECATIONS_HELPER=disabled
+    COMPOSER_CACHE_DIR=/tmp/.composer/cache
+
+# Allow custom PHP runtime configuration for Drush CLI commands.
+# The leading colon appends to the default scan directories.
+# @see https://github.com/drevops/vortex/issues/1913
+ENV PHP_INI_SCAN_DIR="${PHP_INI_SCAN_DIR}:/app/drush/php-ini"
 
 # Starting from this line, Docker adds the result of each command as a
 # separate layer. These layers are cached and reused when the project is

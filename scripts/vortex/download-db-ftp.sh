@@ -8,29 +8,33 @@
 
 t=$(mktemp) && export -p >"${t}" && set -a && . ./.env && if [ -f ./.env.local ]; then . ./.env.local; fi && set +a && . "${t}" && rm "${t}" && unset t
 
+_vortex_var_prefix_default="VORTEX_DOWNLOAD_DB"
+VORTEX_VAR_PREFIX="${VORTEX_VAR_PREFIX:-${_vortex_var_prefix_default}}"
+for v in $(env | grep "^${VORTEX_VAR_PREFIX}_" | cut -d= -f1); do export "${_vortex_var_prefix_default}_${v#"${VORTEX_VAR_PREFIX}"_}=${!v}"; done
+
 set -eu
 [ "${VORTEX_DEBUG-}" = "1" ] && set -x
 
 # The FTP user.
-VORTEX_DB_DOWNLOAD_FTP_USER="${VORTEX_DB_DOWNLOAD_FTP_USER:-}"
+VORTEX_DOWNLOAD_DB_FTP_USER="${VORTEX_DOWNLOAD_DB_FTP_USER:-}"
 
 # The FTP password.
-VORTEX_DB_DOWNLOAD_FTP_PASS="${VORTEX_DB_DOWNLOAD_FTP_PASS:-}"
+VORTEX_DOWNLOAD_DB_FTP_PASS="${VORTEX_DOWNLOAD_DB_FTP_PASS:-}"
 
 # The FTP host.
-VORTEX_DB_DOWNLOAD_FTP_HOST="${VORTEX_DB_DOWNLOAD_FTP_HOST:-}"
+VORTEX_DOWNLOAD_DB_FTP_HOST="${VORTEX_DOWNLOAD_DB_FTP_HOST:-}"
 
 # The FTP port.
-VORTEX_DB_DOWNLOAD_FTP_PORT="${VORTEX_DB_DOWNLOAD_FTP_PORT:-}"
+VORTEX_DOWNLOAD_DB_FTP_PORT="${VORTEX_DOWNLOAD_DB_FTP_PORT:-}"
 
 # The file name, including any directories.
-VORTEX_DB_DOWNLOAD_FTP_FILE="${VORTEX_DB_DOWNLOAD_FTP_FILE:-}"
+VORTEX_DOWNLOAD_DB_FTP_FILE="${VORTEX_DOWNLOAD_DB_FTP_FILE:-}"
 
 # Directory with database dump file.
-VORTEX_DB_DIR="${VORTEX_DB_DIR:-./.data}"
+VORTEX_DOWNLOAD_DB_FTP_DB_DIR="${VORTEX_DOWNLOAD_DB_FTP_DB_DIR:-${VORTEX_DOWNLOAD_DB_DIR:-${VORTEX_DB_DIR:-./.data}}}"
 
 # Database dump file name.
-VORTEX_DB_FILE="${VORTEX_DB_FILE:-db.sql}"
+VORTEX_DOWNLOAD_DB_FTP_DB_FILE="${VORTEX_DOWNLOAD_DB_FTP_DB_FILE:-${VORTEX_DOWNLOAD_DB_FILE:-${VORTEX_DB_FILE:-db.sql}}}"
 
 #-------------------------------------------------------------------------------
 
@@ -49,16 +53,16 @@ for cmd in curl; do command -v "${cmd}" >/dev/null || {
 }; done
 
 # Check all required values.
-[ -z "${VORTEX_DB_DOWNLOAD_FTP_USER}" ] && fail "Missing required value for VORTEX_DB_DOWNLOAD_FTP_USER." && exit 1
-[ -z "${VORTEX_DB_DOWNLOAD_FTP_PASS}" ] && fail "Missing required value for VORTEX_DB_DOWNLOAD_FTP_PASS." && exit 1
-[ -z "${VORTEX_DB_DOWNLOAD_FTP_HOST}" ] && fail "Missing required value for VORTEX_DB_DOWNLOAD_FTP_HOST." && exit 1
-[ -z "${VORTEX_DB_DOWNLOAD_FTP_PORT}" ] && fail "Missing required value for VORTEX_DB_DOWNLOAD_FTP_PORT." && exit 1
-[ -z "${VORTEX_DB_DOWNLOAD_FTP_FILE}" ] && fail "Missing required value for VORTEX_DB_DOWNLOAD_FTP_FILE." && exit 1
+[ -z "${VORTEX_DOWNLOAD_DB_FTP_USER}" ] && fail "Missing required value for VORTEX_DOWNLOAD_DB_FTP_USER." && exit 1
+[ -z "${VORTEX_DOWNLOAD_DB_FTP_PASS}" ] && fail "Missing required value for VORTEX_DOWNLOAD_DB_FTP_PASS." && exit 1
+[ -z "${VORTEX_DOWNLOAD_DB_FTP_HOST}" ] && fail "Missing required value for VORTEX_DOWNLOAD_DB_FTP_HOST." && exit 1
+[ -z "${VORTEX_DOWNLOAD_DB_FTP_PORT}" ] && fail "Missing required value for VORTEX_DOWNLOAD_DB_FTP_PORT." && exit 1
+[ -z "${VORTEX_DOWNLOAD_DB_FTP_FILE}" ] && fail "Missing required value for VORTEX_DOWNLOAD_DB_FTP_FILE." && exit 1
 
 info "Started database dump download from FTP."
 
-mkdir -p "${VORTEX_DB_DIR}"
+mkdir -p "${VORTEX_DOWNLOAD_DB_FTP_DB_DIR}"
 
-curl -u "${VORTEX_DB_DOWNLOAD_FTP_USER}":"${VORTEX_DB_DOWNLOAD_FTP_PASS}" "ftp://${VORTEX_DB_DOWNLOAD_FTP_HOST}:${VORTEX_DB_DOWNLOAD_FTP_PORT}/${VORTEX_DB_DOWNLOAD_FTP_FILE}" -o "${VORTEX_DB_DIR}/${VORTEX_DB_FILE}"
+curl -u "${VORTEX_DOWNLOAD_DB_FTP_USER}":"${VORTEX_DOWNLOAD_DB_FTP_PASS}" "ftp://${VORTEX_DOWNLOAD_DB_FTP_HOST}:${VORTEX_DOWNLOAD_DB_FTP_PORT}/${VORTEX_DOWNLOAD_DB_FTP_FILE}" -o "${VORTEX_DOWNLOAD_DB_FTP_DB_DIR}/${VORTEX_DOWNLOAD_DB_FTP_DB_FILE}"
 
 pass "Finished database dump download from FTP."
