@@ -1,0 +1,5 @@
+do_feed.settings:
+  title: 'Feed settings'
+  route_name: do_feed.settings
+  parent: do_base.admin_config_site
+  description: 'Configure RSS feed path prefix and defaults.'

@@ -1,0 +1,19 @@
+uuid: 1c90e4fa-99c4-478a-9f58-9a817783dd28
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_list_feed_title
+    - paragraphs.paragraphs_type.civictheme_automated_list
+id: paragraph.civictheme_automated_list.field_c_p_list_feed_title
+field_name: field_c_p_list_feed_title
+entity_type: paragraph
+bundle: civictheme_automated_list
+label: 'Feed title'
+description: 'Title shown in the RSS feed channel. Displayed in RSS readers as the feed name.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Feed module hooks.
+ */
+
+declare(strict_types=1);
+
+use Drupal\do_feed\Hook\PreprocessParagraphHook;
+
+/**
+ * Implements hook_preprocess_paragraph().
+ */
+function do_feed_preprocess_paragraph(array &$variables): void {
+  \Drupal::service(PreprocessParagraphHook::class)->preprocessParagraph($variables);
+}

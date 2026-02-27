@@ -54,3 +54,19 @@ parameters:
       paths:
         - web/sites/default/includes
       reportUnmatched: false
+    -
+      # PHPUnit mock method calls are not recognized by PHPStan.
+      message: '#Call to an undefined method .+::(method|expects)\(\)#'
+      paths:
+        - web/modules/custom/*/tests/*
+        - web/themes/custom/*/tests/*
+        - tests/phpunit/*
+      reportUnmatched: false
+    -
+      # PHPUnit mock objects have union types.
+      message: '#Parameter .+ expects .+, .+\|PHPUnit\\Framework\\MockObject\\MockObject given#'
+      paths:
+        - web/modules/custom/*/tests/*
+        - web/themes/custom/*/tests/*
+        - tests/phpunit/*
+      reportUnmatched: false

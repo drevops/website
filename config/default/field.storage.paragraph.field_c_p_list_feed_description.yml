@@ -1,0 +1,19 @@
+uuid: 6c406a6a-07fd-49e5-8ada-767266993884
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.field_c_p_list_feed_description
+field_name: field_c_p_list_feed_description
+entity_type: paragraph
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

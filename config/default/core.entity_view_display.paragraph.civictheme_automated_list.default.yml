@@ -7,6 +7,9 @@ dependencies:
     - field.field.paragraph.civictheme_automated_list.field_c_p_content
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_column_count
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_content_type
+    - field.field.paragraph.civictheme_automated_list.field_c_p_list_feed_description
+    - field.field.paragraph.civictheme_automated_list.field_c_p_list_feed_slug
+    - field.field.paragraph.civictheme_automated_list.field_c_p_list_feed_title
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_fill_width
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_filters_exp
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_item_theme
@@ -181,4 +184,7 @@ content:
     weight: 3
     region: content
 hidden:
+  field_c_p_list_feed_description: true
+  field_c_p_list_feed_slug: true
+  field_c_p_list_feed_title: true
   search_api_excerpt: true
