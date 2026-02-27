@@ -1,0 +1,7 @@
+do_feed.settings:
+  type: config_object
+  label: 'Feed settings'
+  mapping:
+    path_prefix:
+      type: string
+      label: 'Path prefix'

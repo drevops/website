@@ -1,0 +1,7 @@
+do_base.admin_config_site:
+  path: '/admin/config/site'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Site settings'
+  requirements:
+    _permission: 'access administration pages'

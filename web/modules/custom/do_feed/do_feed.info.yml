@@ -1,0 +1,9 @@
+name: DrevOps Website Feed
+type: module
+description: RSS feed support for CivicTheme Automated List paragraphs.
+core_version_requirement: ^11
+package: website
+dependencies:
+  - do_base:do_base
+  - drupal:path_alias
+  - drupal:views

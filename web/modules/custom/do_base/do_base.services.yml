@@ -1,0 +1,6 @@
+services:
+  do_base.twig.icon_assets:
+    class: Drupal\do_base\Twig\IconAssetsExtension
+    arguments: ['@theme.manager']
+    tags:
+      - { name: twig.extension }
