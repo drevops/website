@@ -90,15 +90,13 @@ class FeedSettingsFormTest extends KernelTestBase {
   /**
    * Data provider for `testSubmitAndBuildRoundTrip()`.
    *
-   * @return array<string, array{string}>
+   * @return \Iterator<string, array{string}>
    *   Test cases with path prefix values.
    */
-  public static function dataProviderSubmitAndBuildRoundTrip(): array {
-    return [
-      'short prefix' => ['rss'],
-      'hyphenated prefix' => ['custom-feed'],
-      'single character' => ['f'],
-    ];
+  public static function dataProviderSubmitAndBuildRoundTrip(): \Iterator {
+    yield 'short prefix' => ['rss'];
+    yield 'hyphenated prefix' => ['custom-feed'];
+    yield 'single character' => ['f'];
   }
 
 }

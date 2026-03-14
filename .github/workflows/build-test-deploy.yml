@@ -31,6 +31,8 @@ on:
       - develop
       - release/**
       - hotfix/**
+      - feature/**
+      - bugfix/**
       - project/**
 
   workflow_dispatch:
@@ -47,7 +49,110 @@ defaults:
   run:
     shell: bash
 
+# Workaround for the Actions runner creating /root/.docker/config.json
+# with permissions that prevent the container from reading it.
+# https://github.com/actions/runner/issues/863
+env:
+  DOCKER_CONFIG: /tmp/.docker
+
 jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'schedule' && (github.event_name == 'push' || !startsWith(github.head_ref, 'project/')) }}
+
+    container:
+      # https://hub.docker.com/r/drevops/ci-runner
+      image: drevops/ci-runner:26.2.0@sha256:fe1561c2984a1023e84eebe6461056b0b55afedbb2512e6c2c7f19aca6beb398
+      env:
+        PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
+        VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
+        VORTEX_CONTAINER_REGISTRY_PASS: ${{ secrets.VORTEX_CONTAINER_REGISTRY_PASS }}
+        TZ: ${{ vars.TZ || 'UTC' }}
+        TERM: xterm-256color
+        VORTEX_DEBUG: ${{ vars.VORTEX_DEBUG }}
+
+    steps:
+      - name: Preserve $HOME set in the container
+        run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
+
+      - name: Check out code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Fix Git ownership permissions
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Process the codebase to run in CI
+        run: find . -name "docker-compose.yml" -print0 | xargs -0 -I {} sh -c "sed -i -e '/###/d' {} && sed -i -e 's/##//' {}"
+
+      - name: Load environment variables from .env
+        run: t=$(mktemp) && export -p >"${t}" && set -a && . ./.env && set +a && . "${t}" && env >> "$GITHUB_ENV"
+
+      - name: Validate Composer configuration
+        run: composer validate --strict
+        continue-on-error: ${{ vars.VORTEX_CI_COMPOSER_VALIDATE_IGNORE_FAILURE == '1' }}
+
+      - name: Login to container registry
+        run: ./scripts/vortex/login-container-registry.sh
+
+      - name: Lint Dockerfiles with Hadolint
+        run: |
+          find .docker -name 'Dockerfile' -o -name '*.dockerfile' | while read -r file; do
+            echo "Linting ${file}" && cat "${file}" | docker run --rm -i hadolint/hadolint
+          done
+        continue-on-error: ${{ vars.VORTEX_CI_HADOLINT_IGNORE_FAILURE == '1' }}
+
+      - name: Lint Docker Compose files with DCLint
+        run: docker run --rm -v "${PWD}":/app zavoloklom/dclint:3.1.0 .
+        continue-on-error: ${{ vars.VORTEX_CI_DCLINT_IGNORE_FAILURE == '1' }}
+
+      - name: Build stack
+        run: docker compose up --no-deps --detach cli
+
+      - name: Install development dependencies
+        run: |
+          docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c " \
+            if [ -n \"${PACKAGE_TOKEN:-}\" ]; then export COMPOSER_AUTH='{\"github-oauth\": {\"github.com\": \"${PACKAGE_TOKEN-}\"}}'; fi && \
+            COMPOSER_MEMORY_LIMIT=-1 composer --ansi install --prefer-dist"
+          docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c "yarn install --frozen-lockfile"
+
+      - name: Audit Composer packages
+        run: docker compose exec -T cli composer audit
+        continue-on-error: ${{ vars.VORTEX_CI_COMPOSER_AUDIT_IGNORE_FAILURE == '1' }}
+
+      - name: Validate Composer configuration is normalized
+        run: docker compose exec -T cli composer normalize --dry-run
+        continue-on-error: ${{ vars.VORTEX_CI_COMPOSER_NORMALIZE_IGNORE_FAILURE == '1' }}
+
+      - name: Lint code with PHPCS
+        run: docker compose exec -T cli vendor/bin/phpcs
+        continue-on-error: ${{ vars.VORTEX_CI_PHPCS_IGNORE_FAILURE == '1' }}
+
+      - name: Lint code with PHPStan
+        run: docker compose exec -T cli vendor/bin/phpstan
+        continue-on-error: ${{ vars.VORTEX_CI_PHPSTAN_IGNORE_FAILURE == '1' }}
+
+      - name: Lint code with Rector
+        run: docker compose exec -T cli vendor/bin/rector --dry-run
+        continue-on-error: ${{ vars.VORTEX_CI_RECTOR_IGNORE_FAILURE == '1' }}
+
+      - name: Lint code with Twig CS Fixer
+        run: docker compose exec -T cli vendor/bin/twig-cs-fixer
+        continue-on-error: ${{ vars.VORTEX_CI_TWIG_CS_FIXER_IGNORE_FAILURE == '1' }}
+
+      - name: Lint code with Gherkin Lint
+        run: docker compose exec -T cli vendor/bin/gherkinlint lint tests/behat/features
+        continue-on-error: ${{ vars.VORTEX_CI_GHERKIN_LINT_IGNORE_FAILURE == '1' }}
+
+      - name: Lint module code with NodeJS linters
+        run: docker compose exec -T cli bash -c "yarn run lint"
+        continue-on-error: ${{ vars.VORTEX_CI_NODEJS_LINT_IGNORE_FAILURE == '1' }}
+
+      - name: Lint theme code with NodeJS linters
+        if: ${{ vars.VORTEX_FRONTEND_BUILD_SKIP != '1' }}
+        run: docker compose exec -T cli bash -c "yarn --cwd=\${WEBROOT}/themes/custom/\${DRUPAL_THEME} run lint"
+        continue-on-error: ${{ vars.VORTEX_CI_NODEJS_LINT_IGNORE_FAILURE == '1' }}
+
   database:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' || !startsWith(github.head_ref, 'project/') }}
@@ -83,9 +188,12 @@ jobs:
           # Do not keep SSH credentials after checkout to allow adding custom SSH keys.
           persist-credentials: false
 
+      - name: Fix Git ownership permissions
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Add SSH private key used to download database
         if: ${{ env.VORTEX_DOWNLOAD_DB_SSH_PRIVATE_KEY != '' }}
-        uses: shimataro/ssh-key-action@v2
+        uses: shimataro/ssh-key-action@6b84f2e793b32fa0b03a379cadadec75cc539391 # v2.8.0
         with:
           key: ${{ secrets.VORTEX_DOWNLOAD_DB_SSH_PRIVATE_KEY }}
           known_hosts: unnecessary
@@ -189,6 +297,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
+      - name: Fix Git ownership permissions
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Process the codebase to run in CI
         run: find . -name "docker-compose.yml" -print0 | xargs -0 -I {} sh -c "sed -i -e '/###/d' {} && sed -i -e 's/##//' {}"
 
@@ -225,19 +336,6 @@ jobs:
       - name: Login to container registry
         run: ./scripts/vortex/login-container-registry.sh
 
-      - name: Lint Dockerfiles with Hadolint
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: |
-          find .docker -name 'Dockerfile' -o -name '*.dockerfile' | while read -r file; do
-            echo "Linting ${file}" && cat "${file}" | docker run --rm -i hadolint/hadolint
-          done
-        continue-on-error: ${{ vars.VORTEX_CI_HADOLINT_IGNORE_FAILURE == '1' }}
-
-      - name: Lint Docker Compose files with DCLint
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker run --rm -v "${PWD}":/app zavoloklom/dclint:3.1.0 .
-        continue-on-error: ${{ vars.VORTEX_CI_DCLINT_IGNORE_FAILURE == '1' }}
-
       - name: Build stack
         run: docker compose up --detach && docker builder prune --all --force
 
@@ -254,51 +352,6 @@ jobs:
           docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c " \
             if [ -n \"${PACKAGE_TOKEN:-}\" ]; then export COMPOSER_AUTH='{\"github-oauth\": {\"github.com\": \"${PACKAGE_TOKEN-}\"}}'; fi && \
             COMPOSER_MEMORY_LIMIT=-1 composer --ansi install --prefer-dist"
-          docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c "yarn install --frozen-lockfile"
-
-      - name: Audit Composer packages
-        run: docker compose exec -T cli composer audit
-        continue-on-error: ${{ vars.VORTEX_CI_COMPOSER_AUDIT_IGNORE_FAILURE == '1' }}
-
-      - name: Validate Composer configuration is normalized
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker compose exec -T cli composer normalize --dry-run
-        continue-on-error: ${{ vars.VORTEX_CI_COMPOSER_NORMALIZE_IGNORE_FAILURE == '1' }}
-
-      - name: Lint code with PHPCS
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker compose exec -T cli vendor/bin/phpcs
-        continue-on-error: ${{ vars.VORTEX_CI_PHPCS_IGNORE_FAILURE == '1' }}
-
-      - name: Lint code with PHPStan
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker compose exec -T cli vendor/bin/phpstan
-        continue-on-error: ${{ vars.VORTEX_CI_PHPSTAN_IGNORE_FAILURE == '1' }}
-
-      - name: Lint code with Rector
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker compose exec -T cli vendor/bin/rector --dry-run
-        continue-on-error: ${{ vars.VORTEX_CI_RECTOR_IGNORE_FAILURE == '1' }}
-
-      - name: Lint code with Twig CS Fixer
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker compose exec -T cli vendor/bin/twig-cs-fixer
-        continue-on-error: ${{ vars.VORTEX_CI_TWIG_CS_FIXER_IGNORE_FAILURE == '1' }}
-
-      - name: Lint code with Gherkin Lint
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker compose exec -T cli vendor/bin/gherkinlint lint tests/behat/features
-        continue-on-error: ${{ vars.VORTEX_CI_GHERKIN_LINT_IGNORE_FAILURE == '1' }}
-
-      - name: Lint module code with NodeJS linters
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: docker compose exec -T cli bash -c "yarn run lint"
-        continue-on-error: ${{ vars.VORTEX_CI_NODEJS_LINT_IGNORE_FAILURE == '1' }}
-
-      - name: Lint theme code with NodeJS linters
-        if: ${{ (matrix.instance == 0 || strategy.job-total == 1) && vars.VORTEX_FRONTEND_BUILD_SKIP != '1' }}
-        run: docker compose exec -T cli bash -c "yarn --cwd=\${WEBROOT}/themes/custom/\${DRUPAL_THEME} run lint"
-        continue-on-error: ${{ vars.VORTEX_CI_NODEJS_LINT_IGNORE_FAILURE == '1' }}
 
       - name: Provision site
         run: |
@@ -310,8 +363,60 @@ jobs:
         timeout-minutes: 30
 
       - name: Test with PHPUnit
+        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
         run: docker compose exec -T cli vendor/bin/phpunit
         continue-on-error: ${{ vars.VORTEX_CI_PHPUNIT_IGNORE_FAILURE == '1' }}
+
+      - name: Process PHPUnit logs and coverage
+        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
+        run: |
+          mkdir -p ".logs"
+          if docker compose ps --services --filter "status=running" | grep -q cli && docker compose exec cli test -d /app/.logs; then
+             docker compose cp cli:/app/.logs/. ".logs/"
+          fi
+
+      - name: Extract code coverage
+        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
+        run: |
+          RATE=$(grep -om1 'line-rate="[0-9.]*"' .logs/coverage/phpunit/cobertura.xml | tr -cd '0-9.')
+          PERCENT=$(awk "BEGIN {printf \"%.2f\", $RATE*100}")
+          echo "Coverage: $PERCENT% (threshold: $VORTEX_CI_CODE_COVERAGE_THRESHOLD%)" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "COVERAGE_PERCENT=${PERCENT}" >> "$GITHUB_ENV"
+          { echo "COVERAGE_CONTENT<<EOF"; sed '/./,$!d' .logs/coverage/phpunit/coverage.txt; echo "EOF"; } >> "$GITHUB_ENV"
+        env:
+          VORTEX_CI_CODE_COVERAGE_THRESHOLD: ${{ vars.VORTEX_CI_CODE_COVERAGE_THRESHOLD || '90' }}
+
+      - name: Post coverage summary as PR comment
+        if: ${{ github.event_name == 'pull_request' && (matrix.instance == 0 || strategy.job-total == 1) && vars.VORTEX_CI_CODE_COVERAGE_PR_COMMENT_SKIP != '1' }}
+        uses: marocchino/sticky-pull-request-comment@70d2764d1a7d5d9560b100cbea0077fc8f633987 # v3
+        with:
+          header: coverage-gha
+          message: |
+            **Code coverage (GitHub Actions)**
+            ```
+            ${{ env.COVERAGE_CONTENT }}
+            ```
+          hide_and_recreate: true
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5
+        if: ${{ (matrix.instance == 0 || strategy.job-total == 1) && env.CODECOV_TOKEN != '' }}
+        with:
+          directory: .logs/coverage
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Check code coverage threshold
+        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
+        run: |
+          if [ "${COVERAGE_PERCENT//.}" -lt "$((VORTEX_CI_CODE_COVERAGE_THRESHOLD*100))" ]; then
+            echo "FAIL: coverage ${COVERAGE_PERCENT}% is below threshold ${VORTEX_CI_CODE_COVERAGE_THRESHOLD}%"
+            exit 1
+          fi
+        env:
+          VORTEX_CI_CODE_COVERAGE_THRESHOLD: ${{ vars.VORTEX_CI_CODE_COVERAGE_THRESHOLD || '90' }}
 
       - name: Test with Behat
         run: |
@@ -334,7 +439,7 @@ jobs:
           fi
 
       - name: Upload test artifacts
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: always()
         with:
           name: test-artifacts-${{ matrix.instance }}
@@ -342,42 +447,8 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
 
-      - name: Check code coverage threshold
-        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
-        run: |
-          RATE=$(grep -om1 'line-rate="[0-9.]*"' .logs/coverage/phpunit/cobertura.xml | tr -cd '0-9.')
-          PERCENT=$(awk "BEGIN {printf \"%.2f\", $RATE*100}")
-          echo "Coverage: $PERCENT% (threshold: $VORTEX_CI_CODE_COVERAGE_THRESHOLD%)" | tee -a "$GITHUB_STEP_SUMMARY"
-          if [ "${PERCENT//./}" -lt "$((VORTEX_CI_CODE_COVERAGE_THRESHOLD*100))" ]; then
-            echo "FAIL: coverage too low"
-            exit 1
-          fi
-          { echo "COVERAGE_CONTENT<<EOF"; sed '/./,$!d' .logs/coverage/phpunit/coverage.txt; echo "EOF"; } >> "$GITHUB_ENV"
-        env:
-          VORTEX_CI_CODE_COVERAGE_THRESHOLD: ${{ vars.VORTEX_CI_CODE_COVERAGE_THRESHOLD || '90' }}
-
-      - name: Post coverage summary as PR comment
-        if: ${{ github.event_name == 'pull_request' && (matrix.instance == 0 || strategy.job-total == 1) && vars.VORTEX_CI_CODE_COVERAGE_PR_COMMENT_SKIP != '1' }}
-        uses: marocchino/sticky-pull-request-comment@773744901bac0e8cbb5a0dc842800d45e9b2b405 # v2
-        with:
-          message: |
-            ```
-            ${{ env.COVERAGE_CONTENT }}
-            ```
-          hide_and_recreate: true
-
-      - name: Upload coverage report to Codecov
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5
-        if: ${{ env.CODECOV_TOKEN != '' }}
-        with:
-          directory: .logs/coverage
-          fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
       - name: Upload exported codebase as an artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ matrix.instance == 0 && !startsWith(github.head_ref || github.ref_name, 'deps/') && contains(env.VORTEX_DEPLOY_TYPES, 'artifact') }}
         with:
           name: code-artifact
@@ -395,7 +466,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, lint]
     if: ${{ github.event_name != 'schedule' && !startsWith(github.head_ref || github.ref_name, 'deps/') && (github.event_name == 'push' || !startsWith(github.head_ref, 'project/')) }}
 
     container:
@@ -421,11 +492,14 @@ jobs:
           persist-credentials: false
           ref: ${{ github.head_ref || github.ref_name }}
 
+      - name: Fix Git ownership permissions
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Load environment variables from .env
         run: t=$(mktemp) && export -p >"${t}" && set -a && . ./.env && set +a && . "${t}" && env >> "$GITHUB_ENV"
 
       - name: Download exported codebase as an artifact
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         if: ${{ contains(env.VORTEX_DEPLOY_TYPES, 'artifact') }}
         with:
           name: code-artifact
@@ -439,7 +513,7 @@ jobs:
 
       - name: Add SSH private key to the runner
         if: ${{ env.VORTEX_DEPLOY_SSH_PRIVATE_KEY != '' }}
-        uses: shimataro/ssh-key-action@v2
+        uses: shimataro/ssh-key-action@6b84f2e793b32fa0b03a379cadadec75cc539391 # v2.8.0
         with:
           key: ${{ secrets.VORTEX_DEPLOY_SSH_PRIVATE_KEY }}
           known_hosts: unnecessary
