@@ -103,26 +103,24 @@ class FeedUrlBuilderTest extends UnitTestCase {
   /**
    * Data provider for testBuildInternalPath.
    */
-  public static function dataProviderBuildInternalPath(): array {
-    return [
-      'blog list with single topic' => [
-        'civictheme_page', [1], [], 'feed/civictheme_page/1/all',
-      ],
-      'multi-topic list' => [
-        'civictheme_page', [1, 2, 3], [], 'feed/civictheme_page/1+2+3/all',
-      ],
-      'no topics' => [
-        'civictheme_page', [], [], 'feed/civictheme_page/all/all',
-      ],
-      'no content type' => [
-        NULL, [], [], 'feed/all/all/all',
-      ],
-      'with site sections' => [
-        'civictheme_page', [1], [5, 6], 'feed/civictheme_page/1/5+6',
-      ],
-      'custom path prefix' => [
-        'civictheme_page', [1], [], 'rss/civictheme_page/1/all', 'rss',
-      ],
+  public static function dataProviderBuildInternalPath(): \Iterator {
+    yield 'blog list with single topic' => [
+      'civictheme_page', [1], [], 'feed/civictheme_page/1/all',
+    ];
+    yield 'multi-topic list' => [
+      'civictheme_page', [1, 2, 3], [], 'feed/civictheme_page/1+2+3/all',
+    ];
+    yield 'no topics' => [
+      'civictheme_page', [], [], 'feed/civictheme_page/all/all',
+    ];
+    yield 'no content type' => [
+      NULL, [], [], 'feed/all/all/all',
+    ];
+    yield 'with site sections' => [
+      'civictheme_page', [1], [5, 6], 'feed/civictheme_page/1/5+6',
+    ];
+    yield 'custom path prefix' => [
+      'civictheme_page', [1], [], 'rss/civictheme_page/1/all', 'rss',
     ];
   }
 

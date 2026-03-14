@@ -52,15 +52,13 @@ class ViewsPreViewHookTest extends UnitTestCase {
   /**
    * Data provider for `testEarlyReturnConditions()`.
    *
-   * @return array<string, array{string, string, bool}>
+   * @return \Iterator<string, array{string, string, bool}>
    *   Test cases: view_id, display_id, has_request.
    */
-  public static function dataProviderEarlyReturnConditions(): array {
-    return [
-      'wrong view id' => ['other_view', 'feed_1', TRUE],
-      'wrong display id' => ['feed', 'page_1', TRUE],
-      'no request' => ['feed', 'feed_1', FALSE],
-    ];
+  public static function dataProviderEarlyReturnConditions(): \Iterator {
+    yield 'wrong view id' => ['other_view', 'feed_1', TRUE];
+    yield 'wrong display id' => ['feed', 'page_1', TRUE];
+    yield 'no request' => ['feed', 'feed_1', FALSE];
   }
 
   /**
@@ -222,16 +220,14 @@ class ViewsPreViewHookTest extends UnitTestCase {
   /**
    * Data provider for `testTitleAndDescriptionOverride()`.
    *
-   * @return array<string, array{string, string, bool, bool}>
+   * @return \Iterator<string, array{string, string, bool, bool}>
    *   Test cases: title, description, expect_title_set, expect_description_set.
    */
-  public static function dataProviderTitleAndDescriptionOverride(): array {
-    return [
-      'both title and description' => ['My Feed', 'Feed description', TRUE, TRUE],
-      'title only' => ['My Feed', '', TRUE, FALSE],
-      'description only' => ['', 'Feed description', FALSE, TRUE],
-      'neither' => ['', '', FALSE, FALSE],
-    ];
+  public static function dataProviderTitleAndDescriptionOverride(): \Iterator {
+    yield 'both title and description' => ['My Feed', 'Feed description', TRUE, TRUE];
+    yield 'title only' => ['My Feed', '', TRUE, FALSE];
+    yield 'description only' => ['', 'Feed description', FALSE, TRUE];
+    yield 'neither' => ['', '', FALSE, FALSE];
   }
 
 }

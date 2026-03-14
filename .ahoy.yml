@@ -171,7 +171,7 @@ commands:
     usage: Watch front-end assets during development.
     cmd: |
       ahoy cli "pkill -9 -f grunt" || true
-      ahoy cli "cd ${WEBROOT}/themes/custom/${DRUPAL_THEME} && yarn run dist:watch drush cc css-js"
+      ahoy cli "cd ${WEBROOT}/themes/custom/${DRUPAL_THEME} && yarn run watch"
 
   lint:
     usage: Lint back-end and front-end code.
@@ -284,14 +284,14 @@ commands:
   confirm:
     cmd: |
       if [ -z "${AHOY_CONFIRM_RESPONSE}" ]; then
-        read -r -p ">> $1 [y/N] " AHOY_CONFIRM_RESPONSE
+        read -r -p "$( echo -e "\033[31m>> $1\033[0m \033[2m[y/N]\033[0m " )" AHOY_CONFIRM_RESPONSE
         if [ "${AHOY_CONFIRM_RESPONSE}" != "y" ] && [ "${AHOY_CONFIRM_RESPONSE}" != "true" ]; then
           echo "The operation was canceled."
           exit 1
         fi
       else
         if [ "${AHOY_CONFIRM_WAIT_SKIP}" != "1" ]; then
-          echo ">> $1 [y/N] ${AHOY_CONFIRM_RESPONSE}"
+          echo -e "\033[31m>> $1\033[0m \033[2m[y/N] ${AHOY_CONFIRM_RESPONSE}\033[0m"
           echo "Waiting for 3 seconds... Press Ctrl+C to cancel."
           sleep 3
         fi

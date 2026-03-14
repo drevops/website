@@ -33,37 +33,35 @@ class PreprocessViewsViewRowRssHookTest extends UnitTestCase {
   /**
    * Data provider for `testSvgStripping()`.
    *
-   * @return array<string, array{string, string}>
+   * @return \Iterator<string, array{string, string}>
    *   Test cases: input description, expected output.
    */
-  public static function dataProviderSvgStripping(): array {
-    return [
-      'no svg' => [
-        '<p>Hello world</p>',
-        '<p>Hello world</p>',
-      ],
-      'simple svg' => [
-        '<p>Text</p><svg><path d="M0 0"/></svg><p>More</p>',
-        '<p>Text</p><p>More</p>',
-      ],
-      'svg with attributes' => [
-        '<p>Text</p><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><p>More</p>',
-        '<p>Text</p><p>More</p>',
-      ],
-      'multiple svgs' => [
-        '<svg><path/></svg><p>Between</p><svg class="icon"><rect/></svg>',
-        '<p>Between</p>',
-      ],
-      'multiline svg' => [
-        "<p>Text</p>\n<svg\n  class=\"icon\"\n  viewBox=\"0 0 24 24\">\n  <path d=\"M0 0\"/>\n</svg>\n<p>More</p>",
-        "<p>Text</p>\n\n<p>More</p>",
-      ],
-      'svg with inner svg-like content' => [
-        '<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0"/></svg><p>After</p>',
-        '<p>After</p>',
-      ],
-      'empty string' => ['', ''],
+  public static function dataProviderSvgStripping(): \Iterator {
+    yield 'no svg' => [
+      '<p>Hello world</p>',
+      '<p>Hello world</p>',
     ];
+    yield 'simple svg' => [
+      '<p>Text</p><svg><path d="M0 0"/></svg><p>More</p>',
+      '<p>Text</p><p>More</p>',
+    ];
+    yield 'svg with attributes' => [
+      '<p>Text</p><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><p>More</p>',
+      '<p>Text</p><p>More</p>',
+    ];
+    yield 'multiple svgs' => [
+      '<svg><path/></svg><p>Between</p><svg class="icon"><rect/></svg>',
+      '<p>Between</p>',
+    ];
+    yield 'multiline svg' => [
+      "<p>Text</p>\n<svg\n  class=\"icon\"\n  viewBox=\"0 0 24 24\">\n  <path d=\"M0 0\"/>\n</svg>\n<p>More</p>",
+      "<p>Text</p>\n\n<p>More</p>",
+    ];
+    yield 'svg with inner svg-like content' => [
+      '<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0"/></svg><p>After</p>',
+      '<p>After</p>',
+    ];
+    yield 'empty string' => ['', ''];
   }
 
   /**
@@ -81,23 +79,21 @@ class PreprocessViewsViewRowRssHookTest extends UnitTestCase {
   /**
    * Data provider for `testSkipsNonString()`.
    *
-   * @return array<string, array{array<string, mixed>, array<string, mixed>}>
+   * @return \Iterator<string, array{array<string, mixed>, array<string, mixed>}>
    *   Test cases: input variables, expected variables.
    */
-  public static function dataProviderSkipsNonString(): array {
-    return [
-      'no description key' => [
+  public static function dataProviderSkipsNonString(): \Iterator {
+    yield 'no description key' => [
         ['title' => 'Test'],
         ['title' => 'Test'],
-      ],
-      'null description' => [
+    ];
+    yield 'null description' => [
         ['description' => NULL],
         ['description' => NULL],
-      ],
-      'array description' => [
+    ];
+    yield 'array description' => [
         ['description' => ['#markup' => '<svg/>']],
         ['description' => ['#markup' => '<svg/>']],
-      ],
     ];
   }
 
