@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * DrevOps Icon component — overrides civictheme:icon with sub-theme fallback.
+ *
+ * Resolves icons from the active sub-theme assets_dir first (injected as a
+ * Twig global by do_base IconAssetsExtension), falling back to civictheme.
+ * Only custom icons need to exist in the sub-theme; all others resolve from
+ * civictheme automatically.
+ *
+ * Props:
+ * - symbol: [string] Icon name (required).
+ * - size: [string] Icon size.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ * - assets_dir: [string] Primary assets directory (defaults to Twig global).
+ */
+#}
+{%- if symbol is not empty -%}
+  {%- set resolved_dir = assets_dir is defined and assets_dir is not empty ? assets_dir : '@civictheme/../assets' -%}
+  {%- set source = source(resolved_dir ~ '/icons/' ~ symbol ~ '.svg', true) -%}
+  {%- if source is empty -%}
+    {%- set source = source('@civictheme/../assets/icons/' ~ symbol ~ '.svg', true) -%}
+  {%- endif -%}
+  {%- if source is not empty -%}
+    {%- set attr = attributes is defined and attributes is not null ? attributes : create_attribute({}) -%}
+    {%- do attr.addClass('ct-icon') -%}
+    {%- if size -%}{%- do attr.addClass('ct-icon--size-' ~ size) -%}{%- endif -%}
+    {%- for class in modifier_class|default('')|split(' ') -%}{%- do attr.addClass(class) -%}{%- endfor -%}
+    {%- do attr.setAttribute('aria-hidden', 'true') -%}
+    {%- do attr.setAttribute('role', 'img') -%}
+    {{- source|replace({'<svg ': '<svg ' ~ attr ~ ' '})|raw -}}
+  {%- endif -%}
+{%- endif -%}

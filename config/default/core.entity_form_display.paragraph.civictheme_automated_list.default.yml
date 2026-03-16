@@ -7,6 +7,9 @@ dependencies:
     - field.field.paragraph.civictheme_automated_list.field_c_p_content
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_column_count
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_content_type
+    - field.field.paragraph.civictheme_automated_list.field_c_p_list_feed_description
+    - field.field.paragraph.civictheme_automated_list.field_c_p_list_feed_slug
+    - field.field.paragraph.civictheme_automated_list.field_c_p_list_feed_title
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_fill_width
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_filters_exp
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_item_theme
@@ -92,12 +95,30 @@ third_party_settings:
         open: false
         description: ''
         required_fields: true
+    group_feed:
+      children:
+        - field_c_p_list_feed_slug
+        - field_c_p_list_feed_title
+        - field_c_p_list_feed_description
+      label: Feed
+      region: content
+      parent_name: group_fields
+      weight: 20
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: false
+        description: ''
+        required_fields: true
     group_fields:
       children:
         - field_c_p_title
         - field_c_p_content
         - field_c_p_list_link_above
         - field_c_p_list_link_below
+        - group_feed
       label: Fields
       region: content
       parent_name: group_tabs
@@ -210,6 +231,30 @@ content:
     weight: 13
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_c_p_list_feed_description:
+    type: string_textarea
+    weight: 12
+    region: content
+    settings:
+      rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_list_feed_slug:
+    type: string_textfield
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_list_feed_title:
+    type: string_textfield
+    weight: 11
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_c_p_list_fill_width:
     type: boolean_checkbox

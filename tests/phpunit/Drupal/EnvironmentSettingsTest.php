@@ -38,207 +38,205 @@ class EnvironmentSettingsTest extends SettingsTestCase {
   /**
    * Data provider for testing environment type detection.
    */
-  public static function dataProviderEnvironmentTypeDetection(): array {
-    return [
-      // By default, the default environment type is local.
-      [[], self::ENVIRONMENT_LOCAL],
+  public static function dataProviderEnvironmentTypeDetection(): \Iterator {
+    // By default, the default environment type is local.
+    yield [[], self::ENVIRONMENT_LOCAL];
 
-      // CI.
+    // CI.
+    yield [
       [
-        [
-          'CI' => 1,
-        ],
-        self::ENVIRONMENT_CI,
+        'CI' => 1,
       ],
+      self::ENVIRONMENT_CI,
+    ];
 
-      // Container.
+    // Container.
+    yield [
       [
-        [
-          'VORTEX_LOCALDEV_URL' => 'https://example-site.docker.amazee.io',
-        ],
-        self::ENVIRONMENT_LOCAL,
+        'VORTEX_LOCALDEV_URL' => 'https://example-site.docker.amazee.io',
       ],
+      self::ENVIRONMENT_LOCAL,
+    ];
 
-      // Lagoon.
+    // Lagoon.
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
       ],
+      self::ENVIRONMENT_DEV,
+    ];
 
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'production',
-        ],
-        self::ENVIRONMENT_PROD,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'production',
       ],
+      self::ENVIRONMENT_PROD,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_GIT_BRANCH' => 'main',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'main',
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-        ],
-        self::ENVIRONMENT_PROD,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_GIT_BRANCH' => 'main',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'main',
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
       ],
+      self::ENVIRONMENT_PROD,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_GIT_BRANCH' => 'main',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'master',
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-        ],
-        self::ENVIRONMENT_STAGE,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_GIT_BRANCH' => 'main',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'master',
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
       ],
+      self::ENVIRONMENT_STAGE,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_GIT_BRANCH' => 'master',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-        ],
-        self::ENVIRONMENT_STAGE,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_GIT_BRANCH' => 'master',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
       ],
+      self::ENVIRONMENT_STAGE,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_GIT_BRANCH' => 'master',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
-          'LAGOON_ENVIRONMENT_TYPE' => 'production',
-        ],
-        self::ENVIRONMENT_PROD,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_GIT_BRANCH' => 'master',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
+        'LAGOON_ENVIRONMENT_TYPE' => 'production',
       ],
+      self::ENVIRONMENT_PROD,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_GIT_BRANCH' => 'main',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-        ],
-        self::ENVIRONMENT_STAGE,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_GIT_BRANCH' => 'main',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
       ],
+      self::ENVIRONMENT_STAGE,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_GIT_BRANCH' => 'main',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
-          'LAGOON_ENVIRONMENT_TYPE' => 'production',
-        ],
-        self::ENVIRONMENT_PROD,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_GIT_BRANCH' => 'main',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
+        'LAGOON_ENVIRONMENT_TYPE' => 'production',
       ],
+      self::ENVIRONMENT_PROD,
+    ];
 
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => 'release',
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => 'release',
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => 'release/1.2.3',
-        ],
-        self::ENVIRONMENT_STAGE,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => 'release/1.2.3',
       ],
+      self::ENVIRONMENT_STAGE,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => 'hotfix',
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => 'hotfix',
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => 'hotfix/1.2.3',
-        ],
-        self::ENVIRONMENT_STAGE,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => 'hotfix/1.2.3',
       ],
+      self::ENVIRONMENT_STAGE,
+    ];
 
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => FALSE,
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => FALSE,
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => FALSE,
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => FALSE,
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => 'somebranch',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => 'somebranch',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => FALSE,
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => FALSE,
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'otherbranch',
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => FALSE,
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'otherbranch',
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => 'somebranch',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'otherbranch',
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => 'somebranch',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'otherbranch',
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => '',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => '',
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => '',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => '',
       ],
+      self::ENVIRONMENT_DEV,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-          'LAGOON_GIT_BRANCH' => 'mainbranch',
-          'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'mainbranch',
-        ],
-        self::ENVIRONMENT_PROD,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
+        'LAGOON_GIT_BRANCH' => 'mainbranch',
+        'VORTEX_LAGOON_PRODUCTION_BRANCH' => 'mainbranch',
       ],
+      self::ENVIRONMENT_PROD,
+    ];
+    yield [
       [
-        [
-          'LAGOON_KUBERNETES' => 1,
-          'LAGOON_ENVIRONMENT_TYPE' => 'development',
-        ],
-        self::ENVIRONMENT_DEV,
+        'LAGOON_KUBERNETES' => 1,
+        'LAGOON_ENVIRONMENT_TYPE' => 'development',
       ],
+      self::ENVIRONMENT_DEV,
     ];
   }
 
@@ -378,12 +376,12 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = self::ENVIRONMENT_LOCAL;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['purge_control.settings']['disable_purge'] = TRUE;
-    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
@@ -429,12 +427,12 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = self::ENVIRONMENT_LOCAL;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['purge_control.settings']['disable_purge'] = TRUE;
-    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
@@ -482,12 +480,12 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['environment_indicator.indicator']['name'] = self::ENVIRONMENT_CI;
     $config['environment_indicator.settings']['favicon'] = TRUE;
     $config['environment_indicator.settings']['toolbar_integration'] = [TRUE];
-    $config['purge_control.settings']['disable_purge'] = TRUE;
-    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['purge_control.settings']['disable_purge'] = TRUE;
+    $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 

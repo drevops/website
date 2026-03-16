@@ -1,0 +1,7 @@
+do_feed.settings:
+  path: '/admin/config/site/feed'
+  defaults:
+    _form: '\Drupal\do_feed\Form\FeedSettingsForm'
+    _title: 'Feed settings'
+  requirements:
+    _permission: 'administer site configuration'

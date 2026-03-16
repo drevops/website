@@ -1,0 +1,19 @@
+uuid: 3431d50e-b2c4-4ff2-90bf-3bfcdea455df
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_list_feed_slug
+    - paragraphs.paragraphs_type.civictheme_automated_list
+id: paragraph.civictheme_automated_list.field_c_p_list_feed_slug
+field_name: field_c_p_list_feed_slug
+entity_type: paragraph
+bundle: civictheme_automated_list
+label: 'Feed slug'
+description: "Enter a unique slug for the RSS feed (e.g., 'blog'). The feed will be available at /{prefix}/{slug}. Leave empty to disable RSS feed."
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

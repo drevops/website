@@ -1,0 +1,6 @@
+do_base.admin_config_site:
+  title: 'Site settings'
+  route_name: do_base.admin_config_site
+  parent: system.admin_config
+  description: 'Site-specific configuration.'
+  weight: 50

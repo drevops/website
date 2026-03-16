@@ -1,0 +1,7 @@
+services:
+  do_feed.url_builder:
+    class: Drupal\do_feed\FeedUrlBuilder
+    arguments: ['@config.factory']
+  Drupal\do_feed\FeedUrlBuilderInterface: '@do_feed.url_builder'
+  Drupal\do_feed\Hook\PreprocessParagraphHook:
+    autowire: true
