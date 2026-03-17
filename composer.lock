@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe9d7f46c02a0e5fef6257c72e52d129",
+    "content-hash": "fe01453e11dd34ccd16f0f704f06740e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3525,6 +3525,62 @@
                 "source": "https://cgit.drupalcode.org/focal_point",
                 "issues": "https://drupal.org/project/issues/focal_point",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
+            "name": "drupal/generated_content",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/generated_content.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/generated_content-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "a7eb32b13c57380e39ad04c0fd44d26b1f534618"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "php": ">=8.2"
+            },
+            "suggest": {
+                "drupal/config_filter": "Provides API to modify the configuration when it is synchronized between the database and the exported yaml files."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1773710061",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Skrypnyk",
+                    "homepage": "https://www.drupal.org/u/alexskrypnyk",
+                    "email": "alex@drevops.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Drupal module to programmatically generate content.",
+            "homepage": "https://drupal.org/project/generated_content",
+            "keywords": [
+                "drupal",
+                "generate",
+                "random"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/generated_content",
+                "issues": "https://drupal.org/project/issues/generated_content"
             }
         },
         {
