@@ -13,6 +13,8 @@ use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Generated page nodes.
+ *
+ * @codeCoverageIgnore
  */
 #[GeneratedContent(
   id: 'do_generated_content_node_civictheme_page',

@@ -10,6 +10,8 @@ use Drupal\generated_content\Plugin\GeneratedContent\GeneratedContentPluginBase;
 
 /**
  * Generated files.
+ *
+ * @codeCoverageIgnore
  */
 #[GeneratedContent(
   id: 'do_generated_content_file_file',
