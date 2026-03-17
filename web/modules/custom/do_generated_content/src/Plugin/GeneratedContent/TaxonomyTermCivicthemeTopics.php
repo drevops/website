@@ -10,6 +10,8 @@ use Drupal\taxonomy\Entity\Term;
 
 /**
  * Generated topic taxonomy terms.
+ *
+ * @codeCoverageIgnore
  */
 #[GeneratedContent(
   id: 'do_generated_content_taxonomy_term_civictheme_topics',
