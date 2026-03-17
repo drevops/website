@@ -1,0 +1,7 @@
+name: DrevOps Website Generated Content
+type: module
+description: 'Provides generated content for non-production environments.'
+package: DrevOps
+core_version_requirement: ^10.3 || ^11
+dependencies:
+  - generated_content:generated_content

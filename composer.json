@@ -25,6 +25,7 @@
         "drupal/entity_usage": "^2.0@beta",
         "drupal/environment_indicator": "^4.0.25",
         "drupal/field_group": "^4",
+        "drupal/generated_content": "^2",
         "drupal/gin": "^4.0.6",
         "drupal/gin_toolbar": "^2",
         "drupal/google_tag": "^2.0.9",
