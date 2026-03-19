@@ -40,19 +40,19 @@ on:
 
   workflow_dispatch:
     inputs:
-      enable_terminal:
-        type: boolean
-        description: 'Enable terminal session.'
-        required: false
-        default: false
       deploy_target:
         type: string
-        description: 'Deploy target: "<branch>" or "PR-<num>".'
+        description: 'Deploy target: "<branch>" or "PR-<num>"'
         required: false
         default: ''
       override_db:
         type: boolean
-        description: 'Override existing database in the deployment environment.'
+        description: 'Override existing database'
+        required: false
+        default: false
+      enable_terminal:
+        type: boolean
+        description: 'Enable terminal session'
         required: false
         default: false
   #;< !PROVISION_TYPE_PROFILE
