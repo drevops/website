@@ -42,7 +42,7 @@ on:
     inputs:
       deploy_target:
         type: string
-        description: 'Deploy target: "<branch>" or "PR-<num>"'
+        description: 'Deploy target: "<branch>" or "PR-<num>"<br/> next line'
         required: false
         default: ''
       override_db:
