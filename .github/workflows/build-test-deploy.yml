@@ -47,7 +47,7 @@ on:
         default: false
       deploy_target:
         type: string
-        description: 'Deploy target: branch name or PR name.'
+        description: 'Deploy target: branch name or `PR-<num>`.'
         required: false
         default: ''
       override_db:
