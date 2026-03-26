@@ -84,16 +84,16 @@ class PreprocessViewsViewRowRssHookTest extends UnitTestCase {
    */
   public static function dataProviderSkipsNonString(): \Iterator {
     yield 'no description key' => [
-        ['title' => 'Test'],
-        ['title' => 'Test'],
+      ['title' => 'Test'],
+      ['title' => 'Test'],
     ];
     yield 'null description' => [
-        ['description' => NULL],
-        ['description' => NULL],
+      ['description' => NULL],
+      ['description' => NULL],
     ];
     yield 'array description' => [
-        ['description' => ['#markup' => '<svg/>']],
-        ['description' => ['#markup' => '<svg/>']],
+      ['description' => ['#markup' => '<svg/>']],
+      ['description' => ['#markup' => '<svg/>']],
     ];
   }
 
