@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9bdac04c6e1bf03828844dcd84a04fad",
+    "content-hash": "b1515c36c32a0c3b8f4f5da21178f774",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -12654,23 +12654,23 @@
         },
         {
             "name": "drevops/behat-steps",
-            "version": "3.5.2",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-steps.git",
-                "reference": "ca461bb310f03f0cc270a7ecda4926a1ebaa1c49"
+                "reference": "00e7feee0b36159d8be0ea32f1ccd455d451eb42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/ca461bb310f03f0cc270a7ecda4926a1ebaa1c49",
-                "reference": "ca461bb310f03f0cc270a7ecda4926a1ebaa1c49",
+                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/00e7feee0b36159d8be0ea32f1ccd455d451eb42",
+                "reference": "00e7feee0b36159d8be0ea32f1ccd455d451eb42",
                 "shasum": ""
             },
             "require": {
                 "behat/behat": "^3.14",
                 "behat/mink": ">=1.11",
                 "behat/mink-selenium2-driver": ">=1.7",
-                "drupal/drupal-extension": "^5",
+                "drupal/drupal-extension": "^5.3.1",
                 "php": ">=8.2"
             },
             "require-dev": {
@@ -12680,7 +12680,7 @@
                 "dealerdirect/phpcodesniffer-composer-installer": "^1",
                 "drevops/behat-phpserver": "^2.1.1",
                 "drevops/behat-screenshot": "^2.1",
-                "drevops/phpcs-standard": "^0.6",
+                "drevops/phpcs-standard": "^0.7",
                 "drupal/coder": "^8.3.28",
                 "dvdoug/behat-code-coverage": "^5.3.2.1",
                 "ergebnis/composer-normalize": "^2.47",
@@ -12734,20 +12734,20 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-03-03T15:05:05+00:00"
+            "time": "2026-03-18T08:47:49+00:00"
         },
         {
             "name": "drevops/phpcs-standard",
-            "version": "0.6.2",
+            "version": "0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/phpcs-standard.git",
-                "reference": "c710039b6b84c60cdac3f1cdcbb5c594e00307b1"
+                "reference": "caee870e84a5c1e41e2047f1c89c98740fa3a2c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/phpcs-standard/zipball/c710039b6b84c60cdac3f1cdcbb5c594e00307b1",
-                "reference": "c710039b6b84c60cdac3f1cdcbb5c594e00307b1",
+                "url": "https://api.github.com/repos/drevops/phpcs-standard/zipball/caee870e84a5c1e41e2047f1c89c98740fa3a2c1",
+                "reference": "caee870e84a5c1e41e2047f1c89c98740fa3a2c1",
                 "shasum": ""
             },
             "require": {
@@ -12813,20 +12813,20 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-12-18T04:22:45+00:00"
+            "time": "2026-03-12T23:43:14+00:00"
         },
         {
             "name": "drupal/coder",
-            "version": "9.0.0-beta1",
+            "version": "9.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pfrenssen/coder.git",
-                "reference": "233fbd8de0ae5eb08ca24a1334bc65f8c3ac35fe"
+                "reference": "9fcf1a15e81256774699173fbbdd262163af35bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/233fbd8de0ae5eb08ca24a1334bc65f8c3ac35fe",
-                "reference": "233fbd8de0ae5eb08ca24a1334bc65f8c3ac35fe",
+                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/9fcf1a15e81256774699173fbbdd262163af35bb",
+                "reference": "9fcf1a15e81256774699173fbbdd262163af35bb",
                 "shasum": ""
             },
             "require": {
@@ -12864,20 +12864,20 @@
                 "issues": "https://www.drupal.org/project/issues/coder",
                 "source": "https://www.drupal.org/project/coder"
             },
-            "time": "2025-12-07T18:07:20+00:00"
+            "time": "2026-03-13T17:11:34+00:00"
         },
         {
             "name": "drupal/drupal-driver",
-            "version": "v2.4.0",
+            "version": "v2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "a240ad259295db7730ee3c32ecf514281900df25"
+                "reference": "71a97a34bb35fedc53f84ebd20b45074127ada8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/a240ad259295db7730ee3c32ecf514281900df25",
-                "reference": "a240ad259295db7730ee3c32ecf514281900df25",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/71a97a34bb35fedc53f84ebd20b45074127ada8c",
+                "reference": "71a97a34bb35fedc53f84ebd20b45074127ada8c",
                 "shasum": ""
             },
             "require": {
@@ -12949,7 +12949,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/DrupalDriver/issues",
-                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v2.4.0"
+                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v2.4.3"
             },
             "funding": [
                 {
@@ -12957,20 +12957,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-02T23:56:34+00:00"
+            "time": "2026-03-17T07:51:15+00:00"
         },
         {
             "name": "drupal/drupal-extension",
-            "version": "v5.2.1",
+            "version": "v5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/drupalextension.git",
-                "reference": "1ffcce1ddd253a9ed3325b56ffb0a675f3ed948c"
+                "reference": "2138dbee19f876fec012e707a97fca60bbf3262a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/1ffcce1ddd253a9ed3325b56ffb0a675f3ed948c",
-                "reference": "1ffcce1ddd253a9ed3325b56ffb0a675f3ed948c",
+                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/2138dbee19f876fec012e707a97fca60bbf3262a",
+                "reference": "2138dbee19f876fec012e707a97fca60bbf3262a",
                 "shasum": ""
             },
             "require": {
@@ -12978,9 +12978,9 @@
                 "behat/gherkin": "^4.13",
                 "behat/mink": "^1.12",
                 "behat/mink-browserkit-driver": "^2.1.0",
-                "drupal/drupal-driver": "^2.4",
+                "drupal/drupal-driver": "^2.4.3",
                 "friends-of-behat/mink-extension": "^2.7.1",
-                "lullabot/mink-selenium2-driver": "^1.7",
+                "lullabot/mink-selenium2-driver": "^1.7.4",
                 "php": ">=8.2",
                 "symfony/css-selector": "^6.4.3 || ^7",
                 "symfony/dom-crawler": "^6.4.3 || ^7",
@@ -12990,12 +12990,14 @@
             "require-dev": {
                 "composer/installers": "^2.3",
                 "dantleech/gherkin-lint": "^0.2.3",
+                "dflydev/dot-access-data": "^3.0.3",
                 "drevops/behat-screenshot": "^2.2",
                 "drevops/phpcs-standard": "^0.6.2",
                 "drupal/coder": "^8.3.27",
                 "drupal/core": "^11",
                 "drupal/core-composer-scaffold": "^11",
                 "drush/drush": "^12.5.2 || ^13.7",
+                "dvdoug/behat-code-coverage": "^5.3.7",
                 "ergebnis/composer-normalize": "^2.50",
                 "grasmash/yaml-cli": "^3.2.1",
                 "guzzlehttp/guzzle": "^7.8.2",
@@ -13007,6 +13009,8 @@
                 "php-parallel-lint/php-parallel-lint": "^1.4",
                 "phpspec/phpspec": "^7.0 || ^8.0",
                 "phpstan/phpstan": "^2.1",
+                "phpunit/php-code-coverage": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^10.5 || ^11.0",
                 "rector/rector": "^2.0",
                 "symfony/browser-kit": "^6.4.3 || ^7",
                 "symfony/config": "^6.4.3 || ^7",
@@ -13019,6 +13023,7 @@
                 "symfony/mime": "^6.4.3 || ^7",
                 "symfony/routing": "^6.4.3 || ^7",
                 "symfony/translation-contracts": "^3.4.2",
+                "symfony/var-dumper": "^6.4.3 || ^7",
                 "symfony/var-exporter": "^6.4.3 || ^7",
                 "symfony/yaml": "^6.4.3 || ^7",
                 "webmozart/assert": "^2"
@@ -13101,6 +13106,16 @@
                 {
                     "name": "Pieter Frenssen",
                     "homepage": "https://github.com/pfrenssen"
+                },
+                {
+                    "name": "Alex Skrypnyk",
+                    "email": "alex@drevops.com",
+                    "role": "maintainer"
+                },
+                {
+                    "name": "Ricardo Sanz",
+                    "homepage": "https://github.com/rsanzante",
+                    "role": "maintainer"
                 }
             ],
             "description": "Drupal extension for Behat",
@@ -13112,7 +13127,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/drupalextension/issues",
-                "source": "https://github.com/jhedstrom/drupalextension/tree/v5.2.1"
+                "source": "https://github.com/jhedstrom/drupalextension/tree/v5.3.2"
             },
             "funding": [
                 {
@@ -13120,7 +13135,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-08T05:27:14+00:00"
+            "time": "2026-03-18T09:25:33+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -13977,16 +13992,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "2.0.11",
+            "version": "2.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "4e1caa0940cfc0837e1890b489a7d95c629e2b92"
+                "reference": "a574f84c681a4559a2d9925263f45da4b1179b35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/4e1caa0940cfc0837e1890b489a7d95c629e2b92",
-                "reference": "4e1caa0940cfc0837e1890b489a7d95c629e2b92",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/a574f84c681a4559a2d9925263f45da4b1179b35",
+                "reference": "a574f84c681a4559a2d9925263f45da4b1179b35",
                 "shasum": ""
             },
             "require": {
@@ -14058,7 +14073,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/2.0.11"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/2.0.12"
             },
             "funding": [
                 {
@@ -14074,7 +14089,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-25T16:38:53+00:00"
+            "time": "2026-03-20T20:09:59+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -14972,11 +14987,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.40",
+            "version": "2.1.44",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
-                "reference": "9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4a88c083c668b2c364a425c9b3171b2d9ea5d218",
+                "reference": "4a88c083c668b2c364a425c9b3171b2d9ea5d218",
                 "shasum": ""
             },
             "require": {
@@ -15021,7 +15036,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-23T15:04:35+00:00"
+            "time": "2026-03-25T17:34:21+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -15590,21 +15605,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.3.8",
+            "version": "2.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "bbd37aedd8df749916cffa2a947cfc4714d1ba2c"
+                "reference": "917842143fd9f5331a2adefc214b8d7143bd32c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/bbd37aedd8df749916cffa2a947cfc4714d1ba2c",
-                "reference": "bbd37aedd8df749916cffa2a947cfc4714d1ba2c",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/917842143fd9f5331a2adefc214b8d7143bd32c4",
+                "reference": "917842143fd9f5331a2adefc214b8d7143bd32c4",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.38"
+                "phpstan/phpstan": "^2.1.40"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -15638,7 +15653,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.8"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.9"
             },
             "funding": [
                 {
@@ -15646,7 +15661,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-22T09:45:50+00:00"
+            "time": "2026-03-16T09:43:55+00:00"
         },
         {
             "name": "sebastian/cli-parser",
