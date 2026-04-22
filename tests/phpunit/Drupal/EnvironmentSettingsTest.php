@@ -380,6 +380,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['csp.settings']['enforce']['directives']['upgrade-insecure-requests'] = FALSE;
     $config['purge_control.settings']['disable_purge'] = TRUE;
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
@@ -431,6 +432,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['csp.settings']['enforce']['directives']['upgrade-insecure-requests'] = FALSE;
     $config['purge_control.settings']['disable_purge'] = TRUE;
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
@@ -484,6 +486,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['csp.settings']['enforce']['directives']['upgrade-insecure-requests'] = FALSE;
     $config['purge_control.settings']['disable_purge'] = TRUE;
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
