@@ -34,6 +34,12 @@ function do_base_page_attachments(array &$attachments): void {
   if (!class_exists(Csp::class)) {
     return;
   }
-  $attachments['#attached']['csp_nonce']['script'] = [Csp::POLICY_UNSAFE_INLINE];
-  $attachments['#attached']['library'][] = 'csp/nonce';
+
+  $existing = $attachments['#attached']['csp_nonce']['script'] ?? [];
+  $attachments['#attached']['csp_nonce']['script'] = array_values(array_unique(array_merge($existing, [Csp::POLICY_UNSAFE_INLINE])));
+
+  $libraries = $attachments['#attached']['library'] ?? [];
+  if (!in_array('csp/nonce', $libraries, TRUE)) {
+    $attachments['#attached']['library'][] = 'csp/nonce';
+  }
 }

@@ -1,6 +1,6 @@
 report-only:
   enable: false
-  directives: {  }
+  directives: {}
   reporting:
     plugin: none
 enforce:
