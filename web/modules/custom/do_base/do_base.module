@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\csp\Csp;
 use Drupal\Core\Site\Settings;
 
 /**
@@ -18,5 +19,27 @@ function do_base_mail_alter(array &$message): void {
   // replaced with a dev mail system.
   if (Settings::get('suspend_mail_send')) {
     $message['send'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function do_base_page_attachments(array &$attachments): void {
+  // Attach a CSP nonce to script-src on every page so that Drupal core's
+  // inline scripts (BigPipe placeholders, drupalSettings, etc.) continue to
+  // run under a strict Content-Security-Policy. The fallback 'unsafe-inline'
+  // is only used by browsers that do not support CSP3 nonces; modern
+  // browsers ignore it when a nonce is present.
+  if (!class_exists(Csp::class)) {
+    return;
+  }
+
+  $existing = $attachments['#attached']['csp_nonce']['script'] ?? [];
+  $attachments['#attached']['csp_nonce']['script'] = array_values(array_unique(array_merge($existing, [Csp::POLICY_UNSAFE_INLINE])));
+
+  $libraries = $attachments['#attached']['library'] ?? [];
+  if (!in_array('csp/nonce', $libraries, TRUE)) {
+    $attachments['#attached']['library'][] = 'csp/nonce';
   }
 }

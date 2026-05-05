@@ -1,6 +1,6 @@
 seckit_xss:
   csp:
-    checkbox: true
+    checkbox: false
     vendor-prefix:
       x: true
       webkit: true
