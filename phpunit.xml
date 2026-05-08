@@ -28,7 +28,7 @@
          cacheDirectory=".phpunit.cache">
     <php>
         <!-- Set error reporting to E_ALL. -->
-        <ini name="error_reporting" value="32767"/>
+        <ini name="error_reporting" value="30719"/>
         <!-- Do not limit the amount of memory tests take to run. -->
         <ini name="memory_limit" value="-1"/>
         <env name="SIMPLETEST_BASE_URL" value="http://nginx:8080"/>
@@ -108,7 +108,9 @@
         </include>
         <exclude>
             <directory suffix="Test.php">web/modules/custom</directory>
+            <directory suffix=".deploy.php">web/modules/custom</directory>
             <directory>web/modules/custom/**/node_modules</directory>
+            <directory suffix="Test.php">web/themes/custom</directory>
             <directory>web/themes/custom/**/node_modules</directory>
             <directory>tests</directory>
         </exclude>

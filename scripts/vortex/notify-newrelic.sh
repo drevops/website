@@ -70,19 +70,33 @@ VORTEX_NOTIFY_NEWRELIC_ENDPOINT="${VORTEX_NOTIFY_NEWRELIC_ENDPOINT:-https://api.
 # New Relic notification event type. Can be 'pre_deployment' or 'post_deployment'.
 VORTEX_NOTIFY_NEWRELIC_EVENT="${VORTEX_NOTIFY_NEWRELIC_EVENT:-${VORTEX_NOTIFY_EVENT:-post_deployment}}"
 
+# New Relic notification branch filter.
+#
+# Comma-separated list of branch names. When set, New Relic notifications
+# are only sent for deployments on the listed branches. When empty, no
+# filtering is applied.
+VORTEX_NOTIFY_NEWRELIC_BRANCHES="${VORTEX_NOTIFY_NEWRELIC_BRANCHES:-main,master,develop}"
+
 # ------------------------------------------------------------------------------
 
 # @formatter:off
-note() { printf "       %s\n" "${1}"; }
-task() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[34m[TASK] %s\033[0m\n" "${1}" || printf "[TASK] %s\n" "${1}"; }
 info() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[36m[INFO] %s\033[0m\n" "${1}" || printf "[INFO] %s\n" "${1}"; }
-pass() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[32m[ OK ] %s\033[0m\n" "${1}" || printf "[ OK ] %s\n" "${1}"; }
+note() { printf "       %s\n" "${1}"; }
+task() { _TASK_START=$(date +%s); [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[34m[TASK] %s\033[0m\n" "${1}" || printf "[TASK] %s\n" "${1}"; }
+pass() { _d=""; [ -n "${_TASK_START:-}" ] && _d=" ($(($(date +%s) - _TASK_START))s)" && unset _TASK_START; [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[32m[ OK ] %s%s\033[0m\n" "${1}" "${_d}" || printf "[ OK ] %s%s\n" "${1}" "${_d}"; }
 fail() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[31m[FAIL] %s\033[0m\n" "${1}" || printf "[FAIL] %s\n" "${1}"; }
 # @formatter:on
 
 if [ -z "${VORTEX_NOTIFY_NEWRELIC_ENABLED}" ]; then
   info "New Relic is not enabled. Set NEWRELIC_ENABLED or VORTEX_NOTIFY_NEWRELIC_ENABLED in your environment."
   exit 0
+fi
+
+if [ -n "${VORTEX_NOTIFY_NEWRELIC_BRANCHES}" ]; then
+  if ! echo ",${VORTEX_NOTIFY_NEWRELIC_BRANCHES}," | grep -qF ",${VORTEX_NOTIFY_BRANCH},"; then
+    pass "Skipping New Relic notification for branch '${VORTEX_NOTIFY_BRANCH}'."
+    exit 0
+  fi
 fi
 
 for cmd in curl; do command -v "${cmd}" >/dev/null || {

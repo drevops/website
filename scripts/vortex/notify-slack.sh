@@ -45,13 +45,20 @@ VORTEX_NOTIFY_SLACK_USERNAME="${VORTEX_NOTIFY_SLACK_USERNAME:-Deployment Bot}"
 # Slack notification bot icon emoji (optional).
 VORTEX_NOTIFY_SLACK_ICON_EMOJI="${VORTEX_NOTIFY_SLACK_ICON_EMOJI:-:rocket:}"
 
+# Slack notification branch filter.
+#
+# Comma-separated list of branch names. When set, Slack notifications
+# are only sent for deployments on the listed branches. When empty, no
+# filtering is applied.
+VORTEX_NOTIFY_SLACK_BRANCHES="${VORTEX_NOTIFY_SLACK_BRANCHES:-}"
+
 # ------------------------------------------------------------------------------
 
 # @formatter:off
-note() { printf "       %s\n" "${1}"; }
-task() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[34m[TASK] %s\033[0m\n" "${1}" || printf "[TASK] %s\n" "${1}"; }
 info() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[36m[INFO] %s\033[0m\n" "${1}" || printf "[INFO] %s\n" "${1}"; }
-pass() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[32m[ OK ] %s\033[0m\n" "${1}" || printf "[ OK ] %s\n" "${1}"; }
+note() { printf "       %s\n" "${1}"; }
+task() { _TASK_START=$(date +%s); [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[34m[TASK] %s\033[0m\n" "${1}" || printf "[TASK] %s\n" "${1}"; }
+pass() { _d=""; [ -n "${_TASK_START:-}" ] && _d=" ($(($(date +%s) - _TASK_START))s)" && unset _TASK_START; [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[32m[ OK ] %s%s\033[0m\n" "${1}" "${_d}" || printf "[ OK ] %s%s\n" "${1}" "${_d}"; }
 fail() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[31m[FAIL] %s\033[0m\n" "${1}" || printf "[FAIL] %s\n" "${1}"; }
 # @formatter:on
 
@@ -59,6 +66,13 @@ for cmd in php curl; do command -v "${cmd}" >/dev/null || {
   fail "Command ${cmd} is not available"
   exit 1
 }; done
+
+if [ -n "${VORTEX_NOTIFY_SLACK_BRANCHES}" ]; then
+  if ! echo ",${VORTEX_NOTIFY_SLACK_BRANCHES}," | grep -qF ",${VORTEX_NOTIFY_BRANCH},"; then
+    pass "Skipping Slack notification for branch '${VORTEX_NOTIFY_BRANCH}'."
+    exit 0
+  fi
+fi
 
 [ -z "${VORTEX_NOTIFY_SLACK_PROJECT}" ] && fail "Missing required value for VORTEX_NOTIFY_SLACK_PROJECT" && exit 1
 [ -z "${VORTEX_NOTIFY_SLACK_LABEL}" ] && fail "Missing required value for VORTEX_NOTIFY_SLACK_LABEL" && exit 1

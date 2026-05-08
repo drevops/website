@@ -44,6 +44,14 @@ VORTEX_PROVISION_POST_OPERATIONS_SKIP="${VORTEX_PROVISION_POST_OPERATIONS_SKIP:-
 # drush config:import from silently overwriting those changes.
 VORTEX_PROVISION_VERIFY_CONFIG_UNCHANGED_AFTER_UPDATE="${VORTEX_PROVISION_VERIFY_CONFIG_UNCHANGED_AFTER_UPDATE:-0}"
 
+# Skip cache rebuild after database updates.
+VORTEX_PROVISION_CACHE_REBUILD_AFTER_DB_UPDATE_SKIP="${VORTEX_PROVISION_CACHE_REBUILD_AFTER_DB_UPDATE_SKIP:-0}"
+
+# Repeat configuration import after the initial import.
+# Useful when update hooks introduce new configuration that affects subsequent
+# configuration imports (e.g., new config_split settings).
+VORTEX_PROVISION_CONFIG_IMPORT_REPEAT="${VORTEX_PROVISION_CONFIG_IMPORT_REPEAT:-0}"
+
 # Provision database dump file.
 # If not set, it will be auto-discovered from the VORTEX_DB_DIR directory using
 # the VORTEX_DB_FILE name.
@@ -76,10 +84,10 @@ VORTEX_PROVISION_DB_IMAGE="${VORTEX_PROVISION_DB_IMAGE:-${VORTEX_DB_IMAGE:-}}"
 # ------------------------------------------------------------------------------
 
 # @formatter:off
-note() { printf "       %s\n" "${1}"; }
-task() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[34m[TASK] %s\033[0m\n" "${1}" || printf "[TASK] %s\n" "${1}"; }
 info() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[36m[INFO] %s\033[0m\n" "${1}" || printf "[INFO] %s\n" "${1}"; }
-pass() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[32m[ OK ] %s\033[0m\n" "${1}" || printf "[ OK ] %s\n" "${1}"; }
+note() { printf "       %s\n" "${1}"; }
+task() { _TASK_START=$(date +%s); [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[34m[TASK] %s\033[0m\n" "${1}" || printf "[TASK] %s\n" "${1}"; }
+pass() { _d=""; [ -n "${_TASK_START:-}" ] && _d=" ($(($(date +%s) - _TASK_START))s)" && unset _TASK_START; [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[32m[ OK ] %s%s\033[0m\n" "${1}" "${_d}" || printf "[ OK ] %s%s\n" "${1}" "${_d}"; }
 fail() { [ "${TERM:-}" != "dumb" ] && tput colors >/dev/null 2>&1 && printf "\033[31m[FAIL] %s\033[0m\n" "${1}" || printf "[FAIL] %s\n" "${1}"; }
 # @formatter:on
 
@@ -163,7 +171,7 @@ provision_from_db() {
   if [ ! -f "${VORTEX_PROVISION_DB}" ]; then
     if [ "${VORTEX_PROVISION_FALLBACK_TO_PROFILE}" = "1" ]; then
       info "Database dump file is not available. Falling back to profile installation."
-      provision_from_profile
+      provision_from_profile 1 "${site_has_config_files}"
       return
     fi
 
@@ -186,6 +194,8 @@ provision_from_db() {
 # Provision site from the profile.
 #
 provision_from_profile() {
+  local is_fallback="${1:-0}"
+  local has_config="${2:-0}"
   local opts=()
 
   opts+=(
@@ -199,12 +209,19 @@ provision_from_profile() {
 
   [ -n "${DRUPAL_ADMIN_EMAIL:-}" ] && opts+=(--account-mail="${DRUPAL_ADMIN_EMAIL:-}")
 
-  [ "${site_has_config_files}" = "1" ] && opts+=(--existing-config)
+  [ "${is_fallback}" != "1" ] && [ "${has_config}" = "1" ] && opts+=(--existing-config)
 
   # Database may exist in non-bootstrappable state - truncate it.
   drush sql:drop || true
 
   drush site:install "${opts[@]}"
+
+  # On fallback, enable Shield to protect the site and skip post-provision
+  # operations since the site was installed from profile without configuration.
+  if [ "${is_fallback}" = "1" ]; then
+    drush pm:install shield
+    export VORTEX_PROVISION_POST_OPERATIONS_SKIP=1
+  fi
 
   pass "Installed a site from the profile."
 }
@@ -242,7 +259,7 @@ if [ "${VORTEX_PROVISION_TYPE}" = "database" ]; then
       note "Database is baked into the container image."
       if [ "${VORTEX_PROVISION_FALLBACK_TO_PROFILE}" = "1" ]; then
         info "Database in the container image is not available. Falling back to profile installation."
-        provision_from_profile
+        provision_from_profile 1 "${site_has_config_files}"
         export VORTEX_PROVISION_OVERRIDE_DB=1
       else
         note "Looks like the database in the container image is corrupted."
@@ -265,7 +282,7 @@ else
 
     if [ "${VORTEX_PROVISION_OVERRIDE_DB}" = "1" ]; then
       note "Existing site content will be removed and new content will be created from the profile."
-      provision_from_profile
+      provision_from_profile 0 "${site_has_config_files}"
       # Let the downstream scripts know that the database is fresh.
       export VORTEX_PROVISION_OVERRIDE_DB=1
     else
@@ -276,7 +293,7 @@ else
   else
     note "Existing site was not found."
     note "Fresh site content will be created from the profile."
-    provision_from_profile
+    provision_from_profile 0 "${site_has_config_files}"
     export VORTEX_PROVISION_OVERRIDE_DB=1
   fi
 fi
@@ -345,12 +362,29 @@ fi
 pass "Completed running database updates."
 echo
 
+if [ "${VORTEX_PROVISION_CACHE_REBUILD_AFTER_DB_UPDATE_SKIP}" != "1" ]; then
+  task "Clearing cache after database updates."
+  drush cache:rebuild
+  pass "Cache was cleared."
+  echo
+else
+  pass "Skipped cache rebuild after database updates."
+  echo
+fi
+
 # Import configuration if config files are present.
 if [ "${site_has_config_files}" = "1" ]; then
   task "Importing configuration."
   drush config:import
   pass "Completed configuration import."
   echo
+
+  if [ "${VORTEX_PROVISION_CONFIG_IMPORT_REPEAT}" = "1" ]; then
+    task "Repeating configuration import."
+    drush config:import
+    pass "Completed repeated configuration import."
+    echo
+  fi
 
   # Import config_split configuration if the module is installed.
   # Drush deploy does not import config_split configuration on the first run.
