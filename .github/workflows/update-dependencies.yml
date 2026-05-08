@@ -45,7 +45,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 22.17.1
 
@@ -54,7 +54,7 @@ jobs:
 
       - name: Run Renovate
         if: steps.check-requirements.outputs.should_run == 'true'
-        uses: renovatebot/github-action@68a3ea99af6ad249940b5a9fdf44fc6d7f14378b # v46.1.6
+        uses: renovatebot/github-action@6a9df9227eeb83af9a5abef6890bbb0c9068f436 # v46.1.11
         with:
           configurationFile: renovate.json
           token: ${{ secrets.RENOVATE_TOKEN }}
