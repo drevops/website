@@ -24,7 +24,7 @@ Feature: Manual list fields
 
     And I should see the text "Title"
     And should see a "[name='field_c_n_components[0][subform][field_c_p_title][0][value]']" element
-    And should not see a "[name='field_c_n_components[0][subform][field_c_p_title][0][value]]'].required" element
+    And should not see a "[name='field_c_n_components[0][subform][field_c_p_title][0][value]'].required" element
     And should not see a "[name='field_c_n_components[0][subform][field_c_p_title][0][value]'][disabled]" element
 
     And I should see the text "Content"
