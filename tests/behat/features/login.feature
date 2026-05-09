@@ -7,14 +7,22 @@ Feature: Login
 
   @api
   Scenario: Administrator user logs in
-    Given I am logged in as a user with the "administer site configuration, access administration pages" permissions
+    Given I am logged in as a user with the "Administrator" role
     When I go to "admin"
     Then the path should be "/admin"
     And I save screenshot
 
   @api @javascript
   Scenario: Administrator user logs in using a real browser
-    Given I am logged in as a user with the "administer site configuration, access administration pages" permissions
+    Given I am logged in as a user with the "Administrator" role
     When I go to "admin"
     Then the path should be "/admin"
     And I save screenshot
+
+  Scenario: Login page has correct vertical spacing class
+    Given I go to "/user/login"
+    Then I should see a ".block-system-main-block.ct-vertical-spacing--both" element
+
+  Scenario: Password reset page has correct vertical spacing class
+    Given I go to "/user/password"
+    Then I should see a ".block-system-main-block.ct-vertical-spacing--both" element
