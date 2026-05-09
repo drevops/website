@@ -56,6 +56,7 @@ default:
       drush:
         root: web
       regions:
+        primary_tabs: '#block-drevops-primary-local-tasks'
         header_top_1: '.ct-header__content-top1'
         header_top_2: '.ct-header__content-top2'
         header_top_3: '.ct-header__content-top3'
