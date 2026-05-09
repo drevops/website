@@ -10,7 +10,7 @@ Feature: Scheduled Transitions functionality for content roles
   So that I can efficiently manage content publishing workflows
 
   Background:
-    Given "civictheme_page" content:
+    Given the following "civictheme_page" content with fields:
       | title                     | field_c_n_summary             | status |
       | Test Page for Transitions | Test page for scheduled trans | 1      |
 

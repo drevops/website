@@ -20,7 +20,7 @@ Feature: Entity Clone permissions for Content Author role
   @api
   Scenario: Content Author can clone CivicTheme Page content
     Given I am logged in as a user with the "Content Author" role
-    And "civictheme_page" content:
+    And the following "civictheme_page" content with fields:
       | title                      | field_c_n_summary     | status |
       | Test CivicTheme Clone Page | Test page for cloning | 1      |
     When I go to "admin/content"

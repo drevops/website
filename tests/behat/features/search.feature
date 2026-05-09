@@ -11,7 +11,7 @@ Feature: Search API
 
   @api
   Scenario: User searches for Page content
-    Given civictheme_page content:
+    Given the following civictheme_page content with fields:
       | title                                     | status | field_c_n_summary                   |
       | [TEST] Search result 1 firstuniquestring  | 1      | Summary 1 firstuniquestringsummary  |
       | [TEST] Search result 2 seconduniquestring | 1      | Summary 2 seconduniquestringsummary |

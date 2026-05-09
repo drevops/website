@@ -10,12 +10,12 @@ Feature: Manual list render
       | name                    | field_c_m_image |
       | [TEST] CivicTheme Image | image.jpg       |
 
-    And "civictheme_page" content:
+    And the following "civictheme_page" content with fields:
       | title                           | status |
       | [TEST] Page Manual list content | 1      |
       | [TEST] Referenced Page          | 1      |
 
-    And "civictheme_event" content:
+    And the following "civictheme_event" content with fields:
       | title                   | status |
       | [TEST] Referenced Event | 1      |
 

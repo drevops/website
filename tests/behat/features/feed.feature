@@ -9,7 +9,7 @@ Feature: Automated list RSS feed
     Given "civictheme_topics" terms:
       | name              |
       | [TEST] Feed Topic |
-    And "civictheme_page" content:
+    And the following "civictheme_page" content with fields:
       | title                           | moderation_state | field_c_n_topics  |
       | [TEST] Feed Article One         | published        | [TEST] Feed Topic |
       | [TEST] Feed Article Two         | published        | [TEST] Feed Topic |

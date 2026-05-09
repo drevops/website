@@ -7,7 +7,7 @@ Feature: Content moderation block container class
   @api
   Scenario: Moderation block has container class
     Given I am logged in as a user with the "administrator" role
-    And "civictheme_page" content:
+    And the following "civictheme_page" content with fields:
       | title           | moderation_state | field_c_n_hide_sidebar |
       | Test Page Draft | draft            | 1                      |
     When I visit the "civictheme_page" content page with the title "Test Page Draft"
