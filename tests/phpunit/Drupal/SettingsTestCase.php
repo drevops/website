@@ -128,6 +128,7 @@ abstract class SettingsTestCase extends TestCase {
    *
    * @param array $vars
    *   Array of environment variables.
+   *
    */
   protected function setEnvVars(array $vars): void {
     // Unset the existing environment variable if not set in the test.
@@ -174,15 +175,7 @@ abstract class SettingsTestCase extends TestCase {
   protected static function getRealEnvVarsFilteredNoValues(array $prefixes = []): array {
     $vars = getenv();
 
-    $vars = array_filter(array_keys($vars), static function (string $key) use ($prefixes): bool {
-      foreach ($prefixes as $prefix) {
-        if (str_starts_with($key, $prefix)) {
-          return TRUE;
-        }
-      }
-
-      return FALSE;
-    });
+    $vars = array_filter(array_keys($vars), static fn(string $key): bool => array_any($prefixes, fn($prefix): bool => str_starts_with($key, (string) $prefix)));
 
     return array_fill_keys($vars, NULL);
   }
@@ -307,6 +300,7 @@ abstract class SettingsTestCase extends TestCase {
    *   Array to search in.
    * @param string $message
    *   Message to display on failure.
+   *
    */
   protected function assertArraySubset(array $subset, array $haystack, string $message = ''): void {
     foreach ($subset as $key => $value) {
