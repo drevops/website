@@ -28,29 +28,33 @@ Feature: Manual list render
       | field_c_p_list_fill_width   | 0                        |
       | field_p_list_layout         | spotlight                |
     And the following fields for the paragraph "civictheme_promo_card" exist in the field "field_c_p_list_items" within the "civictheme_manual_list" "paragraph" identified by the field "field_c_p_title" and the value "[TEST] Manual list title":
-      | field_c_p_title   | Card title 1                                  |
-      | field_c_p_summary | Card summary 1                                |
-      | field_c_p_link    | 0: Test link 1 - 1: https://example.com/link1 |
-      | field_c_p_image   | [TEST] CivicTheme Image                       |
-      | field_c_p_theme   | light                                         |
+      | field_c_p_title      | Card title 1              |
+      | field_c_p_summary    | Card summary 1            |
+      | field_c_p_link:title | Test link 1               |
+      | field_c_p_link:uri   | https://example.com/link1 |
+      | field_c_p_image      | [TEST] CivicTheme Image   |
+      | field_c_p_theme      | light                     |
     And the following fields for the paragraph "civictheme_promo_card" exist in the field "field_c_p_list_items" within the "civictheme_manual_list" "paragraph" identified by the field "field_c_p_title" and the value "[TEST] Manual list title":
-      | field_c_p_title   | Card title 2                                  |
-      | field_c_p_summary | Card summary 2                                |
-      | field_c_p_link    | 0: Test link 2 - 1: https://example.com/link2 |
-      | field_c_p_image   | [TEST] CivicTheme Image                       |
-      | field_c_p_theme   | light                                         |
+      | field_c_p_title      | Card title 2              |
+      | field_c_p_summary    | Card summary 2            |
+      | field_c_p_link:title | Test link 2               |
+      | field_c_p_link:uri   | https://example.com/link2 |
+      | field_c_p_image      | [TEST] CivicTheme Image   |
+      | field_c_p_theme      | light                     |
     And the following fields for the paragraph "civictheme_promo_card" exist in the field "field_c_p_list_items" within the "civictheme_manual_list" "paragraph" identified by the field "field_c_p_title" and the value "[TEST] Manual list title":
-      | field_c_p_title   | Card title 3                                  |
-      | field_c_p_summary | Card summary 3                                |
-      | field_c_p_link    | 0: Test link 3 - 1: https://example.com/link3 |
-      | field_c_p_image   | [TEST] CivicTheme Image                       |
-      | field_c_p_theme   | dark                                          |
+      | field_c_p_title      | Card title 3              |
+      | field_c_p_summary    | Card summary 3            |
+      | field_c_p_link:title | Test link 3               |
+      | field_c_p_link:uri   | https://example.com/link3 |
+      | field_c_p_image      | [TEST] CivicTheme Image   |
+      | field_c_p_theme      | dark                      |
     And the following fields for the paragraph "civictheme_promo_card" exist in the field "field_c_p_list_items" within the "civictheme_manual_list" "paragraph" identified by the field "field_c_p_title" and the value "[TEST] Manual list title":
-      | field_c_p_title   | Card title 4                                  |
-      | field_c_p_summary | Card summary 4                                |
-      | field_c_p_link    | 0: Test link 4 - 1: https://example.com/link4 |
-      | field_c_p_image   | [TEST] CivicTheme Image                       |
-      | field_c_p_theme   | light                                         |
+      | field_c_p_title      | Card title 4              |
+      | field_c_p_summary    | Card summary 4            |
+      | field_c_p_link:title | Test link 4               |
+      | field_c_p_link:uri   | https://example.com/link4 |
+      | field_c_p_image      | [TEST] CivicTheme Image   |
+      | field_c_p_theme      | light                     |
 
     When I visit the "civictheme_page" content page with the title "[TEST] Page Manual list content"
     Then I should see the text "[TEST] Manual list title"
