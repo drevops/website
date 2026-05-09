@@ -52,7 +52,7 @@ Feature: Behat configuration
 
   @api
   Scenario: Messages and login selectors configured correctly
-    Given the following users with fields:
+    Given the following users:
       | name | mail             | roles         |
       | test | test@example.com | administrator |
     And I am an anonymous user

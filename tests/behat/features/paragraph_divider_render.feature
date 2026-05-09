@@ -10,7 +10,7 @@ Feature: Divider render
       | name            | field_c_m_image |
       | [TEST] DO Image | image.jpg       |
 
-    And the following "civictheme_page" content with fields:
+    And the following "civictheme_page" content:
       | title                      | status |
       | [TEST] Page Divider test 1 | 1      |
       | [TEST] Page Divider test 2 | 1      |

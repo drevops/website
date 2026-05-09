@@ -7,7 +7,7 @@ Feature: Page content metatags
 
   @api
   Scenario: CivicTheme page content type contains default metatags
-    Given the following civictheme_page content with fields:
+    Given the following civictheme_page content:
       | title              | status | field_c_n_summary                           |
       | Test Metatags Page | 1      | This is a test summary for metatags testing |
     When I visit the "civictheme_page" content page with the title "Test Metatags Page"
