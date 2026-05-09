@@ -383,6 +383,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['csp.settings']['enforce']['directives']['upgrade-insecure-requests'] = FALSE;
     $config['purge_control.settings']['disable_purge'] = TRUE;
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
+    $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
@@ -435,6 +436,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['csp.settings']['enforce']['directives']['upgrade-insecure-requests'] = FALSE;
     $config['purge_control.settings']['disable_purge'] = TRUE;
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
+    $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
@@ -489,6 +491,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['csp.settings']['enforce']['directives']['upgrade-insecure-requests'] = FALSE;
     $config['purge_control.settings']['disable_purge'] = TRUE;
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
+    $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $this->assertConfig($config);
 
