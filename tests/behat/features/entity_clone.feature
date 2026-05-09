@@ -23,10 +23,7 @@ Feature: Entity Clone permissions for Content Author role
     And the following "civictheme_page" content:
       | title                      | field_c_n_summary     | status |
       | Test CivicTheme Clone Page | Test page for cloning | 1      |
-    When I go to "admin/content"
-    Then I should see the link "Test CivicTheme Clone Page"
-
-    When I click "Test CivicTheme Clone Page"
+    When I visit the "civictheme_page" content page with the title "Test CivicTheme Clone Page"
     Then I should see the link "Clone"
 
     When I click "Clone"
