@@ -55,7 +55,8 @@ default:
         drupal_root: web
       drush:
         root: web
-      region_map:
+      regions:
+        primary_tabs: '#block-drevops-primary-local-tasks'
         header_top_1: '.ct-header__content-top1'
         header_top_2: '.ct-header__content-top2'
         header_top_3: '.ct-header__content-top3'
@@ -84,10 +85,11 @@ default:
       selectors:
         login_form_selector: 'form#user-login,form#user-login-form'
         logged_in_selector: 'body.logged-in,body.user-logged-in'
-        message_selector: '.messages,.ct-message'
-        error_message_selector: '.messages.error,.messages.messages--error,.ct-message.ct-message--error'
-        success_message_selector: '.messages.status,.messages.messages--status,.ct-message.ct-message--info'
-        warning_message_selector: '.messages.warning,.messages.messages--warning,.ct-message.ct-message--warning'
+        messages:
+          default: '.messages,.ct-message'
+          error: '.messages.error,.messages.messages--error,.ct-message.ct-message--error'
+          success: '.messages.status,.messages.messages--status,.ct-message.ct-message--info'
+          warning: '.messages.warning,.messages.messages--warning,.ct-message.ct-message--warning'
 
     # Capture HTML and PNG screenshots on demand and on failure.
     DrevOps\BehatScreenshotExtension:
