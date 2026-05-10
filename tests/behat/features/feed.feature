@@ -6,10 +6,10 @@ Feature: Automated list RSS feed
   So that I can stay updated on new content
 
   Background:
-    Given "civictheme_topics" terms:
+    Given the following "civictheme_topics" terms:
       | name              |
       | [TEST] Feed Topic |
-    And "civictheme_page" content:
+    And the following "civictheme_page" content:
       | title                           | moderation_state | field_c_n_topics  |
       | [TEST] Feed Article One         | published        | [TEST] Feed Topic |
       | [TEST] Feed Article Two         | published        | [TEST] Feed Topic |

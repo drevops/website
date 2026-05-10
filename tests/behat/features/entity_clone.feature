@@ -1,4 +1,4 @@
-@p1 @entity_clone @user_roles
+@p1 @bigpipe @entity_clone @user_roles
 Feature: Entity Clone permissions for Content Author role
 
   As a site owner
@@ -20,16 +20,16 @@ Feature: Entity Clone permissions for Content Author role
   @api
   Scenario: Content Author can clone CivicTheme Page content
     Given I am logged in as a user with the "Content Author" role
-    And "civictheme_page" content:
+    And the following "civictheme_page" content:
       | title                      | field_c_n_summary     | status |
       | Test CivicTheme Clone Page | Test page for cloning | 1      |
     When I go to "admin/content"
     Then I should see the link "Test CivicTheme Clone Page"
 
     When I click "Test CivicTheme Clone Page"
-    Then I should see the link "Clone"
+    Then I should see the link "Clone" in the "primary_tabs" region
 
-    When I click "Clone"
+    When I click "Clone" in the "primary_tabs" region
     Then I should see "Clone Content"
 
     When I press "Clone"
