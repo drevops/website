@@ -13,7 +13,7 @@ Drupal 11 implementation of DrevOps Website for DrevOps
 
 [//]: # (DO NOT REMOVE THE BADGE BELOW. IT IS USED BY VORTEX TO TRACK INTEGRATION)
 
-[![Vortex](https://img.shields.io/badge/Vortex-1.38.0-65ACBC.svg)](https://github.com/drevops/vortex/tree/1.38.0)
+[![Vortex](https://img.shields.io/badge/Vortex-69de37c866e351d0e6b5c24ecbf23d3a1c721f7e-65ACBC.svg)](https://github.com/drevops/vortex/tree/69de37c866e351d0e6b5c24ecbf23d3a1c721f7e)
 
 </div>
 
