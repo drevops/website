@@ -5,7 +5,7 @@ Feature: Behat configuration
   I want to ensure Behat is properly configured
   So that behavioral tests can run successfully across all environments
 
-  @api
+  @api @javascript
   Scenario: Screenshot functionality works
     Given I am an anonymous user
     When I am on the homepage
@@ -25,30 +25,19 @@ Feature: Behat configuration
     And I am logged in as a user with the "administrator" role
     And I go to "/admin/structure/block"
     When I click "Demonstrate block regions"
-    Then I should see the ".demo-block" element in the "header_top_1" region
-    And I should see the ".demo-block" element in the "header_top_2" region
-    And I should see the ".demo-block" element in the "header_top_3" region
-    And I should see the ".demo-block" element in the "header_middle_1" region
-    And I should see the ".demo-block" element in the "header_middle_2" region
-    And I should see the ".demo-block" element in the "header_middle_3" region
-    And I should see the ".demo-block" element in the "header_bottom_1" region
-    And I should see the ".demo-block" element in the "banner" region
+    Then I should see the ".demo-block" element in the "header" region
+    And I should see the ".demo-block" element in the "primary_menu" region
+    And I should see the ".demo-block" element in the "secondary_menu" region
+    And I should see the ".demo-block" element in the "hero" region
     And I should see the ".demo-block" element in the "highlighted" region
-    And I should see the ".demo-block" element in the "content_top" region
+    And I should see the ".demo-block" element in the "breadcrumb" region
+    And I should see the ".demo-block" element in the "social" region
+    And I should see the ".demo-block" element in the "content_above" region
     And I should see the ".demo-block" element in the "content" region
-    And I should see the ".demo-block" element in the "content_bottom" region
-    And I should see the ".demo-block" element in the "sidebar_top_left" region
-    And I should see the ".demo-block" element in the "sidebar_bottom_left" region
-    And I should see the ".demo-block" element in the "sidebar_top_right" region
-    And I should see the ".demo-block" element in the "sidebar_bottom_right" region
-    And I should see the ".demo-block" element in the "footer_top_1" region
-    And I should see the ".demo-block" element in the "footer_top_2" region
-    And I should see the ".demo-block" element in the "footer_middle_1" region
-    And I should see the ".demo-block" element in the "footer_middle_2" region
-    And I should see the ".demo-block" element in the "footer_middle_3" region
-    And I should see the ".demo-block" element in the "footer_middle_4" region
-    And I should see the ".demo-block" element in the "footer_bottom_1" region
-    And I should see the ".demo-block" element in the "footer_bottom_2" region
+    And I should see the ".demo-block" element in the "sidebar" region
+    And I should see the ".demo-block" element in the "content_below" region
+    And I should see the ".demo-block" element in the "footer_top" region
+    And I should see the ".demo-block" element in the "footer_bottom" region
 
   @api
   Scenario: Messages and login selectors configured correctly
