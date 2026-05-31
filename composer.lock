@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "992d86c9e27be227ab80517d2bd61159",
+    "content-hash": "e32c228ab7119ef9a3f07e59d7aa3ca1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1545,6 +1545,44 @@
                 "issues": "https://github.com/drevops/test-private-package/issues"
             },
             "time": "2023-04-10T00:06:49+00:00"
+        },
+        {
+            "name": "drevops/vortex-tooling",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/drevops/vortex-tooling.git",
+                "reference": "30a9cb0e70d3863e25397b9fa3a830f795d4ed44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/30a9cb0e70d3863e25397b9fa3a830f795d4ed44",
+                "reference": "30a9cb0e70d3863e25397b9fa3a830f795d4ed44",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Skrypnyk",
+                    "email": "alex@drevops.com",
+                    "homepage": "https://www.drevops.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Shell scripts for Vortex-based Drupal projects (deploy, notify, provision, download/export DB, etc.).",
+            "homepage": "https://github.com/drevops/vortex",
+            "support": {
+                "issues": "https://github.com/drevops/vortex/issues",
+                "source": "https://github.com/drevops/vortex"
+            },
+            "time": "2026-05-25T04:16:12+00:00"
         },
         {
             "name": "drupal/admin_toolbar",
