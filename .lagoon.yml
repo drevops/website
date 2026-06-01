@@ -108,8 +108,6 @@ environments:
     #   - nginx-php:
     #       - www.drevops.com:
     #           tls-acme: 'false'
-    monitoring_urls:
-      - www.drevops.com
   # Branch name that represents development environment.
   develop:
     cronjobs:
@@ -126,8 +124,3 @@ environments:
     #   - nginx-php:
     #       - dev.drevops.com:
     #           tls-acme: 'false'
-    monitoring_urls:
-      - dev.drevops.com
-
-routes:
-  insecure: Redirect
