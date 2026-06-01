@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "992d86c9e27be227ab80517d2bd61159",
+    "content-hash": "a1c41436087dbb30a7ed277ae21baaac",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1545,6 +1545,44 @@
                 "issues": "https://github.com/drevops/test-private-package/issues"
             },
             "time": "2023-04-10T00:06:49+00:00"
+        },
+        {
+            "name": "drevops/vortex-tooling",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/drevops/vortex-tooling.git",
+                "reference": "30a9cb0e70d3863e25397b9fa3a830f795d4ed44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/30a9cb0e70d3863e25397b9fa3a830f795d4ed44",
+                "reference": "30a9cb0e70d3863e25397b9fa3a830f795d4ed44",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Skrypnyk",
+                    "email": "alex@drevops.com",
+                    "homepage": "https://www.drevops.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Shell scripts for Vortex-based Drupal projects (deploy, notify, provision, download/export DB, etc.).",
+            "homepage": "https://github.com/drevops/vortex",
+            "support": {
+                "issues": "https://github.com/drevops/vortex/issues",
+                "source": "https://github.com/drevops/vortex"
+            },
+            "time": "2026-05-25T04:16:12+00:00"
         },
         {
             "name": "drupal/admin_toolbar",
@@ -12834,25 +12872,27 @@
         },
         {
             "name": "drevops/behat-steps",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-steps.git",
-                "reference": "94bdbfbe89bb4c58c5e9a3a7d2824fe6b8fe3520"
+                "reference": "9ccc5d9016ea94b5a5a9c83acd6db30157948fa0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/94bdbfbe89bb4c58c5e9a3a7d2824fe6b8fe3520",
-                "reference": "94bdbfbe89bb4c58c5e9a3a7d2824fe6b8fe3520",
+                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/9ccc5d9016ea94b5a5a9c83acd6db30157948fa0",
+                "reference": "9ccc5d9016ea94b5a5a9c83acd6db30157948fa0",
                 "shasum": ""
             },
             "require": {
                 "behat/behat": "^3.14",
                 "behat/mink": ">=1.11",
-                "drupal/drupal-driver": "^3.0@alpha",
-                "drupal/drupal-extension": "^6.0@alpha",
+                "drupal/drupal-extension": "^6.0",
                 "lullabot/mink-selenium2-driver": "^1.7.4",
                 "php": ">=8.2"
+            },
+            "conflict": {
+                "drupal/drupal-extension": "<6"
             },
             "require-dev": {
                 "alexskrypnyk/phpunit-helpers": "^0.15.0",
@@ -12915,7 +12955,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-05-04T00:42:45+00:00"
+            "time": "2026-05-29T03:10:31+00:00"
         },
         {
             "name": "drevops/phpcs-standard",
