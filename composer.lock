@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1c41436087dbb30a7ed277ae21baaac",
+    "content-hash": "eaf032a7b827f0d2a1a24a475fe3a5c5",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1548,21 +1548,22 @@
         },
         {
             "name": "drevops/vortex-tooling",
-            "version": "1.0.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/vortex-tooling.git",
-                "reference": "30a9cb0e70d3863e25397b9fa3a830f795d4ed44"
+                "reference": "19a9c69536e52c22441097dc726067cf549dd310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/30a9cb0e70d3863e25397b9fa3a830f795d4ed44",
-                "reference": "30a9cb0e70d3863e25397b9fa3a830f795d4ed44",
+                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/19a9c69536e52c22441097dc726067cf549dd310",
+                "reference": "19a9c69536e52c22441097dc726067cf549dd310",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2"
             },
+            "default-branch": true,
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1582,7 +1583,7 @@
                 "issues": "https://github.com/drevops/vortex/issues",
                 "source": "https://github.com/drevops/vortex"
             },
-            "time": "2026-05-25T04:16:12+00:00"
+            "time": "2026-05-31T01:07:58+00:00"
         },
         {
             "name": "drupal/admin_toolbar",
@@ -17651,9 +17652,17 @@
             "time": "2026-04-11T10:33:05+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "drevops/vortex-tooling",
+            "version": "dev-main",
+            "alias": "1.0.0",
+            "alias_normalized": "1.0.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "drevops/vortex-tooling": 20,
         "drupal/cloudflare": 10,
         "drupal/coder": 15,
         "drupal/config_update": 15,
