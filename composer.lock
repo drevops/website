@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1c41436087dbb30a7ed277ae21baaac",
+    "content-hash": "8d2363230a079d3edfed3db2fc6e089b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1548,16 +1548,16 @@
         },
         {
             "name": "drevops/vortex-tooling",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/vortex-tooling.git",
-                "reference": "30a9cb0e70d3863e25397b9fa3a830f795d4ed44"
+                "reference": "19764b9bf92d94f8cf51323bd6850cf8e807e171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/30a9cb0e70d3863e25397b9fa3a830f795d4ed44",
-                "reference": "30a9cb0e70d3863e25397b9fa3a830f795d4ed44",
+                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/19764b9bf92d94f8cf51323bd6850cf8e807e171",
+                "reference": "19764b9bf92d94f8cf51323bd6850cf8e807e171",
                 "shasum": ""
             },
             "require": {
@@ -1582,7 +1582,7 @@
                 "issues": "https://github.com/drevops/vortex/issues",
                 "source": "https://github.com/drevops/vortex"
             },
-            "time": "2026-05-25T04:16:12+00:00"
+            "time": "2026-06-01T03:39:57+00:00"
         },
         {
             "name": "drupal/admin_toolbar",
