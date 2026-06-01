@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e32c228ab7119ef9a3f07e59d7aa3ca1",
+    "content-hash": "a1c41436087dbb30a7ed277ae21baaac",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -12872,25 +12872,27 @@
         },
         {
             "name": "drevops/behat-steps",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-steps.git",
-                "reference": "94bdbfbe89bb4c58c5e9a3a7d2824fe6b8fe3520"
+                "reference": "9ccc5d9016ea94b5a5a9c83acd6db30157948fa0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/94bdbfbe89bb4c58c5e9a3a7d2824fe6b8fe3520",
-                "reference": "94bdbfbe89bb4c58c5e9a3a7d2824fe6b8fe3520",
+                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/9ccc5d9016ea94b5a5a9c83acd6db30157948fa0",
+                "reference": "9ccc5d9016ea94b5a5a9c83acd6db30157948fa0",
                 "shasum": ""
             },
             "require": {
                 "behat/behat": "^3.14",
                 "behat/mink": ">=1.11",
-                "drupal/drupal-driver": "^3.0@alpha",
-                "drupal/drupal-extension": "^6.0@alpha",
+                "drupal/drupal-extension": "^6.0",
                 "lullabot/mink-selenium2-driver": "^1.7.4",
                 "php": ">=8.2"
+            },
+            "conflict": {
+                "drupal/drupal-extension": "<6"
             },
             "require-dev": {
                 "alexskrypnyk/phpunit-helpers": "^0.15.0",
@@ -12953,7 +12955,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-05-04T00:42:45+00:00"
+            "time": "2026-05-29T03:10:31+00:00"
         },
         {
             "name": "drevops/phpcs-standard",
