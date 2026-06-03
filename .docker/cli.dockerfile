@@ -7,7 +7,7 @@
 # @see https://hub.docker.com/r/uselagoon/php-8.4-cli-drupal/tags
 # @see https://github.com/uselagoon/lagoon-images/tree/main/images/php-cli-drupal
 
-FROM uselagoon/php-8.4-cli-drupal:26.4.0
+FROM uselagoon/php-8.4-cli-drupal:26.5.1
 
 # Add missing variables.
 # @todo Remove once https://github.com/uselagoon/lagoon/issues/3121 is resolved.
@@ -70,7 +70,7 @@ COPY scripts /app/scripts
 # to the repository.
 # The .env file (and other environment files) is copied into the image, as it
 # may be needed by Composer scripts to access additional variables.
-COPY composer.json composer.* .env* auth* /app/
+COPY composer.json composer.* patches.lock.* .env* auth* /app/
 
 # Install PHP dependencies without development packages to avoid exposing
 # potential security vulnerabilities in the production environment.

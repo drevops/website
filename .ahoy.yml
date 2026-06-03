@@ -15,6 +15,7 @@ commands:
 
   build:
     usage: Build or rebuild the project.
+    aliases: [rebuild]
     cmd: |
       ahoy confirm "All containers, build files and database will be removed. Proceed?" && export AHOY_CONFIRM_RESPONSE=y && export AHOY_CONFIRM_WAIT_SKIP=1 || exit 0
       ahoy reset                          # Reset the project.
@@ -27,13 +28,14 @@ commands:
 
   info:
     usage: Show information about this project.
+    aliases: [status, describe, ps]
     cmd: |
       export COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-${PWD##*/}}
       export VORTEX_HOST_DB_PORT=$(docker compose port database 3306 2>/dev/null | cut -d : -f 2)
       export VORTEX_HOST_SOLR_PORT=$(docker compose port solr 8983 2>/dev/null | cut -d : -f 2)
       export VORTEX_HOST_SELENIUM_VNC_PORT=$(docker compose port chrome 7900 2>/dev/null | cut -d : -f 2)
       export VORTEX_HOST_HAS_SEQUELACE=$(uname -a | grep -i -q darwin && mdfind -name 'Sequel Ace' 2>/dev/null | grep -q "Ace" && echo 1 || true)
-      ahoy cli ./scripts/vortex/info.sh "$@"
+      ahoy cli ./vendor/drevops/vortex-tooling/src/info "$@"
 
   db:
     usage: Open DB in Sequel Ace.
@@ -55,6 +57,7 @@ commands:
 
   down:
     usage: Stop and remove containers, images, volumes and networks.
+    aliases: [destroy]
     cmd: |
       ahoy confirm "Running this command will remove your current database. Are you sure?" || exit 0
       if [ -f "docker-compose.yml" ]; then docker compose down --remove-orphans --volumes > /dev/null 2>&1; fi
@@ -81,6 +84,7 @@ commands:
   # arguments that contain spaces.
   cli:
     usage: Start a shell or run a command inside the CLI service container.
+    aliases: [ssh, shell]
     cmd: |
       if [ "${#}" -ne 0 ]; then
         docker compose exec $(env | cut -f1 -d= | grep "TERM\|COMPOSE_\|GITHUB_\|PACKAGE_\|DOCKER_\|DRUPAL_\|VORTEX_" | sed 's/^/-e /') cli bash -c "$*"
@@ -109,14 +113,15 @@ commands:
 
   login:
     usage: Unblock user 1 and generate a one time login link.
-    cmd: ahoy cli ./scripts/vortex/login.sh
+    cmd: ahoy cli ./vendor/drevops/vortex-tooling/src/login
 
   download-db:
     usage: Download database. Run with "--fresh" option to force fresh database backup.
-    aliases: [fetch-db]
+    aliases: [fetch-db, db-download, db-fetch]
     cmd: |
-      case " $* " in *" --fresh "*) export VORTEX_DOWNLOAD_DB_FRESH=1;; esac
-      ./scripts/vortex/download-db.sh
+      ahoy require-tooling
+      case " $* " in *" --fresh "*) export VORTEX_DOWNLOAD_DB_FRESH=1 VORTEX_DOWNLOAD_DB_FORCE=1;; esac
+      ./vendor/drevops/vortex-tooling/src/download-db
 
   reload-db:
     usage: Reload the database container using local database image.
@@ -131,16 +136,20 @@ commands:
     cmd: |
       ahoy confirm "Running this command will remove your current database. Are you sure?" || exit 0
       [ -n "${VORTEX_DB_IMAGE}" ] && AHOY_CONFIRM_RESPONSE=y ahoy reload-db
-      ahoy cli ./scripts/vortex/provision.sh
+      ahoy cli ./vendor/drevops/vortex-tooling/src/provision
       [ "${VORTEX_SHOW_LOGIN:-1}" = "1" ] && ahoy login || true
 
   export-db:
     usage: Export database dump or database image (if VORTEX_DB_IMAGE variable is set).
-    cmd: ./scripts/vortex/export-db.sh "$@"
+    aliases: [db-export, db-dump, dump-db]
+    cmd: |
+      ahoy require-tooling
+      ./vendor/drevops/vortex-tooling/src/export-db "$@"
 
   import-db:
     usage: Import database from dump.
-    cmd: VORTEX_PROVISION_POST_OPERATIONS_SKIP=1 VORTEX_PROVISION_DB="$@" ahoy cli ./scripts/vortex/provision.sh
+    aliases: [db-import]
+    cmd: VORTEX_PROVISION_POST_OPERATIONS_SKIP=1 VORTEX_PROVISION_DB="$@" ahoy cli ./vendor/drevops/vortex-tooling/src/provision
 
   pull-db:
     usage: Download database image with the latest nightly dump. Run "ahoy reload-db" to reload DB in the running stack.
@@ -148,27 +157,34 @@ commands:
 
   reset:
     usage: Remove containers, all build files. Use with `hard` to reset repository to the last commit.
+    aliases: [prune, delete]
     cmd: |
       ahoy confirm "All containers and build files will be removed. Proceed?" || exit 0
       AHOY_CONFIRM_RESPONSE=y ahoy down || true
-      ./scripts/vortex/reset.sh "$@"
+      if [ -f ./vendor/drevops/vortex-tooling/src/reset ]; then
+        bash ./vendor/drevops/vortex-tooling/src/reset "$@"
+      fi
 
   fei:
     usage: Install front-end assets.
+    aliases: [fe-install]
     cmd: |
       ahoy cli "yarn install --frozen-lockfile"
       ahoy cli "yarn --cwd=${WEBROOT}/themes/custom/${DRUPAL_THEME} install --frozen-lockfile"
 
   fe:
     usage: Build front-end assets.
+    aliases: [fe-build]
     cmd: ahoy cli "cd ${WEBROOT}/themes/custom/${DRUPAL_THEME} && yarn run build"
 
   fed:
     usage: Build front-end assets for development.
+    aliases: [fe-build-dev]
     cmd: ahoy cli "cd ${WEBROOT}/themes/custom/${DRUPAL_THEME} && yarn run build-dev"
 
   few:
     usage: Watch front-end assets during development.
+    aliases: [fe-watch]
     cmd: |
       ahoy cli "pkill -9 -f grunt" || true
       ahoy cli "cd ${WEBROOT}/themes/custom/${DRUPAL_THEME} && yarn run watch"
@@ -220,6 +236,7 @@ commands:
 
   test:
     usage: Run all PHPUnit tests.
+    aliases: [phpunit]
     cmd: ahoy cli vendor/bin/phpunit "$@"
 
   test-unit:
@@ -245,6 +262,7 @@ commands:
 
   debug:
     usage: Enable PHP Xdebug.
+    aliases: [xdebug]
     cmd: |
       ahoy cli php -v | grep -q Xdebug && echo "Debug configuration is already enabled. Use 'ahoy up' to disable." || \
       (XDEBUG_ENABLE=true ahoy up cli php nginx && sleep 1 && ahoy cli php -v | grep -q Xdebug && echo "Enabled debug configuration. Use 'ahoy up' to disable.")
@@ -253,15 +271,21 @@ commands:
     usage: Run remote deployment procedures.
     cmd: |
       ahoy confirm "Deployment usually runs in CI. Are you sure you want to proceed with manual deployment? (Run as ahoy deploy [type1,[type2..]], where [type] is 'code', 'container_registry', 'webhook')" || exit 0
-      ./scripts/vortex/deploy.sh "$@"
+      ahoy require-tooling
+      ./vendor/drevops/vortex-tooling/src/deploy "$@"
 
   doctor:
     usage: Find problems with current project setup.
-    cmd: ./scripts/vortex/doctor.sh "$@"
+    aliases: [diagnose, health]
+    cmd: |
+      ahoy require-tooling
+      ./vendor/drevops/vortex-tooling/src/doctor "$@"
 
   update-vortex:
     usage: Update project from the Vortex template repository.
-    cmd: ./scripts/vortex/update-vortex.sh $@
+    cmd: |
+      ahoy require-tooling
+      ./vendor/drevops/vortex-tooling/src/update-vortex "$@"
 
   local:
     usage: Custom local commands. See `ahoy local help`.
@@ -295,6 +319,14 @@ commands:
           sleep 3
         fi
       fi
+    hide: true
+
+  # Internal utility command that ensures the Vortex tooling package is
+  # available in vendor/. Installs just the tooling (not the full dep tree)
+  # so commands like 'ahoy download-db' work on a fresh clone before a full
+  # 'composer install' has run.
+  require-tooling:
+    cmd: ./scripts/vortex-tooling.sh
     hide: true
 
 # Override entrypoint to alter default behavior of Ahoy.
