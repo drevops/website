@@ -45,6 +45,11 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
     $variables['type'] = 'intro';
     $hero_class = $is_front ? 'ct-banner--hero ct-banner--hero-home' : 'ct-banner--hero';
     $variables['modifier_class'] = trim(($variables['modifier_class'] ?? '') . ' ' . $hero_class);
+
+    // The design hero is a dark canvas with an atmospheric glow (rendered in
+    // banner.scss), not a background image. The shared banner block ships a
+    // default background image, so drop it here to render the clean hero.
+    unset($variables['background_image'], $variables['background_image_blend_mode']);
   }
 
   // Adds extra top padding for the banner when additional spacing is needed.

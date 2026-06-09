@@ -1,0 +1,168 @@
+//
+// DrevOps - Rich-text content.
+//
+// The blog article body and the contact details render through CivicTheme's
+// basic-content component with the rich-text format, and the hero subtitle
+// renders through the same component inside the banner. These rules give that
+// editorial content the design's typography on the dark theme: lead paragraph,
+// headings, lists, inline and block code, tables and blockquotes.
+//
+
+.ct-basic-content.ct-theme-dark {
+  // CivicTheme tints dark headings and content links through these tokens; the
+  // design uses pure-white headings and the cyan link accent.
+  --ct-basic-content-dark-heading-1-color: var(--text-color);
+  --ct-basic-content-dark-heading-2-color: var(--text-color);
+  --ct-basic-content-dark-heading-3-color: var(--text-color);
+  --ct-basic-content-dark-heading-4-color: var(--text-color);
+  --ct-basic-content-dark-heading-5-color: var(--text-color);
+  --ct-basic-content-dark-heading-6-color: var(--text-color);
+  --ct-content-link-dark-color: var(--link-color);
+}
+
+.ct-basic-content {
+  // Lead paragraph (the article intro and the hero subtitle).
+  .ct-text-large {
+    font-size: var(--heading-h4-font-size);
+    font-weight: var(--body-font-weight);
+    line-height: var(--line-height-lg);
+    color: var(--text-subtle-color);
+  }
+
+  p {
+    font-weight: var(--body-font-weight);
+    line-height: var(--line-height-lg);
+  }
+
+  strong {
+    font-weight: var(--font-weight-normal);
+    color: var(--text-color);
+  }
+
+  h2 {
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -0.01em;
+    margin-top: var(--space-y-8);
+    margin-bottom: var(--space-y-3);
+  }
+
+  h3 {
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-normal);
+    margin-top: var(--space-y-5);
+    margin-bottom: var(--space-y-2);
+  }
+
+  ul,
+  ol {
+    margin: 0 0 var(--space-y-3);
+    padding-left: var(--space-x-3);
+  }
+
+  li {
+    font-weight: var(--body-font-weight);
+    line-height: var(--line-height-lg);
+    margin-bottom: var(--space-y-1);
+
+    &::marker {
+      color: var(--color-secondary-4);
+    }
+  }
+
+  // Inline code.
+  code {
+    font-family: var(--font-family-mono);
+    font-size: 0.875em;
+    background: var(--code-inline-bg);
+    color: var(--code-inline-color);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  // Block code (highlighted client-side by the highlight_js filter).
+  pre {
+    margin: var(--space-y-3) 0 var(--space-x-4);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+
+    code {
+      display: block;
+      padding: var(--space-y-3);
+      font-size: var(--caption-font-size);
+      line-height: var(--line-height-md);
+      background: var(--code-bg);
+      color: var(--code-color);
+      border: none;
+      border-radius: 0;
+      overflow-x: auto;
+    }
+  }
+
+  // Tables.
+  table {
+    width: 100%;
+    margin: var(--space-y-3) 0 var(--space-x-4);
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  thead th {
+    background: var(--table-header-bg);
+    color: var(--table-header-color);
+    font-family: var(--font-family-primary);
+    font-size: var(--caption-font-size);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: var(--space-y-2) var(--space-x-2);
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  td {
+    padding: var(--space-y-1) var(--space-x-2);
+    color: var(--text-subtle-color);
+    line-height: var(--line-height-md);
+    border-bottom: 1px solid var(--border-subtle-color);
+  }
+
+  tbody tr:nth-child(even) td {
+    background: var(--table-stripe-bg);
+  }
+
+  // Blockquotes (the article callouts).
+  blockquote {
+    margin: var(--space-y-4) 0;
+    padding: var(--space-y-3) var(--space-x-3);
+    background: var(--surface-subtle-color);
+    border-left: 3px solid var(--color-secondary-6);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+
+    p {
+      margin-bottom: 0;
+    }
+
+    p + p {
+      margin-top: var(--space-y-2);
+    }
+
+    strong {
+      color: var(--color-secondary-3);
+    }
+  }
+}
+
+// The hero subtitle (and optional CTA button) render through basic-content
+// inside the intro banner. Give the subtitle a comfortable measure and space
+// the CTA button away from it.
+.ct-banner__content .ct-basic-content {
+  max-width: 720px;
+  margin-inline: auto;
+
+  .ct-text-large {
+    margin-bottom: var(--space-y-5);
+  }
+}
+

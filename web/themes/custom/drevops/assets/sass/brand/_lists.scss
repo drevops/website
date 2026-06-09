@@ -219,3 +219,143 @@
     letter-spacing: 0.04em;
   }
 }
+
+// ── Service-detail rows (services page) ─────────────────────────────────────
+// Each service is a CivicTheme promo: title, a rich-text body (tagline lead,
+// description, "what's included" list and price) and a CTA button. They are
+// the only promos on the site, so the design's numbered-card treatment lives
+// here, with the 01/02/03 badge from a CSS counter reset once per page.
+.ct-page {
+  counter-reset: do-service;
+}
+
+.ct-promo {
+  counter-increment: do-service;
+  padding: var(--layout-rhythm-sm, 6.25rem) 0 0;
+
+  &:last-child {
+    padding-bottom: var(--layout-rhythm-sm, 6.25rem);
+  }
+
+  .ct-promo__wrapper {
+    position: relative;
+    display: block;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-y-7);
+    background: var(--page-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+  }
+
+  // The decorative service number.
+  .ct-promo__inner::before {
+    content: counter(do-service, decimal-leading-zero);
+    display: block;
+    font-family: var(--font-family-primary);
+    font-size: 64px;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--color-secondary-4);
+    opacity: 0.8;
+    margin-bottom: var(--space-y-3);
+  }
+
+  .ct-promo__title {
+    font-family: var(--font-family-primary);
+    font-size: var(--heading-h2-font-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -0.01em;
+    color: var(--text-color);
+    margin-bottom: var(--space-y-4);
+  }
+
+  .ct-promo__content {
+    .ct-text-large {
+      font-size: var(--heading-h4-font-size);
+      font-weight: var(--body-font-weight);
+      line-height: var(--line-height-md);
+      color: var(--text-muted-color);
+      margin-bottom: var(--space-y-3);
+    }
+
+    p {
+      color: var(--text-subtle-color);
+      line-height: var(--line-height-lg);
+      margin-bottom: var(--space-y-2);
+    }
+
+    h3 {
+      font-family: var(--font-family-primary);
+      font-size: var(--label-font-size);
+      font-weight: var(--font-weight-normal);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted-color);
+      margin: var(--space-y-4) 0 var(--space-y-2);
+    }
+
+    ul {
+      list-style: none;
+      margin: 0 0 var(--space-y-4);
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 var(--space-x-4);
+    }
+
+    li {
+      position: relative;
+      padding: var(--space-y-1) 0 var(--space-y-1) var(--space-y-3);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-md);
+      color: var(--text-subtle-color);
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 14px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--color-secondary-6);
+      }
+    }
+
+    // The price line: a small label above a large figure.
+    .ct-text-small {
+      display: block;
+      margin-top: var(--space-y-4);
+      padding-top: var(--space-y-3);
+      border-top: 1px solid var(--border-subtle-color);
+      font-family: var(--font-family-primary);
+      font-size: var(--heading-h3-font-size);
+      font-weight: var(--font-weight-normal);
+      letter-spacing: -0.01em;
+      color: var(--color-secondary-3);
+
+      strong {
+        display: block;
+        margin-bottom: 4px;
+        font-family: var(--body-font-family);
+        font-size: var(--label-font-size);
+        font-weight: var(--font-weight-normal);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted-color);
+      }
+    }
+  }
+
+  .ct-promo__links {
+    margin-top: var(--space-y-5);
+  }
+}
+
+@media (max-width: 768px) {
+  .ct-promo .ct-promo__content ul {
+    grid-template-columns: 1fr;
+  }
+}

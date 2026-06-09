@@ -2,9 +2,7 @@
 // Brand supplements.
 //
 
-// Section-rhythm and inset tokens. The page markup references these (the
-// design's token migration introduced them) but they are absent from the
-// source variables.css, so define them here.
+// Section-rhythm and inset tokens used by the bespoke section treatments.
 :root {
   --layout-rhythm-sm: 6.25rem;
   --layout-rhythm-md: 8.75rem;
@@ -21,11 +19,8 @@
   --ct-back-to-top-outline-color: var(--link-color);
 }
 
-// Base typography and canvas. CivicTheme applies fonts through its own .ct-*
-// component classes, but the ported design markup uses .component-* classes
-// and relies on inheritance, so set the document-level family, weight, colour
-// and background here. Display and headings use the primary font (Plus Jakarta
-// Sans); body copy uses the secondary font (Outfit).
+// Base canvas. Display and headings use the primary font (Plus Jakarta Sans);
+// body copy uses the secondary font (Outfit).
 body {
   font-family: var(--body-font-family);
   font-weight: var(--body-font-weight);
@@ -33,6 +28,15 @@ body {
   color: var(--text-color);
   background-color: var(--page-bg);
   overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-primary);
 }
 
 // CivicTheme derives the page wrapper and header as lighter navy tints, which
@@ -46,82 +50,6 @@ body {
 
 .ct-header__middle {
   background-color: color-mix(in srgb, var(--page-bg) 82%, transparent) !important;
-}
-
-// The design sections live inside CivicTheme's contained content region, but
-// their backgrounds must bleed edge to edge. Remove the grid container
-// constraints for any content block wrapping a design <section>; each
-// section's own .component-section-inner re-constrains the content width.
-//
-// CivicTheme also applies inset vertical spacing (padding) to the content
-// block. Each design section carries its own vertical rhythm and must sit
-// flush against the next, so its full-bleed background meets the neighbour edge
-// to edge; the inset padding would otherwise expose a strip of the page
-// background between sections whose backgrounds differ.
-.ct-basic-content:has(section[class*='component-']) {
-  padding-top: 0;
-  padding-bottom: 0;
-
-  > .container {
-    max-width: none;
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  .row {
-    margin-right: 0;
-    margin-left: 0;
-  }
-
-  [class*='col-'] {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-// The design's base line-height is 1.75 - the design sets it on <body> and
-// every section inherits it, whereas CivicTheme applies a tighter block
-// line-height to .ct-basic-content. Restore the design's value on the design
-// content wrapper so the eyebrow, subtitle, labels, links and descriptions
-// inherit it, while components that declare their own line-height (headings,
-// the trust description, the decorative numbers) keep theirs.
-//
-// CivicTheme's dark theme also colours headings a near-white tint and content
-// links a muted blue via these tokens (specificity 0,2,1 / 0,4,1, above the
-// component classes). The design uses pure white headings and the cyan link
-// accent, so point the tokens at the design values on the same wrapper; the
-// descendant headings and links inherit the overridden custom properties.
-.ct-basic-content:has([class*='component-']) {
-  line-height: var(--line-height-lg);
-  // CivicTheme's base `p` rule reads this token for paragraph line-height
-  // (a fixed value that breaks the design's inheritance). Repoint it at the
-  // design's value so paragraphs without their own line-height inherit it,
-  // while paragraphs that declare one (the trust description) keep it.
-  --ct-typography-text-regular-line-height: var(--line-height-lg);
-  // ct-content() reads these tokens for heading line-heights, which are looser
-  // than the design's. The design sets every heading to the tight line-height;
-  // the display components override to their own value through their classes.
-  --ct-typography-heading-1-line-height: var(--line-height-sm);
-  --ct-typography-heading-2-line-height: var(--line-height-sm);
-  --ct-typography-heading-3-line-height: var(--line-height-sm);
-  --ct-typography-heading-4-line-height: var(--line-height-sm);
-  --ct-typography-heading-5-line-height: var(--line-height-sm);
-  --ct-typography-heading-6-line-height: var(--line-height-sm);
-  --ct-basic-content-dark-heading-1-color: var(--text-color);
-  --ct-basic-content-dark-heading-2-color: var(--text-color);
-  --ct-basic-content-dark-heading-3-color: var(--text-color);
-  --ct-basic-content-dark-heading-4-color: var(--text-color);
-  --ct-basic-content-dark-heading-5-color: var(--text-color);
-  --ct-basic-content-dark-heading-6-color: var(--text-color);
-  --ct-content-link-dark-color: var(--link-color);
-}
-
-// The contact value/email link renders white in the design (the cyan accent is
-// reserved for the underline on hover). CivicTheme's dark content-link rule
-// (specificity 0,4,1) would otherwise tint it; this selector matches that rule
-// plus the component class to clear it.
-.ct-basic-content.ct-theme-dark a.component-contact-value:not(.ct-button):not(.ct-link) {
-  color: var(--text-color);
 }
 
 // The contact webform's submit button renders with CivicTheme's solid light
@@ -145,66 +73,6 @@ body {
   }
 }
 
-// CivicTheme's dark content-link rule (specificity 0,4,1) styles every <a>
-// inside content as a text link - inline padding and an underline - which
-// strips the button appearance from the design's `.btn` anchors (the hero CTA,
-// the service-detail buttons and the "Get in touch" CTA). Restore the button
-// box at a specificity that clears the link rule; the `.btn-*` variants still
-// supply the colours and the `::before` provides the hover fill.
-.ct-basic-content.ct-theme-dark a.btn:not(.ct-button):not(.ct-link) {
-  &,
-  &:hover,
-  &:focus-visible,
-  &:active,
-  &:visited {
-    margin: 0;
-    padding: var(--space-y-2) var(--space-x-4);
-    line-height: 1;
-    text-decoration: none;
-  }
-
-  &:hover {
-    background: transparent;
-    color: var(--text-color);
-  }
-}
-
-// The decorative service numbers are a faint ghost in the design (the cyan-6
-// brand at 0.18 opacity), which falls below the WCAG large-text contrast
-// minimum and fails the accessibility gate. Lift them to a lighter cyan at a
-// higher opacity so they clear 3:1 on the dark section surfaces while staying
-// understated. Scoped under .ct-basic-content (and matching the detail-header
-// selector) so the lift wins over the component CSS on every page.
-.ct-basic-content .component-service-number,
-.ct-basic-content .component-service-detail-header .component-service-number {
-  color: var(--color-secondary-4);
-  opacity: 0.8;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-family-primary);
-}
-
-// The design renders the hero as a full-width content section, so hide the
-// node banner (which would otherwise duplicate the heading) on any page that
-// contains a design hero.
-body:has(.component-hero) .ct-banner {
-  display: none;
-}
-
-// Reveal-on-scroll keeps content hidden until the behaviour adds `.visible`.
-// Guard on the `js` class (added by Drupal) so content stays visible when
-// JavaScript is unavailable.
-html:not(.js) .component-reveal {
-  opacity: 1;
-  transform: none;
-}
-
 // Primary navigation styled to the design: small, uppercase, letter-spaced
 // links rather than CivicTheme's larger mixed-case menu.
 .ct-header .ct-menu__item__link {
@@ -213,22 +81,4 @@ html:not(.js) .component-reveal {
   font-weight: var(--font-weight-normal);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-// Respect reduced-motion preferences: disable the reveal, hero and scroll
-// animations for motion-sensitive users while keeping content fully visible.
-@media (prefers-reduced-motion: reduce) {
-  .component-reveal,
-  .component-reveal.visible,
-  .component-hero-eyebrow,
-  .component-hero-subtitle,
-  .component-hero-cta,
-  .component-hero-rule,
-  .component-scroll-indicator,
-  .component-scroll-line {
-    transition: none !important;
-    animation: none !important;
-    transform: none !important;
-    opacity: 1 !important;
-  }
 }

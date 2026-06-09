@@ -15,13 +15,3 @@ css-variables:
   css:
     theme:
       dist/styles.variables.css: { preprocess: false, weight: 10 }
-
-# Scroll animations: reveal-on-scroll and stats count-up. Authored JS (not
-# part of the SCSS/dist build), attached globally via the theme info file.
-animations:
-  js:
-    assets/js/reveal.js: {}
-    assets/js/stats-counter.js: {}
-  dependencies:
-    - core/drupal
-    - core/once

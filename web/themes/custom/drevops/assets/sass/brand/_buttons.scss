@@ -1,75 +1,61 @@
 //
-// DrevOps — Brand Buttons
+// DrevOps - Brand buttons.
 //
-// Ported from the static design's framework.css. Only the .btn and
-// .btn-{primary,secondary,tertiary} rules are included here; bare
-// element selectors, resets, and document/print styles are
-// intentionally excluded so the rest of the CivicTheme site is
-// unaffected.
+// The design renders every call-to-action as one outline button: transparent
+// with a cyan border and label, filling softly on hover. CivicTheme emits its
+// buttons - and the promo, callout and rich-text CTAs - with the `.ct-button`
+// class, so the design treatment is applied there through the button tokens
+// rather than the design's original `.btn` classes.
 //
 
-/* ── Buttons ── */
-.btn {
-  display: inline-block;
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-normal);
-  line-height: 1;
-  padding: var(--space-y-2) var(--space-x-4);
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  position: relative;
-  overflow: hidden;
-  transition: color 0.4s ease, border-color 0.4s ease;
-}
-.btn:hover { text-decoration: none; background: none; }
-.btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease;
-}
-.btn:hover::before { transform: scaleX(1); }
-.btn:disabled, .btn[disabled] {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
+.ct-button {
+  &,
+  &:focus-visible,
+  &:active,
+  &:visited {
+    display: inline-block;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    line-height: 1;
+    padding: var(--space-y-2) var(--space-x-4);
+    border: 1px solid var(--btn-secondary-border);
+    border-radius: 0;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-secondary-color);
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  &:hover {
+    background-color: var(--btn-secondary-hover-bg);
+    border-color: var(--btn-secondary-color);
+    color: var(--btn-secondary-hover-color);
+    text-decoration: none;
+  }
 }
 
-.btn-primary {
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-color);
-  border-color: var(--btn-primary-border);
-}
-.btn-primary::before { background: var(--btn-primary-hover-bg); }
-.btn-primary:hover {
-  color: var(--btn-primary-hover-color);
-  border-color: var(--btn-primary-color);
-}
+// CivicTheme's dark content-link rule (high specificity) restyles every anchor
+// inside content as an underlined text link, which would otherwise strip the
+// button box from rich-text CTAs (the hero "Talk to us" button and the blog
+// "Get a free CI review" button). Re-assert the button appearance at a
+// matching specificity; the base `.ct-button` rule still supplies the box.
+.ct-basic-content.ct-theme-dark a.ct-button {
+  &,
+  &:hover,
+  &:focus-visible,
+  &:active,
+  &:visited {
+    margin: 0;
+    padding: var(--space-y-2) var(--space-x-4);
+    line-height: 1;
+    text-decoration: none;
+    color: var(--btn-secondary-color);
+  }
 
-.btn-secondary {
-  background: var(--btn-secondary-bg);
-  color: var(--btn-secondary-color);
-  border-color: var(--btn-secondary-border);
-}
-.btn-secondary::before { background: var(--btn-secondary-hover-bg); }
-.btn-secondary:hover {
-  color: var(--btn-secondary-hover-color);
-  border-color: var(--btn-secondary-color);
-}
-
-.btn-tertiary {
-  background: var(--btn-tertiary-bg);
-  color: var(--btn-tertiary-color);
-  border-color: var(--btn-tertiary-border);
-}
-.btn-tertiary::before { background: var(--btn-tertiary-hover-bg); }
-.btn-tertiary:hover {
-  color: var(--btn-tertiary-hover-color);
-  border-color: var(--btn-tertiary-color);
+  &:hover {
+    color: var(--btn-secondary-hover-color);
+  }
 }

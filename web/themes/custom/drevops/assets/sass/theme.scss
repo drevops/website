@@ -10,19 +10,12 @@
 @import 'block/local-tasks';
 @import 'brand/tokens';
 
-// The brand sections render inside CivicTheme's .ct-basic-content, whose
-// ct-content() mixin styles descendant headings/text (e.g. `.ct-basic-content
-// h1`, specificity 0,1,1) and would otherwise override the .component-* rules
-// (0,1,0). Scoping the brand component and button styles under
-// .ct-basic-content raises their specificity so the design typography wins.
-.ct-basic-content {
-  @import 'brand/buttons';
-  @import 'brand/components';
-}
-
+// Design tokens and base canvas, the CivicTheme button treatment, the
+// rich-text content typography (blog article, contact details, hero subtitle)
+// and the bespoke section treatments (manual lists, service-detail promos and
+// the CTA callout). All enhance CivicTheme component markup, so they import at
+// the top level rather than being scoped to a content wrapper.
 @import 'brand/extra';
-
-// Bespoke design treatments for CivicTheme manual lists (numbered rows, stats,
-// trust grid, dotted list) and the CTA callout. These render outside
-// .ct-basic-content, so they are imported at the top level.
+@import 'brand/buttons';
+@import 'brand/content';
 @import 'brand/lists';
