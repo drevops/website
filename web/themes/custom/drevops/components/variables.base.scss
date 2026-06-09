@@ -39,13 +39,13 @@ $ct-colors: (
     'heading': #152235,
     'body': #2b394d,
     'background-light': #f4f7fc,
-    'background': #ffffff,
+    'background': #fff,
     'background-dark': #e9eef6,
     'highlight': #cd5b43,
   ),
   'dark': (
-    'heading': #ffffff,
-    'body': #ffffff,
+    'heading': #fff,
+    'body': #fff,
     'background-light': #2b394d,
     'background': #152235,
     'background-dark': #0f1a29,
@@ -80,7 +80,6 @@ $ct-fonts: (
     ),
   ),
 );
-
 $ct-particle: 8px;
 
 // Base font sizes defined in CivicTheme base variables.

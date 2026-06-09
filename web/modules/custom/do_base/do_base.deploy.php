@@ -22,7 +22,7 @@ use Drupal\paragraphs\Entity\Paragraph;
  * updated in place so the referencing entity revision keeps resolving to it.
  * Content created by later deploy hooks is built dark directly.
  */
-function do_base_deploy_components_dark(array &$sandbox): ?string {
+function do_base_deploy_components_dark(?array &$sandbox): ?string {
   return Helper::entity($sandbox)->batchEntity('paragraph', NULL, static function ($paragraph): void {
     if (!$paragraph->hasField('field_c_p_theme')) {
       return;
@@ -113,7 +113,7 @@ function do_base_deploy_contact(): string {
   }
 
   if ($node->hasField('field_c_n_banner_title')) {
-    $node->set('field_c_n_banner_title', 'Let\'s talk about your platform.');
+    $node->set('field_c_n_banner_title', "Let's talk about your platform.");
   }
 
   if ($node->hasField('field_c_n_summary')) {
