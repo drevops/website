@@ -1,0 +1,221 @@
+//
+// DrevOps — Manual list design treatments.
+//
+// CivicTheme manual lists carry a `field_do_style` value that the theme turns
+// into a `.ct-list--style-*` modifier (see includes/manual_list.inc). These
+// rules render the design's bespoke sections (numbered service rows, the stats
+// figures, the trust grid and the dotted "why" list) by styling the snippet
+// children of those lists. No markup is stored as content; the structure is
+// CivicTheme's manual list + snippet components.
+//
+
+// Section rhythm shared by all styled lists.
+.ct-list--style-numbered,
+.ct-list--style-stat,
+.ct-list--style-trust,
+.ct-list--style-dotted {
+  padding: var(--layout-rhythm-md, 8.75rem) 0;
+
+  .ct-list__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--space-x-8);
+  }
+
+  .ct-list__title {
+    font-family: var(--font-family-primary);
+    font-size: var(--display-2-font-size, clamp(40px, 5vw, 56px));
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-sm);
+    letter-spacing: -0.02em;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: var(--space-y-9);
+  }
+
+  .ct-list__header .row {
+    justify-content: center;
+  }
+}
+
+// Alternating section surfaces, matching the design.
+.ct-list--style-stat {
+  background: var(--surface-subtle-color);
+}
+
+// ── Numbered rows (services, process) ──────────────────────────────────────
+.ct-list--style-numbered {
+  .ct-list__rows {
+    counter-reset: do-list;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .ct-snippet {
+    counter-increment: do-list;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0 var(--space-y-6);
+    align-items: start;
+    padding: var(--space-y-8) 0;
+    border-bottom: 1px solid var(--border-subtle-color);
+  }
+
+  .ct-snippet::before {
+    content: counter(do-list, decimal-leading-zero);
+    font-family: var(--font-family-primary);
+    font-size: 80px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-secondary-6);
+    opacity: 0.18;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .ct-snippet__title {
+    font-family: var(--font-family-primary);
+    font-size: 32px;
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -0.01em;
+    line-height: var(--line-height-sm);
+    color: var(--text-color);
+    margin-bottom: var(--space-y-3);
+  }
+
+  .ct-snippet__summary {
+    font-size: var(--body-font-size);
+    font-weight: var(--body-font-weight);
+    line-height: var(--line-height-lg);
+    color: var(--text-subtle-color);
+    max-width: 560px;
+  }
+}
+
+// ── Statistics (4 big figures) ──────────────────────────────────────────────
+.ct-list--style-stat {
+  .ct-snippet {
+    text-align: left;
+    padding: var(--space-y-6) var(--space-x-4);
+  }
+
+  .ct-snippet__title {
+    font-family: var(--font-family-primary);
+    font-size: clamp(72px, 8vw, 108px);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--color-secondary-4);
+    margin-bottom: var(--space-y-2);
+  }
+
+  .ct-snippet__summary {
+    font-size: var(--label-font-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-subtle-color);
+  }
+}
+
+// ── Trust grid (4 cells: label + description) ───────────────────────────────
+.ct-list--style-trust {
+  background: var(--page-bg);
+
+  .ct-snippet {
+    text-align: center;
+    padding: var(--space-y-5) var(--space-x-3);
+    border: 1px solid var(--border-subtle-color);
+    border-radius: var(--radius-sm);
+    height: 100%;
+  }
+
+  .ct-snippet__title {
+    font-size: var(--body-font-size);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-color);
+    margin-bottom: var(--space-y-2);
+  }
+
+  .ct-snippet__summary {
+    font-size: var(--font-size-sm);
+    font-weight: var(--body-font-weight);
+    line-height: var(--line-height-md);
+    color: var(--text-subtle-color);
+  }
+}
+
+// ── Dotted list (why / approach) ────────────────────────────────────────────
+.ct-list--style-dotted {
+  .ct-list__rows {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .ct-snippet {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: var(--space-y-3);
+    align-items: start;
+    padding: var(--space-y-5) 0;
+    border-bottom: 1px solid var(--border-subtle-color);
+  }
+
+  .ct-snippet:first-child {
+    border-top: 1px solid var(--border-subtle-color);
+  }
+
+  .ct-snippet::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-secondary-6);
+    margin-top: 10px;
+  }
+
+  .ct-snippet__title {
+    font-size: var(--heading-h4-font-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -0.01em;
+    color: var(--text-color);
+    margin-bottom: var(--space-y-1);
+  }
+
+  .ct-snippet__summary {
+    font-size: var(--body-font-size);
+    font-weight: var(--body-font-weight);
+    line-height: var(--line-height-lg);
+    color: var(--text-subtle-color);
+  }
+}
+
+// ── CTA callout (closing "Let's talk" section) ──────────────────────────────
+.ct-callout {
+  background: var(--cta-bg);
+  padding: calc(var(--space-y-10) * 2) 0;
+  text-align: center;
+
+  .ct-callout__title {
+    font-family: var(--font-family-primary);
+    font-size: var(--display-1-font-size, clamp(56px, 8vw, 92px));
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-xs, 1.1);
+    letter-spacing: -0.02em;
+    color: var(--text-color);
+    margin-bottom: var(--space-y-6);
+  }
+
+  .ct-callout__content {
+    font-size: var(--body-font-size);
+    font-weight: var(--body-font-weight);
+    line-height: var(--line-height-lg);
+    color: var(--text-subtle-color);
+    max-width: 560px;
+    margin: 0 auto var(--space-y-7);
+  }
+
+  .ct-button {
+    font-size: var(--heading-h3-font-size);
+    letter-spacing: 0.04em;
+  }
+}
