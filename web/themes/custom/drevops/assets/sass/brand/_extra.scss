@@ -1,5 +1,5 @@
 //
-// Redesign supplements.
+// Brand supplements.
 //
 
 // Section-rhythm and inset tokens. The page markup references these (the
@@ -13,7 +13,7 @@
 
   // CivicTheme hard-codes the back-to-top control to the light interaction
   // palette regardless of page theme, so it renders in the old accent on the
-  // dark site. Repoint it at the redesign's accent (cyan control, navy glyph),
+  // dark site. Repoint it at the design's accent (cyan control, navy glyph),
   // matching the link and button colours used elsewhere.
   --ct-back-to-top-background-color: var(--link-color);
   --ct-back-to-top-border-color: var(--link-color);
@@ -22,7 +22,7 @@
 }
 
 // Base typography and canvas. CivicTheme applies fonts through its own .ct-*
-// component classes, but the ported redesign markup uses .component-* classes
+// component classes, but the ported design markup uses .component-* classes
 // and relies on inheritance, so set the document-level family, weight, colour
 // and background here. Display and headings use the primary font (Plus Jakarta
 // Sans); body copy uses the secondary font (Outfit).
@@ -48,13 +48,13 @@ body {
   background-color: color-mix(in srgb, var(--page-bg) 82%, transparent) !important;
 }
 
-// The redesign sections live inside CivicTheme's contained content region, but
+// The design sections live inside CivicTheme's contained content region, but
 // their backgrounds must bleed edge to edge. Remove the grid container
-// constraints for any content block wrapping a redesign <section>; each
+// constraints for any content block wrapping a design <section>; each
 // section's own .component-section-inner re-constrains the content width.
 //
 // CivicTheme also applies inset vertical spacing (padding) to the content
-// block. Each redesign section carries its own vertical rhythm and must sit
+// block. Each design section carries its own vertical rhythm and must sit
 // flush against the next, so its full-bleed background meets the neighbour edge
 // to edge; the inset padding would otherwise expose a strip of the page
 // background between sections whose backgrounds differ.
@@ -79,16 +79,16 @@ body {
   }
 }
 
-// The redesign's base line-height is 1.75 - the design sets it on <body> and
+// The design's base line-height is 1.75 - the design sets it on <body> and
 // every section inherits it, whereas CivicTheme applies a tighter block
-// line-height to .ct-basic-content. Restore the design's value on the redesign
+// line-height to .ct-basic-content. Restore the design's value on the design
 // content wrapper so the eyebrow, subtitle, labels, links and descriptions
 // inherit it, while components that declare their own line-height (headings,
 // the trust description, the decorative numbers) keep theirs.
 //
 // CivicTheme's dark theme also colours headings a near-white tint and content
 // links a muted blue via these tokens (specificity 0,2,1 / 0,4,1, above the
-// component classes). The redesign uses pure white headings and the cyan link
+// component classes). The design uses pure white headings and the cyan link
 // accent, so point the tokens at the design values on the same wrapper; the
 // descendant headings and links inherit the overridden custom properties.
 .ct-basic-content:has([class*='component-']) {
@@ -127,7 +127,7 @@ body {
 // The contact webform's submit button renders with CivicTheme's solid light
 // primary style (the old accent). The design renders form submits as the
 // secondary outline button - transparent with the cyan accent - so restyle the
-// webform submit to the redesign's secondary button tokens.
+// webform submit to the design's secondary button tokens.
 .ct-button.ct-button--submit {
   &,
   &:focus-visible,
@@ -190,9 +190,9 @@ h6 {
   font-family: var(--font-family-primary);
 }
 
-// Redesigned pages render their hero as a full-width content section, so hide
-// the node banner (which would otherwise duplicate the heading) on any page
-// that contains a redesign hero.
+// The design renders the hero as a full-width content section, so hide the
+// node banner (which would otherwise duplicate the heading) on any page that
+// contains a design hero.
 body:has(.component-hero) .ct-banner {
   display: none;
 }
@@ -205,7 +205,7 @@ html:not(.js) .component-reveal {
   transform: none;
 }
 
-// Primary navigation styled to the redesign: small, uppercase, letter-spaced
+// Primary navigation styled to the design: small, uppercase, letter-spaced
 // links rather than CivicTheme's larger mixed-case menu.
 .ct-header .ct-menu__item__link {
   font-family: var(--font-family-secondary);

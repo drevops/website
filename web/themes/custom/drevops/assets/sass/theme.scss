@@ -8,16 +8,16 @@
 // @todo Refactor build to use direct import from the CivicTheme theme.
 @import 'page/page';
 @import 'block/local-tasks';
-@import 'redesign/tokens';
+@import 'brand/tokens';
 
-// The redesign sections render inside CivicTheme's .ct-basic-content, whose
+// The brand sections render inside CivicTheme's .ct-basic-content, whose
 // ct-content() mixin styles descendant headings/text (e.g. `.ct-basic-content
 // h1`, specificity 0,1,1) and would otherwise override the .component-* rules
-// (0,1,0). Scoping the ported component and button styles under
+// (0,1,0). Scoping the brand component and button styles under
 // .ct-basic-content raises their specificity so the design typography wins.
 .ct-basic-content {
-  @import 'redesign/buttons';
-  @import 'redesign/components';
+  @import 'brand/buttons';
+  @import 'brand/components';
 }
 
-@import 'redesign/extra';
+@import 'brand/extra';

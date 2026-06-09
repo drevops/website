@@ -37,7 +37,7 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
 
   $variables['type'] = $type;
 
-  // Redesign hero: render page banners as a centered intro hero with the
+  // Brand hero: render page banners as a centered intro hero with the
   // atmospheric glow. The front page gets the full-viewport variant; other
   // pages get a shorter inner variant.
   $is_front = \Drupal::service('path.matcher')->isFrontPage();

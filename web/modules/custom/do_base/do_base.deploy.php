@@ -16,7 +16,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 /**
  * Flip every component paragraph to the dark theme.
  *
- * The redesign renders the whole site dark. CivicTheme themes each component
+ * The design renders the whole site dark. CivicTheme themes each component
  * individually through the shared `field_c_p_theme` field, and list components
  * theme their rendered items separately through `field_c_p_list_item_theme`, so
  * this switches both - across every bundle - to `dark`. The revision is updated
@@ -57,7 +57,7 @@ function do_base_deploy_components_dark(?array &$sandbox): ?string {
  * Page-chrome blocks (the mobile navigation drawer, banner, social links)
  * carry their own `field_c_b_theme`, and the mobile navigation also themes
  * its trigger through `field_c_b_trigger_theme`. The mobile navigation ships
- * light, so it ignored the dark redesign; switch every block - and its
+ * light, so it ignored the dark design; switch every block - and its
  * trigger - to dark so the whole site, including the mobile drawer, is dark.
  */
 function do_base_deploy_blocks_dark(?array &$sandbox): ?string {
@@ -89,7 +89,7 @@ function do_base_deploy_blocks_dark(?array &$sandbox): ?string {
 }
 
 /**
- * Rebuild the homepage to the redesign.
+ * Rebuild the homepage to the design.
  *
  * The hero is the first content section, so the node banner is cleared. New
  * references are saved before the previous paragraphs are deleted, so a failed
@@ -112,7 +112,7 @@ function do_base_deploy_homepage(): string {
 }
 
 /**
- * Rebuild the Services page to the redesign.
+ * Rebuild the Services page to the design.
  */
 function do_base_deploy_services(): string {
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
@@ -132,7 +132,7 @@ function do_base_deploy_services(): string {
 }
 
 /**
- * Rebuild the Contact page to the redesign.
+ * Rebuild the Contact page to the design.
  *
  * Keeps the existing contact webform (rendered through a CivicTheme webform
  * paragraph) between the hero and the contact-detail sections.
@@ -175,7 +175,7 @@ function do_base_deploy_contact(): string {
 }
 
 /**
- * Seed the redesign demo blog article.
+ * Seed the design demo blog article.
  *
  * Idempotent: matches the existing article by title, otherwise creates it.
  */
@@ -207,7 +207,7 @@ function do_base_deploy_blog_demo(): string {
 }
 
 /**
- * Stage redesign content sections on a node from a content directory.
+ * Stage design content sections on a node from a content directory.
  *
  * Builds the new component paragraphs and assigns them to the node, returning
  * the previously referenced components for deletion after the node is saved.
@@ -290,14 +290,14 @@ function _do_base_html_paragraphs(string $dir): array {
   $path = \Drupal::service('extension.list.module')->getPath('do_base') . '/content/' . $dir;
 
   if (!is_dir($path)) {
-    throw new \RuntimeException(sprintf('Redesign content directory not found: %s', $path));
+    throw new \RuntimeException(sprintf('Design content directory not found: %s', $path));
   }
 
   $files = glob($path . '/*.html') ?: [];
   sort($files);
 
   if (empty($files)) {
-    throw new \RuntimeException(sprintf('No redesign content files found in: %s', $path));
+    throw new \RuntimeException(sprintf('No design content files found in: %s', $path));
   }
 
   $paragraphs = [];
@@ -306,7 +306,7 @@ function _do_base_html_paragraphs(string $dir): array {
     $html = file_get_contents($file);
 
     if ($html === FALSE) {
-      throw new \RuntimeException(sprintf('Failed to read redesign content file: %s', $file));
+      throw new \RuntimeException(sprintf('Failed to read design content file: %s', $file));
     }
 
     // The content/ partials are trusted, version-controlled markup authored
