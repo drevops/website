@@ -183,7 +183,14 @@ function do_base_deploy_services(): string {
         'Full Drupal website builds delivered with automated testing, CI/CD pipelines, and production-ready infrastructure. We handle the architecture, development, theming, and deployment - your team gets a solid platform, not a prototype that needs fixing after launch.',
         'Every project ships with a complete test suite, documentation, and a handover that actually works.',
       ],
-      ['Technical architecture and planning', 'Custom module and theme development', 'Automated testing (PHPUnit, Behat, Cypress)', 'CI/CD pipeline setup (GitHub Actions, CircleCI)', 'Content migration and data import', 'Hosting setup and go-live support'],
+      [
+        'Technical architecture and planning',
+        'Custom module and theme development',
+        'Automated testing (PHPUnit, Behat, Cypress)',
+        'CI/CD pipeline setup (GitHub Actions, CircleCI)',
+        'Content migration and data import',
+        'Hosting setup and go-live support',
+      ],
       'Typical engagement', '$40K - $180K'
     ), 'Discuss your project', '/contact'),
     _do_base_promo('Ongoing Support', _do_base_service_content(
@@ -192,7 +199,14 @@ function do_base_deploy_services(): string {
         'Proactive platform maintenance from the engineers who built your site. Security updates, Drupal core and module patches, performance monitoring, and continuous improvement - all on a predictable prepaid arrangement.',
         'No ticket queues, no outsourced support desks. You talk directly to the people who know your codebase.',
       ],
-      ['Security patches and Drupal updates', 'Uptime and performance monitoring', 'Bug fixes and minor enhancements', 'Monthly reporting and recommendations', 'Direct Slack/email access to engineers', 'Priority response for critical issues'],
+      [
+        'Security patches and Drupal updates',
+        'Uptime and performance monitoring',
+        'Bug fixes and minor enhancements',
+        'Monthly reporting and recommendations',
+        'Direct Slack/email access to engineers',
+        'Priority response for critical issues',
+      ],
       'From', '$740 / month'
     ), 'Get a support quote', '/contact'),
     _do_base_promo('Upgrades & Migrations', _do_base_service_content(
@@ -201,7 +215,14 @@ function do_base_deploy_services(): string {
         'Drupal 7 and 9 are end-of-life. Drupal 10 follows in December 2026. We handle the full migration with test coverage and zero-downtime deployments, so your organisation stays compliant and your users stay unaffected.',
         'We assess your current platform, map out module compatibility, migrate custom code, and deliver an upgraded site with full test coverage.',
       ],
-      ['Platform audit and risk assessment', 'Module compatibility analysis', 'Custom code migration and refactoring', 'Data migration and content integrity checks', 'Automated test suite for the upgraded site', 'Zero-downtime deployment and rollback plan'],
+      [
+        'Platform audit and risk assessment',
+        'Module compatibility analysis',
+        'Custom code migration and refactoring',
+        'Data migration and content integrity checks',
+        'Automated test suite for the upgraded site',
+        'Zero-downtime deployment and rollback plan',
+      ],
       'Typical engagement', '$25K - $120K'
     ), 'Book a free assessment', '/contact'),
     _do_base_manual_list('Our approach', 2, 'dotted', [
@@ -568,9 +589,8 @@ function _do_base_service_content(string $tagline, array $paras, array $includes
   }
 
   $html .= '</ul>';
-  $html .= '<p class="ct-text-small"><strong>' . $price_label . '</strong> ' . $price_value . '</p>';
 
-  return $html;
+  return $html . '<p class="ct-text-small"><strong>' . $price_label . '</strong> ' . $price_value . '</p>';
 }
 
 /**
