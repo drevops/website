@@ -34,6 +34,10 @@ regions:
 features:
   - favicon
 
+# Attach redesign behaviours (reveal-on-scroll, stats count-up) on every page.
+libraries:
+  - drevops/redesign
+
 # Override libraries to point to the sub-theme assets.
 # @note It is advised to preserve civictheme/* libraries overrides in sub-themes
 # to allow CivicTheme to additionally process libraries on behalf of sub-themes.

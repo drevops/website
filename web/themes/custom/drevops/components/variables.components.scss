@@ -66,9 +66,8 @@ $ct-icon-sizes: (
   ),
 );
 
-// Example to override component's variable - Back to Top should have a
-// 'custom1' colour background.
-$ct-back-to-top-light-background-color: ct-color-light('custom1');
+// Back to Top button background uses the highlight (accent) colour.
+$ct-back-to-top-light-background-color: ct-color-light('highlight');
 
 //
 // Banner.
