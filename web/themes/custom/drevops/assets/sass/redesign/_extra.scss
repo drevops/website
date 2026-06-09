@@ -1,0 +1,21 @@
+//
+// Redesign supplements.
+//
+
+// Section-rhythm and inset tokens. The page markup references these (the
+// design's token migration introduced them) but they are absent from the
+// source variables.css, so define them here.
+:root {
+  --layout-rhythm-sm: 6.25rem;
+  --layout-rhythm-md: 8.75rem;
+  --layout-rhythm-lg: 10rem;
+  --layout-inset: 3.75rem;
+}
+
+// Reveal-on-scroll keeps content hidden until the behaviour adds `.visible`.
+// Guard on the `js` class (added by Drupal) so content stays visible when
+// JavaScript is unavailable.
+html:not(.js) .component-reveal {
+  opacity: 1;
+  transform: none;
+}

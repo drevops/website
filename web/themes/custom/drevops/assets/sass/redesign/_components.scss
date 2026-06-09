@@ -1,0 +1,1712 @@
+//
+// DrevOps — Redesign Components
+//
+// Every component from the static design's components/*.css, ported
+// verbatim. All selectors are scoped to .component-* classes, so they
+// are safe to include globally. Selectors, media queries, keyframes,
+// color-mix(), clamp(), etc. are preserved exactly as authored.
+//
+
+/*
+ * DrevOps — Hero Component
+ */
+
+/* Base hero — full viewport height with glow */
+.component-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--page-bg);
+  overflow: hidden;
+  padding: calc(var(--space-y-10) * 1.75) var(--space-x-8) var(--space-y-10);
+}
+
+/* Atmospheric teal glow */
+.component-hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 12%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 4%, transparent) 40%, transparent 70%);
+  pointer-events: none;
+  animation: heroGlow 8s ease-in-out infinite;
+}
+
+/* Deep vignette (homepage only — applied via modifier) */
+.component-hero--home::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, var(--page-bg) 60%, transparent) 100%);
+  pointer-events: none;
+}
+
+/* Shorter hero for inner pages */
+.component-hero--inner {
+  min-height: 70vh;
+  padding: calc(var(--space-y-10) * 2) var(--space-x-8) var(--space-y-10);
+}
+
+.component-hero--inner::before {
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 10%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 3%, transparent) 40%, transparent 70%);
+}
+
+/* Blog/contact hero variant — centered text, no min-height */
+.component-hero--page {
+  min-height: auto;
+  padding: 200px 0 var(--space-y-10);
+  text-align: center;
+}
+
+.component-hero--page::before {
+  width: 900px;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 8%, transparent) 0%, transparent 65%);
+  animation: none;
+}
+
+/* Contact hero with darker bg */
+.component-hero--contact {
+  background: var(--color-primary-8);
+}
+
+.component-hero--contact::before {
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 12%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 3%, transparent) 40%, transparent 70%);
+  animation: none;
+}
+
+.component-hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+}
+
+.component-hero-inner--narrow {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.component-hero-eyebrow {
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-secondary-6);
+  margin-bottom: var(--space-y-4);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards 0.2s;
+}
+
+.component-hero-subtitle {
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-y-7);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards 1.2s;
+}
+
+.component-hero-cta {
+  margin-top: 2em;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards 1.5s;
+}
+
+.component-hero-rule {
+  position: absolute;
+  bottom: calc(var(--space-y-10) * 1.75);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--color-secondary-6) 40%, transparent) 20%, color-mix(in srgb, var(--color-secondary-6) 60%, transparent) 50%, color-mix(in srgb, var(--color-secondary-6) 40%, transparent) 80%, transparent 100%);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 2s;
+}
+
+.component-scroll-indicator {
+  position: absolute;
+  bottom: var(--space-y-5);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-y-1);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 2.2s;
+}
+
+.component-scroll-line {
+  width: 1px;
+  height: var(--space-y-6);
+  background: linear-gradient(to bottom, var(--color-secondary-6), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-hero {
+    padding: calc(var(--space-y-10) * 1.25) var(--space-y-3) var(--space-x-10);
+  }
+
+  .component-hero--inner {
+    padding: calc(var(--space-y-10) * 1.75) var(--space-y-3) var(--space-x-8);
+    min-height: 50vh;
+  }
+
+  .component-hero--page {
+    padding: calc(var(--space-y-10) * 1.75) 0 var(--space-y-5);
+  }
+
+  .component-hero--contact {
+    padding: calc(var(--space-y-10) * 1.75) 0 var(--space-x-8);
+  }
+}
+
+/*
+ * DrevOps — Display Headings & Text Decorations
+ */
+
+/* Display 1 — largest heading (hero, CTA sections) */
+.component-display-1 {
+  font-family: var(--font-family-primary);
+  font-size: var(--display-1-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--display-line-height);
+  letter-spacing: -0.02em;
+  color: var(--text-color);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease forwards 0.4s;
+}
+
+/* Display 1 without animation (for CTA sections) */
+.component-display-1--static {
+  opacity: 1;
+  transform: none;
+  animation: none;
+  font-weight: var(--font-weight-normal);
+  line-height: var(--display-line-height);
+  margin-bottom: var(--space-y-6);
+}
+
+/* Display 2 — section headings */
+.component-display-2 {
+  font-family: var(--font-family-primary);
+  font-size: var(--display-2-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.02em;
+  line-height: var(--display-line-height);
+}
+
+/* Accent-coloured word (coral) */
+.component-word-accent {
+  color: var(--text-accent-color);
+}
+
+/* Gradient underline decoration */
+.component-underlined {
+  position: relative;
+  display: inline-block;
+}
+
+.component-underlined::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-secondary-6), var(--link-hover-color));
+}
+
+/*
+ * DrevOps — Label Component
+ *
+ * Unified small-caps label pattern used across the site.
+ */
+
+/* Base label — muted colour */
+.component-label {
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: var(--label-text-transform);
+  color: var(--text-muted-color);
+}
+
+/* Accent variant */
+.component-label--accent {
+  color: var(--text-accent-color);
+}
+
+/* Subtle variant */
+.component-label--subtle {
+  color: var(--text-subtle-color);
+}
+
+/* Section label with line prefix */
+.component-section-label {
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: var(--label-text-transform);
+  color: var(--text-accent-color);
+  display: flex;
+  align-items: center;
+  gap: var(--space-x-2);
+  margin-bottom: var(--space-y-8);
+}
+
+.component-section-label::before {
+  content: '';
+  display: block;
+  width: var(--space-x-6);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.component-section-label--compact {
+  margin-bottom: var(--space-y-4);
+}
+
+/*
+ * DrevOps — Stat Grid Component
+ */
+
+.component-stat {
+  background: var(--surface-subtle-color);
+  padding: calc(var(--space-y-10) * 1.75) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.component-stat::before {
+  content: '';
+  position: absolute;
+  bottom: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--color-secondary-6) 7%, transparent) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.component-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border-color);
+  position: relative;
+  z-index: 2;
+}
+
+.component-stat-cell {
+  padding: var(--space-y-9) var(--space-x-7);
+  position: relative;
+}
+
+.component-stat-cell:nth-child(1) { border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+.component-stat-cell:nth-child(2) { border-bottom: 1px solid var(--border-color); }
+.component-stat-cell:nth-child(3) { border-right: 1px solid var(--border-color); }
+
+.component-stat-number {
+  font-family: var(--font-family-primary);
+  font-size: clamp(72px, 8vw, 108px);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-6);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-y-2);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.component-stat-suffix {
+  font-size: 0.45em;
+  font-weight: var(--font-weight-normal);
+  opacity: 0.8;
+  letter-spacing: 0;
+}
+
+.component-stat-label {
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-subtle-color);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-stat {
+    padding: calc(var(--space-y-10) * 1.25) 0;
+  }
+
+  .component-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .component-stat-cell:nth-child(1),
+  .component-stat-cell:nth-child(2),
+  .component-stat-cell:nth-child(3) {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .component-stat-cell {
+    padding: var(--space-y-6) var(--space-x-4);
+  }
+}
+
+/*
+ * DrevOps — Trust Grid Component
+ */
+
+.component-trust {
+  background: var(--page-bg);
+  padding: calc(var(--space-y-10) * 1.75) 0;
+  position: relative;
+}
+
+.component-trust-header {
+  text-align: center;
+  margin-bottom: var(--space-y-10);
+}
+
+.component-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-y-4);
+}
+
+.component-trust-item {
+  text-align: center;
+  padding: var(--space-y-5) var(--space-x-3);
+  border: 1px solid var(--border-subtle-color);
+  border-radius: var(--radius-sm);
+}
+
+.component-trust-icon {
+  color: var(--color-secondary-6);
+  margin-bottom: var(--space-y-3);
+}
+
+.component-trust-label {
+  font-size: var(--body-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-2);
+}
+
+.component-trust-desc {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-trust {
+    padding: calc(var(--space-y-10) * 1.25) 0;
+  }
+
+  .component-trust-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-y-2);
+  }
+}
+
+/*
+ * DrevOps — List Component
+ *
+ * Unified vertical list used for "Why us", "How we work",
+ * and any dot+title+description pattern.
+ */
+
+.component-list {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.component-list-item {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--space-y-3);
+  align-items: start;
+  padding: var(--space-y-5) 0;
+  border-bottom: 1px solid var(--border-subtle-color);
+}
+
+.component-list-item:first-child {
+  border-top: 1px solid var(--border-subtle-color);
+}
+
+.component-list-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-secondary-6);
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.component-list-title {
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-1);
+  letter-spacing: -0.01em;
+}
+
+.component-list-desc {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+}
+
+/*
+ * DrevOps — Service Component
+ *
+ * Compact service list used on homepage and process sections.
+ */
+
+.component-service-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.component-service-item {
+  padding: var(--space-y-8) 0;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0 var(--space-y-6);
+  align-items: start;
+  position: relative;
+}
+
+.component-service-divider {
+  height: 1px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-secondary-6) 50%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 15%, transparent) 50%, transparent 100%);
+  margin: 0;
+}
+
+.component-service-number {
+  font-family: var(--font-family-primary);
+  font-size: 80px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-6);
+  opacity: 0.18;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  user-select: none;
+}
+
+.component-service-body {
+  /* Semantic wrapper for service item content (title + desc). No additional styles needed. */
+}
+
+.component-service-title {
+  font-family: var(--font-family-primary);
+  font-size: 32px;
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-y-3);
+  line-height: var(--line-height-sm);
+}
+
+.component-service-desc {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  max-width: 560px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-service-item {
+    grid-template-columns: 1fr;
+    gap: var(--space-y-2);
+    padding: var(--space-y-6) 0;
+  }
+
+  .component-service-number {
+    font-size: 48px;
+  }
+}
+
+/*
+ * DrevOps — Service Detail Component
+ *
+ * Expanded service detail panels used on the services page.
+ */
+
+.component-service-detail {
+  background: var(--page-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-y-7);
+  margin-bottom: var(--space-y-6);
+}
+
+.component-service-detail:last-child {
+  margin-bottom: 0;
+}
+
+.component-service-detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-y-4);
+  margin-bottom: var(--space-y-5);
+  padding-bottom: var(--space-y-4);
+  border-bottom: 1px solid var(--border-subtle-color);
+}
+
+.component-service-detail-header .component-service-number {
+  font-size: 64px;
+  opacity: 0.2;
+  flex-shrink: 0;
+}
+
+.component-service-detail-title {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h2-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-y-1);
+}
+
+.component-service-detail-tagline {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-muted-color);
+}
+
+.component-service-detail-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-y-6);
+  margin-bottom: var(--space-y-5);
+}
+
+.component-service-detail-desc p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: var(--space-y-2);
+}
+
+.component-service-detail-includes ul {
+  list-style: none;
+  padding: 0;
+}
+
+.component-service-detail-includes li {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+  padding: var(--space-y-1) 0 var(--space-x-1) var(--space-y-3);
+  position: relative;
+  border-bottom: 1px solid var(--border-muted-color);
+}
+
+.component-service-detail-includes li:last-child {
+  border-bottom: none;
+}
+
+.component-service-detail-includes li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-secondary-6);
+  position: absolute;
+  left: 0;
+  top: 16px;
+}
+
+.component-service-detail-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-y-4);
+  border-top: 1px solid var(--border-subtle-color);
+}
+
+.component-pricing-label {
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted-color);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.component-pricing-value {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-secondary-6);
+  letter-spacing: -0.01em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-service-detail {
+    padding: var(--space-y-4) var(--space-x-3);
+  }
+
+  .component-service-detail-header {
+    flex-direction: column;
+    gap: var(--space-y-2);
+  }
+
+  .component-service-detail-header .component-service-number {
+    font-size: 48px;
+  }
+
+  .component-service-detail-body {
+    grid-template-columns: 1fr;
+    gap: var(--space-y-4);
+  }
+
+  .component-service-detail-footer {
+    flex-direction: column;
+    gap: var(--space-y-3);
+    align-items: flex-start;
+  }
+}
+
+/*
+ * DrevOps — Grid Component
+ *
+ * Reusable grid layouts for content sections.
+ */
+
+/* Two-column content grid (approach section) */
+.component-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-y-6) var(--space-y-8);
+}
+
+.component-grid-2-item {
+  padding: var(--space-y-4) 0;
+}
+
+.component-grid-2-item .component-list-dot {
+  margin-top: 0;
+  margin-bottom: var(--space-y-3);
+}
+
+.component-grid-2-item h3 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-2);
+  letter-spacing: -0.01em;
+}
+
+.component-grid-2-item p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+}
+
+/* Two-column contact grid */
+.component-grid-contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-y-10);
+  align-items: start;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-grid-2 {
+    grid-template-columns: 1fr;
+    gap: var(--space-y-4);
+  }
+
+  .component-grid-contact {
+    grid-template-columns: 1fr;
+    gap: var(--space-x-8);
+  }
+}
+
+/*
+ * DrevOps — CTA Section Component
+ */
+
+.component-cta {
+  background: var(--cta-bg);
+  padding: calc(var(--space-y-10) * 2) 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.component-cta::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 10%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 3%, transparent) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+.component-cta-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.component-cta-sub {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  margin-bottom: var(--space-y-7);
+  letter-spacing: 0.02em;
+}
+
+.component-cta-email {
+  display: inline-block;
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--link-color);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  position: relative;
+}
+
+.component-cta-email:hover {
+  background: none;
+  text-decoration: none;
+}
+
+.component-cta-email::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--link-hover-color);
+  transition: width 0.4s ease;
+}
+
+.component-cta-email:hover::after {
+  width: 100%;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-cta {
+    padding: calc(var(--space-y-10) * 1.75) 0;
+  }
+}
+
+/*
+ * DrevOps — Tag Component
+ */
+
+.component-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-x-1);
+}
+
+.component-tag {
+  display: inline-block;
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: var(--label-text-transform);
+  color: var(--tag-color);
+  background: var(--tag-bg);
+  padding: var(--space-y-1) var(--space-x-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle-color);
+}
+
+.component-tag--sm {
+  font-size: var(--font-size-2xs);
+  padding: var(--space-y-1) var(--space-x-1);
+}
+
+/*
+ * DrevOps — Meta Component
+ *
+ * Shared meta line (date, read time) used in blog cards and posts.
+ */
+
+.component-meta {
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted-color);
+  margin-bottom: var(--space-y-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-y-1);
+}
+
+.component-meta--lg {
+  font-size: var(--caption-font-size);
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-y-3);
+  gap: var(--space-y-2);
+}
+
+.component-meta-sep {
+  color: var(--color-secondary-6);
+  opacity: 0.4;
+}
+
+.component-meta--lg .component-meta-sep {
+  opacity: 0.5;
+}
+
+/*
+ * DrevOps — Blog Card Component
+ */
+
+/* ── Featured post ── */
+.component-blog-featured {
+  background: var(--page-bg);
+  padding: 0 0 var(--space-y-8);
+}
+
+.component-blog-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  text-decoration: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.component-blog-feature:hover {
+  border-color: var(--color-secondary-6);
+  background: none;
+  text-decoration: none;
+}
+
+.component-blog-feature-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.component-blog-feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.component-blog-feature:hover .component-blog-feature-image img {
+  transform: scale(1.03);
+}
+
+.component-blog-feature-content {
+  padding: var(--space-y-6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.component-blog-feature-content h2 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h2-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.01em;
+  line-height: var(--line-height-sm);
+  margin-bottom: var(--space-y-2);
+}
+
+.component-blog-feature-content p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: var(--space-y-3);
+}
+
+/* ── Card grid section ── */
+.component-blog-grid-section {
+  background: var(--surface-muted-color);
+  padding: var(--space-y-10) 0 calc(var(--space-y-10) * 1.75);
+}
+
+.component-blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-y-4);
+}
+
+/* ── Individual card ── */
+.component-blog-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  background: var(--page-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.component-blog-card:hover {
+  border-color: var(--color-secondary-6);
+  transform: translateY(-4px);
+  background: var(--page-bg);
+  text-decoration: none;
+}
+
+.component-blog-card-image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.component-blog-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.component-blog-card:hover .component-blog-card-image img {
+  transform: scale(1.05);
+}
+
+.component-blog-card-body {
+  padding: var(--space-y-3);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.component-blog-card-body h3 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  line-height: var(--line-height-sm);
+  margin-bottom: var(--space-y-2);
+  letter-spacing: -0.01em;
+}
+
+.component-blog-card-body p {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+  margin-bottom: var(--space-y-2);
+  flex: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-blog-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .component-blog-feature-content {
+    padding: var(--space-y-3);
+  }
+
+  .component-blog-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-y-3);
+  }
+
+  .component-blog-grid-section {
+    padding: var(--space-y-6) 0 var(--space-x-10);
+  }
+}
+
+/*
+ * DrevOps — Blog Hero Component
+ *
+ * Hero banner with featured image and gradient overlay,
+ * used on blog post pages.
+ */
+
+.component-blog-hero {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.component-blog-hero-image {
+  position: absolute;
+  inset: 0;
+}
+
+.component-blog-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.component-blog-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--page-bg) 40%, transparent) 0%,
+    color-mix(in srgb, var(--page-bg) 70%, transparent) 40%,
+    var(--page-bg) 100%
+  );
+}
+
+.component-blog-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-x-8) var(--space-y-8);
+  width: 100%;
+}
+
+.component-blog-hero-content h1 {
+  font-family: var(--font-family-primary);
+  font-size: var(--display-2-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--display-line-height);
+  letter-spacing: -0.02em;
+  color: var(--text-color);
+  margin-bottom: var(--space-y-3);
+  max-width: 800px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-blog-hero {
+    min-height: 400px;
+  }
+
+  .component-blog-hero-content {
+    padding: 0 var(--space-y-3) var(--space-x-5);
+  }
+}
+
+/*
+ * DrevOps — Article Component
+ *
+ * Prose styling for blog posts and long-form content.
+ * Includes code blocks (highlight.js compatible), tables,
+ * blockquotes, lists, and inline elements.
+ */
+
+.component-article {
+  background: var(--page-bg);
+  padding: var(--space-y-10) 0 calc(var(--space-y-10) * 1.75);
+}
+
+.component-article-inner {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 0 var(--space-x-8);
+}
+
+/* ── Lead paragraph ── */
+.component-article-lead {
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--line-height-lg);
+  color: var(--text-subtle-color);
+  margin-bottom: var(--space-y-5);
+  padding-bottom: var(--space-y-5);
+  border-bottom: 1px solid var(--border-subtle-color);
+}
+
+/* ── Body text ── */
+.component-article p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: var(--space-y-3);
+}
+
+.component-article p strong {
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+}
+
+/* ── Headings ── */
+.component-article h2 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h2-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.01em;
+  margin-top: var(--space-y-8);
+  margin-bottom: var(--space-y-3);
+}
+
+.component-article h3 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  margin-top: var(--space-y-5);
+  margin-bottom: var(--space-y-2);
+}
+
+/* ── Links ── */
+.component-article a {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.component-article a:hover {
+  color: var(--link-hover-color);
+}
+
+/* ── Lists ── */
+.component-article ul,
+.component-article ol {
+  margin: 0 0 var(--space-y-3);
+  padding-left: var(--space-x-3);
+}
+
+.component-article li {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: var(--space-y-1);
+}
+
+.component-article li::marker {
+  color: var(--color-secondary-6);
+}
+
+/* ── Inline code ── */
+.component-article code {
+  font-family: var(--font-family-mono);
+  font-size: 0.875em;
+  background: var(--code-inline-bg);
+  color: var(--code-inline-color);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Block code (highlight.js) ── */
+.component-article pre {
+  margin: var(--space-y-3) 0 var(--space-x-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--code-border);
+  overflow: hidden;
+}
+
+.component-article pre code {
+  display: block;
+  padding: var(--space-y-3);
+  font-size: var(--caption-font-size);
+  line-height: var(--line-height-md);
+  background: var(--code-bg);
+  color: var(--code-color);
+  overflow-x: auto;
+  border-radius: 0;
+  border: none;
+}
+
+.component-article pre code.hljs {
+  background: var(--code-bg);
+}
+
+/* ── Tables ── */
+.component-article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-y-3) 0 var(--space-x-4);
+  font-size: var(--font-size-sm);
+}
+
+.component-article thead th {
+  background: var(--table-header-bg);
+  color: var(--table-header-color);
+  font-family: var(--font-family-primary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: var(--space-y-2) var(--space-x-2);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.component-article td {
+  padding: var(--space-y-1) var(--space-x-2);
+  border-bottom: 1px solid var(--border-subtle-color);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+}
+
+.component-article tbody tr:nth-child(even) td {
+  background: var(--table-stripe-bg);
+}
+
+.component-article td strong {
+  color: var(--text-color);
+  font-weight: var(--font-weight-normal);
+}
+
+/* ── Blockquotes ── */
+.component-article blockquote {
+  margin: var(--space-y-4) 0;
+  padding: var(--space-y-3) var(--space-x-3);
+  border-left: 3px solid var(--color-secondary-6);
+  background: var(--surface-subtle-color);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.component-article blockquote p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: 0;
+}
+
+.component-article blockquote p + p {
+  margin-top: var(--space-y-2);
+}
+
+.component-article blockquote strong {
+  color: var(--color-secondary-6);
+  font-weight: var(--font-weight-normal);
+}
+
+/* ── Article CTA ── */
+.component-article-cta {
+  margin-top: var(--space-y-8);
+  padding-top: var(--space-y-6);
+  border-top: 1px solid var(--border-subtle-color);
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-article {
+    padding: var(--space-y-6) 0 var(--space-x-10);
+  }
+
+  .component-article-inner {
+    padding: 0 var(--space-y-3);
+  }
+
+  .component-article pre code {
+    font-size: var(--caption-font-size);
+    padding: var(--space-y-2);
+  }
+
+  .component-article table {
+    font-size: var(--caption-font-size);
+  }
+
+  .component-article thead th,
+  .component-article td {
+    padding: var(--space-y-1) var(--space-x-1);
+  }
+}
+
+/*
+ * DrevOps — Contact Info Component
+ *
+ * Contact information blocks, steps list, and dividers.
+ * Used on the contact page info column.
+ */
+
+.component-contact-col {
+  padding-top: var(--space-y-1);
+}
+
+.component-contact-block {
+  margin-bottom: var(--space-y-5);
+}
+
+.component-contact-value {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  text-decoration: none;
+  display: block;
+  margin-bottom: var(--space-y-1);
+}
+
+a.component-contact-value {
+  transition: color 0.3s ease;
+}
+
+a.component-contact-value:hover {
+  color: var(--color-secondary-6);
+  background: none;
+  text-decoration: none;
+}
+
+.component-contact-email-link {
+  position: relative;
+  display: inline-block;
+}
+
+.component-contact-email-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-secondary-6);
+  transition: width 0.4s ease;
+}
+
+.component-contact-email-link:hover::after {
+  width: 100%;
+}
+
+.component-contact-note {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-muted-color);
+  line-height: var(--line-height-md);
+}
+
+.component-contact-divider {
+  height: 1px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-secondary-6) 30%, transparent) 0%, transparent 100%);
+  margin: var(--space-y-6) 0;
+}
+
+/* ── Contact content section ── */
+.component-contact-content {
+  background: var(--page-bg);
+  padding: calc(var(--space-y-10) * 1.25) 0 calc(var(--space-y-10) * 1.75);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-contact-content {
+    padding: var(--space-x-8) 0 var(--space-y-10);
+  }
+}
+
+/*
+ * DrevOps — Step Component
+ */
+
+.component-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-y-3);
+  margin-top: var(--space-y-2);
+}
+
+.component-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-y-2);
+}
+
+.component-step-number {
+  font-family: var(--font-family-primary);
+  font-size: 28px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-6);
+  opacity: 0.3;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.component-step p {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+  padding-top: 4px;
+}
+
+/*
+ * DrevOps — Form Layout Component
+ *
+ * Form layout patterns. Base input/select/textarea styling
+ * lives in framework.css; this file handles composition.
+ */
+
+.component-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-y-3);
+}
+
+.component-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-y-1);
+}
+
+.component-form .btn {
+  align-self: flex-start;
+  margin-top: var(--space-y-1);
+}
+
+/*
+ * DrevOps — Nav Component
+ *
+ * Fixed top navigation bar with glassmorphism backdrop,
+ * logo, and underline-on-hover links.
+ */
+
+.component-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  padding: var(--space-y-3) var(--space-x-8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: color-mix(in srgb, var(--page-bg) 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-secondary-6) 8%, transparent);
+}
+
+.component-nav-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.component-nav-links {
+  display: flex;
+  gap: var(--space-y-6);
+  list-style: none;
+}
+
+.component-nav-links a {
+  font-family: var(--font-family-secondary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-muted-color);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.component-nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-secondary-6);
+  transition: width 0.3s ease;
+}
+
+.component-nav-links a:hover {
+  color: var(--link-hover-color);
+  background: none;
+  text-decoration: none;
+}
+
+.component-nav-links a:hover::after {
+  width: 100%;
+}
+
+.component-nav-active {
+  color: var(--color-secondary-6) !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-nav {
+    padding: var(--space-y-2) var(--space-x-3);
+  }
+
+  .component-nav-links {
+    display: none;
+  }
+}
+
+/*
+ * DrevOps — Footer Component
+ *
+ * Site footer bar with copyright and contact link.
+ */
+
+.component-footer {
+  background: var(--color-primary-8);
+  padding: var(--space-y-4) var(--space-x-8);
+  border-top: 1px solid color-mix(in srgb, var(--color-secondary-6) 20%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.component-footer-copy {
+  font-size: var(--caption-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-muted-color);
+  letter-spacing: 0.08em;
+}
+
+.component-footer-link {
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-secondary-6);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  position: relative;
+}
+
+.component-footer-link:hover {
+  background: none;
+  text-decoration: none;
+}
+
+.component-footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--link-hover-color);
+  transition: width 0.3s ease;
+}
+
+.component-footer-link:hover::after {
+  width: 100%;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-footer {
+    flex-direction: column;
+    gap: var(--space-y-2);
+    text-align: center;
+    padding: var(--space-y-3);
+  }
+}
+
+/*
+ * DrevOps — Section Component
+ *
+ * Max-width container with gutter padding for page sections.
+ */
+
+.component-section {
+  position: relative;
+}
+
+.component-section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-x-8);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-section-inner {
+    padding: 0 var(--space-y-3);
+  }
+}
+
+/*
+ * DrevOps — Reveal Component
+ *
+ * Scroll-triggered fade-up animation with staggered delay utilities.
+ * Requires JavaScript to add .visible class on scroll.
+ */
+
+.component-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.component-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.component-reveal-d1 { transition-delay: 0.1s; }
+.component-reveal-d2 { transition-delay: 0.2s; }
+.component-reveal-d3 { transition-delay: 0.3s; }
+.component-reveal-d4 { transition-delay: 0.4s; }
+.component-reveal-d5 { transition-delay: 0.5s; }
+.component-reveal-d6 { transition-delay: 0.6s; }
+
+/*
+ * DrevOps — Animations
+ *
+ * Shared keyframe definitions for hero glow, scroll indicator,
+ * and entrance transitions.
+ */
+
+@keyframes heroGlow {
+  0%, 100% { opacity: 0.7; transform: translate(-50%, -55%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -55%) scale(1.08); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 0.9; transform: scaleY(1.15); }
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}

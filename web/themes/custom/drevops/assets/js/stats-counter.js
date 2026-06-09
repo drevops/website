@@ -2,11 +2,11 @@
  * @file
  * Stats count-up behaviour.
  *
- * Animates `.dr-stat-count` elements from 0 to their `data-target` value when
+ * Animates `.stat-count` elements from 0 to their `data-target` value when
  * they scroll into view, using an easeOut curve. Without JavaScript or an
  * IntersectionObserver the element keeps its server-rendered target value.
  *
- * Expects: <span class="dr-stat-count" data-target="42">42</span>
+ * Expects: <span class="stat-count" data-target="42">42</span>
  */
 ((Drupal, once) => {
   const easeOut = (t) => 1 - (1 - t) ** 3;
@@ -34,7 +34,7 @@
 
   Drupal.behaviors.drevopsStatsCounter = {
     attach(context) {
-      const elements = once('dr-stat-count', '.dr-stat-count', context);
+      const elements = once('dr-stat-count', '.stat-count', context);
 
       if (!elements.length || !('IntersectionObserver' in window)) {
         return;

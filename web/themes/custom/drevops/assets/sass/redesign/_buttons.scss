@@ -1,0 +1,75 @@
+//
+// DrevOps — Redesign Buttons
+//
+// Ported from the static design's framework.css. Only the .btn and
+// .btn-{primary,secondary,tertiary} rules are included here; bare
+// element selectors, resets, and document/print styles are
+// intentionally excluded so the rest of the CivicTheme site is
+// unaffected.
+//
+
+/* ── Buttons ── */
+.btn {
+  display: inline-block;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+  padding: var(--space-y-2) var(--space-x-4);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.4s ease, border-color 0.4s ease;
+}
+.btn:hover { text-decoration: none; background: none; }
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.btn:hover::before { transform: scaleX(1); }
+.btn:disabled, .btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-color);
+  border-color: var(--btn-primary-border);
+}
+.btn-primary::before { background: var(--btn-primary-hover-bg); }
+.btn-primary:hover {
+  color: var(--btn-primary-hover-color);
+  border-color: var(--btn-primary-color);
+}
+
+.btn-secondary {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-color);
+  border-color: var(--btn-secondary-border);
+}
+.btn-secondary::before { background: var(--btn-secondary-hover-bg); }
+.btn-secondary:hover {
+  color: var(--btn-secondary-hover-color);
+  border-color: var(--btn-secondary-color);
+}
+
+.btn-tertiary {
+  background: var(--btn-tertiary-bg);
+  color: var(--btn-tertiary-color);
+  border-color: var(--btn-tertiary-border);
+}
+.btn-tertiary::before { background: var(--btn-tertiary-hover-bg); }
+.btn-tertiary:hover {
+  color: var(--btn-tertiary-hover-color);
+  border-color: var(--btn-tertiary-color);
+}
