@@ -19,3 +19,21 @@ html:not(.js) .component-reveal {
   opacity: 1;
   transform: none;
 }
+
+// Respect reduced-motion preferences: disable the reveal, hero and scroll
+// animations for motion-sensitive users while keeping content fully visible.
+@media (prefers-reduced-motion: reduce) {
+  .component-reveal,
+  .component-reveal.visible,
+  .component-hero-eyebrow,
+  .component-hero-subtitle,
+  .component-hero-cta,
+  .component-hero-rule,
+  .component-scroll-indicator,
+  .component-scroll-line {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

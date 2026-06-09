@@ -36,7 +36,14 @@
     attach(context) {
       const elements = once('dr-stat-count', '.stat-count', context);
 
-      if (!elements.length || !('IntersectionObserver' in window)) {
+      if (!elements.length) {
+        return;
+      }
+
+      if (!('IntersectionObserver' in window)) {
+        elements.forEach((el) => {
+          el.textContent = String(parseInt(el.dataset.target, 10) || 0);
+        });
         return;
       }
 

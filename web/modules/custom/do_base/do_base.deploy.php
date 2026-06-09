@@ -46,10 +46,12 @@ function do_base_deploy_components_dark(?array &$sandbox): ?string {
  * the markup in this module's content/homepage directory.
  */
 function do_base_deploy_homepage(): string {
-  $node = Node::load(1);
+  // Resolve the configured front page rather than assuming a fixed node ID.
+  $front = (string) \Drupal::config('system.site')->get('page.front');
+  $node = preg_match('#^/node/(\d+)$#', $front, $matches) ? Node::load((int) $matches[1]) : NULL;
 
   if (!$node instanceof Node) {
-    return 'Homepage node (1) not found - skipped.';
+    return 'Homepage node not found - skipped.';
   }
 
   if ($node->hasField('field_c_n_banner_title')) {
@@ -120,6 +122,10 @@ function do_base_deploy_contact(): string {
     $node->set('field_c_n_summary', 'Whether you need a new Drupal build, help upgrading from an end-of-life version, or ongoing support from a senior team, we are happy to have an honest conversation about where things stand.');
   }
 
+  // Build the contact details first so a missing content directory aborts
+  // before any existing components are removed.
+  $details = _do_base_html_paragraphs('contact');
+
   foreach ($node->get('field_c_n_components')->referencedEntities() as $existing) {
     $existing->delete();
   }
@@ -131,7 +137,7 @@ function do_base_deploy_contact(): string {
   ]);
   $webform->save();
 
-  $components = [$webform, ..._do_base_html_paragraphs('contact')];
+  $components = [$webform, ...$details];
   $node->set('field_c_n_components', $components);
   $node->save();
 
@@ -185,11 +191,15 @@ function _do_base_set_components(Node $node, string $dir): void {
     return;
   }
 
+  // Build the new components first; this throws if the content is missing, so
+  // existing components are never deleted without a replacement.
+  $components = _do_base_html_paragraphs($dir);
+
   foreach ($node->get('field_c_n_components')->referencedEntities() as $existing) {
     $existing->delete();
   }
 
-  $node->set('field_c_n_components', _do_base_html_paragraphs($dir));
+  $node->set('field_c_n_components', $components);
 }
 
 /**
@@ -203,8 +213,17 @@ function _do_base_set_components(Node $node, string $dir): void {
  */
 function _do_base_html_paragraphs(string $dir): array {
   $path = \Drupal::service('extension.list.module')->getPath('do_base') . '/content/' . $dir;
+
+  if (!is_dir($path)) {
+    throw new \RuntimeException(sprintf('Redesign content directory not found: %s', $path));
+  }
+
   $files = glob($path . '/*.html') ?: [];
   sort($files);
+
+  if (empty($files)) {
+    throw new \RuntimeException(sprintf('No redesign content files found in: %s', $path));
+  }
 
   $paragraphs = [];
 
@@ -212,9 +231,12 @@ function _do_base_html_paragraphs(string $dir): array {
     $html = file_get_contents($file);
 
     if ($html === FALSE) {
-      continue;
+      throw new \RuntimeException(sprintf('Failed to read redesign content file: %s', $file));
     }
 
+    // The content/ partials are trusted, version-controlled markup authored
+    // by developers - not user input. The `full_html` format stores them
+    // verbatim; Drupal core still strips <script> and on* via its XSS filter.
     $paragraph = Paragraph::create([
       'type' => 'civictheme_content',
       'field_c_p_theme' => 'dark',
