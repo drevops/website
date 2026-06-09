@@ -175,10 +175,17 @@
   &.ct-banner-type--intro.ct-banner--hero {
     #{$root}__inner {
       position: relative;
-      min-height: 100vh;
+      min-height: 62vh;
       flex-direction: column;
       justify-content: center;
       overflow: hidden;
+      padding-top: ct-spacing(16);
+      padding-bottom: ct-spacing(10);
+    }
+
+    // Full-viewport variant for the front page.
+    &.ct-banner--hero-home #{$root}__inner {
+      min-height: 100vh;
       padding-top: ct-spacing(20);
       padding-bottom: ct-spacing(12);
     }

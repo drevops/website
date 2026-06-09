@@ -37,10 +37,14 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
 
   $variables['type'] = $type;
 
-  // Homepage hero: render the front-page banner as a full-viewport intro hero.
-  if (\Drupal::service('path.matcher')->isFrontPage()) {
+  // Redesign hero: render page banners as a centered intro hero with the
+  // atmospheric glow. The front page gets the full-viewport variant; other
+  // pages get a shorter inner variant.
+  $is_front = \Drupal::service('path.matcher')->isFrontPage();
+  if ($is_front || (!empty($node) && $node->bundle() === 'civictheme_page')) {
     $variables['type'] = 'intro';
-    $variables['modifier_class'] = trim(($variables['modifier_class'] ?? '') . ' ct-banner--hero');
+    $hero_class = $is_front ? 'ct-banner--hero ct-banner--hero-home' : 'ct-banner--hero';
+    $variables['modifier_class'] = trim(($variables['modifier_class'] ?? '') . ' ' . $hero_class);
   }
 
   // Adds extra top padding for the banner when additional spacing is needed.
