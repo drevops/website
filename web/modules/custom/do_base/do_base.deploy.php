@@ -89,22 +89,65 @@ function do_base_deploy_blocks_dark(?array &$sandbox): ?string {
 }
 
 /**
- * Rebuild the homepage to the design.
+ * Rebuild the homepage from CivicTheme components.
  *
- * The hero is the first content section, so the node banner is cleared. New
- * references are saved before the previous paragraphs are deleted, so a failed
- * save can never leave the node pointing at deleted entities.
+ * The hero is the node banner (populated, not cleared). Every section is built
+ * from CivicTheme paragraph components - manual lists of snippets for the
+ * services, stats, trust, "why" and process sections, and a callout for the
+ * closing CTA - with the bespoke design treatments driven by `field_do_style`.
+ * No markup is stored as content. New references are saved before the previous
+ * paragraphs are deleted, so a failed save never leaves dangling references.
  */
 function do_base_deploy_homepage(): string {
   // Resolve the configured front page rather than assuming a fixed node ID.
   $front = (string) \Drupal::config('system.site')->get('page.front');
   $node = preg_match('#^/node/(\d+)$#', $front, $matches) ? Node::load((int) $matches[1]) : NULL;
 
-  if (!$node instanceof Node) {
+  if (!$node instanceof Node || !$node->hasField('field_c_n_components')) {
     return 'Homepage node not found - skipped.';
   }
 
-  $stale = array_merge(_do_base_stage_clear_banner($node), _do_base_stage_components($node, 'homepage'));
+  $components = [
+    _do_base_manual_list('What we do', 1, 'numbered', [
+      _do_base_snippet('Website Delivery', "Full Drupal website builds delivered with automated testing, CI/CD pipelines, and production-ready infrastructure. Your team gets a solid platform, not a prototype that needs fixing after launch."),
+      _do_base_snippet('Ongoing Support', "Proactive platform maintenance from the same senior engineers who built it. Security updates, monitoring, continuous improvement, and direct communication with no layers in between."),
+      _do_base_snippet('Upgrades & Migrations', "Drupal 7 and 9 are end-of-life. We handle the full migration with test coverage and zero-downtime deployments, so your organisation stays compliant and your users stay unaffected."),
+    ]),
+    _do_base_manual_list('The essentials', 4, 'stat', [
+      _do_base_snippet('0', 'Juniors on your project'),
+      _do_base_snippet('0', 'Excuses when something breaks'),
+      _do_base_snippet('1 day', 'To set up CI/CD on a new project'),
+      _do_base_snippet('0', 'Shortcuts in how we deliver'),
+    ]),
+    _do_base_manual_list("Trusted on projects where failure isn't an option.", 4, 'trust', [
+      _do_base_snippet('Victorian Government', "Delivered Australia's first Docker-based government Drupal platform."),
+      _do_base_snippet('Australian Defence', 'Multiple classified platforms with complex security and compliance requirements.'),
+      _do_base_snippet('GovCMS', "Drupal platform delivery on Australia's government hosting infrastructure."),
+      _do_base_snippet('Education', 'University platforms with ongoing support, leading to internal referrals across departments.'),
+    ]),
+    _do_base_manual_list('No filler. No overhead. Just good engineering.', 1, 'dotted', [
+      _do_base_snippet('Automated testing is not optional', "Every platform ships with a full test suite. Functional, unit, and visual regression tests run on every commit. If it's not tested, it doesn't deploy."),
+      _do_base_snippet('One team, zero handovers', 'We handle development, DevOps, and production support. One team with full context, no vendors blaming each other, no knowledge lost between handoffs.'),
+      _do_base_snippet('Pricing that makes sense', "Flat-rate pricing with standard and rapid response options. We'll tell you what it costs upfront. No retainer games, no billable surprises, no markup on markup."),
+      _do_base_snippet('Direct line to the engineers', 'You talk to the people building your platform. We manage the project without adding layers between you and the work. Fast communication, honest updates, no runaround.'),
+    ]),
+    _do_base_manual_list('A clear path from kickoff to ongoing support.', 1, 'numbered', [
+      _do_base_snippet('Discovery', 'We review your website, understand your requirements and constraints, and scope the work. You get a clear proposal with flat-rate pricing before any work begins.'),
+      _do_base_snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit. Regular check-ins, transparent progress reporting, and no surprises at the end.'),
+      _do_base_snippet('Ongoing support', 'The same senior team that built your site maintains it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
+    ]),
+    _do_base_callout("Let's talk about your website.", "Tell us where things stand, what's working, and what's not. We'll be straight with you about whether we're the right fit.", 'info@drevops.com', 'mailto:info@drevops.com'),
+  ];
+
+  foreach ($components as $component) {
+    $component->save();
+  }
+
+  $stale = array_merge(
+    _do_base_stage_banner($node, "Your website can't afford to wait."),
+    $node->get('field_c_n_components')->referencedEntities()
+  );
+  $node->set('field_c_n_components', $components);
   $node->save();
   _do_base_delete_entities($stale);
 
@@ -263,6 +306,132 @@ function _do_base_stage_clear_banner(Node $node): array {
   }
 
   return $previous;
+}
+
+/**
+ * Populate the node banner so it renders as the page hero.
+ *
+ * The design's hero is the CivicTheme intro banner (themed in the subtheme),
+ * not a content section. This sets the banner title, type and theme and clears
+ * any previous banner components, returning them for deletion after the save.
+ *
+ * @param \Drupal\node\Entity\Node $node
+ *   The node whose banner becomes the hero.
+ * @param string $title
+ *   The hero heading.
+ *
+ * @return \Drupal\Core\Entity\EntityInterface[]
+ *   The previously referenced banner paragraphs, pending deletion.
+ */
+function _do_base_stage_banner(Node $node, string $title): array {
+  if ($node->hasField('field_c_n_banner_title')) {
+    $node->set('field_c_n_banner_title', $title);
+  }
+
+  if ($node->hasField('field_c_n_banner_type')) {
+    $node->set('field_c_n_banner_type', 'intro');
+  }
+
+  if ($node->hasField('field_c_n_banner_theme')) {
+    $node->set('field_c_n_banner_theme', 'dark');
+  }
+
+  $previous = [];
+
+  foreach (['field_c_n_banner_components', 'field_c_n_banner_components_bott'] as $field) {
+    if (!$node->hasField($field)) {
+      continue;
+    }
+
+    $previous = array_merge($previous, $node->get($field)->referencedEntities());
+    $node->set($field, []);
+  }
+
+  return $previous;
+}
+
+/**
+ * Build a dark CivicTheme snippet (title + summary) list item.
+ *
+ * @param string $title
+ *   The snippet title.
+ * @param string $summary
+ *   The snippet summary.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph
+ *   An unsaved snippet paragraph.
+ */
+function _do_base_snippet(string $title, string $summary): Paragraph {
+  return Paragraph::create([
+    'type' => 'civictheme_snippet',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_title' => $title,
+    'field_c_p_summary' => $summary,
+  ]);
+}
+
+/**
+ * Build a dark CivicTheme manual list of snippet items.
+ *
+ * The `$style` is stored in `field_do_style`; the theme renders the bespoke
+ * design treatment (numbered, stat, trust, dotted) from a single list modifier
+ * class, styling the snippet children with CSS - no markup is stored.
+ *
+ * @param string $title
+ *   The section heading.
+ * @param int $columns
+ *   Column count (1-4).
+ * @param string $style
+ *   The design style key (numbered, stat, trust, dotted).
+ * @param \Drupal\paragraphs\Entity\Paragraph[] $items
+ *   The snippet list items.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph
+ *   An unsaved manual list paragraph referencing the saved items.
+ */
+function _do_base_manual_list(string $title, int $columns, string $style, array $items): Paragraph {
+  foreach ($items as $item) {
+    $item->save();
+  }
+
+  return Paragraph::create([
+    'type' => 'civictheme_manual_list',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_title' => $title,
+    'field_c_p_list_column_count' => $columns,
+    'field_do_style' => $style,
+    'field_c_p_list_items' => $items,
+  ]);
+}
+
+/**
+ * Build a dark CivicTheme callout (title + rich-text body + link).
+ *
+ * @param string $title
+ *   The callout heading.
+ * @param string $body
+ *   The callout body, rendered through the rich-text format.
+ * @param string $link_title
+ *   The link text.
+ * @param string $link_uri
+ *   The link URI.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph
+ *   An unsaved callout paragraph.
+ */
+function _do_base_callout(string $title, string $body, string $link_title, string $link_uri): Paragraph {
+  return Paragraph::create([
+    'type' => 'civictheme_callout',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_title' => $title,
+    'field_c_p_content' => [
+      'value' => $body,
+      'format' => 'civictheme_rich_text',
+    ],
+    'field_c_p_links' => [
+      ['uri' => $link_uri, 'title' => $link_title],
+    ],
+  ]);
 }
 
 /**

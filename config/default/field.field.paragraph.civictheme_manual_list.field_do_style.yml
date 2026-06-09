@@ -1,0 +1,21 @@
+uuid: 2c8b6e14-3a7d-49f5-b0c2-1d9e8f4a6b73
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_do_style
+    - paragraphs.paragraphs_type.civictheme_manual_list
+  module:
+    - options
+id: paragraph.civictheme_manual_list.field_do_style
+field_name: field_do_style
+entity_type: paragraph
+bundle: civictheme_manual_list
+label: 'Design style'
+description: 'Optional bespoke design treatment applied by the DrevOps theme.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

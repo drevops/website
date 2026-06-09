@@ -1,0 +1,33 @@
+uuid: 6f1d2a40-9c3e-4b7a-8d21-7e5c4a9b1f02
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_do_style
+field_name: field_do_style
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: numbered
+      label: 'Numbered rows'
+    -
+      value: stat
+      label: 'Statistics'
+    -
+      value: trust
+      label: 'Trust grid'
+    -
+      value: dotted
+      label: 'Dotted rows'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
