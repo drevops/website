@@ -168,4 +168,75 @@
       @include ct-typography('display-large');
     }
   }
+
+  // Custom: Homepage hero treatment for the intro banner - full-viewport dark
+  // canvas with an atmospheric glow, eyebrow, oversized display headline,
+  // subtitle and a scroll cue, reproducing the redesign hero.
+  &.ct-banner-type--intro.ct-banner--hero {
+    #{$root}__inner {
+      position: relative;
+      min-height: 100vh;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      padding-top: ct-spacing(20);
+      padding-bottom: ct-spacing(12);
+    }
+
+    // Atmospheric glow.
+    #{$root}__inner::before {
+      content: '';
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      width: min(800px, 90vw);
+      height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{ct-color-dark('interaction-background')} 14%, transparent) 0%, color-mix(in srgb, #{ct-color-dark('interaction-background')} 4%, transparent) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    // Vignette.
+    #{$root}__inner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, #{ct-color-dark('background')} 60%, transparent) 100%);
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: ct-particle(115);
+    }
+
+    #{$root}__site-section {
+      @include ct-typography('label-regular');
+
+      margin-bottom: ct-spacing(3);
+      color: ct-color-dark('interaction-background');
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    #{$root}__title {
+      margin-bottom: ct-spacing(3);
+      font-size: clamp(ct-particle(7), 8vw, ct-particle(11.5));
+      line-height: 1.05;
+    }
+
+    #{$root}__content {
+      max-width: ct-particle(90);
+      margin: 0 auto;
+      color: color-mix(in srgb, #{ct-color-dark('body')} 75%, transparent);
+
+      @include ct-typography('text-large');
+    }
+  }
+}
+
+// Accent word inside the hero headline.
+.ct-banner__title .dr-word-accent {
+  color: ct-color-dark('highlight');
 }

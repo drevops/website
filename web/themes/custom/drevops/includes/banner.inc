@@ -37,6 +37,12 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
 
   $variables['type'] = $type;
 
+  // Homepage hero: render the front-page banner as a full-viewport intro hero.
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    $variables['type'] = 'intro';
+    $variables['modifier_class'] = trim(($variables['modifier_class'] ?? '') . ' ct-banner--hero');
+  }
+
   // Adds extra top padding for the banner when additional spacing is needed.
   $variables['with_offset'] = civictheme_get_theme_config_manager()->load('components.header.is_sticky', FALSE);
 
