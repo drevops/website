@@ -145,6 +145,30 @@ body {
   }
 }
 
+// CivicTheme's dark content-link rule (specificity 0,4,1) styles every <a>
+// inside content as a text link - inline padding and an underline - which
+// strips the button appearance from the design's `.btn` anchors (the hero CTA,
+// the service-detail buttons and the "Get in touch" CTA). Restore the button
+// box at a specificity that clears the link rule; the `.btn-*` variants still
+// supply the colours and the `::before` provides the hover fill.
+.ct-basic-content.ct-theme-dark a.btn:not(.ct-button):not(.ct-link) {
+  &,
+  &:hover,
+  &:focus-visible,
+  &:active,
+  &:visited {
+    margin: 0;
+    padding: var(--space-y-2) var(--space-x-4);
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  &:hover {
+    background: transparent;
+    color: var(--text-color);
+  }
+}
+
 // The decorative service numbers are a faint ghost in the design (the cyan-6
 // brand at 0.18 opacity), which falls below the WCAG large-text contrast
 // minimum and fails the accessibility gate. Lift them to a lighter cyan at a
