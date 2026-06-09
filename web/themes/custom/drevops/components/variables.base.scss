@@ -95,6 +95,11 @@ $ct-typography: (
     'xxs': ($ct-font-base-size * 2.5, $ct-font-base-line-height * 2.75, 'bold', 'primary', -1px),
     'm': ($ct-font-base-size * 4, $ct-font-base-line-height * 4.25, 'bold', 'primary', -1.5px)
   ),
+  // Display large - used by the banner hero (size is overridden per-component).
+  'display-large': (
+    'xxs': ($ct-font-base-size * 3, $ct-font-base-line-height * 3.25, 'bold', 'primary', -1px),
+    'm': ($ct-font-base-size * 5, $ct-font-base-line-height * 5, 'bold', 'primary', -2px)
+  ),
   // Headings.
   'heading-1': (
     'xxs': ($ct-font-base-size * 2, $ct-font-base-line-height * 2.375, 'bold', 'primary', -0.6px),

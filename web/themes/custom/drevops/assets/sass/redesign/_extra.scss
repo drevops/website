@@ -12,12 +12,83 @@
   --layout-inset: 3.75rem;
 }
 
+// Base typography and canvas. CivicTheme applies fonts through its own .ct-*
+// component classes, but the ported redesign markup uses .component-* classes
+// and relies on inheritance, so set the document-level family, weight, colour
+// and background here. Display and headings use the primary font (Plus Jakarta
+// Sans); body copy uses the secondary font (Outfit).
+body {
+  font-family: var(--body-font-family);
+  font-weight: var(--body-font-weight);
+  line-height: var(--body-line-height);
+  color: var(--text-color);
+  background-color: var(--page-bg);
+  overflow-x: hidden;
+}
+
+// The redesign sections live inside CivicTheme's contained content region, but
+// their backgrounds must bleed edge to edge. Remove the grid container
+// constraints for any content block wrapping a redesign <section>; each
+// section's own .component-section-inner re-constrains the content width.
+.ct-basic-content:has(section) {
+  > .container {
+    max-width: none;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .row {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  [class*='col-'] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-primary);
+}
+
+// Redesigned pages render their hero as a full-width content section, so hide
+// the node banner (which would otherwise duplicate the heading) on any page
+// that contains a redesign hero.
+body:has(.component-hero) .ct-banner {
+  display: none;
+}
+
 // Reveal-on-scroll keeps content hidden until the behaviour adds `.visible`.
 // Guard on the `js` class (added by Drupal) so content stays visible when
 // JavaScript is unavailable.
 html:not(.js) .component-reveal {
   opacity: 1;
   transform: none;
+}
+
+// Primary navigation styled to the redesign: small, uppercase, letter-spaced
+// links rather than CivicTheme's larger mixed-case menu.
+.ct-header .ct-menu__item__link {
+  font-family: var(--font-family-secondary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+// The decorative service numbers are intentionally faint, but must still meet
+// the large-text contrast ratio on the dark section surfaces. Lift the design's
+// faint teal to a muted cyan that clears the threshold while staying subtle.
+.component-service-number,
+.component-service-detail-header .component-service-number {
+  color: var(--color-secondary-4);
+  opacity: 0.7;
 }
 
 // Respect reduced-motion preferences: disable the reveal, hero and scroll

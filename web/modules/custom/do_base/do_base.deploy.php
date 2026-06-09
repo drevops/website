@@ -54,18 +54,39 @@ function do_base_deploy_homepage(): string {
     return 'Homepage node not found - skipped.';
   }
 
-  if ($node->hasField('field_c_n_banner_title')) {
-    $node->set('field_c_n_banner_title', "Your website can't afford to wait.");
-  }
-
-  if ($node->hasField('field_c_n_summary')) {
-    $node->set('field_c_n_summary', 'We build and support Drupal websites for government, enterprise, and education. One senior team, predictable costs, tested code, and one point of accountability across your entire platform lifecycle.');
-  }
-
+  // The hero is the first content section (content/homepage/00-hero.html), so
+  // clear the node banner to avoid a duplicate heading above it.
+  _do_base_clear_banner($node);
   _do_base_set_components($node, 'homepage');
   $node->save();
 
   return 'Homepage rebuilt.';
+}
+
+/**
+ * Empty a node's banner so it renders nothing.
+ *
+ * Clears the banner title and deletes any banner component paragraphs.
+ *
+ * @param \Drupal\node\Entity\Node $node
+ *   The node whose banner should be emptied.
+ */
+function _do_base_clear_banner(Node $node): void {
+  if ($node->hasField('field_c_n_banner_title')) {
+    $node->set('field_c_n_banner_title', '');
+  }
+
+  foreach (['field_c_n_banner_components', 'field_c_n_banner_components_bott'] as $field) {
+    if (!$node->hasField($field)) {
+      continue;
+    }
+
+    foreach ($node->get($field)->referencedEntities() as $existing) {
+      $existing->delete();
+    }
+
+    $node->set($field, []);
+  }
 }
 
 /**
@@ -81,14 +102,8 @@ function do_base_deploy_services(): string {
     return 'Services node not found - skipped.';
   }
 
-  if ($node->hasField('field_c_n_banner_title')) {
-    $node->set('field_c_n_banner_title', 'Engineering that keeps your platform running.');
-  }
-
-  if ($node->hasField('field_c_n_summary')) {
-    $node->set('field_c_n_summary', "We deliver, support, and upgrade Drupal websites for organisations where downtime, security gaps, and slow development aren't acceptable.");
-  }
-
+  // The hero is the first content section, so clear the node banner.
+  _do_base_clear_banner($node);
   _do_base_set_components($node, 'services');
   $node->save();
 
@@ -114,17 +129,14 @@ function do_base_deploy_contact(): string {
     return 'Contact node not usable - skipped.';
   }
 
-  if ($node->hasField('field_c_n_banner_title')) {
-    $node->set('field_c_n_banner_title', "Let's talk about your platform.");
-  }
+  // The hero is the first content section, so clear the node banner.
+  _do_base_clear_banner($node);
 
-  if ($node->hasField('field_c_n_summary')) {
-    $node->set('field_c_n_summary', 'Whether you need a new Drupal build, help upgrading from an end-of-life version, or ongoing support from a senior team, we are happy to have an honest conversation about where things stand.');
-  }
-
-  // Build the contact details first so a missing content directory aborts
-  // before any existing components are removed.
-  $details = _do_base_html_paragraphs('contact');
+  // Build the content first so a missing content directory aborts before any
+  // existing components are removed. The hero leads, then the webform, then the
+  // remaining detail sections (contact info).
+  $sections = _do_base_html_paragraphs('contact');
+  $hero = array_shift($sections);
 
   foreach ($node->get('field_c_n_components')->referencedEntities() as $existing) {
     $existing->delete();
@@ -137,7 +149,7 @@ function do_base_deploy_contact(): string {
   ]);
   $webform->save();
 
-  $components = [$webform, ...$details];
+  $components = array_values(array_filter([$hero, $webform, ...$sections]));
   $node->set('field_c_n_components', $components);
   $node->save();
 
