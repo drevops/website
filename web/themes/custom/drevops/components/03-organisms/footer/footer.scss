@@ -1,0 +1,48 @@
+//
+// Minimal footer override styles.
+//
+// Single-line bar: copyright left, contact email right.
+//
+
+.ct-footer {
+  $root: &;
+
+  background-color: ct-color-dark('background-light');
+  border-top: ct-particle(0.125) solid color-mix(in srgb, #{ct-color-dark('interaction-background')} 18%, transparent);
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: ct-spacing(2);
+    padding-top: ct-spacing(3);
+    padding-bottom: ct-spacing(3);
+  }
+
+  &__copy {
+    @include ct-typography('text-small');
+
+    color: color-mix(in srgb, #{ct-color-dark('body')} 60%, transparent);
+    letter-spacing: 0.08em;
+  }
+
+  &__contact {
+    @include ct-typography('text-small');
+
+    color: ct-color-dark('interaction-background');
+    letter-spacing: 0.08em;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  @media (max-width: 767px) {
+    &__bar {
+      flex-direction: column;
+      gap: ct-spacing(1);
+      text-align: center;
+    }
+  }
+}

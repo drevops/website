@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Minimal footer override.
+ *
+ * The redesign uses a single-line footer: copyright on the left, a contact
+ * email on the right. The CivicTheme footer region slots are intentionally not
+ * rendered.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - site_name: [string] Site name for the copyright line.
+ * - email: [string] Contact email rendered as a mailto link.
+ * - modifier_class: [string] Additional CSS classes.
+ */
+#}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+
+<footer class="ct-footer {{ modifier_class -}}" role="contentinfo" data-component-name="ct-footer" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+  <div class="container ct-footer__bar">
+    <span class="ct-footer__copy">{{ site_name|default('DrevOps') }} &copy; {{ 'now'|date('Y') }}</span>
+    {% if email %}
+      <a class="ct-footer__contact" href="mailto:{{ email }}">{{ email }}</a>
+    {% endif %}
+  </div>
+</footer>

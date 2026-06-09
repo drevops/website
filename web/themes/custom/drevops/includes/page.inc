@@ -19,4 +19,8 @@ function _drevops_preprocess_page(array &$variables): void {
   $variables['theme'] = 'dark';
   $variables['header_theme'] = 'dark';
   $variables['footer_theme'] = 'dark';
+
+  // Minimal footer: copyright (site name) and a single public contact email.
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['contact_email'] = 'info@drevops.com';
 }
