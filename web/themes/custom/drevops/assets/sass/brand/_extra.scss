@@ -82,3 +82,19 @@ h6 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+// CivicTheme's responsive navigation rules do not reach the compiled theme CSS,
+// so both the horizontal desktop menu and the mobile-navigation hamburger show
+// at every width. Restore the design's behaviour - a horizontal menu on desktop
+// and a hamburger on mobile - switching at the desktop-menu breakpoint (768px).
+@media (min-width: 768px) {
+  .ct-header .ct-mobile-navigation-trigger {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ct-header .ct-primary-navigation {
+    display: none;
+  }
+}
