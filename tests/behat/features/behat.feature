@@ -41,14 +41,8 @@ Feature: Behat configuration
     And I should see the ".demo-block" element in the "sidebar_bottom_left" region
     And I should see the ".demo-block" element in the "sidebar_top_right" region
     And I should see the ".demo-block" element in the "sidebar_bottom_right" region
-    And I should see the ".demo-block" element in the "footer_top_1" region
-    And I should see the ".demo-block" element in the "footer_top_2" region
-    And I should see the ".demo-block" element in the "footer_middle_1" region
-    And I should see the ".demo-block" element in the "footer_middle_2" region
-    And I should see the ".demo-block" element in the "footer_middle_3" region
-    And I should see the ".demo-block" element in the "footer_middle_4" region
-    And I should see the ".demo-block" element in the "footer_bottom_1" region
-    And I should see the ".demo-block" element in the "footer_bottom_2" region
+    # The redesign uses a minimal footer (copyright and contact email only), so
+    # the footer regions are intentionally not rendered.
 
   @api
   Scenario: Messages and login selectors configured correctly

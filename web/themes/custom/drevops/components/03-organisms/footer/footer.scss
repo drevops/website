@@ -22,7 +22,8 @@
   &__copy {
     @include ct-typography('text-small');
 
-    color: color-mix(in srgb, #{ct-color-dark('body')} 60%, transparent);
+    // Opaque light tint that clears WCAG AA contrast on the footer surface.
+    color: color-mix(in srgb, #{ct-color-dark('body')} 80%, #{ct-color-dark('background-light')});
     letter-spacing: 0.08em;
   }
 
