@@ -145,6 +145,18 @@ body {
   }
 }
 
+// The decorative service numbers are a faint ghost in the design (the cyan-6
+// brand at 0.18 opacity), which falls below the WCAG large-text contrast
+// minimum and fails the accessibility gate. Lift them to a lighter cyan at a
+// higher opacity so they clear 3:1 on the dark section surfaces while staying
+// understated. Scoped under .ct-basic-content (and matching the detail-header
+// selector) so the lift wins over the component CSS on every page.
+.ct-basic-content .component-service-number,
+.ct-basic-content .component-service-detail-header .component-service-number {
+  color: var(--color-secondary-4);
+  opacity: 0.8;
+}
+
 h1,
 h2,
 h3,
