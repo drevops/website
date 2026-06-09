@@ -1,0 +1,47 @@
+/**
+ * @file
+ * Reveal-on-scroll behaviour.
+ *
+ * Mounts a subtle fade-and-rise reveal on the outer wrapper of each section
+ * component (manual lists, service-detail promos and callouts) as it enters
+ * the viewport.
+ *
+ * The hiding class is added by this script, never in the stylesheet, so the
+ * content is only ever hidden once the reveal has been initialised. If the
+ * script does not run, the browser lacks IntersectionObserver, or the visitor
+ * prefers reduced motion, every section stays fully visible.
+ */
+((Drupal, once) => {
+  Drupal.behaviors.drevopsReveal = {
+    attach(context) {
+      const elements = once('dr-reveal', '.ct-list, .ct-promo, .ct-callout', context);
+
+      if (!elements.length) {
+        return;
+      }
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('dr-reveal--in');
+              obs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+      );
+
+      elements.forEach((el) => {
+        el.classList.add('dr-reveal');
+        observer.observe(el);
+      });
+    },
+  };
+})(Drupal, once);
