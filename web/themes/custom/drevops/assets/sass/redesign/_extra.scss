@@ -26,6 +26,19 @@ body {
   overflow-x: hidden;
 }
 
+// CivicTheme derives the page wrapper and header as lighter navy tints, which
+// read as mismatched horizontal bands against the section backgrounds. Unify
+// them with the deep-navy page background (the header keeps its blur). The
+// !important overrides win over CivicTheme's theme-scoped component styles
+// without depending on stylesheet load order.
+.ct-page {
+  background-color: var(--page-bg) !important;
+}
+
+.ct-header__middle {
+  background-color: color-mix(in srgb, var(--page-bg) 82%, transparent) !important;
+}
+
 // The redesign sections live inside CivicTheme's contained content region, but
 // their backgrounds must bleed edge to edge. Remove the grid container
 // constraints for any content block wrapping a redesign <section>; each
