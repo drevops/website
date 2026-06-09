@@ -1,0 +1,21 @@
+uuid: 7b2e9d04-1a6f-4c83-9e57-2d4b8f1a6c90
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.field_do_eyebrow
+field_name: field_do_eyebrow
+entity_type: paragraph
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

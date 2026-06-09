@@ -108,23 +108,23 @@ function do_base_deploy_homepage(): string {
   }
 
   $components = [
-    _do_base_manual_list('What we do', 1, 'numbered', [
+    _do_base_manual_list('', 1, 'numbered', [
       _do_base_snippet('Website Delivery', "Full Drupal website builds delivered with automated testing, CI/CD pipelines, and production-ready infrastructure. Your team gets a solid platform, not a prototype that needs fixing after launch."),
       _do_base_snippet('Ongoing Support', "Proactive platform maintenance from the same senior engineers who built it. Security updates, monitoring, continuous improvement, and direct communication with no layers in between."),
       _do_base_snippet('Upgrades & Migrations', "Drupal 7 and 9 are end-of-life. We handle the full migration with test coverage and zero-downtime deployments, so your organisation stays compliant and your users stay unaffected."),
-    ]),
-    _do_base_manual_list('The essentials', 2, 'stat', [
+    ], 'What we do'),
+    _do_base_manual_list('', 2, 'stat', [
       _do_base_fact_card('0', 'Juniors on your project'),
       _do_base_fact_card('0', 'Excuses when something breaks'),
       _do_base_fact_card('1 day', 'To set up CI/CD on a new project'),
       _do_base_fact_card('0', 'Shortcuts in how we deliver'),
-    ]),
+    ], 'The essentials'),
     _do_base_manual_list("Trusted on projects where failure isn't an option.", 4, 'trust', [
       _do_base_snippet('Victorian Government', "Delivered Australia's first Docker-based government Drupal platform."),
       _do_base_snippet('Australian Defence', 'Multiple classified platforms with complex security and compliance requirements.'),
       _do_base_snippet('GovCMS', "Drupal platform delivery on Australia's government hosting infrastructure."),
       _do_base_snippet('Education', 'University platforms with ongoing support, leading to internal referrals across departments.'),
-    ]),
+    ], 'Who we work with'),
     _do_base_manual_list('No filler. No overhead. Just good engineering.', 1, 'dotted', [
       _do_base_snippet('Automated testing is not optional', "Every platform ships with a full test suite. Functional, unit, and visual regression tests run on every commit. If it's not tested, it doesn't deploy."),
       _do_base_snippet('One team, zero handovers', 'We handle development, DevOps, and production support. One team with full context, no vendors blaming each other, no knowledge lost between handoffs.'),
@@ -135,8 +135,8 @@ function do_base_deploy_homepage(): string {
       _do_base_snippet('Discovery', 'We review your website, understand your requirements and constraints, and scope the work. You get a clear proposal with flat-rate pricing before any work begins.'),
       _do_base_snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit. Regular check-ins, transparent progress reporting, and no surprises at the end.'),
       _do_base_snippet('Ongoing support', 'The same senior team that built your site maintains it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
-    ]),
-    _do_base_callout("Let's talk about your website.", "Tell us where things stand, what's working, and what's not. We'll be straight with you about whether we're the right fit.", 'info@drevops.com', 'mailto:info@drevops.com'),
+    ], 'How we work'),
+    _do_base_callout("Let's talk about your website.", '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a href="mailto:info@drevops.com">info@drevops.com</a></p>'),
   ];
 
   foreach ($components as $component) {
@@ -225,12 +225,12 @@ function do_base_deploy_services(): string {
       ],
       'Typical engagement', '$25K - $120K'
     ), 'Book a free assessment', '/contact'),
-    _do_base_manual_list('Our approach', 2, 'dotted', [
+    _do_base_manual_list('', 2, 'dotted', [
       _do_base_snippet('Senior engineers only', 'No juniors on your project. Every person who touches your code has 10+ years of Drupal experience.'),
       _do_base_snippet('Flat-rate pricing', 'We quote a fixed price upfront. No hourly billing surprises, no retainer games, no scope creep charges.'),
       _do_base_snippet('Tested by default', "Every platform ships with automated tests. If it's not tested, it doesn't deploy. No exceptions."),
       _do_base_snippet('Direct communication', 'You talk to the engineers building your site. No project managers relaying messages, no layers in between.'),
-    ]),
+    ], 'Our approach'),
     _do_base_callout('Ready to talk about your platform?', "Tell us where things stand. We'll be straight with you about whether we're the right fit.", 'Get in touch', '/contact'),
   ];
 
@@ -494,7 +494,7 @@ function _do_base_fact_card(string $fact, string $label): Paragraph {
  * @return \Drupal\paragraphs\Entity\Paragraph
  *   An unsaved manual list paragraph referencing the saved items.
  */
-function _do_base_manual_list(string $title, int $columns, string $style, array $items): Paragraph {
+function _do_base_manual_list(string $title, int $columns, string $style, array $items, string $eyebrow = ''): Paragraph {
   foreach ($items as $item) {
     $item->save();
   }
@@ -505,6 +505,7 @@ function _do_base_manual_list(string $title, int $columns, string $style, array 
     'field_c_p_title' => $title,
     'field_c_p_list_column_count' => $columns,
     'field_do_style' => $style,
+    'field_do_eyebrow' => $eyebrow,
     'field_c_p_list_items' => $items,
   ]);
 }
@@ -524,8 +525,8 @@ function _do_base_manual_list(string $title, int $columns, string $style, array 
  * @return \Drupal\paragraphs\Entity\Paragraph
  *   An unsaved callout paragraph.
  */
-function _do_base_callout(string $title, string $body, string $link_title, string $link_uri): Paragraph {
-  return Paragraph::create([
+function _do_base_callout(string $title, string $body, string $link_title = '', string $link_uri = ''): Paragraph {
+  $values = [
     'type' => 'civictheme_callout',
     'field_c_p_theme' => 'dark',
     'field_c_p_title' => $title,
@@ -533,10 +534,16 @@ function _do_base_callout(string $title, string $body, string $link_title, strin
       'value' => $body,
       'format' => 'civictheme_rich_text',
     ],
-    'field_c_p_links' => [
-      ['uri' => _do_base_link_uri($link_uri), 'title' => $link_title],
-    ],
-  ]);
+  ];
+
+  // The callout button renders external links (a mailto) with a new-window
+  // target and an arrow. Only add the button for a real call-to-action link;
+  // the homepage CTA renders its email inside the body as a plain link instead.
+  if ($link_uri !== '') {
+    $values['field_c_p_links'] = [['uri' => _do_base_link_uri($link_uri), 'title' => $link_title]];
+  }
+
+  return Paragraph::create($values);
 }
 
 /**
