@@ -1,0 +1,19 @@
+uuid: 9a3b2d51-4c7e-4f8b-0d23-6e9f5a1b8c32
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_title
+    - paragraphs.paragraphs_type.do_fact_card
+id: paragraph.do_fact_card.field_c_p_title
+field_name: field_c_p_title
+entity_type: paragraph
+bundle: do_fact_card
+label: Fact
+description: 'The figure, e.g. "0" or "1 day".'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\civictheme\CivicthemeConstants;
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Render\Markup;
 
 /**
@@ -50,6 +51,15 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
     // banner.scss), not a background image. The shared banner block ships a
     // default background image, so drop it here to render the clean hero.
     unset($variables['background_image'], $variables['background_image_blend_mode']);
+  }
+
+  // CivicTheme's civictheme_get_field_value() runs string fields through
+  // strip_tags(), which removes the design's accent markup from the banner
+  // title. Re-read the raw value (XSS-filtered to a safe inline set) so the
+  // accent word survives; it is wrapped in Markup below to render unescaped.
+  if (!empty($node) && $node->hasField('field_c_n_banner_title') && !$node->get('field_c_n_banner_title')->isEmpty()) {
+    $allowed_tags = ['span', 'em', 'strong', 'br'];
+    $variables['title'] = Xss::filter((string) $node->get('field_c_n_banner_title')->value, $allowed_tags);
   }
 
   // Adds extra top padding for the banner when additional spacing is needed.

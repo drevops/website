@@ -1,0 +1,30 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Fact card
+status: stable
+description: 'A single statistic - a large figure with a label.'
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+    fact:
+      type: string
+      title: Fact
+      description: The figure, e.g. "0" or "1 day".
+    label:
+      type: string
+      title: Label
+      description: The label beneath the figure.
+    modifier_class:
+      type: string
+      title: Modifier Class
+      description: Additional CSS classes.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.

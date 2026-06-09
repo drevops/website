@@ -1,0 +1,39 @@
+uuid: 2d6e5a84-7f01-4c1e-3a56-9b2c8d4e1f65
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.do_fact_card.field_c_p_summary
+    - field.field.paragraph.do_fact_card.field_c_p_theme
+    - field.field.paragraph.do_fact_card.field_c_p_title
+    - paragraphs.paragraphs_type.do_fact_card
+id: paragraph.do_fact_card.default
+targetEntityType: paragraph
+bundle: do_fact_card
+mode: default
+content:
+  field_c_p_summary:
+    type: string_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

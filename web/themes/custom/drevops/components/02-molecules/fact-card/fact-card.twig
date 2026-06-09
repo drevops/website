@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Fact card component.
+ *
+ * A single statistic: a large figure with a label beneath it.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - fact: [string] The figure, e.g. "0" or "1 day".
+ * - label: [string] The label beneath the figure.
+ * - modifier_class: [string] Additional CSS classes.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ */
+#}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+
+{% if fact is not empty %}
+  <div class="ct-fact-card {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="ct-fact-card__figure">{{ fact }}</div>
+    {% if label is not empty %}
+      <div class="ct-fact-card__label">{{ label }}</div>
+    {% endif %}
+  </div>
+{% endif %}

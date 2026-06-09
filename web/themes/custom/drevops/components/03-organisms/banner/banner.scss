@@ -181,6 +181,11 @@
       overflow: hidden;
       padding-top: ct-spacing(16);
       padding-bottom: ct-spacing(10);
+
+      // The design hero is the deep-navy page canvas with an atmospheric glow,
+      // not CivicTheme's lighter banner surface. Let the page background show
+      // through so the hero is not washed out.
+      background-color: transparent;
     }
 
     // Full-viewport variant for the front page.
@@ -243,7 +248,7 @@
   }
 }
 
-// Accent word inside the hero headline.
+// Accent word inside the hero headline - the design's coral accent.
 .ct-banner__title .dr-word-accent {
-  color: ct-color-dark('highlight');
+  color: var(--text-accent-color);
 }

@@ -91,14 +91,19 @@
   }
 }
 
-// ── Statistics (4 big figures) ──────────────────────────────────────────────
+// ── Fact cards (homepage "The essentials") ──────────────────────────────────
+// Each "essential" is a do_fact_card: a large figure above an uppercase label,
+// laid out as a bordered grid on the subtle surface.
 .ct-list--style-stat {
-  .ct-snippet {
-    text-align: left;
-    padding: var(--space-y-6) var(--space-x-4);
+  .ct-fact-card {
+    height: 100%;
+    padding: var(--space-y-7) var(--space-x-5);
+    border: 1px solid var(--border-color);
   }
 
-  .ct-snippet__title {
+  .ct-fact-card__figure {
+    display: flex;
+    align-items: baseline;
     font-family: var(--font-family-primary);
     font-size: clamp(72px, 8vw, 108px);
     font-weight: var(--font-weight-bold);
@@ -108,7 +113,7 @@
     margin-bottom: var(--space-y-2);
   }
 
-  .ct-snippet__summary {
+  .ct-fact-card__label {
     font-size: var(--label-font-size);
     font-weight: var(--font-weight-normal);
     letter-spacing: 0.2em;
@@ -292,7 +297,7 @@
       font-weight: var(--font-weight-normal);
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--text-muted-color);
+      color: var(--text-accent-color);
       margin: var(--space-y-4) 0 var(--space-y-2);
     }
 

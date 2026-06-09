@@ -113,11 +113,11 @@ function do_base_deploy_homepage(): string {
       _do_base_snippet('Ongoing Support', "Proactive platform maintenance from the same senior engineers who built it. Security updates, monitoring, continuous improvement, and direct communication with no layers in between."),
       _do_base_snippet('Upgrades & Migrations', "Drupal 7 and 9 are end-of-life. We handle the full migration with test coverage and zero-downtime deployments, so your organisation stays compliant and your users stay unaffected."),
     ]),
-    _do_base_manual_list('The essentials', 4, 'stat', [
-      _do_base_snippet('0', 'Juniors on your project'),
-      _do_base_snippet('0', 'Excuses when something breaks'),
-      _do_base_snippet('1 day', 'To set up CI/CD on a new project'),
-      _do_base_snippet('0', 'Shortcuts in how we deliver'),
+    _do_base_manual_list('The essentials', 2, 'stat', [
+      _do_base_fact_card('0', 'Juniors on your project'),
+      _do_base_fact_card('0', 'Excuses when something breaks'),
+      _do_base_fact_card('1 day', 'To set up CI/CD on a new project'),
+      _do_base_fact_card('0', 'Shortcuts in how we deliver'),
     ]),
     _do_base_manual_list("Trusted on projects where failure isn't an option.", 4, 'trust', [
       _do_base_snippet('Victorian Government', "Delivered Australia's first Docker-based government Drupal platform."),
@@ -146,7 +146,7 @@ function do_base_deploy_homepage(): string {
   $stale = array_merge(
     _do_base_stage_banner(
       $node,
-      "Your website can't afford to wait.",
+      'Your website<br><span class="dr-word-accent">can\'t afford to wait.</span>',
       'We build and support Drupal websites for government, enterprise, and education. One senior team, predictable costs, tested code, and one point of accountability across your entire platform lifecycle.',
       ['title' => 'Talk to us', 'uri' => '/contact']
     ),
@@ -241,7 +241,7 @@ function do_base_deploy_services(): string {
   $stale = array_merge(
     _do_base_stage_banner(
       $node,
-      'Engineering that keeps your platform running.',
+      'Engineering that keeps<br><span class="dr-word-accent">your platform running.</span>',
       "We deliver, support, and upgrade Drupal websites for organisations where downtime, security gaps, and slow development aren't acceptable."
     ),
     $node->get('field_c_n_components')->referencedEntities()
@@ -452,6 +452,26 @@ function _do_base_snippet(string $title, string $summary): Paragraph {
     'field_c_p_theme' => 'dark',
     'field_c_p_title' => $title,
     'field_c_p_summary' => $summary,
+  ]);
+}
+
+/**
+ * Build a dark Fact card (a large figure above a label).
+ *
+ * @param string $fact
+ *   The figure, e.g. "0" or "1 day".
+ * @param string $label
+ *   The label beneath the figure.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph
+ *   An unsaved fact card paragraph.
+ */
+function _do_base_fact_card(string $fact, string $label): Paragraph {
+  return Paragraph::create([
+    'type' => 'do_fact_card',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_title' => $fact,
+    'field_c_p_summary' => $label,
   ]);
 }
 

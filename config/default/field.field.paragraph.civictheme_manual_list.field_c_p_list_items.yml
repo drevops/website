@@ -17,6 +17,7 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_snippet_ref
     - paragraphs.paragraphs_type.civictheme_subject_card
     - paragraphs.paragraphs_type.civictheme_subject_card_ref
+    - paragraphs.paragraphs_type.do_fact_card
   module:
     - entity_reference_revisions
 _core:
@@ -47,6 +48,7 @@ settings:
       civictheme_snippet_ref: civictheme_snippet_ref
       civictheme_subject_card: civictheme_subject_card
       civictheme_subject_card_ref: civictheme_subject_card_ref
+      do_fact_card: do_fact_card
     negate: 0
     target_bundles_drag_drop:
       civictheme_accordion:
@@ -136,4 +138,7 @@ settings:
       civictheme_webform:
         weight: -32
         enabled: false
+      do_fact_card:
+        weight: -31
+        enabled: true
 field_type: entity_reference_revisions
