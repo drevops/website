@@ -54,11 +54,11 @@ function do_base_deploy_components_dark(?array &$sandbox): ?string {
 /**
  * Flip CivicTheme block content to the dark theme.
  *
- * Page-chrome blocks (the mobile navigation drawer, banner, social links) carry
- * their own `field_c_b_theme`, and the mobile navigation also themes its trigger
- * through `field_c_b_trigger_theme`. The mobile navigation ships light, so it
- * ignored the dark redesign; switch every block - and its trigger - to dark so
- * the whole site, including the mobile drawer and skip controls, renders dark.
+ * Page-chrome blocks (the mobile navigation drawer, banner, social links)
+ * carry their own `field_c_b_theme`, and the mobile navigation also themes
+ * its trigger through `field_c_b_trigger_theme`. The mobile navigation ships
+ * light, so it ignored the dark redesign; switch every block - and its
+ * trigger - to dark so the whole site, including the mobile drawer, is dark.
  */
 function do_base_deploy_blocks_dark(?array &$sandbox): ?string {
   $fields = ['field_c_b_theme', 'field_c_b_trigger_theme'];
