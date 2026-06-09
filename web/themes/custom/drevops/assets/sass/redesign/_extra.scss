@@ -10,6 +10,15 @@
   --layout-rhythm-md: 8.75rem;
   --layout-rhythm-lg: 10rem;
   --layout-inset: 3.75rem;
+
+  // CivicTheme hard-codes the back-to-top control to the light interaction
+  // palette regardless of page theme, so it renders in the old accent on the
+  // dark site. Repoint it at the redesign's accent (cyan control, navy glyph),
+  // matching the link and button colours used elsewhere.
+  --ct-back-to-top-background-color: var(--link-color);
+  --ct-back-to-top-border-color: var(--link-color);
+  --ct-back-to-top-color: var(--page-bg);
+  --ct-back-to-top-outline-color: var(--link-color);
 }
 
 // Base typography and canvas. CivicTheme applies fonts through its own .ct-*
@@ -43,7 +52,16 @@ body {
 // their backgrounds must bleed edge to edge. Remove the grid container
 // constraints for any content block wrapping a redesign <section>; each
 // section's own .component-section-inner re-constrains the content width.
+//
+// CivicTheme also applies inset vertical spacing (padding) to the content
+// block. Each redesign section carries its own vertical rhythm and must sit
+// flush against the next, so its full-bleed background meets the neighbour edge
+// to edge; the inset padding would otherwise expose a strip of the page
+// background between sections whose backgrounds differ.
 .ct-basic-content:has(section[class*='component-']) {
+  padding-top: 0;
+  padding-bottom: 0;
+
   > .container {
     max-width: none;
     padding-right: 0;
@@ -58,6 +76,72 @@ body {
   [class*='col-'] {
     padding-right: 0;
     padding-left: 0;
+  }
+}
+
+// The redesign's base line-height is 1.75 - the design sets it on <body> and
+// every section inherits it, whereas CivicTheme applies a tighter block
+// line-height to .ct-basic-content. Restore the design's value on the redesign
+// content wrapper so the eyebrow, subtitle, labels, links and descriptions
+// inherit it, while components that declare their own line-height (headings,
+// the trust description, the decorative numbers) keep theirs.
+//
+// CivicTheme's dark theme also colours headings a near-white tint and content
+// links a muted blue via these tokens (specificity 0,2,1 / 0,4,1, above the
+// component classes). The redesign uses pure white headings and the cyan link
+// accent, so point the tokens at the design values on the same wrapper; the
+// descendant headings and links inherit the overridden custom properties.
+.ct-basic-content:has([class*='component-']) {
+  line-height: var(--line-height-lg);
+  // CivicTheme's base `p` rule reads this token for paragraph line-height
+  // (a fixed value that breaks the design's inheritance). Repoint it at the
+  // design's value so paragraphs without their own line-height inherit it,
+  // while paragraphs that declare one (the trust description) keep it.
+  --ct-typography-text-regular-line-height: var(--line-height-lg);
+  // ct-content() reads these tokens for heading line-heights, which are looser
+  // than the design's. The design sets every heading to the tight line-height;
+  // the display components override to their own value through their classes.
+  --ct-typography-heading-1-line-height: var(--line-height-sm);
+  --ct-typography-heading-2-line-height: var(--line-height-sm);
+  --ct-typography-heading-3-line-height: var(--line-height-sm);
+  --ct-typography-heading-4-line-height: var(--line-height-sm);
+  --ct-typography-heading-5-line-height: var(--line-height-sm);
+  --ct-typography-heading-6-line-height: var(--line-height-sm);
+  --ct-basic-content-dark-heading-1-color: var(--text-color);
+  --ct-basic-content-dark-heading-2-color: var(--text-color);
+  --ct-basic-content-dark-heading-3-color: var(--text-color);
+  --ct-basic-content-dark-heading-4-color: var(--text-color);
+  --ct-basic-content-dark-heading-5-color: var(--text-color);
+  --ct-basic-content-dark-heading-6-color: var(--text-color);
+  --ct-content-link-dark-color: var(--link-color);
+}
+
+// The contact value/email link renders white in the design (the cyan accent is
+// reserved for the underline on hover). CivicTheme's dark content-link rule
+// (specificity 0,4,1) would otherwise tint it; this selector matches that rule
+// plus the component class to clear it.
+.ct-basic-content.ct-theme-dark a.component-contact-value:not(.ct-button):not(.ct-link) {
+  color: var(--text-color);
+}
+
+// The contact webform's submit button renders with CivicTheme's solid light
+// primary style (the old accent). The design renders form submits as the
+// secondary outline button - transparent with the cyan accent - so restyle the
+// webform submit to the redesign's secondary button tokens.
+.ct-button.ct-button--submit {
+  &,
+  &:focus-visible,
+  &:active,
+  &:visited {
+    background-color: var(--btn-secondary-bg);
+    border-color: var(--btn-secondary-border);
+    color: var(--btn-secondary-color);
+  }
+
+  &:hover {
+    background-color: var(--btn-secondary-hover-bg);
+    border-color: var(--btn-secondary-color);
+    color: var(--btn-secondary-hover-color);
   }
 }
 
@@ -93,15 +177,6 @@ html:not(.js) .component-reveal {
   font-weight: var(--font-weight-normal);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-// The decorative service numbers are intentionally faint, but must still meet
-// the large-text contrast ratio on the dark section surfaces. Lift the design's
-// faint teal to a muted cyan that clears the threshold while staying subtle.
-.component-service-number,
-.component-service-detail-header .component-service-number {
-  color: var(--color-secondary-4);
-  opacity: 0.7;
 }
 
 // Respect reduced-motion preferences: disable the reveal, hero and scroll
