@@ -39,11 +39,11 @@ function do_base_deploy_components_dark(?array &$sandbox): ?string {
 }
 
 /**
- * Rebuild the homepage (node 1) to the redesign.
+ * Rebuild the homepage to the redesign.
  *
- * Sets the hero (banner) copy and replaces the page components with the
- * redesign sections, each rendered as a full-width dark content paragraph from
- * the markup in this module's content/homepage directory.
+ * The hero is the first content section, so the node banner is cleared. New
+ * references are saved before the previous paragraphs are deleted, so a failed
+ * save can never leave the node pointing at deleted entities.
  */
 function do_base_deploy_homepage(): string {
   // Resolve the configured front page rather than assuming a fixed node ID.
@@ -54,39 +54,11 @@ function do_base_deploy_homepage(): string {
     return 'Homepage node not found - skipped.';
   }
 
-  // The hero is the first content section (content/homepage/00-hero.html), so
-  // clear the node banner to avoid a duplicate heading above it.
-  _do_base_clear_banner($node);
-  _do_base_set_components($node, 'homepage');
+  $stale = array_merge(_do_base_stage_clear_banner($node), _do_base_stage_components($node, 'homepage'));
   $node->save();
+  _do_base_delete_entities($stale);
 
   return 'Homepage rebuilt.';
-}
-
-/**
- * Empty a node's banner so it renders nothing.
- *
- * Clears the banner title and deletes any banner component paragraphs.
- *
- * @param \Drupal\node\Entity\Node $node
- *   The node whose banner should be emptied.
- */
-function _do_base_clear_banner(Node $node): void {
-  if ($node->hasField('field_c_n_banner_title')) {
-    $node->set('field_c_n_banner_title', '');
-  }
-
-  foreach (['field_c_n_banner_components', 'field_c_n_banner_components_bott'] as $field) {
-    if (!$node->hasField($field)) {
-      continue;
-    }
-
-    foreach ($node->get($field)->referencedEntities() as $existing) {
-      $existing->delete();
-    }
-
-    $node->set($field, []);
-  }
 }
 
 /**
@@ -102,10 +74,9 @@ function do_base_deploy_services(): string {
     return 'Services node not found - skipped.';
   }
 
-  // The hero is the first content section, so clear the node banner.
-  _do_base_clear_banner($node);
-  _do_base_set_components($node, 'services');
+  $stale = array_merge(_do_base_stage_clear_banner($node), _do_base_stage_components($node, 'services'));
   $node->save();
+  _do_base_delete_entities($stale);
 
   return 'Services page rebuilt.';
 }
@@ -113,8 +84,8 @@ function do_base_deploy_services(): string {
 /**
  * Rebuild the Contact page to the redesign.
  *
- * Keeps the existing contact webform and adds the redesign contact details
- * column. The webform is rendered through a CivicTheme webform paragraph.
+ * Keeps the existing contact webform (rendered through a CivicTheme webform
+ * paragraph) between the hero and the contact-detail sections.
  */
 function do_base_deploy_contact(): string {
   $path = \Drupal::service('path_alias.manager')->getPathByAlias('/contact');
@@ -129,18 +100,11 @@ function do_base_deploy_contact(): string {
     return 'Contact node not usable - skipped.';
   }
 
-  // The hero is the first content section, so clear the node banner.
-  _do_base_clear_banner($node);
-
-  // Build the content first so a missing content directory aborts before any
-  // existing components are removed. The hero leads, then the webform, then the
-  // remaining detail sections (contact info).
+  // Build the content first so a missing content directory aborts before
+  // anything is staged. The hero leads, then the webform, then the contact
+  // detail sections.
   $sections = _do_base_html_paragraphs('contact');
   $hero = array_shift($sections);
-
-  foreach ($node->get('field_c_n_components')->referencedEntities() as $existing) {
-    $existing->delete();
-  }
 
   $webform = Paragraph::create([
     'type' => 'civictheme_webform',
@@ -149,9 +113,13 @@ function do_base_deploy_contact(): string {
   ]);
   $webform->save();
 
-  $components = array_values(array_filter([$hero, $webform, ...$sections]));
-  $node->set('field_c_n_components', $components);
+  $stale = array_merge(
+    _do_base_stage_clear_banner($node),
+    $node->get('field_c_n_components')->referencedEntities()
+  );
+  $node->set('field_c_n_components', array_values(array_filter([$hero, $webform, ...$sections])));
   $node->save();
+  _do_base_delete_entities($stale);
 
   return 'Contact page rebuilt.';
 }
@@ -181,37 +149,82 @@ function do_base_deploy_blog_demo(): string {
     $node->set('field_c_n_banner_title', $title);
   }
 
-  _do_base_set_components($node, 'blog');
+  $stale = _do_base_stage_components($node, 'blog');
   $node->save();
+  _do_base_delete_entities($stale);
 
   return 'Blog demo article seeded.';
 }
 
 /**
- * Replace a node's components with full-width content paragraphs from markup.
+ * Stage redesign content sections on a node from a content directory.
  *
- * Existing components are deleted first so the hook is idempotent and does not
- * orphan paragraphs on re-run.
+ * Builds the new component paragraphs and assigns them to the node, returning
+ * the previously referenced components for deletion after the node is saved.
  *
  * @param \Drupal\node\Entity\Node $node
  *   The node to rebuild.
  * @param string $dir
  *   The content sub-directory under this module's content directory.
+ *
+ * @return \Drupal\Core\Entity\EntityInterface[]
+ *   The previously referenced component paragraphs, pending deletion.
  */
-function _do_base_set_components(Node $node, string $dir): void {
+function _do_base_stage_components(Node $node, string $dir): array {
   if (!$node->hasField('field_c_n_components')) {
-    return;
+    return [];
   }
 
   // Build the new components first; this throws if the content is missing, so
-  // existing components are never deleted without a replacement.
+  // the node is never left without a replacement.
   $components = _do_base_html_paragraphs($dir);
+  $previous = $node->get('field_c_n_components')->referencedEntities();
+  $node->set('field_c_n_components', $components);
 
-  foreach ($node->get('field_c_n_components')->referencedEntities() as $existing) {
-    $existing->delete();
+  return $previous;
+}
+
+/**
+ * Stage an emptied banner on a node.
+ *
+ * Clears the banner title and references, returning the previous banner
+ * paragraphs for deletion after the node is saved.
+ *
+ * @param \Drupal\node\Entity\Node $node
+ *   The node whose banner should be emptied.
+ *
+ * @return \Drupal\Core\Entity\EntityInterface[]
+ *   The previously referenced banner paragraphs, pending deletion.
+ */
+function _do_base_stage_clear_banner(Node $node): array {
+  if ($node->hasField('field_c_n_banner_title')) {
+    $node->set('field_c_n_banner_title', '');
   }
 
-  $node->set('field_c_n_components', $components);
+  $previous = [];
+
+  foreach (['field_c_n_banner_components', 'field_c_n_banner_components_bott'] as $field) {
+    if (!$node->hasField($field)) {
+      continue;
+    }
+
+    $previous = array_merge($previous, $node->get($field)->referencedEntities());
+    $node->set($field, []);
+  }
+
+  return $previous;
+}
+
+/**
+ * Delete entities staged for removal after the referencing node was saved.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface[] $entities
+ *   Entities to delete.
+ */
+function _do_base_delete_entities(array $entities): void {
+  foreach ($entities as $entity) {
+    $entity->delete();
+  }
 }
 
 /**

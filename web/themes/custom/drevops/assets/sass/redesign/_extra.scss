@@ -43,7 +43,7 @@ body {
 // their backgrounds must bleed edge to edge. Remove the grid container
 // constraints for any content block wrapping a redesign <section>; each
 // section's own .component-section-inner re-constrains the content width.
-.ct-basic-content:has(section) {
+.ct-basic-content:has(section[class*='component-']) {
   > .container {
     max-width: none;
     padding-right: 0;
