@@ -17,24 +17,74 @@ use Drupal\paragraphs\Entity\Paragraph;
  * Flip every component paragraph to the dark theme.
  *
  * The redesign renders the whole site dark. CivicTheme themes each component
- * individually through the shared `field_c_p_theme` field, so this switches all
- * existing paragraphs - across every bundle - to `dark`. The revision is
- * updated in place so the referencing entity revision keeps resolving to it.
- * Content created by later deploy hooks is built dark directly.
+ * individually through the shared `field_c_p_theme` field, and list components
+ * theme their rendered items separately through `field_c_p_list_item_theme`, so
+ * this switches both - across every bundle - to `dark`. The revision is updated
+ * in place so the referencing entity revision keeps resolving to it. Content
+ * created by later deploy hooks is built dark directly.
  */
 function do_base_deploy_components_dark(?array &$sandbox): ?string {
-  return Helper::entity($sandbox)->batchEntity('paragraph', NULL, static function ($paragraph): void {
-    if (!$paragraph->hasField('field_c_p_theme')) {
+  $fields = ['field_c_p_theme', 'field_c_p_list_item_theme'];
+
+  return Helper::entity($sandbox)->batchEntity('paragraph', NULL, static function ($paragraph) use ($fields): void {
+    $changed = FALSE;
+
+    foreach ($fields as $field) {
+      if (!$paragraph->hasField($field)) {
+        continue;
+      }
+
+      if ($paragraph->get($field)->value === 'dark') {
+        continue;
+      }
+
+      $paragraph->set($field, 'dark');
+      $changed = TRUE;
+    }
+
+    if (!$changed) {
       return;
     }
 
-    if ($paragraph->get('field_c_p_theme')->value === 'dark') {
-      return;
-    }
-
-    $paragraph->set('field_c_p_theme', 'dark');
     $paragraph->setNewRevision(FALSE);
     $paragraph->save();
+  });
+}
+
+/**
+ * Flip CivicTheme block content to the dark theme.
+ *
+ * Page-chrome blocks (the mobile navigation drawer, banner, social links) carry
+ * their own `field_c_b_theme`, and the mobile navigation also themes its trigger
+ * through `field_c_b_trigger_theme`. The mobile navigation ships light, so it
+ * ignored the dark redesign; switch every block - and its trigger - to dark so
+ * the whole site, including the mobile drawer and skip controls, renders dark.
+ */
+function do_base_deploy_blocks_dark(?array &$sandbox): ?string {
+  $fields = ['field_c_b_theme', 'field_c_b_trigger_theme'];
+
+  return Helper::entity($sandbox)->batchEntity('block_content', NULL, static function ($block) use ($fields): void {
+    $changed = FALSE;
+
+    foreach ($fields as $field) {
+      if (!$block->hasField($field)) {
+        continue;
+      }
+
+      if ($block->get($field)->value === 'dark') {
+        continue;
+      }
+
+      $block->set($field, 'dark');
+      $changed = TRUE;
+    }
+
+    if (!$changed) {
+      return;
+    }
+
+    $block->setNewRevision(FALSE);
+    $block->save();
   });
 }
 
