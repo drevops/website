@@ -103,6 +103,15 @@
   row-gap: 0;
 }
 
+// CivicTheme pads the snippet content block, which pushes the heading down so
+// the dot/number no longer lines up with it. Remove that padding so the heading
+// sits at the row top and the dot falls at its first line, as in the design.
+.ct-list--style-numbered .ct-snippet__content,
+.ct-list--style-dotted .ct-snippet__content {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 // ── Numbered rows (services, process) ──────────────────────────────────────
 // Full-width rows so the oversized number sits at the section's left edge,
 // aligned with the eyebrow rule above it (the design's service list).
@@ -396,9 +405,15 @@
     max-width: 560px;
     margin: 0 auto var(--space-y-7);
 
-    // The closing email is a large, clean link (the design's CTA email), not a
-    // button - no new-window arrow or external indicator.
-    a {
+    // The "Talk to us" button (the same secondary button as the hero) sits below
+    // the copy; keep its button styling intact and just space it away.
+    .ct-button {
+      margin-top: var(--space-y-5);
+    }
+
+    // A plain link in the copy (e.g. an email) renders as a large clean link,
+    // not a button.
+    a:not(.ct-button) {
       display: inline-block;
       margin-top: var(--space-y-5);
       font-size: var(--heading-h3-font-size);
@@ -406,18 +421,13 @@
       letter-spacing: 0.04em;
       color: var(--link-color);
       text-decoration: none;
-    }
 
-    a:hover {
-      color: var(--link-hover-color);
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
+      &:hover {
+        color: var(--link-hover-color);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+      }
     }
-  }
-
-  .ct-button {
-    font-size: var(--heading-h3-font-size);
-    letter-spacing: 0.04em;
   }
 }
 

@@ -141,7 +141,7 @@ function do_base_deploy_homepage(): string {
       _do_base_snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.'),
       _do_base_snippet('Ongoing support', 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
     ], 'How we work'),
-    _do_base_callout('Let\'s talk about your <span class="dr-underline">website.</span>', '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a href="mailto:info@drevops.com">info@drevops.com</a></p>'),
+    _do_base_callout('Let\'s talk about your <span class="dr-underline">website.</span>', '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a class="ct-button ct-theme-dark ct-button--secondary ct-button--large" href="/contact">Talk to us</a></p>'),
   ];
 
   foreach ($components as $component) {
