@@ -252,3 +252,17 @@
 .ct-banner__title .dr-word-accent {
   color: var(--text-accent-color);
 }
+
+// Eyebrow label above the hero headline. The design uses a dark teal, lifted
+// here to the lighter teal so the small text clears the contrast minimum.
+.ct-banner__title .ct-banner__eyebrow {
+  display: block;
+  font-family: var(--body-font-family);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.2em;
+  line-height: var(--line-height-md);
+  text-transform: uppercase;
+  color: var(--color-secondary-4);
+  margin-bottom: var(--space-y-4);
+}

@@ -109,22 +109,27 @@ function do_base_deploy_homepage(): string {
 
   $components = [
     _do_base_manual_list('', 1, 'numbered', [
-      _do_base_snippet('Website Delivery', "Full Drupal website builds delivered with automated testing, CI/CD pipelines, and production-ready infrastructure. Your team gets a solid platform, not a prototype that needs fixing after launch."),
-      _do_base_snippet('Ongoing Support', "Proactive platform maintenance from the same senior engineers who built it. Security updates, monitoring, continuous improvement, and direct communication with no layers in between."),
-      _do_base_snippet('Upgrades & Migrations', "Drupal 7 and 9 are end-of-life. We handle the full migration with test coverage and zero-downtime deployments, so your organisation stays compliant and your users stay unaffected."),
+      _do_base_snippet('Website Delivery', "We build your site with automated testing and CI/CD from the first commit, so what launches is solid from day one, not a prototype you'll be fixing after go-live. AI-assisted delivery gets you there faster, at the same tested standard."),
+      _do_base_snippet('Ongoing Support', 'Proactive maintenance from the people who built your platform. Security updates, monitoring, continuous improvement, and a direct line with no layers in between.'),
+      _do_base_snippet('Upgrades & Migrations', 'Running an end-of-life Drupal 7 or 9 site? We handle the full migration with test coverage and zero-downtime deployments, so you stay compliant and your users never notice the switch.'),
     ], 'What we do'),
+    _do_base_manual_list('Faster, without lowering the bar.', 1, 'dotted', [
+      _do_base_snippet('The same quality, in a fraction of the time', "AI does the heavy lifting on production work, so builds that used to take weeks take days. Same automated tests, same CI, same code you can read on GitHub. The quality bar doesn't move."),
+      _do_base_snippet('"Isn\'t AI-written code risky?"', "Not the way we do it. Every change is reviewed, and every build is covered by automated tests and CI before it ships. AI speeds up the writing, not the checking. The guardrails that make this work are our own, and they're open source, so you can see exactly how it runs."),
+      _do_base_snippet('Your code and data stay yours', "We control the models and the data handling, and nothing trains on your project. It's all written down in our Responsible AI policy."),
+    ], 'AI-assisted delivery'),
     _do_base_manual_list('', 2, 'stat', [
-      _do_base_fact_card('0', 'Juniors on your project'),
+      _do_base_fact_card('1', 'To set up CI/CD on a new project', 'day'),
+      _do_base_fact_card('10', 'Delivering reliable platforms', 'yrs'),
+      _do_base_fact_card('40', 'Open-source tools we maintain', '+'),
       _do_base_fact_card('0', 'Excuses when something breaks'),
-      _do_base_fact_card('1 day', 'To set up CI/CD on a new project'),
-      _do_base_fact_card('0', 'Shortcuts in how we deliver'),
     ], 'The essentials'),
     _do_base_manual_list("Trusted on projects where failure isn't an option.", 4, 'trust', [
       _do_base_snippet('Victorian Government', "Delivered Australia's first Docker-based government Drupal platform."),
       _do_base_snippet('Australian Defence', 'Multiple classified platforms with complex security and compliance requirements.'),
       _do_base_snippet('GovCMS', "Drupal platform delivery on Australia's government hosting infrastructure."),
       _do_base_snippet('Education', 'University platforms with ongoing support, leading to internal referrals across departments.'),
-    ], 'Who we work with'),
+    ], 'Track record'),
     _do_base_manual_list('No filler. No overhead. Just good engineering.', 1, 'dotted', [
       _do_base_snippet('Automated testing is not optional', "Every platform ships with a full test suite. Functional, unit, and visual regression tests run on every commit. If it's not tested, it doesn't deploy."),
       _do_base_snippet('One team, zero handovers', 'We handle development, DevOps, and production support. One team with full context, no vendors blaming each other, no knowledge lost between handoffs.'),
@@ -132,9 +137,9 @@ function do_base_deploy_homepage(): string {
       _do_base_snippet('Direct line to the engineers', 'You talk to the people building your platform. We manage the project without adding layers between you and the work. Fast communication, honest updates, no runaround.'),
     ]),
     _do_base_manual_list('A clear path from kickoff to ongoing support.', 1, 'numbered', [
-      _do_base_snippet('Discovery', 'We review your website, understand your requirements and constraints, and scope the work. You get a clear proposal with flat-rate pricing before any work begins.'),
-      _do_base_snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit. Regular check-ins, transparent progress reporting, and no surprises at the end.'),
-      _do_base_snippet('Ongoing support', 'The same senior team that built your site maintains it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
+      _do_base_snippet('Discovery', 'We review your website, understand your requirements and constraints, and scope the work, including whether AI-assisted delivery is the right fit. You get a clear proposal with flat-rate pricing before any work begins.'),
+      _do_base_snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.'),
+      _do_base_snippet('Ongoing support', 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
     ], 'How we work'),
     _do_base_callout("Let's talk about your website.", '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a href="mailto:info@drevops.com">info@drevops.com</a></p>'),
   ];
@@ -146,8 +151,8 @@ function do_base_deploy_homepage(): string {
   $stale = array_merge(
     _do_base_stage_banner(
       $node,
-      'Your website<br><span class="dr-word-accent">can\'t afford to wait.</span>',
-      'We build and support Drupal websites for government, enterprise, and education. One senior team, predictable costs, tested code, and one point of accountability across your entire platform lifecycle.',
+      '<span class="ct-banner__eyebrow">Reliable websites, delivered faster</span>Your website<br><span class="dr-word-accent">can\'t afford to wait.</span>',
+      'We build and support reliable websites for businesses and organisations that depend on them. Now delivered faster with AI-assisted development.',
       ['title' => 'Talk to us', 'uri' => '/contact']
     ),
     $node->get('field_c_n_components')->referencedEntities()
@@ -459,18 +464,21 @@ function _do_base_snippet(string $title, string $summary): Paragraph {
  * Build a dark Fact card (a large figure above a label).
  *
  * @param string $fact
- *   The figure, e.g. "0" or "1 day".
+ *   The figure, e.g. "0" or "40".
  * @param string $label
  *   The label beneath the figure.
+ * @param string $suffix
+ *   A small unit after the figure, e.g. "day", "yrs" or "+".
  *
  * @return \Drupal\paragraphs\Entity\Paragraph
  *   An unsaved fact card paragraph.
  */
-function _do_base_fact_card(string $fact, string $label): Paragraph {
+function _do_base_fact_card(string $fact, string $label, string $suffix = ''): Paragraph {
   return Paragraph::create([
     'type' => 'do_fact_card',
     'field_c_p_theme' => 'dark',
     'field_c_p_title' => $fact,
+    'field_do_suffix' => $suffix,
     'field_c_p_summary' => $label,
   ]);
 }

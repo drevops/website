@@ -121,6 +121,7 @@
   .ct-fact-card__figure {
     display: flex;
     align-items: baseline;
+    gap: 4px;
     font-family: var(--font-family-primary);
     font-size: clamp(72px, 8vw, 108px);
     font-weight: var(--font-weight-bold);
@@ -128,6 +129,13 @@
     letter-spacing: -0.03em;
     color: var(--color-secondary-4);
     margin-bottom: var(--space-y-2);
+  }
+
+  .ct-fact-card__suffix {
+    font-size: 0.45em;
+    font-weight: var(--font-weight-normal);
+    letter-spacing: 0;
+    opacity: 0.8;
   }
 
   .ct-fact-card__label {

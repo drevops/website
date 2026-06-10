@@ -1,0 +1,21 @@
+uuid: 4d9a1f60-7c3b-4e25-9a18-6f2d5b8c1e40
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.field_do_suffix
+field_name: field_do_suffix
+entity_type: paragraph
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

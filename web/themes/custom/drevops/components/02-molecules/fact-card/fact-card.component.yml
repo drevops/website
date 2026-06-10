@@ -15,7 +15,11 @@ props:
     fact:
       type: string
       title: Fact
-      description: The figure, e.g. "0" or "1 day".
+      description: The figure, e.g. "0" or "40".
+    suffix:
+      type: string
+      title: Suffix
+      description: A small unit after the figure, e.g. "day", "yrs" or "+".
     label:
       type: string
       title: Label

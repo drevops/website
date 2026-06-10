@@ -7,7 +7,8 @@
  *
  * Props:
  * - theme: [string] Theme variation (light or dark).
- * - fact: [string] The figure, e.g. "0" or "1 day".
+ * - fact: [string] The figure, e.g. "0" or "40".
+ * - suffix: [string] A small unit after the figure, e.g. "day", "yrs" or "+".
  * - label: [string] The label beneath the figure.
  * - modifier_class: [string] Additional CSS classes.
  * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
@@ -18,7 +19,7 @@
 
 {% if fact is not empty %}
   <div class="ct-fact-card {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
-    <div class="ct-fact-card__figure">{{ fact }}</div>
+    <div class="ct-fact-card__figure">{{ fact }}{% if suffix is not empty %}<span class="ct-fact-card__suffix">{{ suffix }}</span>{% endif %}</div>
     {% if label is not empty %}
       <div class="ct-fact-card__label">{{ label }}</div>
     {% endif %}
