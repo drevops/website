@@ -31,34 +31,51 @@ function drevops_preprocess_paragraph__civictheme_promo(array &$variables): void
   $dom = Html::load((string) $paragraph->get('field_c_p_content')->value);
   $xpath = new \DOMXPath($dom);
 
-  $tagline = $xpath->query('//p[contains(@class, "ct-text-large")]')->item(0);
-  $variables['sd_tagline'] = $tagline ? trim($tagline->textContent) : '';
+  $first_element = static function (string $query, ?\DOMNode $context = NULL) use ($xpath): ?\DOMElement {
+    $nodes = $xpath->query($query, $context);
+    $node = $nodes instanceof \DOMNodeList ? $nodes->item(0) : NULL;
+
+    return $node instanceof \DOMElement ? $node : NULL;
+  };
+
+  $tagline = $first_element('//p[contains(@class, "ct-text-large")]');
+  $variables['sd_tagline'] = $tagline instanceof \DOMElement ? trim($tagline->textContent) : '';
 
   $description = '';
-  foreach ($xpath->query('//p[not(@class)]') as $paragraph_node) {
-    $description .= '<p>' . htmlspecialchars(trim($paragraph_node->textContent)) . '</p>';
+  $description_nodes = $xpath->query('//p[not(@class)]');
+
+  foreach ($description_nodes instanceof \DOMNodeList ? $description_nodes : [] as $node) {
+    if ($node instanceof \DOMElement) {
+      $description .= '<p>' . htmlspecialchars(trim($node->textContent)) . '</p>';
+    }
   }
+
   $variables['sd_description'] = Markup::create($description);
 
   $includes = [];
-  foreach ($xpath->query('//ul/li') as $item) {
-    $includes[] = trim($item->textContent);
+  $include_nodes = $xpath->query('//ul/li');
+
+  foreach ($include_nodes instanceof \DOMNodeList ? $include_nodes : [] as $node) {
+    if ($node instanceof \DOMElement) {
+      $includes[] = trim($node->textContent);
+    }
   }
+
   $variables['sd_includes'] = $includes;
 
-  $price = $xpath->query('//p[contains(@class, "ct-text-small")]')->item(0);
+  $price = $first_element('//p[contains(@class, "ct-text-small")]');
 
   if ($price instanceof \DOMElement) {
-    $label = $xpath->query('.//strong', $price)->item(0);
-    $variables['sd_price_label'] = $label ? trim($label->textContent) : '';
+    $label = $first_element('.//strong', $price);
+    $variables['sd_price_label'] = $label instanceof \DOMElement ? trim($label->textContent) : '';
     $variables['sd_price_value'] = trim(str_replace($variables['sd_price_label'], '', $price->textContent));
   }
 
-  $variables['sd_title'] = $paragraph->hasField('field_c_p_title') ? $paragraph->get('field_c_p_title')->value : '';
+  $variables['sd_title'] = (string) $paragraph->get('field_c_p_title')->value;
 
   if ($paragraph->hasField('field_c_p_link') && !$paragraph->get('field_c_p_link')->isEmpty()) {
     $link = $paragraph->get('field_c_p_link')->first();
-    $variables['sd_link_url'] = Url::fromUri($link->uri)->toString();
-    $variables['sd_link_title'] = $link->title;
+    $variables['sd_link_url'] = Url::fromUri((string) $link->uri)->toString();
+    $variables['sd_link_title'] = (string) $link->title;
   }
 }
