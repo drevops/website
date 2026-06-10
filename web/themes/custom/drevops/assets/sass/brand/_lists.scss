@@ -89,6 +89,16 @@
   background: var(--surface-subtle-color);
 }
 
+// CivicTheme's flex grid row stretches the single-column cols to equal height,
+// which inflates each snippet past its content so its bottom divider overlaps
+// the next item's heading. Top-align the cols so every snippet is its natural
+// height and the dividers fall cleanly between items. (The stat and trust grids
+// override `.row` to CSS grid, so they are unaffected.)
+.ct-list--style-numbered .row,
+.ct-list--style-dotted .row {
+  align-items: flex-start;
+}
+
 // ── Numbered rows (services, process) ──────────────────────────────────────
 // Full-width rows so the oversized number sits at the section's left edge,
 // aligned with the eyebrow rule above it (the design's service list).
@@ -98,13 +108,13 @@
   }
 
   .ct-snippet {
+    position: relative;
     counter-increment: do-list;
     display: grid;
     grid-template-columns: 120px 1fr;
     gap: 0 var(--space-y-6);
     align-items: start;
     padding: var(--space-y-8) 0;
-    border-bottom: 1px solid var(--border-subtle-color);
   }
 
   .ct-snippet::before {
@@ -116,6 +126,23 @@
     opacity: 0.18;
     line-height: 1;
     letter-spacing: -0.04em;
+  }
+
+  // Divider between rows: a teal line fading out to the right (the design's
+  // `.component-service-divider`). The grid-column span keeps it clear of the
+  // number, and it is omitted after the last row.
+  .ct-snippet::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--color-secondary-6) 50%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 15%, transparent) 50%, transparent 100%);
+  }
+
+  [class*='col-']:last-child .ct-snippet::after {
+    display: none;
   }
 
   .ct-snippet__title {
