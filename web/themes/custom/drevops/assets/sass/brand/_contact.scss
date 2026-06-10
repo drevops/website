@@ -1,0 +1,218 @@
+//
+// DrevOps - Contact page.
+//
+// The contact page renders two CivicTheme components in its node components
+// region: the contact webform and a rich-text block with the direct-contact
+// details. The design lays these out as two columns - the form on the left and
+// the contact details on the right - and styles the form fields and the detail
+// blocks to the design tokens.
+//
+// The contact page is the only page whose components region contains a
+// webform, so `:has(> .ct-webform)` scopes the layout (and the contact-detail
+// typography) to it without needing a page-specific body class. The form-field
+// styling is scoped to `.ct-webform`, which only appears on this page.
+//
+
+// The Layout Builder field block that renders `field_c_n_components`. Every
+// civictheme_page node uses this class, so the `:has(> .ct-webform)` guard
+// narrows it to the contact page's instance.
+$contact-region: '.block-field-blocknodecivictheme-pagefield-c-n-components';
+
+#{$contact-region}:has(> .ct-webform) {
+  // Constrain the region to the shared page measure and centre it, so the
+  // two-column grid lines up with the hero and the other sections.
+  @include ct-container();
+
+  // Each component carries its own inner `.container`; neutralise it so the
+  // content fills its grid column instead of re-centring at the page measure.
+  > .ct-webform > .container,
+  > .ct-basic-content > .container {
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  // Two equal columns from the desktop-menu breakpoint up: form left, details
+  // right (the design switches to a single column at 768px). Below it the
+  // components stack (CivicTheme's default flow).
+  @include ct-breakpoint(m) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-y-10);
+    align-items: start;
+  }
+}
+
+// The contact webform, styled to the design's form tokens.
+.ct-webform {
+  // Field labels: uppercase small-caps in the muted colour (the design `label`).
+  .ct-label {
+    font-family: var(--body-font-family);
+    font-size: var(--label-font-size);
+    font-weight: var(--label-font-weight);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted-color);
+    margin-bottom: var(--space-y-1);
+  }
+
+  // The design relies on the `required` attribute for the cue and shows no
+  // visible marker; keep it in the accessibility tree but hide it visually.
+  .ct-label__required {
+    @include ct-visually-hidden();
+  }
+
+  // Inputs, select and textarea: secondary font on the subtle surface with the
+  // subtle border, matching the design's field treatment.
+  .ct-textfield,
+  .ct-textarea,
+  .ct-select {
+    font-family: var(--body-font-family);
+    font-size: var(--body-font-size);
+    font-weight: var(--body-font-weight);
+    color: var(--text-color);
+    background-color: var(--surface-subtle-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+
+    &::placeholder {
+      color: var(--text-muted-color);
+    }
+
+    &:focus,
+    &:focus-visible {
+      border-color: var(--color-secondary-6);
+      background-color: var(--surface-muted-color);
+    }
+  }
+
+  // Field rhythm: space groups by the design's form gap and the label/control
+  // gap, overriding CivicTheme's default field margins.
+  .ct-field {
+    margin-bottom: var(--space-y-3);
+  }
+
+  // The submit sits left, set off from the last field.
+  .ct-button--submit {
+    margin-top: var(--space-y-1);
+  }
+}
+
+// The direct-contact details (the right column). Scoped to the contact page's
+// rich-text block so the blog article's headings and lists are untouched. The
+// `.ct-theme-dark` qualifier matches the specificity of CivicTheme's themed
+// content rules (its link colour uses `a:not(.ct-button):not(.ct-link)`), so
+// these design overrides win without `!important`.
+#{$contact-region}:has(> .ct-webform) .ct-basic-content.ct-theme-dark {
+  // Block labels ("Email us directly", "Call us", ...): coral small-caps, the
+  // design's `.component-label--accent`. The rich text stores them as <h3>.
+  h3 {
+    font-family: var(--body-font-family);
+    font-size: var(--label-font-size);
+    font-weight: var(--label-font-weight);
+    letter-spacing: var(--label-letter-spacing);
+    text-transform: uppercase;
+    color: var(--text-accent-color);
+    margin: var(--space-y-5) 0 var(--space-y-1);
+  }
+
+  h3:first-child {
+    margin-top: 0;
+  }
+
+  // The prominent value under each label (email, phone, location).
+  h3 + p {
+    font-family: var(--font-family-primary);
+    font-size: var(--heading-h3-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-sm);
+    color: var(--text-color);
+    margin-bottom: var(--space-y-1);
+
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--color-secondary-3);
+      }
+    }
+
+    // The email keeps the design's animated underline on hover.
+    a[href^='mailto:'] {
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0;
+        height: 1px;
+        background-color: var(--color-secondary-3);
+        transition: width 0.4s ease;
+      }
+
+      &:hover::after {
+        width: 100%;
+      }
+    }
+  }
+
+  // The note under each value.
+  .ct-text-small {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted-color);
+    line-height: var(--line-height-md);
+    margin-bottom: 0;
+  }
+
+  // A gradient divider sits above the "What to expect" block - the only label
+  // immediately followed by the steps list.
+  h3:has(+ ol) {
+    margin-top: var(--space-y-6);
+    padding-top: var(--space-y-6);
+    border-top: 1px solid transparent;
+    border-image: linear-gradient(90deg, color-mix(in srgb, var(--color-secondary-6) 30%, transparent) 0%, transparent 100%) 1;
+  }
+
+  // The "what to expect" steps: a faint oversized number beside each line,
+  // reproducing the design's step list (not a bulleted list).
+  ol {
+    list-style: none;
+    counter-reset: contact-step;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-y-3);
+    margin: var(--space-y-2) 0 0;
+    padding: 0;
+  }
+
+  li {
+    counter-increment: contact-step;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-y-2);
+    margin: 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-md);
+    color: var(--text-subtle-color);
+
+    &::before {
+      content: counter(contact-step);
+      flex-shrink: 0;
+      width: 28px;
+      text-align: center;
+      font-family: var(--font-family-primary);
+      font-size: 28px;
+      font-weight: var(--font-weight-bold);
+      line-height: 1;
+      color: var(--color-secondary-6);
+      opacity: 0.3;
+    }
+
+    &::marker {
+      content: none;
+    }
+  }
+}

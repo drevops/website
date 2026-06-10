@@ -11,10 +11,11 @@ Feature: Contact form
     When I go to "/contact"
     Then I should see the heading "Let's talk about your platform."
     And I should see "Contact"
-    And I should see "Your Name"
-    And I should see "Your Email"
-    And I should see "Subject"
-    And I should see "Message"
+    And I should see "Name"
+    And I should see "Email"
+    And I should see "Organisation"
+    And I should see "What do you need help with?"
+    And I should see "Tell us more"
     And I should see the button "Send message"
 
   @api
@@ -24,8 +25,8 @@ Feature: Contact form
     Then I should see the heading "Let's talk about your platform."
     When I fill in "Name" with "Test User"
     And I fill in "Email" with "test@example.com"
-    And I fill in "Subject" with "Test Contact"
-    And I fill in "Message" with "This is a test message for the contact form."
+    And I select "Ongoing support" from "What do you need help with?"
+    And I fill in "Tell us more" with "This is a test message for the contact form."
     And I save screenshot
     And I press "Send message"
     # The form may not send actual messages in the test environment
@@ -44,6 +45,4 @@ Feature: Contact form
     When I press "Send message"
     Then I should see the text "Name field is required."
     And I should see the text "Email field is required."
-    And I should see the text "Subject field is required."
-    And I should see the text "Message field is required."
     And I save screenshot
