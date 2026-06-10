@@ -14,6 +14,7 @@ require_once __DIR__ . '/includes/divider.inc';
 require_once __DIR__ . '/includes/manual_list.inc';
 require_once __DIR__ . '/includes/snippet.inc';
 require_once __DIR__ . '/includes/callout.inc';
+require_once __DIR__ . '/includes/promo.inc';
 require_once __DIR__ . '/includes/page.inc';
 require_once __DIR__ . '/includes/node.inc';
 require_once __DIR__ . '/includes/cards.inc';

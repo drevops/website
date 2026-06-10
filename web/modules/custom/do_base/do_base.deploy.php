@@ -236,7 +236,7 @@ function do_base_deploy_services(): string {
       _do_base_snippet('Tested by default', "Every platform ships with automated tests. If it's not tested, it doesn't deploy. No exceptions."),
       _do_base_snippet('Direct communication', 'You talk to the engineers building your site. No project managers relaying messages, no layers in between.'),
     ], 'Our approach'),
-    _do_base_callout('Ready to talk about your platform?', "Tell us where things stand. We'll be straight with you about whether we're the right fit.", 'Get in touch', '/contact'),
+    _do_base_callout('Ready to talk about your <span class="dr-underline">platform?</span>', '<p>Tell us where things stand. We\'ll be straight with you about whether we\'re the right fit.</p><p><a class="ct-button ct-theme-dark ct-button--secondary ct-button--large" href="/contact">Get in touch</a></p>'),
   ];
 
   foreach ($components as $component) {

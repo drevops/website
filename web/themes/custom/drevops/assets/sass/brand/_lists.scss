@@ -350,6 +350,24 @@
     line-height: var(--line-height-lg);
     color: var(--text-subtle-color);
   }
+
+  // The services "approach" is a two-column dotted list. The design renders it
+  // as a full-width two-column grid (`.component-grid-2`) where each item stacks
+  // the dot above the heading with no dividers, unlike the single-column lists.
+  .ct-list__rows:has([class*='col-m-6']) {
+    max-width: none;
+  }
+
+  [class*='col-m-6'] .ct-snippet {
+    display: block;
+    padding: var(--space-y-4) 0;
+    border: 0;
+
+    &::before {
+      display: block;
+      margin: 0 0 var(--space-y-3);
+    }
+  }
 }
 
 // ── CTA callout (closing "Let's talk" section) ──────────────────────────────
@@ -431,142 +449,173 @@
   }
 }
 
-// ── Service-detail rows (services page) ─────────────────────────────────────
-// Each service is a CivicTheme promo: title, a rich-text body (tagline lead,
-// description, "what's included" list and price) and a CTA button. They are
-// the only promos on the site, so the design's numbered-card treatment lives
-// here, with the 01/02/03 badge from a CSS counter reset once per page.
+// ── Service-detail cards (services page) ────────────────────────────────────
+// Each service is a CivicTheme promo, rendered as the design's structured card:
+// a header (number, title, tagline), a two-column body (description and the
+// "what's included" list) and a footer (price and CTA button). The rich-text
+// body is split into those parts in includes/promo.inc; the 01/02/03 number is
+// a CSS counter reset once per page.
 .ct-page {
   counter-reset: do-service;
 }
 
-.ct-promo {
+.ct-service-detail {
   counter-increment: do-service;
-  padding: var(--layout-rhythm-sm, 6.25rem) 0 0;
+  padding-top: var(--space-y-6);
 
-  &:last-child {
-    padding-bottom: var(--layout-rhythm-sm, 6.25rem);
+  &:first-of-type {
+    padding-top: var(--layout-rhythm-md, 8.75rem);
   }
 
-  .ct-promo__wrapper {
-    position: relative;
-    display: block;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: var(--space-y-7);
-    background: var(--page-bg);
+  &:last-of-type {
+    padding-bottom: var(--layout-rhythm-md, 8.75rem);
+  }
+
+  &__inner {
+    background: var(--surface-subtle-color);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
+    padding: var(--space-y-7);
   }
 
-  // The decorative service number.
-  .ct-promo__inner::before {
-    content: counter(do-service, decimal-leading-zero);
-    display: block;
+  // Header: the number beside the title and tagline, with a divider below.
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-y-4);
+    margin-bottom: var(--space-y-5);
+    padding-bottom: var(--space-y-4);
+    border-bottom: 1px solid var(--border-subtle-color);
+  }
+
+  &__number {
+    flex-shrink: 0;
     font-family: var(--font-family-primary);
     font-size: 64px;
     font-weight: var(--font-weight-bold);
     line-height: 1;
     letter-spacing: -0.04em;
     color: var(--color-secondary-4);
-    opacity: 0.8;
-    margin-bottom: var(--space-y-3);
+    opacity: 0.4;
+
+    &::before {
+      content: counter(do-service, decimal-leading-zero);
+    }
   }
 
-  .ct-promo__title {
+  &__title {
     font-family: var(--font-family-primary);
     font-size: var(--heading-h2-font-size);
     font-weight: var(--font-weight-normal);
     letter-spacing: -0.01em;
     color: var(--text-color);
-    margin-bottom: var(--space-y-4);
+    margin-bottom: var(--space-y-1);
   }
 
-  .ct-promo__content {
-    .ct-text-large {
-      font-size: var(--heading-h4-font-size);
-      font-weight: var(--body-font-weight);
-      line-height: var(--line-height-md);
-      color: var(--text-muted-color);
-      margin-bottom: var(--space-y-3);
+  &__tagline {
+    font-size: var(--body-font-size);
+    font-weight: var(--body-font-weight);
+    color: var(--text-muted-color);
+  }
+
+  // Body: description and inclusions side by side.
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-y-6);
+    margin-bottom: var(--space-y-5);
+  }
+
+  &__desc p {
+    font-size: var(--body-font-size);
+    font-weight: var(--body-font-weight);
+    color: var(--text-subtle-color);
+    line-height: var(--line-height-lg);
+    margin-bottom: var(--space-y-2);
+  }
+
+  &__includes-label {
+    font-size: var(--label-font-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--label-letter-spacing);
+    text-transform: uppercase;
+    color: var(--text-accent-color);
+    margin-bottom: var(--space-y-2);
+  }
+
+  &__includes ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__includes li {
+    position: relative;
+    padding: var(--space-y-1) 0 var(--space-y-1) var(--space-y-3);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-md);
+    color: var(--text-subtle-color);
+    border-bottom: 1px solid var(--border-muted-color);
+
+    &:last-child {
+      border-bottom: none;
     }
 
-    p {
-      color: var(--text-subtle-color);
-      line-height: var(--line-height-lg);
-      margin-bottom: var(--space-y-2);
-    }
-
-    h3 {
-      font-family: var(--font-family-primary);
-      font-size: var(--label-font-size);
-      font-weight: var(--font-weight-normal);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-accent-color);
-      margin: var(--space-y-4) 0 var(--space-y-2);
-    }
-
-    ul {
-      list-style: none;
-      margin: 0 0 var(--space-y-4);
-      padding: 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 var(--space-x-4);
-    }
-
-    li {
-      position: relative;
-      padding: var(--space-y-1) 0 var(--space-y-1) var(--space-y-3);
-      font-size: var(--font-size-sm);
-      line-height: var(--line-height-md);
-      color: var(--text-subtle-color);
-
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 14px;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--color-secondary-6);
-      }
-    }
-
-    // The price line: a small label above a large figure.
-    .ct-text-small {
-      display: block;
-      margin-top: var(--space-y-4);
-      padding-top: var(--space-y-3);
-      border-top: 1px solid var(--border-subtle-color);
-      font-family: var(--font-family-primary);
-      font-size: var(--heading-h3-font-size);
-      font-weight: var(--font-weight-normal);
-      letter-spacing: -0.01em;
-      color: var(--color-secondary-3);
-
-      strong {
-        display: block;
-        margin-bottom: 4px;
-        font-family: var(--body-font-family);
-        font-size: var(--label-font-size);
-        font-weight: var(--font-weight-normal);
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--text-muted-color);
-      }
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 14px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-secondary-6);
     }
   }
 
-  .ct-promo__links {
-    margin-top: var(--space-y-5);
+  // Footer: price on the left, CTA button on the right.
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-y-3);
+    padding-top: var(--space-y-4);
+    border-top: 1px solid var(--border-subtle-color);
+  }
+
+  &__price-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: var(--label-font-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted-color);
+  }
+
+  &__price-value {
+    font-family: var(--font-family-primary);
+    font-size: var(--heading-h3-font-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -0.01em;
+    color: var(--color-secondary-3);
   }
 }
 
-@media (max-width: 768px) {
-  .ct-promo .ct-promo__content ul {
+@media (max-width: 767.98px) {
+  .ct-service-detail__header {
+    flex-direction: column;
+    gap: var(--space-y-2);
+  }
+
+  .ct-service-detail__body {
     grid-template-columns: 1fr;
+    gap: var(--space-y-4);
+  }
+
+  .ct-service-detail__footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-y-3);
   }
 }
