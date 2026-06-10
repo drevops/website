@@ -97,6 +97,10 @@
 .ct-list--style-numbered .row,
 .ct-list--style-dotted .row {
   align-items: flex-start;
+
+  // Remove CivicTheme's inter-row gap so the rows are adjacent and the dividers
+  // sit directly between them, as in the design.
+  row-gap: 0;
 }
 
 // ── Numbered rows (services, process) ──────────────────────────────────────
