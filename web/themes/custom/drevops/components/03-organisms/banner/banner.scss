@@ -175,6 +175,11 @@
   &.ct-banner-type--intro.ct-banner--hero {
     #{$root}__inner {
       position: relative;
+
+      // Include the padding in the min-height so the hero is exactly its target
+      // height and never overflows the first screen (CivicTheme's banner inner
+      // is content-box, which would otherwise add the padding on top of 100vh).
+      box-sizing: border-box;
       min-height: 62vh;
       flex-direction: column;
       justify-content: center;
@@ -188,11 +193,12 @@
       background-color: transparent;
     }
 
-    // Full-viewport variant for the front page.
+    // Full-viewport variant for the front page. The fixed header overlaps the
+    // top, so the top padding clears it while the hero stays within one screen.
     &.ct-banner--hero-home #{$root}__inner {
       min-height: 100vh;
-      padding-top: ct-spacing(20);
-      padding-bottom: ct-spacing(12);
+      padding-top: ct-spacing(16);
+      padding-bottom: ct-spacing(10);
     }
 
     // Atmospheric glow.

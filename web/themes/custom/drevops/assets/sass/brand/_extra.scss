@@ -39,6 +39,23 @@ h6 {
   font-family: var(--font-family-primary);
 }
 
+// The design's gradient underline accent on a heading's closing word
+// (`.component-underlined`), used in the CTA callouts and the page heroes.
+.dr-underline {
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-secondary-6), var(--link-hover-color));
+  }
+}
+
 // CivicTheme derives the page wrapper and header as lighter navy tints, which
 // read as mismatched horizontal bands against the section backgrounds. Unify
 // them with the deep-navy page background (the header keeps its blur). The

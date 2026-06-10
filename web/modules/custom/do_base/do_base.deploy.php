@@ -116,7 +116,7 @@ function do_base_deploy_homepage(): string {
     _do_base_manual_list('Faster, without lowering the bar.', 1, 'dotted', [
       _do_base_snippet('The same quality, in a fraction of the time', "AI does the heavy lifting on production work, so builds that used to take weeks take days. Same automated tests, same CI, same code you can read on GitHub. The quality bar doesn't move."),
       _do_base_snippet('"Isn\'t AI-written code risky?"', "Not the way we do it. Every change is reviewed, and every build is covered by automated tests and CI before it ships. AI speeds up the writing, not the checking. The guardrails that make this work are our own, and they're open source, so you can see exactly how it runs."),
-      _do_base_snippet('Your code and data stay yours', "We control the models and the data handling, and nothing trains on your project. It's all written down in our Responsible AI policy."),
+      _do_base_snippet('Your code and data stay yours', 'We control the models and the data handling, and nothing trains on your project. It\'s all written down in our <a href="https://www.drevops.com/responsible-ai">Responsible AI policy</a>.'),
     ], 'AI-assisted delivery'),
     _do_base_manual_list('', 2, 'stat', [
       _do_base_fact_card('1', 'To set up CI/CD on a new project', 'day'),
@@ -141,7 +141,7 @@ function do_base_deploy_homepage(): string {
       _do_base_snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.'),
       _do_base_snippet('Ongoing support', 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
     ], 'How we work'),
-    _do_base_callout("Let's talk about your website.", '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a href="mailto:info@drevops.com">info@drevops.com</a></p>'),
+    _do_base_callout('Let\'s talk about your <span class="dr-underline">website.</span>', '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a href="mailto:info@drevops.com">info@drevops.com</a></p>'),
   ];
 
   foreach ($components as $component) {
@@ -152,7 +152,7 @@ function do_base_deploy_homepage(): string {
     _do_base_stage_banner(
       $node,
       '<span class="ct-banner__eyebrow">Reliable websites, delivered faster</span>Your website<br><span class="dr-word-accent">can\'t afford to wait.</span>',
-      'We build and support reliable websites for businesses and organisations that depend on them. Now delivered faster with AI-assisted development.',
+      'We build and support reliable websites for businesses and organisations that depend on them.<br>Now delivered faster and cheaper with AI-assisted development.',
       ['title' => 'Talk to us', 'uri' => '/contact']
     ),
     $node->get('field_c_n_components')->referencedEntities()

@@ -22,21 +22,54 @@
     padding: 0 var(--space-x-8);
   }
 
-  // The design's small coral category label above a section.
+  // CivicTheme renders the header's eyebrow and title inside a 9/3 column
+  // split. Collapse it to a single full-width block so the eyebrow aligns with
+  // the section's left edge and the title centres across the full measure.
+  .ct-list__header {
+    .container {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .row {
+      margin: 0;
+    }
+
+    [class*='col-'] {
+      flex: 0 0 100%;
+      max-width: 100%;
+      padding: 0;
+    }
+
+    // The empty spacer column left over from the 9/3 split.
+    .col-m-3 {
+      display: none;
+    }
+  }
+
+  // The design's small coral category label above a section: flush left, with a
+  // short rule before it (the design's `.component-section-label`).
   .ct-list__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-x-2);
     font-family: var(--body-font-family);
     font-size: var(--label-font-size);
     font-weight: var(--font-weight-normal);
     letter-spacing: var(--label-letter-spacing);
     text-transform: uppercase;
     color: var(--text-accent-color);
-    text-align: center;
-    margin-bottom: var(--space-y-4);
-  }
-
-  // When the eyebrow is the only heading (no title), space it from the items.
-  .ct-list__eyebrow:last-child {
     margin-bottom: var(--space-y-8);
+
+    &::before {
+      content: '';
+      flex-shrink: 0;
+      width: var(--space-x-6);
+      height: 1px;
+      background-color: currentColor;
+      opacity: 0.6;
+    }
   }
 
   .ct-list__title {
@@ -49,10 +82,6 @@
     text-align: center;
     margin-bottom: var(--space-y-9);
   }
-
-  .ct-list__header .row {
-    justify-content: center;
-  }
 }
 
 // Alternating section surfaces, matching the design.
@@ -61,11 +90,11 @@
 }
 
 // ── Numbered rows (services, process) ──────────────────────────────────────
+// Full-width rows so the oversized number sits at the section's left edge,
+// aligned with the eyebrow rule above it (the design's service list).
 .ct-list--style-numbered {
   .ct-list__rows {
     counter-reset: do-list;
-    max-width: 900px;
-    margin: 0 auto;
   }
 
   .ct-snippet {
@@ -112,10 +141,37 @@
 // Each "essential" is a do_fact_card: a large figure above an uppercase label,
 // laid out as a bordered grid on the subtle surface.
 .ct-list--style-stat {
+  // The four fact cards form a single bordered 2x2 grid with internal dividers
+  // (the design's stat grid), not separate cards with gaps.
+  .row:has(.ct-fact-card) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--border-color);
+    margin: 0;
+
+    [class*='col-'] {
+      width: auto;
+      max-width: none;
+      padding: 0;
+    }
+
+    > [class*='col-']:nth-child(1) {
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    > [class*='col-']:nth-child(2) {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    > [class*='col-']:nth-child(3) {
+      border-right: 1px solid var(--border-color);
+    }
+  }
+
   .ct-fact-card {
     height: 100%;
-    padding: var(--space-y-7) var(--space-x-5);
-    border: 1px solid var(--border-color);
+    padding: var(--space-y-9) var(--space-x-7);
   }
 
   .ct-fact-card__figure {
@@ -144,6 +200,20 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--text-subtle-color);
+  }
+
+  // Single column on mobile, with the dividers running between stacked cells.
+  @media (max-width: 767.98px) {
+    .row:has(.ct-fact-card) {
+      grid-template-columns: 1fr;
+
+      > [class*='col-']:nth-child(1),
+      > [class*='col-']:nth-child(2),
+      > [class*='col-']:nth-child(3) {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+      }
+    }
   }
 }
 
@@ -243,10 +313,39 @@
 }
 
 // ── CTA callout (closing "Let's talk" section) ──────────────────────────────
+// The design's CTA is a flat, full-width centred section with a soft central
+// glow - not CivicTheme's inner panel with a left highlight stripe.
 .ct-callout {
+  position: relative;
+  overflow: hidden;
   background: var(--cta-bg);
   padding: calc(var(--space-y-10) * 2) 0;
   text-align: center;
+
+  // Soft central glow behind the heading.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 700px;
+    height: 500px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 10%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 3%, transparent) 50%, transparent 70%);
+    pointer-events: none;
+  }
+
+  // Drop CivicTheme's inner panel background and its left highlight stripe so
+  // the section reads as one flat surface.
+  &.ct-theme-dark .ct-callout__wrapper {
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+  }
+
+  .ct-callout__wrapper::before {
+    display: none;
+  }
 
   .ct-callout__title {
     font-family: var(--font-family-primary);
