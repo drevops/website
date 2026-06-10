@@ -348,6 +348,46 @@ function do_base_deploy_blog_demo(): string {
 }
 
 /**
+ * Set the blog listing page hero to the design's headline.
+ *
+ * The /blog node falls back to the bare "Blog" title; the design uses a
+ * descriptive headline above the article grid.
+ */
+function do_base_deploy_blog_listing(): string {
+  $path = \Drupal::service('path_alias.manager')->getPathByAlias('/blog');
+
+  if (!preg_match('#^/node/(\d+)$#', $path, $matches)) {
+    return 'Blog listing node not found - skipped.';
+  }
+
+  $node = Node::load((int) $matches[1]);
+
+  if (!$node instanceof Node || !$node->hasField('field_c_n_banner_title')) {
+    return 'Blog listing node not usable - skipped.';
+  }
+
+  $node->set('field_c_n_banner_title', 'Practical engineering insights<br>from the teams we work with.');
+
+  if ($node->hasField('field_c_n_banner_type')) {
+    $node->set('field_c_n_banner_type', 'intro');
+  }
+
+  if ($node->hasField('field_c_n_banner_theme')) {
+    $node->set('field_c_n_banner_theme', 'dark');
+  }
+
+  foreach (['field_c_n_banner_background', 'field_c_n_banner_featured_image'] as $image_field) {
+    if ($node->hasField($image_field)) {
+      $node->set($image_field, NULL);
+    }
+  }
+
+  $node->save();
+
+  return 'Blog listing banner updated.';
+}
+
+/**
  * Populate the node banner so it renders as the page hero.
  *
  * The design's hero is the CivicTheme intro banner (themed in the subtheme),
