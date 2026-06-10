@@ -21,6 +21,14 @@
 }
 
 .ct-basic-content {
+  // The design widens the article measure (v2 sets the article inner to
+  // 1100px). With the side navigation removed the blog post is a single
+  // full-width column, so the content can use the wider measure. The hero
+  // subtitle is constrained separately, below.
+  > .container {
+    max-width: 1100px;
+  }
+
   // Lead paragraph (the article intro and the hero subtitle).
   .ct-text-large {
     font-size: var(--heading-h4-font-size);
