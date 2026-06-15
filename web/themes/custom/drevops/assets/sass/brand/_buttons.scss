@@ -59,3 +59,18 @@
     color: var(--btn-secondary-hover-color);
   }
 }
+
+// CivicTheme's own secondary-button rule (`.ct-button--secondary.ct-theme-dark`,
+// specificity 0,2,0) sets colour, border and background from its dark-interaction
+// tokens, overriding the design button treatment. Redefine those tokens on the
+// button itself so CivicTheme's rule resolves to the design's secondary colour
+// (the element-level definition outranks the `:root` default regardless of CSS
+// load order).
+.ct-button.ct-theme-dark {
+  --ct-button-dark-secondary-color: var(--btn-secondary-color);
+  --ct-button-dark-secondary-background-color: var(--btn-secondary-bg);
+  --ct-button-dark-secondary-border-color: var(--btn-secondary-border);
+  --ct-button-dark-secondary-hover-color: var(--btn-secondary-hover-color);
+  --ct-button-dark-secondary-hover-background-color: var(--btn-secondary-hover-bg);
+  --ct-button-dark-secondary-hover-border-color: var(--btn-secondary-color);
+}
