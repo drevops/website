@@ -22,4 +22,13 @@
       padding-inline: var(--space-y-3);
     }
   }
+
+  // An automated list renders its view inside a second, nested list. The outer
+  // list already provides the column padding, so the nested inner must not
+  // re-apply it - otherwise the grid is padded twice and ends up narrower than
+  // the design's column.
+  .ct-list__inner .ct-list__inner {
+    max-width: none;
+    padding-inline: 0;
+  }
 }
