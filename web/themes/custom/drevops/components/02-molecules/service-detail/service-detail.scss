@@ -62,8 +62,13 @@
     font-family: var(--font-family-primary);
     font-size: var(--heading-h2-font-size);
     font-weight: var(--font-weight-normal);
+    line-height: 1.2;
     letter-spacing: -0.01em;
     color: var(--text-color);
+
+    // CivicTheme's heading rule adds a top margin that drops the title below the
+    // number; the design top-aligns them in the flex header.
+    margin-top: 0;
     margin-bottom: var(--space-y-1);
   }
 
