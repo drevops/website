@@ -43,3 +43,50 @@
     }
   }
 }
+
+// Featured post: the single-item (full-width) automated list renders the promo
+// card as the design's feature - a 50/50 grid with the image filling the left
+// half and the content centred on the right, in a bordered, rounded panel.
+.ct-list [class~='col-m-12'] .ct-promo-card--with-image {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+
+  .ct-promo-card__image {
+    height: 100%;
+    margin: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .ct-promo-card__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-y-6);
+  }
+
+  // The feature title is the design's h2, not the smaller grid-card title.
+  .ct-promo-card__title {
+    font-size: var(--heading-h2-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-sm);
+    letter-spacing: -0.01em;
+    color: var(--text-color);
+    margin-bottom: var(--space-y-2);
+
+    a {
+      color: inherit;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
