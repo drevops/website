@@ -167,9 +167,9 @@ function do_base_deploy_homepage(): string {
 /**
  * Rebuild the Services page from CivicTheme components.
  *
- * The hero is the node banner. Each service is a CivicTheme promo (title +
- * rich-text body + button); the "our approach" grid is a dotted manual list of
- * snippets; the CTA is a callout. No markup is stored as content.
+ * The hero is the node banner. Each service is a Service detail paragraph; the
+ * "our approach" grid is a dotted manual list of snippets; the CTA is a
+ * callout.
  */
 function do_base_deploy_services(): string {
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
@@ -182,7 +182,7 @@ function do_base_deploy_services(): string {
   }
 
   $components = [
-    _do_base_promo('Website Delivery', _do_base_service_content(
+    _do_base_service_detail('Website Delivery',
       'From requirements to production in one engagement.',
       [
         'Full Drupal website builds delivered with automated testing, CI/CD pipelines, and production-ready infrastructure. We handle the architecture, development, theming, and deployment - your team gets a solid platform, not a prototype that needs fixing after launch.',
@@ -196,9 +196,10 @@ function do_base_deploy_services(): string {
         'Content migration and data import',
         'Hosting setup and go-live support',
       ],
-      'Typical engagement', '$40K - $180K'
-    ), 'Discuss your project', '/contact'),
-    _do_base_promo('Ongoing Support', _do_base_service_content(
+      'Typical engagement', '$40K - $180K',
+      'Discuss your project', '/contact'
+    ),
+    _do_base_service_detail('Ongoing Support',
       'The same senior team that built it, maintaining it.',
       [
         'Proactive platform maintenance from the engineers who built your site. Security updates, Drupal core and module patches, performance monitoring, and continuous improvement - all on a predictable prepaid arrangement.',
@@ -212,9 +213,10 @@ function do_base_deploy_services(): string {
         'Direct Slack/email access to engineers',
         'Priority response for critical issues',
       ],
-      'From', '$740 / month'
-    ), 'Get a support quote', '/contact'),
-    _do_base_promo('Upgrades & Migrations', _do_base_service_content(
+      'From', '$740 / month',
+      'Get a support quote', '/contact'
+    ),
+    _do_base_service_detail('Upgrades & Migrations',
       'Move off end-of-life Drupal without breaking anything.',
       [
         'Drupal 7 and 9 are end-of-life. Drupal 10 follows in December 2026. We handle the full migration with test coverage and zero-downtime deployments, so your organisation stays compliant and your users stay unaffected.',
@@ -228,8 +230,9 @@ function do_base_deploy_services(): string {
         'Automated test suite for the upgraded site',
         'Zero-downtime deployment and rollback plan',
       ],
-      'Typical engagement', '$25K - $120K'
-    ), 'Book a free assessment', '/contact'),
+      'Typical engagement', '$25K - $120K',
+      'Book a free assessment', '/contact'
+    ),
     _do_base_manual_list('', 2, 'dotted', [
       _do_base_snippet('Senior engineers only', 'No juniors on your project. Every person who touches your code has 10+ years of Drupal experience.'),
       _do_base_snippet('Flat-rate pricing', 'We quote a fixed price upfront. No hourly billing surprises, no retainer games, no scope creep charges.'),
@@ -595,77 +598,52 @@ function _do_base_callout(string $title, string $body, string $link_title = '', 
 }
 
 /**
- * Build a dark CivicTheme promo (title + rich-text body + button).
- *
- * Used for the service-detail rows: the title is the service name, the body
- * carries the tagline, description, "what's included" list and price as
- * rich-text, and the link is the call-to-action button.
+ * Build a Service detail paragraph.
  *
  * @param string $title
- *   The promo heading.
- * @param string $content
- *   The promo body, rendered through the rich-text format.
- * @param string $link_title
- *   The button text.
- * @param string $link_uri
- *   The button URI.
- *
- * @return \Drupal\paragraphs\Entity\Paragraph
- *   An unsaved promo paragraph.
- */
-function _do_base_promo(string $title, string $content, string $link_title, string $link_uri): Paragraph {
-  return Paragraph::create([
-    'type' => 'civictheme_promo',
-    'field_c_p_theme' => 'dark',
-    'field_c_p_title' => $title,
-    'field_c_p_content' => [
-      'value' => $content,
-      'format' => 'civictheme_rich_text',
-    ],
-    'field_c_p_link' => [
-      'uri' => _do_base_link_uri($link_uri),
-      'title' => $link_title,
-    ],
-  ]);
-}
-
-/**
- * Assemble the rich-text body of a service-detail promo.
- *
- * Produces only tags permitted by the `civictheme_rich_text` format: a large
- * tagline lead, description paragraphs, a "what's included" heading and list,
- * and a small price line. No `full_html`, no bespoke markup.
- *
+ *   The service name.
  * @param string $tagline
- *   The one-line service tagline.
+ *   The one-line summary shown beside the title.
  * @param string[] $paras
  *   Description paragraphs.
  * @param string[] $includes
  *   The "what's included" list items.
  * @param string $price_label
- *   The price label (e.g. "Typical engagement").
+ *   The price label, e.g. "Typical engagement".
  * @param string $price_value
- *   The price value (e.g. "$40K - $180K").
+ *   The price, e.g. "$40K - $180K".
+ * @param string $link_title
+ *   The call-to-action button text.
+ * @param string $link_uri
+ *   The call-to-action button URI.
  *
- * @return string
- *   The rich-text HTML body.
+ * @return \Drupal\paragraphs\Entity\Paragraph
+ *   An unsaved Service detail paragraph.
  */
-function _do_base_service_content(string $tagline, array $paras, array $includes, string $price_label, string $price_value): string {
-  $html = '<p class="ct-text-large">' . $tagline . '</p>';
+function _do_base_service_detail(string $title, string $tagline, array $paras, array $includes, string $price_label, string $price_value, string $link_title, string $link_uri): Paragraph {
+  $description = '';
 
   foreach ($paras as $para) {
-    $html .= '<p>' . $para . '</p>';
+    $description .= '<p>' . $para . '</p>';
   }
 
-  $html .= "<h3>What's included</h3><ul>";
-
-  foreach ($includes as $include) {
-    $html .= '<li>' . $include . '</li>';
-  }
-
-  $html .= '</ul>';
-
-  return $html . '<p class="ct-text-small"><strong>' . $price_label . '</strong> ' . $price_value . '</p>';
+  return Paragraph::create([
+    'type' => 'do_service_detail',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_title' => $title,
+    'field_p_tagline' => $tagline,
+    'field_c_p_content' => [
+      'value' => $description,
+      'format' => 'civictheme_rich_text',
+    ],
+    'field_p_includes' => $includes,
+    'field_p_price_label' => $price_label,
+    'field_p_price_value' => $price_value,
+    'field_c_p_link' => [
+      'uri' => _do_base_link_uri($link_uri),
+      'title' => $link_title,
+    ],
+  ]);
 }
 
 /**

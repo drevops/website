@@ -1,0 +1,10 @@
+uuid: 83529221-4372-440b-993f-0b6cf539a675
+langcode: en
+status: true
+dependencies: {  }
+id: do_service_detail
+label: 'Service detail'
+icon_uuid: null
+icon_default: null
+description: 'A detailed service card: title, tagline, description, inclusions, price and a call to action.'
+behavior_plugins: {  }

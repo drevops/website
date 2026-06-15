@@ -1,0 +1,19 @@
+uuid: 1d92ddae-083d-41de-b0f7-525ee5116c1e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_includes
+    - paragraphs.paragraphs_type.do_service_detail
+id: paragraph.do_service_detail.field_p_includes
+field_name: field_p_includes
+entity_type: paragraph
+bundle: do_service_detail
+label: "What's included"
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -3,7 +3,7 @@
  * Reveal-on-scroll behaviour.
  *
  * Mounts a subtle fade-and-rise reveal on the outer wrapper of each section
- * component (manual lists, service-detail promos and callouts) as it enters
+ * component (manual lists, service-detail cards and callouts) as it enters
  * the viewport.
  *
  * The hiding class is added by this script, never in the stylesheet, so the
@@ -14,7 +14,7 @@
 ((Drupal, once) => {
   Drupal.behaviors.drevopsReveal = {
     attach(context) {
-      const elements = once('do-reveal', '.ct-list, .ct-promo, .ct-callout', context);
+      const elements = once('do-reveal', '.ct-list, .ct-service-detail, .ct-callout', context);
 
       if (!elements.length) {
         return;

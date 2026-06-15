@@ -1,0 +1,19 @@
+uuid: ad774eb0-0a46-4012-b64c-ff5a5534c4e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_price_value
+    - paragraphs.paragraphs_type.do_service_detail
+id: paragraph.do_service_detail.field_p_price_value
+field_name: field_p_price_value
+entity_type: paragraph
+bundle: do_service_detail
+label: 'Price value'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

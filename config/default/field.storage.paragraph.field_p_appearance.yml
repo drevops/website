@@ -16,7 +16,7 @@ settings:
       label: 'Numbered rows'
     -
       value: stat
-      label: 'Statistics'
+      label: Statistics
     -
       value: trust
       label: 'Trust grid'

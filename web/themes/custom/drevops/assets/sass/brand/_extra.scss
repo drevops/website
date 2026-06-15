@@ -63,6 +63,9 @@ h6 {
 // without depending on stylesheet load order.
 .ct-page {
   background-color: var(--page-bg) !important;
+
+  // Reset the service-detail card counter once per page (the cards increment it).
+  counter-reset: do-service;
 }
 
 .ct-header__middle {

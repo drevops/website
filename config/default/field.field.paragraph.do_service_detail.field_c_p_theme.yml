@@ -1,0 +1,21 @@
+uuid: 44e03969-ddd3-4668-8f73-5aba646213cb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_theme
+    - paragraphs.paragraphs_type.do_service_detail
+  module:
+    - options
+id: paragraph.do_service_detail.field_c_p_theme
+field_name: field_c_p_theme
+entity_type: paragraph
+bundle: do_service_detail
+label: Theme
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
