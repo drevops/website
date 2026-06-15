@@ -386,6 +386,37 @@ function do_base_deploy_blog_listing(): string {
     }
   }
 
+  // Featured article: clone the article grid into a single most-recent card,
+  // shown full-width above the grid (the design's featured post). Idempotent -
+  // skip when a single-item list is already first.
+  if ($node->hasField('field_c_n_components')) {
+    $components = $node->get('field_c_n_components')->referencedEntities();
+    $first = $components[0] ?? NULL;
+    $already = $first instanceof Paragraph && $first->bundle() === 'civictheme_automated_list' && (int) $first->get('field_c_p_list_limit')->value === 1;
+
+    if (!$already) {
+      $grid = NULL;
+
+      foreach ($components as $component) {
+        if ($component->bundle() === 'civictheme_automated_list') {
+          $grid = $component;
+          break;
+        }
+      }
+
+      if ($grid instanceof Paragraph) {
+        $featured = $grid->createDuplicate();
+        $featured->set('field_c_p_list_limit', 1);
+        $featured->set('field_c_p_list_limit_type', 'limited');
+        $featured->set('field_c_p_list_column_count', 1);
+        $featured->save();
+
+        array_unshift($components, $featured);
+        $node->set('field_c_n_components', $components);
+      }
+    }
+  }
+
   $node->save();
 
   return 'Blog listing banner updated.';
