@@ -12,9 +12,9 @@ props:
       enum:
         - light
         - dark
-    fact:
+    content:
       type: string
-      title: Fact
+      title: Content
       description: The figure, e.g. "0" or "40".
     suffix:
       type: string

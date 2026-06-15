@@ -1,8 +1,8 @@
 //
 // DrevOps — Manual list design treatments.
 //
-// CivicTheme manual lists carry a `field_do_style` value that the theme turns
-// into a `.ct-list--style-*` modifier (see includes/manual_list.inc). These
+// CivicTheme manual lists carry a `field_p_appearance` value that the theme
+// turns into a `.ct-list--style-*` modifier (see includes/manual_list.inc). These
 // rules render the design's bespoke sections (numbered service rows, the stats
 // figures, the trust grid and the dotted "why" list) by styling the snippet
 // children of those lists. No markup is stored as content; the structure is

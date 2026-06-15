@@ -11,10 +11,8 @@ use Drupal\civictheme\CivicthemeConstants;
 
 /**
  * Implements template_preprocess_block__HOOK() for sidebar navigation.
- *
- * The design renders the whole site dark, so the sidebar navigation follows
- * the dark theme rather than the light default this override previously forced.
  */
 function drevops_preprocess_block__menu_block__civictheme_sidebar_navigation(array &$variables): void {
+  // The site renders dark, so the sidebar follows the dark theme.
   $variables['theme'] = CivicthemeConstants::THEME_DARK;
 }

@@ -1,12 +1,12 @@
-uuid: 6f1d2a40-9c3e-4b7a-8d21-7e5c4a9b1f02
+uuid: 9c3d4e5f-6071-4283-a495-061728394051
 langcode: en
 status: true
 dependencies:
   module:
     - options
     - paragraphs
-id: paragraph.field_do_style
-field_name: field_do_style
+id: paragraph.field_p_appearance
+field_name: field_p_appearance
 entity_type: paragraph
 type: list_string
 settings:

@@ -94,7 +94,7 @@ function do_base_deploy_blocks_dark(?array &$sandbox): ?string {
  * The hero is the node banner (populated, not cleared). Every section is built
  * from CivicTheme paragraph components - manual lists of snippets for the
  * services, stats, trust, "why" and process sections, and a callout for the
- * closing CTA - with the bespoke design treatments driven by `field_do_style`.
+ * closing CTA - with the bespoke design treatments driven by `field_p_appearance`.
  * No markup is stored as content. New references are saved before the previous
  * paragraphs are deleted, so a failed save never leaves dangling references.
  */
@@ -141,7 +141,7 @@ function do_base_deploy_homepage(): string {
       _do_base_snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.'),
       _do_base_snippet('Ongoing support', 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
     ], 'How we work'),
-    _do_base_callout('Let\'s talk about your <span class="dr-underline">website.</span>', '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a class="ct-button ct-theme-dark ct-button--secondary ct-button--large" href="/contact">Talk to us</a></p>'),
+    _do_base_callout('Let\'s talk about your <span class="do-underline">website.</span>', '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a class="ct-button ct-theme-dark ct-button--secondary ct-button--large" href="/contact">Talk to us</a></p>'),
   ];
 
   foreach ($components as $component) {
@@ -151,7 +151,7 @@ function do_base_deploy_homepage(): string {
   $stale = array_merge(
     _do_base_stage_banner(
       $node,
-      '<span class="ct-banner__eyebrow">Reliable websites, delivered faster</span>Your website<br><span class="dr-word-accent">can\'t afford to wait.</span>',
+      '<span class="ct-banner__eyebrow">Reliable websites, delivered faster</span>Your website<br><span class="do-word-accent">can\'t afford to wait.</span>',
       'We build and support reliable websites for businesses and organisations that depend on them.<br>Now delivered faster and cheaper with AI-assisted development.',
       ['title' => 'Talk to us', 'uri' => '/contact']
     ),
@@ -236,7 +236,7 @@ function do_base_deploy_services(): string {
       _do_base_snippet('Tested by default', "Every platform ships with automated tests. If it's not tested, it doesn't deploy. No exceptions."),
       _do_base_snippet('Direct communication', 'You talk to the engineers building your site. No project managers relaying messages, no layers in between.'),
     ], 'Our approach'),
-    _do_base_callout('Ready to talk about your <span class="dr-underline">platform?</span>', '<p>Tell us where things stand. We\'ll be straight with you about whether we\'re the right fit.</p><p><a class="ct-button ct-theme-dark ct-button--secondary ct-button--large" href="/contact">Get in touch</a></p>'),
+    _do_base_callout('Ready to talk about your <span class="do-underline">platform?</span>', '<p>Tell us where things stand. We\'ll be straight with you about whether we\'re the right fit.</p><p><a class="ct-button ct-theme-dark ct-button--secondary ct-button--large" href="/contact">Get in touch</a></p>'),
   ];
 
   foreach ($components as $component) {
@@ -246,7 +246,7 @@ function do_base_deploy_services(): string {
   $stale = array_merge(
     _do_base_stage_banner(
       $node,
-      'Engineering that keeps<br><span class="dr-word-accent">your platform running.</span>',
+      'Engineering that keeps<br><span class="do-word-accent">your platform running.</span>',
       "We deliver, support, and upgrade Drupal websites for organisations where downtime, security gaps, and slow development aren't acceptable."
     ),
     $node->get('field_c_n_components')->referencedEntities()
@@ -518,7 +518,7 @@ function _do_base_fact_card(string $fact, string $label, string $suffix = ''): P
     'type' => 'do_fact_card',
     'field_c_p_theme' => 'dark',
     'field_c_p_title' => $fact,
-    'field_do_suffix' => $suffix,
+    'field_p_suffix' => $suffix,
     'field_c_p_summary' => $label,
   ]);
 }
@@ -526,7 +526,7 @@ function _do_base_fact_card(string $fact, string $label, string $suffix = ''): P
 /**
  * Build a dark CivicTheme manual list of snippet items.
  *
- * The `$style` is stored in `field_do_style`; the theme renders the bespoke
+ * The `$style` is stored in `field_p_appearance`; the theme renders the bespoke
  * design treatment (numbered, stat, trust, dotted) from a single list modifier
  * class, styling the snippet children with CSS - no markup is stored.
  *
@@ -552,8 +552,8 @@ function _do_base_manual_list(string $title, int $columns, string $style, array 
     'field_c_p_theme' => 'dark',
     'field_c_p_title' => $title,
     'field_c_p_list_column_count' => $columns,
-    'field_do_style' => $style,
-    'field_do_eyebrow' => $eyebrow,
+    'field_p_appearance' => $style,
+    'field_p_eyebrow' => $eyebrow,
     'field_c_p_list_items' => $items,
   ]);
 }

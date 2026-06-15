@@ -1,17 +1,17 @@
-uuid: 2c8b6e14-3a7d-49f5-b0c2-1d9e8f4a6b73
+uuid: ad4e5f60-7182-4394-b506-172839405162
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_do_style
+    - field.storage.paragraph.field_p_appearance
     - paragraphs.paragraphs_type.civictheme_manual_list
   module:
     - options
-id: paragraph.civictheme_manual_list.field_do_style
-field_name: field_do_style
+id: paragraph.civictheme_manual_list.field_p_appearance
+field_name: field_p_appearance
 entity_type: paragraph
 bundle: civictheme_manual_list
-label: 'Design style'
+label: Appearance
 description: 'Optional bespoke design treatment applied by the DrevOps theme.'
 required: false
 translatable: true

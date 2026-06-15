@@ -34,20 +34,17 @@ function _drevops_preprocess_paragraph__paragraph_field__list_layout(array &$var
 }
 
 /**
- * Pre-process for the bespoke design Style paragraph field.
+ * Pre-process for the Appearance paragraph field.
  *
- * The design has section treatments CivicTheme has no component for (numbered
- * rows, statistics, a trust grid, dotted rows). Rather than embed markup, the
- * deploy hooks set `field_do_style` on a manual list and the theme renders the
- * treatment from a single modifier class on the list, styling the snippet
- * children with CSS. No markup is stored as content.
+ * Maps the chosen appearance to a single modifier class so the theme can style
+ * the list's children with CSS instead of storing bespoke markup as content.
  */
-function _drevops_preprocess_paragraph__paragraph_field__do_style(array &$variables): void {
-  $style = civictheme_get_field_value($variables['paragraph'], 'field_do_style');
+function _drevops_preprocess_paragraph__paragraph_field__appearance(array &$variables): void {
+  $appearance = civictheme_get_field_value($variables['paragraph'], 'field_p_appearance');
 
-  if (!$style) {
+  if (!$appearance) {
     return;
   }
 
-  civictheme_add_modifier_class($variables, 'ct-list--style-' . $style);
+  civictheme_add_modifier_class($variables, 'ct-list--style-' . $appearance);
 }

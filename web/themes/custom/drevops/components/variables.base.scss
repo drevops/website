@@ -7,15 +7,11 @@
 // Variables values in this file cannot be based on any variables
 // in _variables.base.scss
 //
-// These values encode the DrevOps dark design system: a deep navy canvas,
-// cyan interactive accent, and coral highlight, with Plus Jakarta Sans for
-// display/headings and Outfit for body text. The site renders dark by default;
-// the light theme is kept consistent for any light-themed surfaces.
+// These override CivicTheme's defaults so the site renders in the DrevOps brand.
 //
 // stylelint-disable scss/dollar-variable-pattern
 
-// Brand colours per theme. CivicTheme derives the semantic palette (headings,
-// backgrounds, borders, interactions, highlight) from these three.
+// CivicTheme derives the semantic palette from these three brand colours.
 //   brand1 - interactive accent (links, buttons) and text tints.
 //   brand2 - canvas / surface backgrounds and borders.
 //   brand3 - highlight / accent.

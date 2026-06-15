@@ -1,12 +1,12 @@
-uuid: 5e0b2a71-8d4c-4f36-ab29-7a3e6c9d2f51
+uuid: cf607182-93a4-45b6-9728-394051627384
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_do_suffix
+    - field.storage.paragraph.field_p_suffix
     - paragraphs.paragraphs_type.do_fact_card
-id: paragraph.do_fact_card.field_do_suffix
-field_name: field_do_suffix
+id: paragraph.do_fact_card.field_p_suffix
+field_name: field_p_suffix
 entity_type: paragraph
 bundle: do_fact_card
 label: Suffix

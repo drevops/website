@@ -10,12 +10,8 @@
 @import 'block/local-tasks';
 @import 'brand/tokens';
 
-// Design tokens and base canvas, the CivicTheme button treatment, the
-// rich-text content typography (blog article, contact details, hero subtitle)
-// and the bespoke section treatments (manual lists, service-detail promos, the
-// CTA callout and the two-column contact page). All enhance CivicTheme
-// component markup, so they import at the top level rather than being scoped to
-// a content wrapper.
+// These enhance CivicTheme's component markup site-wide, so they load globally
+// rather than scoped to a content wrapper.
 @import 'brand/extra';
 @import 'brand/buttons';
 @import 'brand/content';

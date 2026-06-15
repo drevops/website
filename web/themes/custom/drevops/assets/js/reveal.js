@@ -14,7 +14,7 @@
 ((Drupal, once) => {
   Drupal.behaviors.drevopsReveal = {
     attach(context) {
-      const elements = once('dr-reveal', '.ct-list, .ct-promo, .ct-callout', context);
+      const elements = once('do-reveal', '.ct-list, .ct-promo, .ct-callout', context);
 
       if (!elements.length) {
         return;
@@ -30,7 +30,7 @@
         (entries, obs) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('dr-reveal--in');
+              entry.target.classList.add('do-reveal--in');
               obs.unobserve(entry.target);
             }
           });
@@ -39,7 +39,7 @@
       );
 
       elements.forEach((el) => {
-        el.classList.add('dr-reveal');
+        el.classList.add('do-reveal');
         observer.observe(el);
       });
     },
