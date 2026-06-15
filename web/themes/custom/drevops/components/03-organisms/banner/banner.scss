@@ -272,3 +272,43 @@
   color: var(--color-secondary-4);
   margin-bottom: var(--space-y-4);
 }
+
+// Fade hero (blog posts): the featured image fills the banner behind a dark
+// page-coloured gradient, with the title sitting over the bottom of the image.
+.ct-banner-type--fade {
+  .ct-banner__inner {
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+    display: flex;
+    align-items: flex-end;
+    background-size: cover;
+    background-position: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, color-mix(in srgb, var(--page-bg) 40%, transparent) 0%, color-mix(in srgb, var(--page-bg) 70%, transparent) 40%, var(--page-bg) 100%);
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      padding-bottom: var(--space-y-8);
+    }
+
+    @media (max-width: 767.98px) {
+      min-height: 400px;
+    }
+  }
+
+  .ct-banner__title {
+    max-width: 800px;
+    font-size: var(--display-2-font-size);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--display-line-height);
+    letter-spacing: -0.02em;
+    color: var(--text-color);
+  }
+}

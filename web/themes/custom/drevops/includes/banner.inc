@@ -54,6 +54,15 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
     unset($variables['background_image'], $variables['background_image_blend_mode']);
   }
 
+  // Fade hero: the featured image fills the banner behind a dark page-coloured
+  // fade, with the title over it (used by blog posts). The banner renders the
+  // "fade" type natively; here we only promote the featured image to the
+  // full-bleed background so it is not also shown as a side image.
+  if ($type === 'fade' && !empty($variables['featured_image'])) {
+    $variables['background_image'] = $variables['featured_image'];
+    $variables['featured_image'] = NULL;
+  }
+
   // CivicTheme's civictheme_get_field_value() runs string fields through
   // strip_tags(), which removes the design's accent markup from the banner
   // title. Re-read the raw value (XSS-filtered to a safe inline set) so the

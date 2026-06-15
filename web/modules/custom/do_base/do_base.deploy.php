@@ -392,11 +392,12 @@ function do_base_deploy_blog_listing(): string {
 }
 
 /**
- * Reveal topic tags on the blog posts.
+ * Apply the design's blog-post treatment.
  *
- * The blog posts carry topics but ship with tags hidden; the design shows them
- * as pills on the listing cards and the post header, so switch them on for
- * every page that has topics.
+ * Blog posts (pages that carry topics) ship with tags hidden and a default
+ * banner. The design reveals the topic pills and renders the header as a fade
+ * hero over the featured image, so switch the tags on and, where the page has a
+ * featured image, set the banner to the "fade" type.
  */
 function do_base_deploy_blog_tags(?array &$sandbox): ?string {
   return Helper::entity($sandbox)->batchEntity('node', NULL, static function ($node): void {
@@ -404,11 +405,24 @@ function do_base_deploy_blog_tags(?array &$sandbox): ?string {
       return;
     }
 
-    if (!$node->hasField('field_c_n_hide_tags') || $node->get('field_c_n_hide_tags')->value === '0') {
+    $changed = FALSE;
+
+    if ($node->hasField('field_c_n_hide_tags') && $node->get('field_c_n_hide_tags')->value !== '0') {
+      $node->set('field_c_n_hide_tags', 0);
+      $changed = TRUE;
+    }
+
+    $has_image = $node->hasField('field_c_n_banner_featured_image') && !$node->get('field_c_n_banner_featured_image')->isEmpty();
+
+    if ($has_image && $node->hasField('field_c_n_banner_type') && $node->get('field_c_n_banner_type')->value !== 'fade') {
+      $node->set('field_c_n_banner_type', 'fade');
+      $changed = TRUE;
+    }
+
+    if (!$changed) {
       return;
     }
 
-    $node->set('field_c_n_hide_tags', 0);
     $node->setNewRevision(FALSE);
     $node->save();
   });

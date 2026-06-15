@@ -25,6 +25,9 @@ settings:
     -
       value: hero
       label: Hero
+    -
+      value: fade
+      label: Fade
   allowed_values_function: ''
 module: options
 locked: false
