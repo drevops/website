@@ -1,0 +1,45 @@
+//
+// DrevOps - Blog.
+//
+// CivicTheme renders a post's topics as a primary tag list inside each promo
+// card; the design shows them as small bordered pill chips (its
+// `.component-tag--sm`): a dark surface, cyan label and a faint border.
+//
+.ct-promo-card__tags {
+  margin-top: var(--space-y-2);
+
+  .ct-tag-list__content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-x-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ct-item-list__item {
+    margin: 0;
+  }
+
+  .ct-tag {
+    // Override CivicTheme's primary-tag tokens to the design's pill colours;
+    // defining them on the element outranks the :root defaults regardless of
+    // CSS load order.
+    --ct-tag-dark-primary-background-color: var(--tag-bg);
+    --ct-tag-dark-primary-border-color: var(--border-subtle-color);
+    --ct-tag-dark-primary-color: var(--tag-color);
+
+    display: inline-block;
+    font-size: var(--font-size-2xs);
+    font-weight: var(--label-font-weight);
+    letter-spacing: var(--label-letter-spacing);
+    text-transform: var(--label-text-transform);
+    padding: var(--space-y-1) var(--space-x-1);
+    border-radius: var(--radius-sm);
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+}

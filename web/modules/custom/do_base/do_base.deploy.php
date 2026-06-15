@@ -390,3 +390,26 @@ function do_base_deploy_blog_listing(): string {
 
   return 'Blog listing banner updated.';
 }
+
+/**
+ * Reveal topic tags on the blog posts.
+ *
+ * The blog posts carry topics but ship with tags hidden; the design shows them
+ * as pills on the listing cards and the post header, so switch them on for
+ * every page that has topics.
+ */
+function do_base_deploy_blog_tags(?array &$sandbox): ?string {
+  return Helper::entity($sandbox)->batchEntity('node', NULL, static function ($node): void {
+    if ($node->bundle() !== 'civictheme_page' || !$node->hasField('field_c_n_topics') || $node->get('field_c_n_topics')->isEmpty()) {
+      return;
+    }
+
+    if (!$node->hasField('field_c_n_hide_tags') || $node->get('field_c_n_hide_tags')->value === '0') {
+      return;
+    }
+
+    $node->set('field_c_n_hide_tags', 0);
+    $node->setNewRevision(FALSE);
+    $node->save();
+  });
+}
