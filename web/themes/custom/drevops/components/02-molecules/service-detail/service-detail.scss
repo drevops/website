@@ -75,7 +75,9 @@
   &__tagline {
     font-size: var(--body-font-size);
     font-weight: var(--body-font-weight);
+    line-height: var(--line-height-lg);
     color: var(--text-muted-color);
+    margin-top: 0;
   }
 
   // Body: description and inclusions side by side.
@@ -97,6 +99,7 @@
   &__includes-label {
     font-size: var(--label-font-size);
     font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-lg);
     letter-spacing: var(--label-letter-spacing);
     text-transform: uppercase;
     color: var(--text-accent-color);
@@ -148,6 +151,7 @@
     margin-bottom: 4px;
     font-size: var(--label-font-size);
     font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-lg);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--text-muted-color);
@@ -157,6 +161,7 @@
     font-family: var(--font-family-primary);
     font-size: var(--heading-h3-font-size);
     font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-lg);
     letter-spacing: -0.01em;
     color: var(--color-secondary-6);
   }
