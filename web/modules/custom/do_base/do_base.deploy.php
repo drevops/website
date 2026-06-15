@@ -94,8 +94,8 @@ function do_base_deploy_blocks_dark(?array &$sandbox): ?string {
  *
  * The hero is the node banner (populated, not cleared). Every section is built
  * from CivicTheme paragraph components - manual lists of snippets for the
- * services, stats, trust, "why" and process sections, and a callout for the
- * closing CTA - with the bespoke design treatments driven by `field_p_appearance`.
+ * services, stats, trust, "why" and process sections, and a callout for
+ * the closing CTA - with bespoke design treatments via `field_p_appearance`.
  * No markup is stored as content. New references are saved before the previous
  * paragraphs are deleted, so a failed save never leaves dangling references.
  */

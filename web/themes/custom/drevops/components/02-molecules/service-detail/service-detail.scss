@@ -51,7 +51,7 @@
     line-height: 1;
     letter-spacing: -0.04em;
     color: var(--color-secondary-6);
-    opacity: 0.2;
+    opacity: 20%;
 
     &::before {
       content: counter(do-service, decimal-leading-zero);

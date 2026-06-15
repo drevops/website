@@ -7,6 +7,11 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Render\Markup;
+use Drupal\node\NodeInterface;
+
 /**
  * Implements template_preprocess_node().
  */
@@ -26,7 +31,7 @@ function _drevops_preprocess_node__civictheme_promo_card(array &$variables): voi
 function _drevops_preprocess_node__card_summary(array &$variables): void {
   $node = $variables['node'] ?? NULL;
 
-  if (!$node instanceof \Drupal\node\NodeInterface || !$node->hasField('field_c_n_summary') || $node->get('field_c_n_summary')->isEmpty()) {
+  if (!$node instanceof NodeInterface || !$node->hasField('field_c_n_summary') || $node->get('field_c_n_summary')->isEmpty()) {
     return;
   }
 
@@ -44,7 +49,7 @@ function _drevops_preprocess_node__card_summary(array &$variables): void {
     return;
   }
 
-  $variables['summary'] = \Drupal\Core\Render\Markup::create(\Drupal\Component\Utility\Unicode::truncate($summary, $length, TRUE, TRUE));
+  $variables['summary'] = Markup::create(Unicode::truncate($summary, $length, TRUE, TRUE));
 }
 
 /**
@@ -66,7 +71,7 @@ function _drevops_preprocess_paragraph__node_field__date(array &$variables): voi
  * fields, then converts the count to whole minutes at an average adult reading
  * pace, so cards can show the design's "date / N min read" meta line.
  */
-function _drevops_node_reading_time(\Drupal\Core\Entity\FieldableEntityInterface $node): ?string {
+function _drevops_node_reading_time(FieldableEntityInterface $node): ?string {
   if (!$node->hasField('field_c_n_components')) {
     return NULL;
   }
@@ -75,9 +80,9 @@ function _drevops_node_reading_time(\Drupal\Core\Entity\FieldableEntityInterface
   $text_fields = ['field_c_p_content', 'field_c_p_summary', 'field_c_p_title'];
 
   foreach ($node->get('field_c_n_components')->referencedEntities() as $component) {
-    foreach ($text_fields as $field_name) {
-      if ($component->hasField($field_name) && !$component->get($field_name)->isEmpty()) {
-        $words += str_word_count(strip_tags($component->get($field_name)->getString()));
+    foreach ($text_fields as $text_field) {
+      if ($component->hasField($text_field) && !$component->get($text_field)->isEmpty()) {
+        $words += str_word_count(strip_tags((string) $component->get($text_field)->getString()));
       }
     }
   }

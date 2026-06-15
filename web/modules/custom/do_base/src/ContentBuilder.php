@@ -157,7 +157,8 @@ final class ContentBuilder {
    *
    * The `$style` is stored in `field_p_appearance`; the theme renders the
    * bespoke design treatment (numbered, stat, trust, dotted) from a single list
-   * modifier class, styling the snippet children with CSS - no markup is stored.
+   * modifier class, styling the snippet children with CSS - no markup is
+   * stored.
    *
    * @param string $title
    *   The section heading.
@@ -217,7 +218,8 @@ final class ContentBuilder {
 
     // The callout button renders external links (a mailto) with a new-window
     // target and an arrow. Only add the button for a real call-to-action link;
-    // the homepage CTA renders its email inside the body as a plain link instead.
+    // the homepage CTA renders its email inside the body as a plain link
+    // instead.
     if ($link_uri !== '') {
       $values['field_c_p_links'] = [['uri' => self::linkUri($link_uri), 'title' => $link_title]];
     }
@@ -323,7 +325,7 @@ final class ContentBuilder {
   }
 
   /**
-   * Build the rich-text body for the contact details and "what to expect" steps.
+   * Build the rich-text body for contact details and "what to expect" steps.
    *
    * @return string
    *   The rich-text HTML body.
