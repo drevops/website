@@ -370,10 +370,10 @@ function do_base_deploy_blog_listing(): string {
     return 'Blog listing node not usable - skipped.';
   }
 
-  $node->set('field_c_n_banner_title', 'Practical engineering insights<br>from the teams we work with.');
+  $node->set('field_c_n_banner_title', '<span class="ct-banner__eyebrow">Blog</span>Practical engineering insights<br>from the teams we work with.');
 
   if ($node->hasField('field_c_n_banner_type')) {
-    $node->set('field_c_n_banner_type', 'hero');
+    $node->set('field_c_n_banner_type', 'page');
   }
 
   if ($node->hasField('field_c_n_banner_theme')) {

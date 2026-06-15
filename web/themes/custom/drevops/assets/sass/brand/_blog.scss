@@ -54,11 +54,19 @@
   border-radius: var(--radius-md);
   overflow: hidden;
 
+  // Absolutely fill the image so a tall (e.g. square) source does not stretch
+  // the card past the content; the content column then sets the card height,
+  // and the image covers its half - matching the design's feature panel.
   .ct-promo-card__image {
+    position: relative;
     height: 100%;
     margin: 0;
+    overflow: hidden;
 
+    .ct-image,
     img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -96,6 +104,12 @@
 // cards narrower than the design).
 .ct-list:has([class~='col-m-4']) {
   background: var(--surface-muted-color);
+
+  // The design's grid opens straight into the cards; CivicTheme's "Showing N of
+  // M" results count has no place in it.
+  .ct-list__results-count {
+    display: none;
+  }
 
   // CivicTheme nests a fixed-width container inside the list inner, which makes
   // the grid narrower than the design's column. Let it fill the inner column.
@@ -155,11 +169,18 @@
 // larger type).
 .ct-list [class~='col-m-4'] .ct-promo-card--with-image {
   .ct-promo-card__image {
-    aspect-ratio: 16 / 9;
+    // Force a 16/9 image box. CivicTheme pins a fixed image height that wins
+    // over `aspect-ratio`, so use the height:0 + padding ratio box (which the
+    // fixed height cannot override) and stretch the image to fill it.
+    height: 0;
+    padding-bottom: 56.25%;
     overflow: hidden;
+    position: relative;
 
     .ct-image,
     img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;

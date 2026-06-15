@@ -106,24 +106,36 @@
 
         {% block date_block %}
           {% if date is not empty %}
-            {% set date_content %}
-              {% include 'civictheme:datetime' with {
-                start: date,
-                start_iso: date_iso|default(null),
-                end: date_end|default(null),
-                end_iso: date_end_iso|default(null),
-              } only %}
-            {% endset %}
+            {% if date_end %}
+              {# Event date range: keep CivicTheme's pill with a calendar icon. #}
+              {% set date_content %}
+                {% include 'civictheme:datetime' with {
+                  start: date,
+                  start_iso: date_iso|default(null),
+                  end: date_end,
+                  end_iso: date_end_iso|default(null),
+                } only %}
+              {% endset %}
 
-            <div class="ct-promo-card__date">
-              {% include 'civictheme:tag' with {
-                theme: theme,
-                type: date_end ? 'secondary' : 'tertiary',
-                content: date_content,
-                icon: date_end ? 'calendar-2' : null,
-                icon_placement: 'before',
-              } only %}
-            </div>
+              <div class="ct-promo-card__date">
+                {% include 'civictheme:tag' with {
+                  theme: theme,
+                  type: 'secondary',
+                  content: date_content,
+                  icon: 'calendar-2',
+                  icon_placement: 'before',
+                } only %}
+              </div>
+            {% else %}
+              {# Article meta line: the design's "date / N min read". #}
+              <div class="ct-promo-card__meta">
+                <time class="ct-promo-card__meta-date"{% if date_iso %} datetime="{{ date_iso }}"{% endif %}>{{ date }}</time>
+                {% if reading_time is not empty %}
+                  <span class="ct-promo-card__meta-sep" aria-hidden="true">/</span>
+                  <span class="ct-promo-card__meta-read">{{ reading_time }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
           {% endif %}
         {% endblock %}
 

@@ -28,6 +28,9 @@ settings:
     -
       value: fade
       label: Fade
+    -
+      value: page
+      label: Page
   allowed_values_function: ''
 module: options
 locked: false

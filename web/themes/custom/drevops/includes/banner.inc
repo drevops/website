@@ -54,6 +54,17 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
     unset($variables['background_image'], $variables['background_image_blend_mode']);
   }
 
+  // Page hero: a compact centred hero for listing/landing pages - the design's
+  // smaller "page" hero with a faint static glow and a coral eyebrow line above
+  // a centred headline. CivicTheme has no such layout, so map it onto the
+  // centred "intro" layout and add the page styling hook; the background image
+  // is dropped so the clean dark canvas shows through.
+  if ($type === 'page') {
+    $variables['type'] = 'intro';
+    $variables['modifier_class'] = trim(($variables['modifier_class'] ?? '') . ' ct-banner--page');
+    unset($variables['background_image'], $variables['background_image_blend_mode']);
+  }
+
   // Fade hero: the featured image fills the banner behind a dark page-coloured
   // fade, with the title over it (used by blog posts). The banner renders the
   // "fade" type natively; here we only promote the featured image to the
