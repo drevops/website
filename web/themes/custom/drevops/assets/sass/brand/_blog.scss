@@ -149,3 +149,32 @@
     transform: scale(1.05);
   }
 }
+
+// Grid card internals matching the design's blog-card: a 16/9 image, an h4
+// title and a small excerpt (CivicTheme's promo card uses a taller image and
+// larger type).
+.ct-list [class~='col-m-4'] .ct-promo-card--with-image {
+  .ct-promo-card__image {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+
+    .ct-image,
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .ct-promo-card__title {
+    font-size: var(--heading-h4-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-sm);
+    letter-spacing: -0.01em;
+  }
+
+  .ct-promo-card__summary {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-md);
+  }
+}
