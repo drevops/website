@@ -38,12 +38,13 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
 
   $variables['type'] = $type;
 
-  // Brand hero: render page banners as a centered intro hero with the
-  // atmospheric glow. The front page gets the full-viewport variant; other
-  // pages get a shorter inner variant.
-  $is_front = \Drupal::service('path.matcher')->isFrontPage();
-  if ($is_front || (!empty($node) && $node->bundle() === 'civictheme_page')) {
+  // Brand hero: the "hero" banner type renders as a centered intro hero with
+  // the atmospheric glow. CivicTheme has no "hero" layout, so map it onto the
+  // "intro" layout and add the hero styling hook; the front page gets the
+  // taller full-viewport variant.
+  if ($type === 'hero') {
     $variables['type'] = 'intro';
+    $is_front = \Drupal::service('path.matcher')->isFrontPage();
     $hero_class = $is_front ? 'ct-banner--hero ct-banner--hero-home' : 'ct-banner--hero';
     $variables['modifier_class'] = trim(($variables['modifier_class'] ?? '') . ' ' . $hero_class);
 

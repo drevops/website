@@ -372,7 +372,7 @@ function do_base_deploy_blog_listing(): string {
   $node->set('field_c_n_banner_title', 'Practical engineering insights<br>from the teams we work with.');
 
   if ($node->hasField('field_c_n_banner_type')) {
-    $node->set('field_c_n_banner_type', 'intro');
+    $node->set('field_c_n_banner_type', 'hero');
   }
 
   if ($node->hasField('field_c_n_banner_theme')) {
@@ -393,8 +393,9 @@ function do_base_deploy_blog_listing(): string {
 /**
  * Populate the node banner so it renders as the page hero.
  *
- * The design's hero is the CivicTheme intro banner (themed in the subtheme),
- * not a content section. This sets the banner title, type and theme. When a
+ * The design's hero is the CivicTheme banner set to the "hero" type (themed in
+ * the subtheme), not a content section. This sets the banner title, type and
+ * theme. When a
  * subtitle is given it is added as a CivicTheme content component inside the
  * banner (CivicTheme renders `field_c_n_banner_components` into the banner's
  * content slot), optionally with a call-to-action button. Previous banner
@@ -418,14 +419,14 @@ function _do_base_stage_banner(Node $node, string $title, string $subtitle = '',
   }
 
   if ($node->hasField('field_c_n_banner_type')) {
-    $node->set('field_c_n_banner_type', 'intro');
+    $node->set('field_c_n_banner_type', 'hero');
   }
 
   if ($node->hasField('field_c_n_banner_theme')) {
     $node->set('field_c_n_banner_theme', 'dark');
   }
 
-  // The design hero is the dark intro banner with its atmospheric glow, not an
+  // The design hero is the dark hero banner with its atmospheric glow, not an
   // image. Clear any background or featured image left on the node from the
   // demo content so the hero renders dark with legible white text.
   foreach (['field_c_n_banner_background', 'field_c_n_banner_featured_image'] as $image_field) {

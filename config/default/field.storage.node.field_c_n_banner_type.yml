@@ -25,6 +25,9 @@ settings:
     -
       value: intro
       label: Intro
+    -
+      value: hero
+      label: Hero
   allowed_values_function: ''
 module: options
 locked: false
