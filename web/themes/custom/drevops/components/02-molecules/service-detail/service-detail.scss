@@ -18,7 +18,7 @@
   }
 
   &__inner {
-    background: var(--surface-subtle-color);
+    background: var(--page-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     padding: var(--space-y-7);
@@ -41,8 +41,8 @@
     font-weight: var(--font-weight-bold);
     line-height: 1;
     letter-spacing: -0.04em;
-    color: var(--color-secondary-4);
-    opacity: 0.4;
+    color: var(--color-secondary-6);
+    opacity: 0.2;
 
     &::before {
       content: counter(do-service, decimal-leading-zero);
@@ -97,7 +97,7 @@
 
   &__includes li {
     position: relative;
-    padding: var(--space-y-1) 0 var(--space-y-1) var(--space-y-3);
+    padding: var(--space-y-1) 0 var(--space-x-1) var(--space-y-3);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-md);
     color: var(--text-subtle-color);
@@ -111,7 +111,7 @@
       content: '';
       position: absolute;
       left: 0;
-      top: 14px;
+      top: 16px;
       width: 6px;
       height: 6px;
       border-radius: 50%;
@@ -144,7 +144,7 @@
     font-size: var(--heading-h3-font-size);
     font-weight: var(--font-weight-normal);
     letter-spacing: -0.01em;
-    color: var(--color-secondary-3);
+    color: var(--color-secondary-6);
   }
 
   @media (max-width: 767.98px) {
