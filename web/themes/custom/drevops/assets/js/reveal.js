@@ -2,9 +2,10 @@
  * @file
  * Reveal-on-scroll behaviour.
  *
- * Mounts a subtle fade-and-rise reveal on the outer wrapper of each section
- * component (manual lists, service-detail cards and callouts) as it enters
- * the viewport.
+ * Mounts a subtle fade-and-rise reveal on the outer wrapper of each homepage
+ * section component (manual lists and callouts) as it enters the viewport. The
+ * design uses this treatment on the homepage only; every other page renders its
+ * sections statically.
  *
  * The hiding class is added by this script, never in the stylesheet, so the
  * content is only ever hidden once the reveal has been initialised. If the
@@ -14,7 +15,11 @@
 ((Drupal, once) => {
   Drupal.behaviors.drevopsReveal = {
     attach(context) {
-      const elements = once('do-reveal', '.ct-list, .ct-service-detail, .ct-callout', context);
+      if (!document.body.classList.contains('path-frontpage')) {
+        return;
+      }
+
+      const elements = once('do-reveal', '.ct-list, .ct-callout', context);
 
       if (!elements.length) {
         return;
