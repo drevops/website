@@ -1,16 +1,18 @@
 //
 // DrevOps - Section layout.
 //
-// The design lays each section's content inside a centred, max-width column
-// (its `.component-section-inner`: max-width 1100px, auto side margins, a side
+// The design wraps each section in a full-width band (with an optional
+// background) whose content sits in a centred, max-width column (its
+// `.component-section-inner`: max-width 1100px, auto side margins, a side
 // gutter). CivicTheme renders the page components edge-to-edge in a fluid
-// container, so constrain the redesign's section components to that same column
-// - they sit centred at the layout width instead of spanning the viewport. The
-// banner stays full-width because it lives outside the main content block.
+// container, so constrain each component's inner wrapper to that column while
+// the component itself stays full-width - that lets a section paint a
+// full-width background behind its centred content. The banner is unaffected:
+// it lives outside the main content block.
 //
 .block-system-main-block {
-  .ct-list,
-  .ct-callout {
+  .ct-list__inner,
+  .ct-callout__inner {
     box-sizing: border-box;
     max-width: 1100px;
     margin-inline: auto;

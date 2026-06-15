@@ -116,6 +116,9 @@
 // Full-width rows so the oversized number sits at the section's left edge,
 // aligned with the eyebrow rule above it (the design's service list).
 .ct-list--style-numbered {
+  // The design seats the numbered sections on a muted full-width panel.
+  background: var(--surface-muted-color);
+
   .ct-list__rows {
     counter-reset: do-list;
   }
