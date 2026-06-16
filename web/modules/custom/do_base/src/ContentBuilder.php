@@ -116,17 +116,25 @@ final class ContentBuilder {
    *   The snippet title.
    * @param string $summary
    *   The snippet summary.
+   * @param string $variant
+   *   Optional appearance variant key (e.g. 'itemized'). Empty for none.
    *
    * @return \Drupal\paragraphs\Entity\Paragraph
    *   An unsaved snippet paragraph.
    */
-  public static function snippet(string $title, string $summary): Paragraph {
-    return Paragraph::create([
+  public static function snippet(string $title, string $summary, string $variant = ''): Paragraph {
+    $values = [
       'type' => 'civictheme_snippet',
       'field_c_p_theme' => 'dark',
       'field_c_p_title' => $title,
       'field_c_p_summary' => $summary,
-    ]);
+    ];
+
+    if ($variant !== '') {
+      $values['field_p_snippet_appearance'] = $variant;
+    }
+
+    return Paragraph::create($values);
   }
 
   /**
@@ -155,17 +163,13 @@ final class ContentBuilder {
   /**
    * Build a dark CivicTheme manual list of snippet items.
    *
-   * The `$style` is stored in `field_p_appearance`; the theme renders the
-   * bespoke design treatment (numbered, stat, trust, dotted) from a single list
-   * modifier class, styling the snippet children with CSS - no markup is
-   * stored.
+   * Design treatments are driven by per-item variant classes on the snippets
+   * themselves; the list carries no style field.
    *
    * @param string $title
    *   The section heading.
    * @param int $columns
    *   Column count (1-4).
-   * @param string $style
-   *   The design style key (numbered, stat, trust, dotted).
    * @param \Drupal\paragraphs\Entity\Paragraph[] $items
    *   The snippet list items.
    * @param string $eyebrow
@@ -174,7 +178,7 @@ final class ContentBuilder {
    * @return \Drupal\paragraphs\Entity\Paragraph
    *   An unsaved manual list paragraph referencing the saved items.
    */
-  public static function manualList(string $title, int $columns, string $style, array $items, string $eyebrow = ''): Paragraph {
+  public static function manualList(string $title, int $columns, array $items, string $eyebrow = ''): Paragraph {
     foreach ($items as $item) {
       $item->save();
     }
@@ -184,7 +188,6 @@ final class ContentBuilder {
       'field_c_p_theme' => 'dark',
       'field_c_p_title' => $title,
       'field_c_p_list_column_count' => $columns,
-      'field_p_appearance' => $style,
       'field_p_eyebrow' => $eyebrow,
       'field_c_p_list_items' => $items,
     ]);

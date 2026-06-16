@@ -23,6 +23,12 @@ use Drupal\Core\Render\Markup;
 function drevops_preprocess_paragraph__civictheme_snippet(array &$variables): void {
   $paragraph = $variables['paragraph'];
 
+  $appearance = civictheme_get_field_value($paragraph, 'field_p_snippet_appearance');
+
+  if ($appearance) {
+    civictheme_add_modifier_class($variables, 'ct-snippet--' . $appearance);
+  }
+
   if (!$paragraph->hasField('field_c_p_summary') || $paragraph->get('field_c_p_summary')->isEmpty()) {
     return;
   }

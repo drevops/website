@@ -8,6 +8,7 @@ dependencies:
     - field.field.paragraph.civictheme_snippet.field_c_p_theme
     - field.field.paragraph.civictheme_snippet.field_c_p_title
     - field.field.paragraph.civictheme_snippet.field_c_p_topics
+    - field.field.paragraph.civictheme_snippet.field_p_snippet_appearance
     - paragraphs.paragraphs_type.civictheme_snippet
   module:
     - link
@@ -62,4 +63,5 @@ content:
     weight: 4
     region: content
 hidden:
+  field_p_snippet_appearance: true
   search_api_excerpt: true

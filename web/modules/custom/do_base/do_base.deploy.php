@@ -95,7 +95,8 @@ function do_base_deploy_blocks_dark(?array &$sandbox): ?string {
  * The hero is the node banner (populated, not cleared). Every section is built
  * from CivicTheme paragraph components - manual lists of snippets for the
  * services, stats, trust, "why" and process sections, and a callout for
- * the closing CTA - with bespoke design treatments via `field_p_appearance`.
+ * the closing CTA. Bespoke design treatments are driven by per-item variant
+ * classes on the snippets; the list itself carries no style field.
  * No markup is stored as content. New references are saved before the previous
  * paragraphs are deleted, so a failed save never leaves dangling references.
  */
@@ -109,38 +110,38 @@ function do_base_deploy_homepage(): string {
   }
 
   $components = [
-    ContentBuilder::manualList('', 1, 'numbered', [
-      ContentBuilder::snippet('Website Delivery', "We build your site with automated testing and CI/CD from the first commit, so what launches is solid from day one, not a prototype you'll be fixing after go-live. AI-assisted delivery gets you there faster, at the same tested standard."),
-      ContentBuilder::snippet('Ongoing Support', 'Proactive maintenance from the people who built your platform. Security updates, monitoring, continuous improvement, and a direct line with no layers in between.'),
-      ContentBuilder::snippet('Upgrades & Migrations', 'Running an end-of-life Drupal 7 or 9 site? We handle the full migration with test coverage and zero-downtime deployments, so you stay compliant and your users never notice the switch.'),
+    ContentBuilder::manualList('', 1, [
+      ContentBuilder::snippet('Website Delivery', "We build your site with automated testing and CI/CD from the first commit, so what launches is solid from day one, not a prototype you'll be fixing after go-live. AI-assisted delivery gets you there faster, at the same tested standard.", 'itemized'),
+      ContentBuilder::snippet('Ongoing Support', 'Proactive maintenance from the people who built your platform. Security updates, monitoring, continuous improvement, and a direct line with no layers in between.', 'itemized'),
+      ContentBuilder::snippet('Upgrades & Migrations', 'Running an end-of-life Drupal 7 or 9 site? We handle the full migration with test coverage and zero-downtime deployments, so you stay compliant and your users never notice the switch.', 'itemized'),
     ], 'What we do'),
-    ContentBuilder::manualList('Faster, without lowering the bar.', 1, 'dotted', [
-      ContentBuilder::snippet('The same quality, in a fraction of the time', "AI does the heavy lifting on production work, so builds that used to take weeks take days. Same automated tests, same CI, same code you can read on GitHub. The quality bar doesn't move."),
-      ContentBuilder::snippet('"Isn\'t AI-written code risky?"', "Not the way we do it. Every change is reviewed, and every build is covered by automated tests and CI before it ships. AI speeds up the writing, not the checking. The guardrails that make this work are our own, and they're open source, so you can see exactly how it runs."),
-      ContentBuilder::snippet('Your code and data stay yours', 'We control the models and the data handling, and nothing trains on your project. It\'s all written down in our <a href="https://www.drevops.com/responsible-ai">Responsible AI policy</a>.'),
+    ContentBuilder::manualList('Faster, without lowering the bar.', 1, [
+      ContentBuilder::snippet('The same quality, in a fraction of the time', "AI does the heavy lifting on production work, so builds that used to take weeks take days. Same automated tests, same CI, same code you can read on GitHub. The quality bar doesn't move.", 'dotted'),
+      ContentBuilder::snippet('"Isn\'t AI-written code risky?"', "Not the way we do it. Every change is reviewed, and every build is covered by automated tests and CI before it ships. AI speeds up the writing, not the checking. The guardrails that make this work are our own, and they're open source, so you can see exactly how it runs.", 'dotted'),
+      ContentBuilder::snippet('Your code and data stay yours', 'We control the models and the data handling, and nothing trains on your project. It\'s all written down in our <a href="https://www.drevops.com/responsible-ai">Responsible AI policy</a>.', 'dotted'),
     ], 'AI-assisted delivery'),
-    ContentBuilder::manualList('', 2, 'stat', [
+    ContentBuilder::manualList('', 2, [
       ContentBuilder::factCard('1', 'To set up CI/CD on a new project', 'day'),
       ContentBuilder::factCard('10', 'Delivering reliable platforms', 'yrs'),
       ContentBuilder::factCard('40', 'Open-source tools we maintain', '+'),
       ContentBuilder::factCard('0', 'Excuses when something breaks'),
     ], 'The essentials'),
-    ContentBuilder::manualList("Trusted on projects where failure isn't an option.", 4, 'trust', [
-      ContentBuilder::snippet('Victorian Government', "Delivered Australia's first Docker-based government Drupal platform."),
-      ContentBuilder::snippet('Australian Defence', 'Multiple classified platforms with complex security and compliance requirements.'),
-      ContentBuilder::snippet('GovCMS', "Drupal platform delivery on Australia's government hosting infrastructure."),
-      ContentBuilder::snippet('Education', 'University platforms with ongoing support, leading to internal referrals across departments.'),
+    ContentBuilder::manualList("Trusted on projects where failure isn't an option.", 4, [
+      ContentBuilder::snippet('Victorian Government', "Delivered Australia's first Docker-based government Drupal platform.", 'trust'),
+      ContentBuilder::snippet('Australian Defence', 'Multiple classified platforms with complex security and compliance requirements.', 'trust'),
+      ContentBuilder::snippet('GovCMS', "Drupal platform delivery on Australia's government hosting infrastructure.", 'trust'),
+      ContentBuilder::snippet('Education', 'University platforms with ongoing support, leading to internal referrals across departments.', 'trust'),
     ], 'Track record'),
-    ContentBuilder::manualList('No filler. No overhead. Just good engineering.', 1, 'dotted', [
-      ContentBuilder::snippet('Automated testing is not optional', "Every platform ships with a full test suite. Functional, unit, and visual regression tests run on every commit. If it's not tested, it doesn't deploy."),
-      ContentBuilder::snippet('One team, zero handovers', 'We handle development, DevOps, and production support. One team with full context, no vendors blaming each other, no knowledge lost between handoffs.'),
-      ContentBuilder::snippet('Pricing that makes sense', "Flat-rate pricing with standard and rapid response options. We'll tell you what it costs upfront. No retainer games, no billable surprises, no markup on markup."),
-      ContentBuilder::snippet('Direct line to the engineers', 'You talk to the people building your platform. We manage the project without adding layers between you and the work. Fast communication, honest updates, no runaround.'),
+    ContentBuilder::manualList('No filler. No overhead. Just good engineering.', 1, [
+      ContentBuilder::snippet('Automated testing is not optional', "Every platform ships with a full test suite. Functional, unit, and visual regression tests run on every commit. If it's not tested, it doesn't deploy.", 'dotted'),
+      ContentBuilder::snippet('One team, zero handovers', 'We handle development, DevOps, and production support. One team with full context, no vendors blaming each other, no knowledge lost between handoffs.', 'dotted'),
+      ContentBuilder::snippet('Pricing that makes sense', "Flat-rate pricing with standard and rapid response options. We'll tell you what it costs upfront. No retainer games, no billable surprises, no markup on markup.", 'dotted'),
+      ContentBuilder::snippet('Direct line to the engineers', 'You talk to the people building your platform. We manage the project without adding layers between you and the work. Fast communication, honest updates, no runaround.', 'dotted'),
     ]),
-    ContentBuilder::manualList('A clear path from kickoff to ongoing support.', 1, 'numbered', [
-      ContentBuilder::snippet('Discovery', 'We review your website, understand your requirements and constraints, and scope the work, including whether AI-assisted delivery is the right fit. You get a clear proposal with flat-rate pricing before any work begins.'),
-      ContentBuilder::snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.'),
-      ContentBuilder::snippet('Ongoing support', 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
+    ContentBuilder::manualList('A clear path from kickoff to ongoing support.', 1, [
+      ContentBuilder::snippet('Discovery', 'We review your website, understand your requirements and constraints, and scope the work, including whether AI-assisted delivery is the right fit. You get a clear proposal with flat-rate pricing before any work begins.', 'itemized'),
+      ContentBuilder::snippet('Delivery', 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.', 'itemized'),
+      ContentBuilder::snippet('Ongoing support', 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.', 'itemized'),
     ], 'How we work'),
     ContentBuilder::callout('Let\'s talk about your <span class="do-underline">website.</span>', '<p>Tell us where things stand, what\'s working, and what\'s not. We\'ll be straight with you about whether we\'re the right fit.</p><p><a class="ct-button ct-theme-dark ct-button--secondary ct-button--large" href="/contact">Talk to us</a></p>'),
   ];
@@ -169,8 +170,8 @@ function do_base_deploy_homepage(): string {
  * Rebuild the Services page from CivicTheme components.
  *
  * The hero is the node banner. Each service is a Service detail paragraph; the
- * "our approach" grid is a dotted manual list of snippets; the CTA is a
- * callout.
+ * "our approach" grid is a manual list of dotted-variant snippets; the CTA is
+ * a callout.
  */
 function do_base_deploy_services(): string {
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
@@ -234,11 +235,11 @@ function do_base_deploy_services(): string {
       'Typical engagement', '$25K - $120K',
       'Book a free assessment', '/contact'
     ),
-    ContentBuilder::manualList('', 2, 'dotted', [
-      ContentBuilder::snippet('Senior engineers only', 'No juniors on your project. Every person who touches your code has 10+ years of Drupal experience.'),
-      ContentBuilder::snippet('Flat-rate pricing', 'We quote a fixed price upfront. No hourly billing surprises, no retainer games, no scope creep charges.'),
-      ContentBuilder::snippet('Tested by default', "Every platform ships with automated tests. If it's not tested, it doesn't deploy. No exceptions."),
-      ContentBuilder::snippet('Direct communication', 'You talk to the engineers building your site. No project managers relaying messages, no layers in between.'),
+    ContentBuilder::manualList('', 2, [
+      ContentBuilder::snippet('Senior engineers only', 'No juniors on your project. Every person who touches your code has 10+ years of Drupal experience.', 'dotted'),
+      ContentBuilder::snippet('Flat-rate pricing', 'We quote a fixed price upfront. No hourly billing surprises, no retainer games, no scope creep charges.', 'dotted'),
+      ContentBuilder::snippet('Tested by default', "Every platform ships with automated tests. If it's not tested, it doesn't deploy. No exceptions.", 'dotted'),
+      ContentBuilder::snippet('Direct communication', 'You talk to the engineers building your site. No project managers relaying messages, no layers in between.', 'dotted'),
     ], 'Our approach'),
     ContentBuilder::callout('Ready to talk about your <span class="do-underline">platform?</span>', '<p>Tell us where things stand. We\'ll be straight with you about whether we\'re the right fit.</p><p><a class="ct-button ct-theme-dark ct-button--secondary ct-button--large" href="/contact">Get in touch</a></p>'),
   ];

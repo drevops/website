@@ -55,7 +55,6 @@ class ContentBuilderTest extends KernelTestBase {
     $this->createParagraphTextField('field_c_p_summary', 'string_long');
     $this->createParagraphTextField('field_c_p_content', 'text_long');
     $this->createParagraphTextField('field_p_suffix', 'string');
-    $this->createParagraphTextField('field_p_appearance', 'string');
     $this->createParagraphTextField('field_p_eyebrow', 'string');
     $this->createParagraphTextField('field_c_p_list_column_count', 'integer');
     $this->createParagraphTextField('field_p_tagline', 'string');
@@ -69,7 +68,7 @@ class ContentBuilderTest extends KernelTestBase {
     $this->createParagraphType('civictheme_content', ['field_c_p_theme', 'field_c_p_content']);
     $this->createParagraphType('civictheme_snippet', ['field_c_p_theme', 'field_c_p_title', 'field_c_p_summary']);
     $this->createParagraphType('do_fact_card', ['field_c_p_theme', 'field_c_p_title', 'field_p_suffix', 'field_c_p_summary']);
-    $this->createParagraphType('civictheme_manual_list', ['field_c_p_theme', 'field_c_p_title', 'field_c_p_list_column_count', 'field_p_appearance', 'field_p_eyebrow', 'field_c_p_list_items']);
+    $this->createParagraphType('civictheme_manual_list', ['field_c_p_theme', 'field_c_p_title', 'field_c_p_list_column_count', 'field_p_eyebrow', 'field_c_p_list_items']);
     $this->createParagraphType('civictheme_callout', ['field_c_p_theme', 'field_c_p_title', 'field_c_p_content', 'field_c_p_links']);
     $this->createParagraphType('do_service_detail', ['field_c_p_theme', 'field_c_p_title', 'field_p_tagline', 'field_c_p_content', 'field_p_includes', 'field_p_price_label', 'field_p_price_value', 'field_c_p_link']);
 
@@ -126,18 +125,17 @@ class ContentBuilderTest extends KernelTestBase {
    */
   public function testManualList(): void {
     $items = [
-      ContentBuilder::snippet('One', 'First'),
-      ContentBuilder::snippet('Two', 'Second'),
+      ContentBuilder::snippet('One', 'First', 'itemized'),
+      ContentBuilder::snippet('Two', 'Second', 'itemized'),
     ];
 
-    $list = ContentBuilder::manualList('How it works', 2, 'numbered', $items, 'Process');
+    $list = ContentBuilder::manualList('How it works', 2, $items, 'Process');
 
     $this->assertInstanceOf(Paragraph::class, $list);
     $this->assertSame('civictheme_manual_list', $list->bundle());
     $this->assertSame('dark', $list->get('field_c_p_theme')->value);
     $this->assertSame('How it works', $list->get('field_c_p_title')->value);
     $this->assertSame(2, $list->get('field_c_p_list_column_count')->value);
-    $this->assertSame('numbered', $list->get('field_p_appearance')->value);
     $this->assertSame('Process', $list->get('field_p_eyebrow')->value);
     $this->assertCount(2, $list->get('field_c_p_list_items'));
 
@@ -150,7 +148,7 @@ class ContentBuilderTest extends KernelTestBase {
    * Tests manualList() default eyebrow is empty.
    */
   public function testManualListDefaultEyebrow(): void {
-    $list = ContentBuilder::manualList('Stats', 3, 'stat', [ContentBuilder::snippet('A', 'B')]);
+    $list = ContentBuilder::manualList('Stats', 3, [ContentBuilder::snippet('A', 'B')]);
 
     $this->assertSame('', $list->get('field_p_eyebrow')->value);
   }

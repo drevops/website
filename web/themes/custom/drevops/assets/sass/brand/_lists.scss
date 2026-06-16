@@ -1,19 +1,17 @@
 //
 // DrevOps — Manual list design treatments.
 //
-// CivicTheme manual lists carry a `field_p_appearance` value that the theme
-// turns into a `.ct-list--style-*` modifier (see includes/manual_list.inc). These
-// rules render the design's bespoke sections (numbered service rows, the stats
-// figures, the trust grid and the dotted "why" list) by styling the snippet
-// children of those lists. No markup is stored as content; the structure is
-// CivicTheme's manual list + snippet components.
+// Each bespoke design treatment is driven by an item-level variant class
+// (`ct-snippet--{variant}`) emitted by the snippet preprocessor. The enclosing
+// list is scoped via CSS `:has()` so section-level styles (background, grid,
+// rhythm) follow automatically from the items inside it.
 //
 
 // Section rhythm shared by all styled lists.
-.ct-list--style-numbered,
-.ct-list--style-stat,
-.ct-list--style-trust,
-.ct-list--style-dotted {
+.ct-list:has(.ct-snippet--itemized),
+.ct-list:has(.ct-snippet--dotted),
+.ct-list:has(.ct-snippet--trust),
+.ct-list:has(.ct-fact-card) {
   padding: var(--layout-rhythm-md, 8.75rem) 0;
 
   .ct-list__inner {
@@ -85,7 +83,7 @@
 }
 
 // Alternating section surfaces, matching the design.
-.ct-list--style-stat {
+.ct-list:has(.ct-fact-card) {
   background: var(--surface-subtle-color);
 }
 
@@ -94,8 +92,8 @@
 // the next item's heading. Top-align the cols so every snippet is its natural
 // height and the dividers fall cleanly between items. (The stat and trust grids
 // override `.row` to CSS grid, so they are unaffected.)
-.ct-list--style-numbered .row,
-.ct-list--style-dotted .row {
+.ct-list:has(.ct-snippet--itemized) .row,
+.ct-list:has(.ct-snippet--dotted) .row {
   align-items: flex-start;
 
   // Remove CivicTheme's inter-row gap so the rows are adjacent and the dividers
@@ -106,48 +104,46 @@
 // CivicTheme pads the snippet content block, which pushes the heading down so
 // the dot/number no longer lines up with it. Remove that padding so the heading
 // sits at the row top and the dot falls at its first line, as in the design.
-.ct-list--style-numbered .ct-snippet__content,
-.ct-list--style-dotted .ct-snippet__content {
+.ct-snippet--itemized .ct-snippet__content,
+.ct-snippet--dotted .ct-snippet__content {
   padding-top: 0;
   padding-bottom: 0;
 }
 
-// ── Numbered rows (services, process) ──────────────────────────────────────
-// Full-width rows so the oversized number sits at the section's left edge,
-// aligned with the eyebrow rule above it (the design's service list).
-.ct-list--style-numbered {
-  // The design seats the numbered sections on a muted full-width panel.
+// ── Itemized snippet variant ────────────────────────────────────────────────
+// A snippet rendered as a numbered list row with a fading divider. The variant
+// lives on the snippet (field-driven), so a single manual list of itemized
+// snippets renders the separated list. The muted section panel and the row
+// counter follow from the list that contains them.
+.ct-list:has(.ct-snippet--itemized) {
   background: var(--surface-muted-color);
+}
 
-  .ct-list__rows {
-    counter-reset: do-list;
-  }
+.ct-list__rows:has(.ct-snippet--itemized) {
+  counter-reset: do-snippet;
+}
 
-  .ct-snippet {
-    position: relative;
-    counter-increment: do-list;
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 0 var(--space-y-6);
-    align-items: start;
-    padding: var(--space-y-8) 0;
-  }
+.ct-snippet--itemized {
+  position: relative;
+  counter-increment: do-snippet;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0 var(--space-y-6);
+  align-items: start;
+  padding: var(--space-y-8) 0;
 
-  .ct-snippet::before {
-    content: counter(do-list, decimal-leading-zero);
+  &::before {
+    content: counter(do-snippet, decimal-leading-zero);
     font-family: var(--font-family-primary);
     font-size: 80px;
     font-weight: var(--font-weight-bold);
     color: var(--color-secondary-6);
-    opacity: 0.18;
+    opacity: 18%;
     line-height: 1;
     letter-spacing: -0.04em;
   }
 
-  // Divider between rows: a teal line fading out to the right (the design's
-  // `.component-service-divider`). The grid-column span keeps it clear of the
-  // number, and it is omitted after the last row.
-  .ct-snippet::after {
+  &::after {
     content: '';
     position: absolute;
     left: 0;
@@ -155,10 +151,6 @@
     bottom: 0;
     height: 1px;
     background: linear-gradient(90deg, color-mix(in srgb, var(--color-secondary-6) 50%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 15%, transparent) 50%, transparent 100%);
-  }
-
-  [class*='col-']:last-child .ct-snippet::after {
-    display: none;
   }
 
   .ct-snippet__title {
@@ -180,10 +172,14 @@
   }
 }
 
+[class*='col-']:last-child .ct-snippet--itemized::after {
+  display: none;
+}
+
 // ── Fact cards (homepage "The essentials") ──────────────────────────────────
 // Each "essential" is a do_fact_card: a large figure above an uppercase label,
 // laid out as a bordered grid on the subtle surface.
-.ct-list--style-stat {
+.ct-list:has(.ct-fact-card) {
   // The four fact cards form a single bordered 2x2 grid with internal dividers
   // (the design's stat grid), not separate cards with gaps.
   .row:has(.ct-fact-card) {
@@ -260,8 +256,10 @@
   }
 }
 
-// ── Trust grid (4 cells: label + description) ───────────────────────────────
-.ct-list--style-trust {
+// ── Trust card snippet variant ──────────────────────────────────────────────
+// A snippet rendered as a bordered card in a 4-column grid. The trust variant
+// lives on the snippet; the enclosing list switches to a CSS grid layout.
+.ct-list:has(.ct-snippet--trust) {
   background: var(--page-bg);
 
   // CivicTheme's four-column flex grid overflows, overlapping the bordered
@@ -279,15 +277,15 @@
       padding: 0;
     }
   }
+}
 
-  .ct-snippet {
-    box-sizing: border-box;
-    text-align: center;
-    padding: var(--space-y-5) var(--space-x-3);
-    border: 1px solid var(--border-subtle-color);
-    border-radius: var(--radius-sm);
-    height: 100%;
-  }
+.ct-snippet--trust {
+  box-sizing: border-box;
+  text-align: center;
+  padding: var(--space-y-5) var(--space-x-3);
+  border: 1px solid var(--border-subtle-color);
+  border-radius: var(--radius-sm);
+  height: 100%;
 
   .ct-snippet__title {
     font-size: var(--body-font-size);
@@ -302,35 +300,47 @@
     line-height: var(--line-height-md);
     color: var(--text-subtle-color);
   }
+}
 
-  @media (max-width: 767.98px) {
-    .row:has(.ct-snippet) {
-      grid-template-columns: 1fr 1fr;
-    }
+@media (max-width: 767.98px) {
+  .ct-list:has(.ct-snippet--trust) .row:has(.ct-snippet) {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-// ── Dotted list (why / approach) ────────────────────────────────────────────
-.ct-list--style-dotted {
+// ── Dotted snippet variant ──────────────────────────────────────────────────
+// A snippet rendered as a dot-prefixed row with top/bottom dividers.
+.ct-list:has(.ct-snippet--dotted) {
   .ct-list__rows {
     max-width: 680px;
     margin: 0 auto;
   }
 
-  .ct-snippet {
-    display: grid;
-    grid-template-columns: 40px 1fr;
-    gap: var(--space-y-3);
-    align-items: start;
-    padding: var(--space-y-5) 0;
-    border-bottom: 1px solid var(--border-subtle-color);
+  // The services "approach" is a two-column dotted list. The design renders it
+  // as a full-width two-column grid where each item stacks the dot above the
+  // heading with no dividers, unlike the single-column lists.
+  .ct-list__rows:has([class*='col-m-6']) {
+    max-width: none;
   }
+}
 
-  .ct-snippet:first-child {
+.ct-list__rows:has(.ct-snippet--dotted) {
+  counter-reset: do-dotted;
+}
+
+.ct-snippet--dotted {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--space-y-3);
+  align-items: start;
+  padding: var(--space-y-5) 0;
+  border-bottom: 1px solid var(--border-subtle-color);
+
+  &:first-child {
     border-top: 1px solid var(--border-subtle-color);
   }
 
-  .ct-snippet::before {
+  &::before {
     content: '';
     width: 8px;
     height: 8px;
@@ -353,23 +363,18 @@
     line-height: var(--line-height-lg);
     color: var(--text-subtle-color);
   }
+}
 
-  // The services "approach" is a two-column dotted list. The design renders it
-  // as a full-width two-column grid (`.component-grid-2`) where each item stacks
-  // the dot above the heading with no dividers, unlike the single-column lists.
-  .ct-list__rows:has([class*='col-m-6']) {
-    max-width: none;
-  }
+// Two-column dotted list (services "approach"): each item stacks the dot above
+// the heading with no dividers.
+[class*='col-m-6'] .ct-snippet--dotted {
+  display: block;
+  padding: var(--space-y-4) 0;
+  border: 0;
 
-  [class*='col-m-6'] .ct-snippet {
+  &::before {
     display: block;
-    padding: var(--space-y-4) 0;
-    border: 0;
-
-    &::before {
-      display: block;
-      margin: 0 0 var(--space-y-3);
-    }
+    margin: 0 0 var(--space-y-3);
   }
 }
 

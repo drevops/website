@@ -80,6 +80,11 @@ $contact-region: '.block-field-blocknodecivictheme-pagefield-c-n-components';
 
     &:focus,
     &:focus-visible {
+      // Draw the focus ring inside the field's border box so focusing does not
+      // expand the field's footprint outward (the default outline sits 2px
+      // outside, which reads as the field shifting up on focus). Keeps a
+      // visible, keyboard-accessible focus indicator.
+      outline-offset: -2px;
       border-color: var(--color-secondary-6);
       background-color: var(--surface-muted-color);
     }

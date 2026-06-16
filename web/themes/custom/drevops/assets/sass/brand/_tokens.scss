@@ -303,4 +303,11 @@
 :root {
   --display-1-font-size: clamp(56px, 8vw, 92px);
   --display-2-font-size: clamp(40px, 5vw, 56px);
+
+  // CivicTheme derives a saturated red focus colour that reads as an error
+  // state on inputs and buttons. Use the brand coral for the focus ring
+  // instead. This `:root` rule outranks the generated `html { ... }` colour
+  // variables, so it applies regardless of stylesheet load order.
+  --ct-color-light-interaction-focus: var(--color-tertiary-3);
+  --ct-color-dark-interaction-focus: var(--color-tertiary-3);
 }

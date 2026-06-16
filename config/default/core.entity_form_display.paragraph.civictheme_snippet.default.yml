@@ -8,9 +8,11 @@ dependencies:
     - field.field.paragraph.civictheme_snippet.field_c_p_theme
     - field.field.paragraph.civictheme_snippet.field_c_p_title
     - field.field.paragraph.civictheme_snippet.field_c_p_topics
+    - field.field.paragraph.civictheme_snippet.field_p_snippet_appearance
     - paragraphs.paragraphs_type.civictheme_snippet
   module:
     - link
+    - options
 _core:
   default_config_hash: eRhx4ZuWx5g0NU1pysRo1qGgzPmqccGwZD1kuh9SIyQ
 id: paragraph.civictheme_snippet.default
@@ -57,6 +59,12 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_p_snippet_appearance:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true
