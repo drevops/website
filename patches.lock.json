@@ -1,5 +1,5 @@
 {
-    "_hash": "10e1bc80605a2b3b5337445a09432074b7acda4664717c69fcc759e33683800e",
+    "_hash": "cfbcec72c57c586f4a5c55477a92c5aeb912a107893bc66bb76426a27f2f0308",
     "patches": {
         "drupal/civictheme": [
             {
@@ -7,6 +7,18 @@
                 "description": "Remove Shortcut from theme dependency",
                 "url": "patches/civictheme-remove-shortcut-mr19.diff",
                 "sha256": "c9e5dca969c253d74dc05371df40ef722603c46a65a3ef706b6de5e70a901f05",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ],
+        "drupal/cloudflare": [
+            {
+                "package": "drupal/cloudflare",
+                "description": "Remove zone ID to name map update hook that calls the Cloudflare API during database updates",
+                "url": "patches/cloudflare-remove-zone-map-api-update-hook.patch",
+                "sha256": "9b3c9307f48e9a0037b1c335ff6ff39e14223c54231499fde65e0627850a1967",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"

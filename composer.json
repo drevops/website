@@ -207,6 +207,9 @@
             "drupal/civictheme": {
                 "Remove Shortcut from theme dependency": "patches/civictheme-remove-shortcut-mr19.diff"
             },
+            "drupal/cloudflare": {
+                "Remove zone ID to name map update hook that calls the Cloudflare API during database updates": "patches/cloudflare-remove-zone-map-api-update-hook.patch"
+            },
             "drupal/seckit": {
                 "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252": "https://www.drupal.org/files/issues/2025-05-07/3219252-9.patch"
             },
