@@ -99,44 +99,14 @@
   }
 }
 
-// Article grid: the design lays the cards out as an equal-width 3-up CSS grid on
-// a muted panel, not CivicTheme's Bootstrap row/col (whose gutters make the
-// cards narrower than the design).
+// Article grid: a muted section panel behind the card list. The card columns
+// are left to CivicTheme's native grid; only the "Showing N of M" results count
+// is hidden so the panel opens straight into the cards.
 .ct-list:has([class~='col-m-4']) {
   background: var(--surface-muted-color);
 
-  // The design's grid opens straight into the cards; CivicTheme's "Showing N of
-  // M" results count has no place in it.
   .ct-list__results-count {
     display: none;
-  }
-
-  // CivicTheme nests a fixed-width container inside the list inner, which makes
-  // the grid narrower than the design's column. Let it fill the inner column.
-  .ct-list__rows,
-  .container {
-    width: 100%;
-    max-width: none;
-  }
-
-  .row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-y-4);
-    margin: 0;
-
-    > [class*='col-'] {
-      flex: none;
-      width: auto;
-      max-width: none;
-      padding: 0;
-    }
-  }
-
-  @media (max-width: 767.98px) {
-    .row {
-      grid-template-columns: 1fr;
-    }
   }
 }
 
