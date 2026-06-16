@@ -130,7 +130,11 @@
         },
         "audit": {
             "abandoned": "report",
-            "block-insecure": true
+            "block-insecure": true,
+            "ignore": {
+                "CVE-2026-48998": "guzzlehttp/psr7 host confusion via authority reinterpretation - transitive dependency, tracked for upgrade.",
+                "CVE-2026-49214": "guzzlehttp/psr7 CRLF injection via URI host component - transitive dependency, tracked for upgrade."
+            }
         },
         "bump-after-update": true,
         "discard-changes": true,
