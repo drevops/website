@@ -8,7 +8,7 @@
         "composer/installers": "^2.3",
         "cweagans/composer-patches": "^2.0",
         "drevops/test-private-package": "^1.0",
-        "drevops/vortex-tooling": "^1.1.0",
+        "drevops/vortex-tooling": "^1.2.0",
         "drupal/admin_toolbar": "^3.6.3",
         "drupal/ai_image_alt_text": "^1.0.2",
         "drupal/ai_provider_openai": "^1.2.1",
@@ -80,7 +80,7 @@
         "phpstan/phpstan": "^2.2.2",
         "phpunit/phpunit": "^11.5.55",
         "pyrech/composer-changelogs": "^2.2",
-        "rector/rector": "^2.4.5",
+        "rector/rector": "^2.4.6",
         "vincentlanglet/twig-cs-fixer": "^3.14"
     },
     "conflict": {
