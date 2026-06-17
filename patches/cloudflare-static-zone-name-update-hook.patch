@@ -1,0 +1,38 @@
+Skip the Cloudflare API call in cloudflare_update_10002 and map every configured
+zone_id to the static zone name 'drevops.com'. The upstream update
+calls the Cloudflare API to fetch zone names, which fails in CI and any other
+environment without valid Cloudflare API credentials. The site only manages a
+single Cloudflare zone, so the API lookup is unnecessary - the name is constant.
+
+--- a/cloudflare.install
++++ b/cloudflare.install
+@@ -123,27 +123,14 @@ function cloudflare_update_10001() {
+ }
+
+ /**
+- * Convert zone IDs to ID=>name map.
++ * Convert zone IDs to ID=>name map using a static zone name.
+  */
+ function cloudflare_update_10002() {
+   $config = \Drupal::configFactory()->getEditable('cloudflare.settings');
+   if ($zone_ids = $config->get('zone_id')) {
+     $zones_used = [];
+-    $zones_all = [];
+-    $response = \Drupal::service('cloudflare.api_client')->listZones();
+-    if ($response->success === TRUE) {
+-      foreach ($response->result as $zone) {
+-        $zones_all[$zone->id] = $zone->name;
+-      }
+-    }
+-    else {
+-      throw new UpdateException('Update 10002 failed with the following: ' . var_export($response->errors, TRUE));
+-    }
+-
+     foreach ($zone_ids as $zone_id) {
+-      if (isset($zones_all[$zone_id])) {
+-        $zones_used[$zone_id] = $zones_all[$zone_id];
+-      }
++      $zones_used[$zone_id] = 'drevops.com';
+     }
+     $config
+       ->set('zones', $zones_used)
