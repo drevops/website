@@ -5,7 +5,7 @@ remote_addr_validate: true
 bypass_host: ''
 valid_credentials: true
 zones:
-  7303aceb6327852069d6653a5b5f2fb3: drevops.com
+  f65d58af8c4990ceddeadeca057fd185: drevops.com
 auth_using: token
 api_token: ''
 apikey: ''
