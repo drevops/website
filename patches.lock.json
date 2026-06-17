@@ -1,5 +1,5 @@
 {
-    "_hash": "cfbcec72c57c586f4a5c55477a92c5aeb912a107893bc66bb76426a27f2f0308",
+    "_hash": "e229b07bdfadbc048ad3725db4d36669255391275e5a71ed48f918ea0a21e1e6",
     "patches": {
         "drupal/civictheme": [
             {
@@ -16,9 +16,9 @@
         "drupal/cloudflare": [
             {
                 "package": "drupal/cloudflare",
-                "description": "Remove zone ID to name map update hook that calls the Cloudflare API during database updates",
-                "url": "patches/cloudflare-remove-zone-map-api-update-hook.patch",
-                "sha256": "9b3c9307f48e9a0037b1c335ff6ff39e14223c54231499fde65e0627850a1967",
+                "description": "Skip the Cloudflare API call in the zone-name update hook and use a static zone name",
+                "url": "patches/cloudflare-static-zone-name-update-hook.patch",
+                "sha256": "f71d74bdeea0a778a493d28f9e88a6ebccbb3fcfb1671374b9cf153babb6e043",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"
