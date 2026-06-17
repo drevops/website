@@ -129,10 +129,6 @@
             "tbachert/spi": true
         },
         "audit": {
-            "ignore": {
-                "CVE-2026-48998": "guzzlehttp/psr7 host confusion (fixed in 2.10.2); held at 2.8.x by drupal/core-recommended (~2.8.0); remove when that constraint allows >=2.10.2",
-                "CVE-2026-49214": "guzzlehttp/psr7 CRLF injection (fixed in 2.10.2); held at 2.8.x by drupal/core-recommended (~2.8.0); remove when that constraint allows >=2.10.2"
-            },
             "abandoned": "report",
             "block-insecure": true
         },
