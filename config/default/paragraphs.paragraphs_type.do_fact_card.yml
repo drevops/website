@@ -1,0 +1,10 @@
+uuid: 8f2a1c40-3b6d-4e7a-9c12-5d8e4f0a7b21
+langcode: en
+status: true
+dependencies: {  }
+id: do_fact_card
+label: 'Fact card'
+icon_uuid: null
+icon_default: null
+description: 'A single statistic - a large figure with a label.'
+behavior_plugins: {  }

@@ -53,7 +53,7 @@
 {% set is_decorative_class = is_decorative ? 'ct-banner--decorative' : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {# Custom: Add type and with_offset support. #}
-{% set type = type in ['default', 'large', 'intro'] ? type : 'default' %}
+{% set type = type in ['default', 'large', 'intro', 'fade', 'page'] ? type : 'default' %}
 {% set type_class = 'ct-banner-type--%s'|format(type) %}
 {% set with_offset_class = with_offset ? 'ct-banner--with-offset' : '' %}
 {% set modifier_class = '%s %s %s %s %s'|format(theme_class, is_decorative_class, type_class, with_offset_class, modifier_class|default('')) %}
@@ -92,7 +92,7 @@
             <div class="row">
               {% block breadcrumb_block %}
                 {# Custom: Hide breadcrumb for intro type and use include() instead of {% include only %}. #}
-                {% if breadcrumb is not empty and type != 'intro' %}
+                {% if breadcrumb is not empty and type not in ['intro', 'fade'] %}
                   <div class="{% if featured_image is not empty %}col-xxs-12 col-m-6{% else %}col-xxs-12{% endif %}">
                     {{ include('civictheme:breadcrumb', {
                       theme: theme,

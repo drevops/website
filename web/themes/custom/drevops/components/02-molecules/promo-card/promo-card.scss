@@ -66,6 +66,24 @@
     @include ct-typography('heading-4');
   }
 
+  // Custom: Article meta line (date / reading time) - the design's small,
+  // uppercase, muted caption shown above the card title.
+  #{$root}__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-y-1);
+    font-size: var(--label-font-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted-color);
+  }
+
+  #{$root}__meta-sep {
+    color: var(--color-secondary-6);
+    opacity: 40%;
+  }
+
   #{$root}__title-link {
     @include ct-font-size-inherit();
 

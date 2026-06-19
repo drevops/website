@@ -168,4 +168,210 @@
       @include ct-typography('display-large');
     }
   }
+
+  // Custom: Homepage hero treatment for the intro banner - full-viewport dark
+  // canvas with an atmospheric glow, eyebrow, oversized display headline,
+  // subtitle and a scroll cue, reproducing the design hero.
+  &.ct-banner-type--intro.ct-banner--hero {
+    #{$root}__inner {
+      position: relative;
+
+      // Include the padding in the min-height so the hero is exactly its target
+      // height and never overflows the first screen (CivicTheme's banner inner
+      // is content-box, which would otherwise add the padding on top of 100vh).
+      box-sizing: border-box;
+      min-height: 62vh;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      padding-top: ct-spacing(16);
+      padding-bottom: ct-spacing(10);
+
+      // The design hero is the deep-navy page canvas with an atmospheric glow,
+      // not CivicTheme's lighter banner surface. Let the page background show
+      // through so the hero is not washed out.
+      background-color: transparent;
+    }
+
+    // Full-viewport variant for the front page. The fixed header overlaps the
+    // top, so the top padding clears it while the hero stays within one screen.
+    &.ct-banner--hero-home #{$root}__inner {
+      min-height: 100vh;
+      padding-top: ct-spacing(16);
+      padding-bottom: ct-spacing(10);
+    }
+
+    // Atmospheric glow.
+    #{$root}__inner::before {
+      content: '';
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      width: min(800px, 90vw);
+      height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{ct-color-dark('interaction-background')} 14%, transparent) 0%, color-mix(in srgb, #{ct-color-dark('interaction-background')} 4%, transparent) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    // Vignette.
+    #{$root}__inner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, #{ct-color-dark('background')} 60%, transparent) 100%);
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: ct-particle(115);
+    }
+
+    #{$root}__site-section {
+      @include ct-typography('label-regular');
+
+      margin-bottom: ct-spacing(3);
+      color: ct-color-dark('interaction-background');
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    #{$root}__title {
+      margin-bottom: ct-spacing(3);
+      font-size: clamp(ct-particle(7), 8vw, ct-particle(11.5));
+      line-height: 1.05;
+    }
+
+    #{$root}__content {
+      max-width: ct-particle(90);
+      margin: 0 auto;
+      color: color-mix(in srgb, #{ct-color-dark('body')} 75%, transparent);
+
+      @include ct-typography('text-large');
+    }
+  }
+
+  // Custom: Page hero - a compact centred hero for listing/landing pages. A
+  // faint, static glow sits behind a centred headline whose block shrinks to
+  // the text width, with a coral eyebrow line pinned to its top-left edge.
+  &.ct-banner-type--intro.ct-banner--page {
+    #{$root}__inner {
+      position: relative;
+      box-sizing: border-box;
+      min-height: 0;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      padding-top: ct-spacing(25);
+      padding-bottom: ct-spacing(10);
+      background-color: transparent;
+    }
+
+    #{$root}__inner::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(900px, 95vw);
+      height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{ct-color-dark('interaction-background')} 8%, transparent) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    #{$root}__title {
+      max-width: ct-particle(93);
+      margin-inline: auto;
+      font-size: var(--display-2-font-size);
+      font-weight: var(--font-weight-normal);
+      line-height: var(--display-line-height);
+      letter-spacing: -0.02em;
+      color: var(--text-color);
+    }
+
+    #{$root}__eyebrow {
+      display: flex;
+      align-items: center;
+      gap: var(--space-x-2);
+      margin-bottom: var(--space-y-4);
+      font-size: var(--label-font-size);
+      letter-spacing: var(--label-letter-spacing);
+      color: var(--text-accent-color);
+
+      &::before {
+        content: '';
+        display: block;
+        width: var(--space-x-6);
+        height: 1px;
+        background: currentcolor;
+        opacity: 60%;
+      }
+    }
+  }
+}
+
+// Accent word inside the hero headline - the design's coral accent.
+.ct-banner__title .do-word-accent {
+  color: var(--text-accent-color);
+}
+
+// Eyebrow label above the hero headline. The design uses a dark teal, lifted
+// here to the lighter teal so the small text clears the contrast minimum.
+.ct-banner__title .ct-banner__eyebrow {
+  display: block;
+  font-family: var(--body-font-family);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.2em;
+  line-height: var(--line-height-md);
+  text-transform: uppercase;
+  color: var(--color-secondary-4);
+  margin-bottom: var(--space-y-4);
+}
+
+// Fade hero (blog posts): the featured image fills the banner behind a dark
+// page-coloured gradient, with the title sitting over the bottom of the image.
+.ct-banner-type--fade {
+  .ct-banner__inner {
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+    display: flex;
+    align-items: flex-end;
+    background-size: cover;
+    background-position: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, color-mix(in srgb, var(--page-bg) 40%, transparent) 0%, color-mix(in srgb, var(--page-bg) 70%, transparent) 40%, var(--page-bg) 100%);
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      padding-bottom: var(--space-y-8);
+    }
+
+    @media (max-width: 767.98px) {
+      min-height: 400px;
+    }
+  }
+
+  .ct-banner__title {
+    max-width: 800px;
+    font-size: var(--display-2-font-size);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--display-line-height);
+    letter-spacing: -0.02em;
+    color: var(--text-color);
+  }
 }

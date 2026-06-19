@@ -33,6 +33,7 @@ module:
   diff: 0
   do_base: 0
   do_feed: 0
+  drupal_helpers: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
   editor: 0

@@ -1,0 +1,69 @@
+{#
+/**
+ * @file
+ * Service detail component.
+ *
+ * A structured service card: a header (number, title, tagline), a two-column
+ * body (description and the inclusions list) and a footer (price and CTA).
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - title: [string] The service name.
+ * - tagline: [string] A one-line summary shown beside the title.
+ * - includes: [array] The "what's included" list items.
+ * - price_label: [string] The label above the price.
+ * - price_value: [string] The price.
+ * - link_url: [string] The call-to-action destination.
+ * - link_title: [string] The call-to-action label.
+ * - modifier_class: [string] Additional CSS classes.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ *
+ * Slots:
+ * - description: The service description (rich text).
+ */
+#}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+<div class="ct-service-detail {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+  <div class="ct-service-detail__inner">
+    <div class="ct-service-detail__header">
+      <span class="ct-service-detail__number" aria-hidden="true"></span>
+      <div class="ct-service-detail__heading">
+        {% if title is not empty %}
+          <h2 class="ct-service-detail__title">{{ title }}</h2>
+        {% endif %}
+        {% if tagline is not empty %}
+          <p class="ct-service-detail__tagline">{{ tagline }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ct-service-detail__body">
+      <div class="ct-service-detail__desc">{% block description %}{% endblock %}</div>
+      {% if includes is not empty %}
+        <div class="ct-service-detail__includes">
+          <p class="ct-service-detail__includes-label">What's included</p>
+          <ul>
+            {% for item in includes %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if price_value is not empty or link_url is not empty %}
+      <div class="ct-service-detail__footer">
+        {% if price_value is not empty %}
+          <div class="ct-service-detail__pricing">
+            <span class="ct-service-detail__price-label">{{ price_label }}</span>
+            <span class="ct-service-detail__price-value">{{ price_value }}</span>
+          </div>
+        {% endif %}
+        {% if link_url is not empty %}
+          <a class="ct-button {{ theme_class }} ct-button--secondary ct-button--large" href="{{ link_url }}">{{ link_title }}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>

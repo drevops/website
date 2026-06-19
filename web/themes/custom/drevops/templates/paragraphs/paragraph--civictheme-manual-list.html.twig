@@ -8,6 +8,54 @@
 
 {% set layout = layout in ['grid', 'spotlight'] ? layout : 'grid' %}
 
+{# Custom: render the design's coral eyebrow label above the section title. #}
+{% block header_block %}
+  {% if eyebrow is not empty or title is not empty or link_above is not empty %}
+    <div class="ct-list__header">
+      <div class="container">
+        <div class="row">
+          <div class="col-xxs-12 col-m-9">
+            {% if eyebrow is not empty %}
+              <p class="ct-list__eyebrow">{{ eyebrow }}</p>
+            {% endif %}
+
+            {% block title_block %}
+              {% if title -%}
+                {% include 'civictheme:heading' with {
+                  content: title,
+                  level: 2,
+                  theme: theme,
+                  modifier_class: 'ct-list__title',
+                } only %}
+              {% endif %}
+            {% endblock %}
+          </div>
+          <div class="col-xxs-12 col-m-3">
+            {% block link_above_block %}
+              {% if link_above %}
+                <div class="ct-list__link-above ct-flex-justify-content-center">
+                  {% include 'civictheme:button' with {
+                    theme: theme,
+                    type: 'secondary',
+                    kind: 'link',
+                    size: 'regular',
+                    text: link_above.text,
+                    url: link_above.url,
+                    is_new_window: link_above.is_external,
+                    is_external: link_above.is_external,
+                    icon: link_above.is_external ? '' : 'right-arrow-2',
+                    modifier_class: 'ct-list__link-above__link',
+                  } only %}
+                </div>
+              {% endif %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
 {% block rows_block %}
   {% if rows -%}
     {% block rows_above_block %}

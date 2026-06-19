@@ -1,0 +1,19 @@
+uuid: d1380cdd-b256-4d2c-b06a-2fcb37df2491
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_price_label
+    - paragraphs.paragraphs_type.do_service_detail
+id: paragraph.do_service_detail.field_p_price_label
+field_name: field_p_price_label
+entity_type: paragraph
+bundle: do_service_detail
+label: 'Price label'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

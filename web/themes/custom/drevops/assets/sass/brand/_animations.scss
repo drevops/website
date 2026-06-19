@@ -1,0 +1,30 @@
+//
+// DrevOps - Scroll reveal.
+//
+// The `do-reveal` class is added by assets/js/reveal.js to each homepage
+// section component (manual lists, callouts) as the page loads, so the hidden
+// state only ever applies once the reveal behaviour is running. reveal.js then
+// adds `do-reveal--in` when the element scrolls into view.
+//
+
+.do-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: opacity, transform;
+}
+
+.do-reveal--in {
+  opacity: 1;
+  transform: none;
+}
+
+// Belt-and-braces: reveal.js already bails out for reduced motion, but keep the
+// content visible if the class is present for any other reason.
+@media (prefers-reduced-motion: reduce) {
+  .do-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

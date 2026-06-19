@@ -1,0 +1,19 @@
+uuid: 0b4c3e62-5d8f-4a9c-1e34-7f0a6b2c9d43
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_summary
+    - paragraphs.paragraphs_type.do_fact_card
+id: paragraph.do_fact_card.field_c_p_summary
+field_name: field_c_p_summary
+entity_type: paragraph
+bundle: do_fact_card
+label: Label
+description: 'The label beneath the figure.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

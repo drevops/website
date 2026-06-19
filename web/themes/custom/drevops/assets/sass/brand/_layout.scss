@@ -1,0 +1,34 @@
+//
+// DrevOps - Section layout.
+//
+// Each section paints its background full-width while its content keeps a side
+// gutter. The inner wrapper is not width-capped here - lists and callouts use
+// CivicTheme's native container width. Bespoke styled lists (numbered, stat,
+// trust, dotted) set their own measure in _lists.scss. The banner is
+// unaffected: it lives outside the main content block.
+//
+.block-system-main-block {
+  .ct-list__inner,
+  .ct-callout__inner {
+    box-sizing: border-box;
+    padding-inline: var(--space-x-8);
+
+    @media (max-width: 767.98px) {
+      padding-inline: var(--space-y-3);
+    }
+  }
+
+  // The CTA callout keeps the design's centred measure; lists use the full
+  // native container width.
+  .ct-callout__inner {
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+
+  // An automated list renders its view inside a second, nested list. The outer
+  // wrapper already provides the side gutter, so the nested inner must not
+  // re-apply it.
+  .ct-list__inner .ct-list__inner {
+    padding-inline: 0;
+  }
+}

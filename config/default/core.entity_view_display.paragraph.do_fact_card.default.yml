@@ -1,0 +1,40 @@
+uuid: 3e7f6b95-8a12-4d2f-4b67-0c3d9e5f2a76
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.do_fact_card.field_c_p_summary
+    - field.field.paragraph.do_fact_card.field_c_p_theme
+    - field.field.paragraph.do_fact_card.field_c_p_title
+    - paragraphs.paragraphs_type.do_fact_card
+  module:
+    - options
+id: paragraph.do_fact_card.default
+targetEntityType: paragraph
+bundle: do_fact_card
+mode: default
+content:
+  field_c_p_summary:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_p_theme:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_p_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

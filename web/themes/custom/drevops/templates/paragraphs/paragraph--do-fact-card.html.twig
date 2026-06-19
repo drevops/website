@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Renders the Fact card paragraph through the drevops:fact-card component.
+ */
+#}
+{% include 'drevops:fact-card' with {
+  theme: paragraph.field_c_p_theme.value,
+  content: paragraph.field_c_p_title.value,
+  suffix: paragraph.field_p_suffix.value,
+  label: paragraph.field_c_p_summary.value,
+} only %}

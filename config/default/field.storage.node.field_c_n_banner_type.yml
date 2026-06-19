@@ -25,6 +25,15 @@ settings:
     -
       value: intro
       label: Intro
+    -
+      value: hero
+      label: Hero
+    -
+      value: fade
+      label: Fade
+    -
+      value: page
+      label: Page
   allowed_values_function: ''
 module: options
 locked: false

@@ -1,0 +1,29 @@
+uuid: 3f0d3591-d9ab-42ee-85fd-88e27ea918c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.do_service_detail.field_c_p_content
+    - field.field.paragraph.do_service_detail.field_c_p_link
+    - field.field.paragraph.do_service_detail.field_c_p_theme
+    - field.field.paragraph.do_service_detail.field_c_p_title
+    - field.field.paragraph.do_service_detail.field_p_includes
+    - field.field.paragraph.do_service_detail.field_p_price_label
+    - field.field.paragraph.do_service_detail.field_p_price_value
+    - field.field.paragraph.do_service_detail.field_p_tagline
+    - paragraphs.paragraphs_type.do_service_detail
+id: paragraph.do_service_detail.default
+targetEntityType: paragraph
+bundle: do_service_detail
+mode: default
+content: {  }
+hidden:
+  field_c_p_content: true
+  field_c_p_link: true
+  field_c_p_theme: true
+  field_c_p_title: true
+  field_p_includes: true
+  field_p_price_label: true
+  field_p_price_value: true
+  field_p_tagline: true
+  search_api_excerpt: true

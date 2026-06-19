@@ -1,0 +1,107 @@
+{#
+/**
+ * @file
+ * Footer override.
+ *
+ * The design uses a single-line footer: copyright on the left, a contact email
+ * on the right. The CivicTheme footer region slots are still rendered when they
+ * hold content, so the block-demo page (and the region-map test) sees every
+ * declared region. On the live site no blocks are placed in the footer regions,
+ * so only the minimal bar shows.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - site_name: [string] Site name for the copyright line.
+ * - email: [string] Contact email rendered as a mailto link.
+ * - background_image: [string] Content background inline image.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ *
+ * Slots:
+ * - content_top1, content_top2
+ * - content_middle1, content_middle2, content_middle3, content_middle4, content_middle5
+ * - content_bottom1, content_bottom2
+ */
+#}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+
+<footer class="ct-footer {{ modifier_class -}}" role="contentinfo" data-component-name="ct-footer" {% if background_image %}style="background-image: url('{{ background_image }}')"{% endif %} {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+
+  {% if content_top1 is not empty or content_top2 is not empty %}
+    <div class="container ct-footer__top">
+      <div class="row">
+        {% if content_top1 is not empty %}
+          <div class="col-xxs-12 col-m-6">
+            <div class="ct-footer__top__content-top1">{{- content_top1 -}}</div>
+          </div>
+        {% endif %}
+        {% if content_top2 is not empty %}
+          <div class="col-xxs-12 col-m-6">
+            <div class="ct-footer__top__content-top2">{{- content_top2 -}}</div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if content_middle1 is not empty or content_middle2 is not empty or content_middle3 is not empty or content_middle4 is not empty or content_middle5 is not empty %}
+    <div class="container ct-footer__middle">
+      <div class="row">
+        {% if content_middle1 is not empty %}
+          <div class="col-xxs-12 col-m-3">
+            <div class="ct-footer__middle__content-middle1">{{- content_middle1 -}}</div>
+          </div>
+        {% endif %}
+        {% if content_middle2 is not empty %}
+          <div class="col-xxs-12 col-m-3">
+            <div class="ct-footer__middle__content-middle2">{{- content_middle2 -}}</div>
+          </div>
+        {% endif %}
+        {% if content_middle3 is not empty %}
+          <div class="col-xxs-12 col-m-3">
+            <div class="ct-footer__middle__content-middle3">{{- content_middle3 -}}</div>
+          </div>
+        {% endif %}
+        {% if content_middle4 is not empty %}
+          <div class="col-xxs-12 col-m-3">
+            <div class="ct-footer__middle__content-middle4">{{- content_middle4 -}}</div>
+          </div>
+        {% endif %}
+        {% if content_middle5 is not empty %}
+          <div class="col-xxs-12">
+            <div class="ct-footer__middle__content-middle5">{{- content_middle5 -}}</div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if content_bottom1 is not empty or content_bottom2 is not empty %}
+    <div class="container ct-footer__bottom">
+      <div class="row">
+        {% if content_bottom1 is not empty %}
+          <div class="col-xxs-12 col-m-7">
+            <div class="ct-footer__bottom__content-bottom1">{{- content_bottom1 -}}</div>
+          </div>
+        {% endif %}
+        {% if content_bottom2 is not empty %}
+          <div class="col-xxs-12 col-m-5">
+            <div class="ct-footer__bottom__content-bottom2">{{- content_bottom2 -}}</div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="container ct-footer__acknowledgement">
+    <p>DrevOps® is located on the traditional lands of the Wurundjeri-willam people of the Kulin Nation. We pay our respects to Elders both past and present and recognise Aboriginal and Torres Strait Islander people as the Traditional Custodians of the land.</p>
+  </div>
+
+  <div class="container ct-footer__bar">
+    <span class="ct-footer__copy">{{ site_name|default('DrevOps') }} &copy; {{ 'now'|date('Y') }}</span>
+    {% if email %}
+      <a class="ct-footer__contact" href="mailto:{{ email }}">{{ email }}</a>
+    {% endif %}
+  </div>
+</footer>

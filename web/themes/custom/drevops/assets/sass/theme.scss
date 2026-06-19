@@ -8,3 +8,15 @@
 // @todo Refactor build to use direct import from the CivicTheme theme.
 @import 'page/page';
 @import 'block/local-tasks';
+@import 'brand/tokens';
+
+// These enhance CivicTheme's component markup site-wide, so they load globally
+// rather than scoped to a content wrapper.
+@import 'brand/extra';
+@import 'brand/layout';
+@import 'brand/buttons';
+@import 'brand/content';
+@import 'brand/lists';
+@import 'brand/blog';
+@import 'brand/contact';
+@import 'brand/animations';

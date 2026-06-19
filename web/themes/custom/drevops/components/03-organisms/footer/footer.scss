@@ -1,0 +1,65 @@
+//
+// Minimal footer override styles.
+//
+// Single-line bar: copyright left, contact email right.
+//
+
+.ct-footer {
+  $root: &;
+
+  background-color: ct-color-dark('background-light');
+  border-top: ct-particle(0.125) solid color-mix(in srgb, #{ct-color-dark('interaction-background')} 18%, transparent);
+
+  &__acknowledgement {
+    padding-top: ct-spacing(4);
+    text-align: center;
+
+    p {
+      @include ct-typography('text-small');
+
+      max-width: ct-particle(150);
+      margin: 0 auto;
+      color: color-mix(in srgb, #{ct-color-dark('body')} 65%, #{ct-color-dark('background-light')});
+      line-height: 1.6;
+    }
+  }
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: ct-spacing(2);
+    margin-top: ct-spacing(3);
+    padding-top: ct-spacing(3);
+    padding-bottom: ct-spacing(3);
+    border-top: ct-particle(0.125) solid color-mix(in srgb, #{ct-color-dark('interaction-background')} 12%, transparent);
+  }
+
+  &__copy {
+    @include ct-typography('text-small');
+
+    // Opaque light tint that clears WCAG AA contrast on the footer surface.
+    color: color-mix(in srgb, #{ct-color-dark('body')} 80%, #{ct-color-dark('background-light')});
+    letter-spacing: 0.08em;
+  }
+
+  &__contact {
+    @include ct-typography('text-small');
+
+    color: ct-color-dark('interaction-background');
+    letter-spacing: 0.08em;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  @media (max-width: 767px) {
+    &__bar {
+      flex-direction: column;
+      gap: ct-spacing(1);
+      text-align: center;
+    }
+  }
+}

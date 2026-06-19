@@ -7,111 +7,71 @@
 // Variables values in this file cannot be based on any variables
 // in _variables.base.scss
 //
+// These override CivicTheme's defaults so the site renders in the DrevOps brand.
+//
 // stylelint-disable scss/dollar-variable-pattern
 
-// Example to override existing CivicTheme's palette color and define
-// custom colors, which will automatically appear in Storybook.
-
+// CivicTheme derives the semantic palette from these three brand colours.
+//   brand1 - interactive accent (links, buttons) and text tints.
+//   brand2 - canvas / surface backgrounds and borders.
+//   brand3 - highlight / accent.
 $ct-colors-brands: (
   'light': (
-    'brand1': #00698f,
-    'brand2': #e6e9eb,
-    'brand3': #121313,
+    'brand1': #1e7582,
+    'brand2': #e9eef6,
+    'brand3': #cd5b43,
   ),
   'dark': (
-    'brand1': #61daff,
-    'brand2': #003a4f,
-    'brand3': #00698f,
+    'brand1': #96e7f4,
+    'brand2': #152235,
+    'brand3': #ff9c86,
   )
 );
 
-// Example to override existing CivicTheme's palette color variants.
+// Exact semantic overrides to match the design tokens. Unspecified keys fall
+// back to values derived from the brand colours above.
 $ct-colors: (
-  // Override palette color variant.
   'light': (
-    'success': green,
-    'custom1': brown,
+    'heading': #152235,
+    'body': #2b394d,
+    'background-light': #f4f7fc,
+    'background': #fff,
+    'background-dark': #e9eef6,
+    'highlight': #cd5b43,
   ),
   'dark': (
-    'custom1': red,
-    'custom2': orange,
-    'custom3': blue,
+    'heading': #fff,
+    'body': #fff,
+    'background-light': #2b394d,
+    'background': #152235,
+    'background-dark': #0f1a29,
+    'border-light': #3a4a60,
+    'border': #2b394d,
+    'border-dark': #0f1a29,
+    'interaction-text': #152235,
+    'interaction-background': #96e7f4,
+    'interaction-hover-text': #152235,
+    'interaction-hover-background': #e1fbff,
+    'highlight': #ff9c86,
   ),
 );
 
-// Example to define 2 custom local fonts which will automatically appear
-// in Storybook.
+// Display/headings use Plus Jakarta Sans (primary); body uses Outfit
+// (secondary). Weights map to the keys defined in $ct-font-weights-default.
 $ct-fonts: (
+  'primary': (
+    'family': '"Plus Jakarta Sans", sans-serif',
+    'types': (
+      (
+        'uri': 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
+      ),
+    ),
+  ),
   'secondary': (
-    'family': 'Rubik, sans-serif',
+    'family': '"Outfit", sans-serif',
     'types': (
       (
-        'uri': 'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap',
-      ),
-    ),
-  ),
-  'tertiary': (
-    'family': 'Roboto, sans-serif',
-    'types': (
-      (
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.eot',
-        ),
-      ),
-      (
-        'italic': true,
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.eot',
-        ),
-      ),
-      (
-        'weight': 'bold',
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.eot',
-        ),
-      ),
-      (
-        'italic': true,
-        'weight': 'bold',
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.eot',
-        ),
-      ),
-      (
-        'weight': 300,
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.eot',
-        ),
-      ),
-      (
-        'weight': 700,
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.eot',
-        ),
-      ),
-    ),
-  ),
-  'quartary': (
-    'family': '"Dancing Script", serif',
-    'types': (
-      (
-        'uri': (
-          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.ttf',
-          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.woff',
-          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.woff2',
-        ),
+        'uri': 'https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap',
       ),
     ),
   ),
@@ -121,31 +81,84 @@ $ct-particle: 8px;
 // Base font sizes defined in CivicTheme base variables.
 $ct-font-base-size: $ct-particle * 2;
 $ct-font-base-line-height: $ct-font-base-size;
+
+// Typography scale. Display and headings use the primary font (Plus Jakarta
+// Sans, bold); body and labels use the secondary font (Outfit) at the thin
+// weights the design calls for.
 $ct-typography: (
-  'display-large': (
-    'xxs': ($ct-font-base-size * 3, $ct-font-base-line-height * 3.5, 'bold', 'primary', -0.6px),
-    'm': ($ct-font-base-size * 4, $ct-font-base-line-height * 4.75, 'bold', 'primary', -1px)
+  // Display - hero headlines (further enlarged per-component in the banner).
+  'display': (
+    'xxs': ($ct-font-base-size * 2.5, $ct-font-base-line-height * 2.75, 'bold', 'primary', -1px),
+    'm': ($ct-font-base-size * 4, $ct-font-base-line-height * 4.25, 'bold', 'primary', -1.5px)
   ),
-  // Text.
+  // Display large - used by the banner hero (size is overridden per-component).
+  'display-large': (
+    'xxs': ($ct-font-base-size * 3, $ct-font-base-line-height * 3.25, 'bold', 'primary', -1px),
+    'm': ($ct-font-base-size * 5, $ct-font-base-line-height * 5, 'bold', 'primary', -2px)
+  ),
+  // Headings.
+  'heading-1': (
+    'xxs': ($ct-font-base-size * 2, $ct-font-base-line-height * 2.375, 'bold', 'primary', -0.6px),
+    'm': ($ct-font-base-size * 3, $ct-font-base-line-height * 3.375, 'bold', 'primary', -1px)
+  ),
+  'heading-2': (
+    'xxs': ($ct-font-base-size * 1.75, $ct-font-base-line-height * 2.125, 'bold', 'primary', -0.5px),
+    'm': ($ct-font-base-size * 2.5, $ct-font-base-line-height * 2.875, 'bold', 'primary', -0.8px)
+  ),
+  'heading-3': (
+    'xxs': ($ct-font-base-size * 1.5, $ct-font-base-line-height * 2, 'bold', 'primary', -0.35px),
+    'm': ($ct-font-base-size * 2, $ct-font-base-line-height * 2.5, 'bold', 'primary', -0.6px)
+  ),
+  'heading-4': (
+    'xxs': ($ct-font-base-size * 1.25, $ct-font-base-line-height * 1.5, 'bold', 'primary', -0.25px),
+    'm': ($ct-font-base-size * 1.5, $ct-font-base-line-height * 2, 'bold', 'primary', -0.4px)
+  ),
+  'heading-5': (
+    'xxs': ($ct-font-base-size, $ct-font-base-line-height * 1.375, 'bold', 'primary', 0),
+    'm': ($ct-font-base-size * 1.25, $ct-font-base-line-height * 1.5, 'bold', 'primary', -0.2px)
+  ),
+  'heading-6': ($ct-font-base-size, $ct-font-base-line-height * 1.625, 'bold', 'primary', 0),
+  // Body text - Outfit, thin weights.
   'text-extra-large': (
-    'xxs': ($ct-font-base-size * 1.25, $ct-font-base-line-height * 1.5, 'regular', 'secondary', -0.1px),
-    'm': ($ct-font-base-size * 1.5, $ct-font-base-line-height * 1.5, 'regular', 'secondary', 0)
+    'xxs': ($ct-font-base-size * 1.125, $ct-font-base-line-height * 1.625, 'extralight', 'secondary', -0.1px),
+    'm': ($ct-font-base-size * 1.25, $ct-font-base-line-height * 1.75, 'extralight', 'secondary', 0)
   ),
   'text-large': (
-    'xxs': ($ct-font-base-size * 1.125, $ct-font-base-line-height * 1.75, 'regular', 'secondary', 0),
-    'm': ($ct-font-base-size * 1.25, $ct-font-base-line-height * 2.125, 'regular', 'secondary', 0)
+    'xxs': ($ct-font-base-size * 1.0625, $ct-font-base-line-height * 1.625, 'extralight', 'secondary', 0),
+    'm': ($ct-font-base-size * 1.125, $ct-font-base-line-height * 1.75, 'extralight', 'secondary', 0)
   ),
   'text-regular': (
-    'xxs': ($ct-font-base-size, $ct-font-base-line-height * 1.75, 'regular', 'secondary', 0),
-    'm': ($ct-font-base-size, $ct-font-base-line-height * 1.75, 'regular', 'secondary', 0)
+    'xxs': ($ct-font-base-size, $ct-font-base-line-height * 1.5, 'extralight', 'secondary', 0),
+    'm': ($ct-font-base-size, $ct-font-base-line-height * 1.625, 'extralight', 'secondary', 0)
   ),
   'text-small': (
-    'xxs': ($ct-font-base-size * 0.75, $ct-font-base-line-height * 1.25, 'regular', 'secondary', 0),
+    'xxs': ($ct-font-base-size * 0.875, $ct-font-base-line-height * 1.25, 'regular', 'secondary', 0),
     'm': ($ct-font-base-size * 0.875, $ct-font-base-line-height * 1.5, 'regular', 'secondary', 0),
+  ),
+  // Labels - eyebrow/section labels, uppercase with wide tracking.
+  'label-extra-large': (
+    'xxs': ($ct-font-base-size * 1.25, $ct-font-base-line-height * 1.5, 'semibold', 'primary', 0),
+    'm': ($ct-font-base-size * 1.5, $ct-font-base-line-height * 1.5, 'semibold', 'primary', 0)
+  ),
+  'label-large': (
+    'xxs': ($ct-font-base-size * 1.125, $ct-font-base-line-height * 1.5, 'semibold', 'primary', 0),
+    'm': ($ct-font-base-size * 1.125, $ct-font-base-line-height * 1.5, 'semibold', 'primary', 0)
+  ),
+  'label-regular': (
+    'xxs': ($ct-font-base-size * 0.875, $ct-font-base-line-height * 1.25, 'semibold', 'primary', 0.5px),
+    'm': ($ct-font-base-size * 0.875, $ct-font-base-line-height * 1.25, 'semibold', 'primary', 0.5px)
+  ),
+  'label-small': (
+    'xxs': ($ct-font-base-size * 0.6875, $ct-font-base-line-height * 1.25, 'semibold', 'primary', 1.5px),
+    'm': ($ct-font-base-size * 0.6875, $ct-font-base-line-height * 1.25, 'semibold', 'primary', 1.5px)
+  ),
+  'label-extra-small': (
+    'xxs': ($ct-font-base-size * 0.6875, $ct-font-base-line-height * 1.125, 'semibold', 'primary', 1.5px),
+    'm': ($ct-font-base-size * 0.6875, $ct-font-base-line-height * 1.125, 'semibold', 'primary', 1.5px)
   ),
   // Special elements.
   'quote': (
-    'xxs': ($ct-font-base-size * 1.125, $ct-font-base-line-height * 1.815, 'regular', 'secondary', -0.15px),
-    'm': ($ct-font-base-size * 1.5, $ct-font-base-size * 2.5, 'regular', 'secondary', -0.35px)
+    'xxs': ($ct-font-base-size * 1.125, $ct-font-base-line-height * 1.815, 'extralight', 'secondary', -0.15px),
+    'm': ($ct-font-base-size * 1.5, $ct-font-base-size * 2.5, 'extralight', 'secondary', -0.35px)
   ),
 );

@@ -19,25 +19,34 @@ description: 'Basic email contact webform.'
 categories: {  }
 elements: |
   name:
-    '#title': 'Your Name'
+    '#title': 'Name'
     '#type': textfield
     '#required': true
-    '#default_value': '[current-user:display-name]'
+    '#placeholder': 'Your full name'
   email:
-    '#title': 'Your Email'
+    '#title': 'Email'
     '#type': email
     '#required': true
-    '#default_value': '[current-user:mail]'
-  subject:
-    '#title': Subject
+    '#placeholder': 'you@organisation.com'
+  organisation:
+    '#title': 'Organisation'
     '#type': textfield
-    '#required': true
-    '#test': 'Testing contact webform from [site:name]'
+    '#placeholder': 'Company or department'
+  subject:
+    '#title': 'What do you need help with?'
+    '#type': select
+    '#empty_option': 'Select a topic'
+    '#options':
+      new-build: 'New Drupal website'
+      upgrade: 'Upgrade or migration'
+      support: 'Ongoing support'
+      audit: 'Platform audit or site check'
+      other: 'Something else'
   message:
-    '#title': Message
+    '#title': 'Tell us more'
     '#type': textarea
-    '#required': true
-    '#test': 'Please ignore this email.'
+    '#rows': 5
+    '#placeholder': 'What''s the current state of your platform? What are you looking to achieve?'
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'

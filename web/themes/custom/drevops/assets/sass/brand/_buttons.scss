@@ -1,0 +1,76 @@
+//
+// DrevOps - Brand buttons.
+//
+// The design renders every call-to-action as one outline button: transparent
+// with a cyan border and label, filling softly on hover. CivicTheme emits its
+// buttons - and the promo, callout and rich-text CTAs - with the `.ct-button`
+// class, so the design treatment is applied there through the button tokens
+// rather than the design's original `.btn` classes.
+//
+
+.ct-button {
+  &,
+  &:focus-visible,
+  &:active,
+  &:visited {
+    display: inline-block;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    line-height: 1;
+    padding: var(--space-y-2) var(--space-x-4);
+    border: 1px solid var(--btn-secondary-border);
+    border-radius: 0;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-secondary-color);
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  &:hover {
+    background-color: var(--btn-secondary-hover-bg);
+    border-color: var(--btn-secondary-color);
+    color: var(--btn-secondary-hover-color);
+    text-decoration: none;
+  }
+}
+
+// CivicTheme's dark content-link rule (high specificity) restyles every anchor
+// inside content as an underlined text link, which would otherwise strip the
+// button box from rich-text CTAs (the hero "Talk to us" button and the blog
+// "Get a free CI review" button). Re-assert the button appearance at a
+// matching specificity; the base `.ct-button` rule still supplies the box.
+.ct-basic-content.ct-theme-dark a.ct-button {
+  &,
+  &:hover,
+  &:focus-visible,
+  &:active,
+  &:visited {
+    margin: 0;
+    padding: var(--space-y-2) var(--space-x-4);
+    line-height: 1;
+    text-decoration: none;
+    color: var(--btn-secondary-color);
+  }
+
+  &:hover {
+    color: var(--btn-secondary-hover-color);
+  }
+}
+
+// CivicTheme's own secondary-button rule (`.ct-button--secondary.ct-theme-dark`,
+// specificity 0,2,0) sets colour, border and background from its dark-interaction
+// tokens, overriding the design button treatment. Redefine those tokens on the
+// button itself so CivicTheme's rule resolves to the design's secondary colour
+// (the element-level definition outranks the `:root` default regardless of CSS
+// load order).
+.ct-button.ct-theme-dark {
+  --ct-button-dark-secondary-color: var(--btn-secondary-color);
+  --ct-button-dark-secondary-background-color: var(--btn-secondary-bg);
+  --ct-button-dark-secondary-border-color: var(--btn-secondary-border);
+  --ct-button-dark-secondary-hover-color: var(--btn-secondary-hover-color);
+  --ct-button-dark-secondary-hover-background-color: var(--btn-secondary-hover-bg);
+  --ct-button-dark-secondary-hover-border-color: var(--btn-secondary-color);
+}

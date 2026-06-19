@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\civictheme\CivicthemeConstants;
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Render\Markup;
 
 /**
@@ -36,6 +37,51 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
   }
 
   $variables['type'] = $type;
+
+  // Brand hero: the "hero" banner type renders as a centered intro hero with
+  // the atmospheric glow. CivicTheme has no "hero" layout, so map it onto the
+  // "intro" layout and add the hero styling hook; the front page gets the
+  // taller full-viewport variant.
+  if ($type === 'hero') {
+    $variables['type'] = 'intro';
+    $is_front = \Drupal::service('path.matcher')->isFrontPage();
+    $hero_class = $is_front ? 'ct-banner--hero ct-banner--hero-home' : 'ct-banner--hero';
+    $variables['modifier_class'] = trim(($variables['modifier_class'] ?? '') . ' ' . $hero_class);
+
+    // The design hero is a dark canvas with an atmospheric glow (rendered in
+    // banner.scss), not a background image. The shared banner block ships a
+    // default background image, so drop it here to render the clean hero.
+    unset($variables['background_image'], $variables['background_image_blend_mode']);
+  }
+
+  // Page hero: a compact centred hero for listing/landing pages - the design's
+  // smaller "page" hero with a faint static glow and a coral eyebrow line above
+  // a centred headline. CivicTheme has no such layout, so map it onto the
+  // centred "intro" layout and add the page styling hook; the background image
+  // is dropped so the clean dark canvas shows through.
+  if ($type === 'page') {
+    $variables['type'] = 'intro';
+    $variables['modifier_class'] = trim(($variables['modifier_class'] ?? '') . ' ct-banner--page');
+    unset($variables['background_image'], $variables['background_image_blend_mode']);
+  }
+
+  // Fade hero: the featured image fills the banner behind a dark page-coloured
+  // fade, with the title over it (used by blog posts). The banner renders the
+  // "fade" type natively; here we only promote the featured image to the
+  // full-bleed background so it is not also shown as a side image.
+  if ($type === 'fade' && !empty($variables['featured_image'])) {
+    $variables['background_image'] = $variables['featured_image'];
+    $variables['featured_image'] = NULL;
+  }
+
+  // CivicTheme's civictheme_get_field_value() runs string fields through
+  // strip_tags(), which removes the design's accent markup from the banner
+  // title. Re-read the raw value (XSS-filtered to a safe inline set) so the
+  // accent word survives; it is wrapped in Markup below to render unescaped.
+  if (!empty($node) && $node->hasField('field_c_n_banner_title') && !$node->get('field_c_n_banner_title')->isEmpty()) {
+    $allowed_tags = ['span', 'em', 'strong', 'br'];
+    $variables['title'] = Xss::filter((string) $node->get('field_c_n_banner_title')->value, $allowed_tags);
+  }
 
   // Adds extra top padding for the banner when additional spacing is needed.
   $variables['with_offset'] = civictheme_get_theme_config_manager()->load('components.header.is_sticky', FALSE);

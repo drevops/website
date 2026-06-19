@@ -1,0 +1,19 @@
+uuid: 8b2c3d4e-5f60-4172-9384-950617283940
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_eyebrow
+    - paragraphs.paragraphs_type.civictheme_manual_list
+id: paragraph.civictheme_manual_list.field_p_eyebrow
+field_name: field_p_eyebrow
+entity_type: paragraph
+bundle: civictheme_manual_list
+label: Eyebrow
+description: 'A small category label shown above the section title.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

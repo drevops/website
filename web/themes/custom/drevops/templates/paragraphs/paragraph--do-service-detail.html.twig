@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Renders the Service detail paragraph through the drevops:service-detail
+ * component, with the rich-text description in the component's slot.
+ */
+#}
+{% embed 'drevops:service-detail' with {
+  theme: paragraph.field_c_p_theme.value|default('dark'),
+  title: sd_title,
+  tagline: sd_tagline,
+  includes: sd_includes,
+  price_label: sd_price_label,
+  price_value: sd_price_value,
+  link_url: sd_link_url,
+  link_title: sd_link_title,
+  description: sd_description,
+} only %}
+  {% block description %}{{ description }}{% endblock %}
+{% endembed %}

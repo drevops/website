@@ -1,0 +1,171 @@
+//
+// DrevOps - Blog.
+//
+// CivicTheme renders a post's topics as a primary tag list inside each promo
+// card; the design shows them as small bordered pill chips (its
+// `.component-tag--sm`): a dark surface, cyan label and a faint border.
+//
+.ct-promo-card__tags {
+  margin-top: var(--space-y-2);
+
+  .ct-tag-list__content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-x-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ct-item-list__item {
+    margin: 0;
+  }
+
+  .ct-tag {
+    // Override CivicTheme's primary-tag tokens to the design's pill colours;
+    // defining them on the element outranks the :root defaults regardless of
+    // CSS load order.
+    --ct-tag-dark-primary-background-color: var(--tag-bg);
+    --ct-tag-dark-primary-border-color: var(--border-subtle-color);
+    --ct-tag-dark-primary-color: var(--tag-color);
+
+    display: inline-block;
+    font-size: var(--font-size-2xs);
+    font-weight: var(--label-font-weight);
+    letter-spacing: var(--label-letter-spacing);
+    text-transform: var(--label-text-transform);
+    padding: var(--space-y-1) var(--space-x-1);
+    border-radius: var(--radius-sm);
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+}
+
+// Featured post: the single-item (full-width) automated list renders the promo
+// card as the design's feature - a 50/50 grid with the image filling the left
+// half and the content centred on the right, in a bordered, rounded panel.
+.ct-list [class~='col-m-12'] .ct-promo-card--with-image {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+
+  // Absolutely fill the image so a tall (e.g. square) source does not stretch
+  // the card past the content; the content column then sets the card height,
+  // and the image covers its half - matching the design's feature panel.
+  .ct-promo-card__image {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+
+    .ct-image,
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .ct-promo-card__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-y-6);
+  }
+
+  // The feature title is the design's h2, not the smaller grid-card title.
+  .ct-promo-card__title {
+    font-size: var(--heading-h2-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-sm);
+    letter-spacing: -0.01em;
+    color: var(--text-color);
+    margin-bottom: var(--space-y-2);
+
+    a {
+      color: inherit;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Article grid: a muted section panel behind the card list. The card columns
+// are left to CivicTheme's native grid; only the "Showing N of M" results count
+// is hidden so the panel opens straight into the cards.
+.ct-list:has([class~='col-m-4']) {
+  background: var(--surface-muted-color);
+
+  .ct-list__results-count {
+    display: none;
+  }
+}
+
+// Blog cards (featured + grid): the design's bordered page-bg panel that lifts
+// on hover. CivicTheme's promo card ships a filled surface and a white border,
+// so restate the design colours and add the hover transform.
+.ct-list .ct-promo-card--with-image.ct-theme-dark {
+  background: var(--page-bg);
+  border-color: var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    border-color: var(--color-secondary-6);
+    transform: translateY(-4px);
+  }
+
+  .ct-promo-card__image img {
+    transition: transform 0.5s ease;
+  }
+
+  &:hover .ct-promo-card__image img {
+    transform: scale(1.05);
+  }
+}
+
+// Grid card internals matching the design's blog-card: a 16/9 image, an h4
+// title and a small excerpt (CivicTheme's promo card uses a taller image and
+// larger type).
+.ct-list [class~='col-m-4'] .ct-promo-card--with-image {
+  .ct-promo-card__image {
+    // Force a 16/9 image box. CivicTheme pins a fixed image height that wins
+    // over `aspect-ratio`, so use the height:0 + padding ratio box (which the
+    // fixed height cannot override) and stretch the image to fill it.
+    height: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+    position: relative;
+
+    .ct-image,
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .ct-promo-card__title {
+    font-size: var(--heading-h4-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-sm);
+    letter-spacing: -0.01em;
+  }
+
+  .ct-promo-card__summary {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-md);
+  }
+}

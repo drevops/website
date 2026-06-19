@@ -1,0 +1,192 @@
+//
+// Service detail component styles.
+//
+// The 01/02/03 number is a CSS counter, incremented per card and reset once per
+// page in brand/_extra.scss.
+//
+
+.ct-service-detail {
+  counter-increment: do-service;
+
+  // The design seats the service cards on a full-width muted section band, with
+  // the cards themselves in a centred column. Consecutive cards' bands are
+  // contiguous, so together they read as one panel.
+  background: var(--surface-muted-color);
+  padding-top: var(--space-y-6);
+  padding-inline: var(--space-x-8);
+
+  &:first-of-type {
+    padding-top: var(--layout-rhythm-md, 8.75rem);
+  }
+
+  &:last-of-type {
+    padding-bottom: var(--layout-rhythm-md, 8.75rem);
+  }
+
+  &__inner {
+    box-sizing: border-box;
+    max-width: calc(1100px - 2 * var(--space-x-8));
+    margin-inline: auto;
+    background: var(--page-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-y-7);
+  }
+
+  // Header: the number beside the title and tagline, with a divider below.
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-y-4);
+    margin-bottom: var(--space-y-5);
+    padding-bottom: var(--space-y-4);
+    border-bottom: 1px solid var(--border-subtle-color);
+  }
+
+  &__number {
+    flex-shrink: 0;
+    font-family: var(--font-family-primary);
+    font-size: 64px;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--color-secondary-6);
+    opacity: 20%;
+
+    &::before {
+      content: counter(do-service, decimal-leading-zero);
+    }
+  }
+
+  &__title {
+    font-family: var(--font-family-primary);
+    font-size: var(--heading-h2-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text-color);
+
+    // CivicTheme's heading rule adds a top margin that drops the title below the
+    // number; the design top-aligns them in the flex header.
+    margin-top: 0;
+    margin-bottom: var(--space-y-1);
+  }
+
+  &__tagline {
+    font-size: var(--body-font-size);
+    font-weight: var(--body-font-weight);
+    line-height: var(--line-height-lg);
+    color: var(--text-muted-color);
+    margin-top: 0;
+  }
+
+  // Body: description and inclusions side by side.
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-y-6);
+    margin-bottom: var(--space-y-5);
+  }
+
+  &__desc p {
+    font-size: var(--body-font-size);
+    font-weight: var(--body-font-weight);
+    color: var(--text-subtle-color);
+    line-height: var(--line-height-lg);
+    margin-bottom: var(--space-y-2);
+  }
+
+  &__includes-label {
+    font-size: var(--label-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-lg);
+    letter-spacing: var(--label-letter-spacing);
+    text-transform: uppercase;
+    color: var(--text-accent-color);
+    margin-bottom: var(--space-y-2);
+  }
+
+  &__includes ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__includes li {
+    position: relative;
+    padding: var(--space-y-1) 0 var(--space-x-1) var(--space-y-3);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-md);
+    color: var(--text-subtle-color);
+    border-bottom: 1px solid var(--border-muted-color);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 16px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-secondary-6);
+    }
+  }
+
+  // Footer: price on the left, CTA button on the right.
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-y-3);
+    padding-top: var(--space-y-4);
+    border-top: 1px solid var(--border-subtle-color);
+  }
+
+  &__price-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: var(--label-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-lg);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted-color);
+  }
+
+  &__price-value {
+    font-family: var(--font-family-primary);
+    font-size: var(--heading-h3-font-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-lg);
+    letter-spacing: -0.01em;
+    color: var(--color-secondary-6);
+  }
+
+  @media (max-width: 767.98px) {
+    padding-inline: var(--space-y-3);
+
+    &__inner {
+      padding: var(--space-y-4) var(--space-x-3);
+    }
+
+    &__header {
+      flex-direction: column;
+      gap: var(--space-y-2);
+    }
+
+    &__body {
+      grid-template-columns: 1fr;
+      gap: var(--space-y-4);
+    }
+
+    &__footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-y-3);
+    }
+  }
+}

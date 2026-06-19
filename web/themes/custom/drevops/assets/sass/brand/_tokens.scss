@@ -1,0 +1,313 @@
+//
+// DrevOps — Brand Token System
+//
+// Ported from the static design's variables.css.
+//
+// The site is ALWAYS dark and does NOT use data-color-scheme. The
+// scheme-aware semantic tokens below therefore take their DARK values
+// (from the design's [data-color-scheme="dark"] block) directly at
+// :root. The Google Fonts @import is intentionally omitted (fonts are
+// already loaded by the theme).
+//
+
+// ══════════════════════════════════════════════════════════════
+//    PALETTE
+//    Eleven derived steps per brand colour. Step 1 = lightest,
+//    step 11 = near-black. The brand base colour sits near step 9.
+//    ══════════════════════════════════════════════════════════════
+:root {
+  /* primary */
+  --color-primary-1: #EFF6FF;
+  --color-primary-2: #C8D9F3;
+  --color-primary-3: #ABBCD5;
+  --color-primary-4: #8FA0B8;
+  --color-primary-5: #75849C;
+  --color-primary-6: #5B6A80;
+  --color-primary-7: #425166;
+  --color-primary-8: #2B394D;
+  --color-primary-9: #152235;
+  --color-primary-10: #030D1E;
+  --color-primary-11: #000108;
+
+  /* secondary */
+  --color-secondary-1: #E1FBFF;
+  --color-secondary-2: #96E7F4;
+  --color-secondary-3: #79C9D7;
+  --color-secondary-4: #5CACBA;
+  --color-secondary-5: #3F919D;
+  --color-secondary-6: #1E7582;
+  --color-secondary-7: #045A65;
+  --color-secondary-8: #044048;
+  --color-secondary-9: #00272D;
+  --color-secondary-10: #001013;
+  --color-secondary-11: #000202;
+
+  /* tertiary */
+  --color-tertiary-1: #FFF2EF;
+  --color-tertiary-2: #FFC9BC;
+  --color-tertiary-3: #FF9C86;
+  --color-tertiary-4: #ED775E;
+  --color-tertiary-5: #CD5B43;
+  --color-tertiary-6: #AE3F28;
+  --color-tertiary-7: #902107;
+  --color-tertiary-8: #691301;
+  --color-tertiary-9: #430800;
+  --color-tertiary-10: #210200;
+  --color-tertiary-11: #050000;
+
+  /* neutral */
+  --color-neutral-1: #FFFFFF;
+  --color-neutral-2: #F0F0F0;
+  --color-neutral-3: #D4D4D4;
+  --color-neutral-4: #B0B0B0;
+  --color-neutral-5: #8C8C8C;
+  --color-neutral-6: #6B6B6B;
+  --color-neutral-7: #4D4D4D;
+  --color-neutral-8: #333333;
+  --color-neutral-9: #1F1F1F;
+  --color-neutral-10: #0F0F0F;
+  --color-neutral-11: #000000;
+
+  /* pass */
+  --color-pass-1: #EFFBF1;
+  --color-pass-2: #D6F5DD;
+  --color-pass-3: #B5EDC2;
+  --color-pass-4: #8CE3A0;
+  --color-pass-5: #63DA7E;
+  --color-pass-6: #3AD05C;
+  --color-pass-7: #29AD47;
+  --color-pass-8: #208436;
+  --color-pass-9: #165B25;
+  --color-pass-10: #0E3A18;
+  --color-pass-11: #08210E;
+
+  /* fail */
+  --color-fail-1: #FCEEEF;
+  --color-fail-2: #F7D4D7;
+  --color-fail-3: #F1B1B7;
+  --color-fail-4: #EA858F;
+  --color-fail-5: #E25A67;
+  --color-fail-6: #DB2E3F;
+  --color-fail-7: #B7202E;
+  --color-fail-8: #8B1823;
+  --color-fail-9: #601118;
+  --color-fail-10: #3D0B0F;
+  --color-fail-11: #230609;
+
+  /* warn */
+  --color-warn-1: #FFFAEB;
+  --color-warn-2: #FFF2CC;
+  --color-warn-3: #FFE8A3;
+  --color-warn-4: #FFDB70;
+  --color-warn-5: #FFCF3D;
+  --color-warn-6: #FFC20A;
+  --color-warn-7: #D6A100;
+  --color-warn-8: #A37A00;
+  --color-warn-9: #705400;
+  --color-warn-10: #473600;
+  --color-warn-11: #291F00;
+
+  /* info */
+  --color-info-1: #F1F8F9;
+  --color-info-2: #DCEDEF;
+  --color-info-3: #BFDEE3;
+  --color-info-4: #9CCCD3;
+  --color-info-5: #78B9C4;
+  --color-info-6: #55A7B4;
+  --color-info-7: #418995;
+  --color-info-8: #326971;
+  --color-info-9: #22484E;
+  --color-info-10: #162E32;
+  --color-info-11: #0C1A1C;
+}
+
+// ══════════════════════════════════════════════════════════════
+//    PRIMITIVE TOKENS
+//    Flat values on a scale — never change by theme context.
+//    ══════════════════════════════════════════════════════════════
+:root {
+  /* Font Family */
+  --font-family-primary:   'Plus Jakarta Sans', sans-serif;
+  --font-family-secondary: 'Outfit', sans-serif;
+  --font-family-mono:      'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+
+  /* Font Size */
+  --font-size-2xs: 0.6875rem;
+  --font-size-xs:  0.75rem;
+  --font-size-sm:  0.875rem;
+  --font-size-md:  1rem;
+  --font-size-lg:  1.25rem;
+  --font-size-xl:  1.5rem;
+  --font-size-2xl: 1.875rem;
+  --font-size-3xl: 2.25rem;
+  --font-size-4xl: 3rem;
+  --font-size-5xl: 4rem;
+
+  /* Font Weight */
+  --font-weight-thin:      100;
+  --font-weight-extralight: 200;
+  --font-weight-light:     300;
+  --font-weight-normal:    400;
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+
+  /* Line Height */
+  --line-height-xs: 1.1;
+  --line-height-sm: 1.2;
+  --line-height-md: 1.5;
+  --line-height-lg: 1.75;
+  --line-height-xl: 2;
+
+  /* Space */
+  --space-x-1:  0.5rem;
+  --space-x-2:  1rem;
+  --space-x-3:  1.5rem;
+  --space-x-4:  2rem;
+  --space-x-5:  2.5rem;
+  --space-x-6:  3rem;
+  --space-x-7:  3.5rem;
+  --space-x-8:  4rem;
+  --space-x-9:  4.5rem;
+  --space-x-10: 5rem;
+  --space-y-1:  0.5rem;
+  --space-y-2:  1rem;
+  --space-y-3:  1.5rem;
+  --space-y-4:  2rem;
+  --space-y-5:  2.5rem;
+  --space-y-6:  3rem;
+  --space-y-7:  3.5rem;
+  --space-y-8:  4rem;
+  --space-y-9:  4.5rem;
+  --space-y-10: 5rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+}
+
+// ══════════════════════════════════════════════════════════════
+//    SEMANTIC TOKENS — Typography
+//    Reusable UI decisions that reference primitives.
+//    ══════════════════════════════════════════════════════════════
+:root {
+  /* Heading */
+  --heading-font-family:  var(--font-family-primary);
+  --heading-font-weight:  var(--font-weight-bold);
+  --heading-line-height:  var(--line-height-sm);
+  --heading-h1-font-size: var(--font-size-3xl);
+  --heading-h2-font-size: var(--font-size-2xl);
+  --heading-h3-font-size: var(--font-size-xl);
+  --heading-h4-font-size: var(--font-size-lg);
+  --heading-h5-font-size: var(--font-size-md);
+  --heading-h6-font-size: var(--font-size-sm);
+
+  /* Display */
+  --display-font-family:  var(--font-family-primary);
+  --display-font-weight:  var(--font-weight-bold);
+  --display-line-height:  var(--line-height-xs);
+  --display-1-font-size:  var(--font-size-5xl);
+  --display-2-font-size:  var(--font-size-4xl);
+
+  /* Body */
+  --body-font-family:  var(--font-family-secondary);
+  --body-font-size:    var(--font-size-md);
+  --body-font-weight:  var(--font-weight-extralight);
+  --body-line-height:  var(--line-height-md);
+
+  /* Caption */
+  --caption-font-size:   var(--font-size-xs);
+  --caption-line-height: var(--line-height-md);
+
+  /* Label */
+  --label-font-size:      var(--font-size-2xs);
+  --label-font-weight:    var(--font-weight-normal);
+  --label-letter-spacing: 0.2em;
+  --label-text-transform: uppercase;
+
+  /* Link (non-scheme-aware) */
+  --link-decoration:       underline;
+  --link-hover-decoration: none;
+  --link-underline-offset: 0.15em;
+}
+
+// ══════════════════════════════════════════════════════════════
+//    SEMANTIC TOKENS — Colour (DARK values, emitted at :root)
+//    The site is always dark, so the dark scheme values are applied
+//    directly at :root with no data-color-scheme selector.
+//    ══════════════════════════════════════════════════════════════
+:root {
+  /* Text */
+  --text-color:        #FFFFFF;
+  --text-subtle-color: var(--color-primary-1);
+  --text-muted-color:  var(--color-primary-3);
+  --text-accent-color: var(--color-tertiary-3);
+
+  /* Links */
+  --link-color:      var(--color-secondary-2);
+  --link-hover-color: var(--color-secondary-1);
+
+  /* Surfaces */
+  --page-color:           #FFFFFF;
+  --page-bg:        var(--color-primary-9);
+  --surface-color:        var(--color-primary-8);
+  --surface-subtle-color: color-mix(in srgb, white 6%, var(--color-primary-9));
+  --surface-muted-color:  color-mix(in srgb, white 3%, var(--color-primary-9));
+
+  /* Borders */
+  --border-color:        color-mix(in srgb, var(--color-secondary-6) 18%, transparent);
+  --border-subtle-color: color-mix(in srgb, white 6%, transparent);
+  --border-muted-color:  color-mix(in srgb, white 3%, transparent);
+
+  /* Buttons */
+  --btn-primary-bg:          transparent;
+  --btn-primary-color:       var(--color-primary-1);
+  --btn-primary-border:      color-mix(in srgb, var(--color-primary-1) 40%, transparent);
+  --btn-primary-hover-bg:    color-mix(in srgb, var(--color-primary-1) 8%, transparent);
+  --btn-primary-hover-color: #FFFFFF;
+  --btn-secondary-bg:          transparent;
+  --btn-secondary-color:       var(--color-secondary-2);
+  --btn-secondary-border:      color-mix(in srgb, var(--color-secondary-2) 40%, transparent);
+  --btn-secondary-hover-bg:    color-mix(in srgb, var(--color-secondary-6) 8%, transparent);
+  --btn-secondary-hover-color: #FFFFFF;
+  --btn-tertiary-bg:          transparent;
+  --btn-tertiary-color:       var(--color-tertiary-3);
+  --btn-tertiary-border:      color-mix(in srgb, var(--color-tertiary-3) 40%, transparent);
+  --btn-tertiary-hover-bg:    color-mix(in srgb, var(--color-tertiary-6) 8%, transparent);
+  --btn-tertiary-hover-color: #FFFFFF;
+
+  /* Code */
+  --code-bg:           var(--color-primary-8);
+  --code-color:        var(--color-primary-1);
+  --code-border:       var(--border-color);
+  --code-inline-bg:    var(--surface-color);
+  --code-inline-color: var(--color-tertiary-3);
+
+  /* Tags */
+  --tag-bg:    var(--surface-color);
+  --tag-color: var(--color-secondary-2);
+
+  /* Tables (article context) */
+  --table-header-bg:    var(--surface-color);
+  --table-header-color: #FFFFFF;
+  --table-stripe-bg:    var(--surface-subtle-color);
+
+  /* CTA */
+  --cta-bg: var(--color-primary-8);
+}
+
+// ══════════════════════════════════════════════════════════════
+//    TOKEN OVERRIDES — Website context (from website.css)
+//    ══════════════════════════════════════════════════════════════
+:root {
+  --display-1-font-size: clamp(56px, 8vw, 92px);
+  --display-2-font-size: clamp(40px, 5vw, 56px);
+
+  // CivicTheme derives a saturated red focus colour that reads as an error
+  // state on inputs and buttons. Use the brand coral for the focus ring
+  // instead. This `:root` rule outranks the generated `html { ... }` colour
+  // variables, so it applies regardless of stylesheet load order.
+  --ct-color-light-interaction-focus: var(--color-tertiary-3);
+  --ct-color-dark-interaction-focus: var(--color-tertiary-3);
+}

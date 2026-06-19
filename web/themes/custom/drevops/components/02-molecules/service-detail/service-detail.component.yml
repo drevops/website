@@ -1,0 +1,56 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Service detail
+status: stable
+description: 'A detailed service card: a number, title and tagline, a description, an inclusions list, a price and a call-to-action button.'
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+    title:
+      type: string
+      title: Title
+      description: The service name.
+    tagline:
+      type: string
+      title: Tagline
+      description: A one-line summary shown beside the title.
+    includes:
+      type: array
+      title: Inclusions
+      description: The "what's included" list items.
+      items:
+        type: string
+    price_label:
+      type: string
+      title: Price label
+      description: The label above the price, e.g. "From" or "Typical engagement".
+    price_value:
+      type: string
+      title: Price value
+      description: The price, e.g. "$40K - $180K".
+    link_url:
+      type: string
+      title: Link URL
+      description: The call-to-action destination.
+    link_title:
+      type: string
+      title: Link title
+      description: The call-to-action label.
+    modifier_class:
+      type: string
+      title: Modifier Class
+      description: Additional CSS classes.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+slots:
+  description:
+    title: Description
+    description: The service description (rich text).

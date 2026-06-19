@@ -1,0 +1,21 @@
+uuid: dd7b2811-e267-4f5c-97cf-b1be6dbf9dc1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_snippet_appearance
+    - paragraphs.paragraphs_type.civictheme_snippet
+  module:
+    - options
+id: paragraph.civictheme_snippet.field_p_snippet_appearance
+field_name: field_p_snippet_appearance
+entity_type: paragraph
+bundle: civictheme_snippet
+label: 'Snippet appearance'
+description: 'Optional per-item design treatment.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

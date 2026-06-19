@@ -3,3 +3,5 @@ type: module
 description: Base feature for DrevOps Website site.
 core_version_requirement: ^11
 package: website
+dependencies:
+  - drupal_helpers:drupal_helpers

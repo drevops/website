@@ -1,0 +1,50 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Footer
+status: stable
+replaces: civictheme:footer
+description: Minimal site footer - copyright and a single contact link.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+    site_name:
+      type: string
+      title: Site name
+      description: Site name shown in the copyright line.
+    email:
+      type: string
+      title: Contact email
+      description: Contact email rendered as a mailto link.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier Class
+      description: Additional CSS classes.
+slots:
+  content_top1:
+    title: Content Top 1
+  content_top2:
+    title: Content Top 2
+  content_middle1:
+    title: Content Middle 1
+  content_middle2:
+    title: Content Middle 2
+  content_middle3:
+    title: Content Middle 3
+  content_middle4:
+    title: Content Middle 4
+  content_middle5:
+    title: Content Middle 5
+  content_bottom1:
+    title: Content Bottom 1
+  content_bottom2:
+    title: Content Bottom 2
