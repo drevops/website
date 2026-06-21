@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_c_n_components
     - node.type.civictheme_page
     - paragraphs.paragraphs_type.campaign
+    - paragraphs.paragraphs_type.card_group
     - paragraphs.paragraphs_type.civictheme_accordion
     - paragraphs.paragraphs_type.civictheme_attachment
     - paragraphs.paragraphs_type.civictheme_automated_list
@@ -65,10 +66,14 @@ settings:
       service_detail: service_detail
       stat: stat
       contact_detail: contact_detail
+      card_group: card_group
     negate: 0
     target_bundles_drag_drop:
       campaign:
         weight: 61
+        enabled: true
+      card_group:
+        weight: 63
         enabled: true
       civictheme_accordion:
         weight: -58
