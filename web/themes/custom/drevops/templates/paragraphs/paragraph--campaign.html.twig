@@ -8,7 +8,7 @@
 {% for item in paragraph.field_link %}
   {% if item.uri is not empty %}
     {% set campaign_actions = campaign_actions|merge([{
-      url: item.url.toString,
+      url: item.url.toString(),
       title: item.title,
     }]) %}
   {% endif %}
