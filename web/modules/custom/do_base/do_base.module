@@ -7,10 +7,16 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\block\BlockInterface;
 use Drupal\csp\Csp;
+use Drupal\node\NodeInterface;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Allowed values for the shared paragraph component "type" selector.
@@ -52,6 +58,41 @@ function do_base_field_c_p_type_allowed_values(FieldStorageDefinitionInterface $
   }
 
   return $all;
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function do_base_block_access(BlockInterface $block, string $operation, AccountInterface $account): AccessResultInterface {
+  if ($operation !== 'view' || $block->id() !== 'drevops_banner') {
+    return AccessResult::neutral();
+  }
+
+  // A hero-led page supplies its own heading through the hero component, so the
+  // CivicTheme title banner is hidden to avoid stacking a duplicate page title
+  // and breadcrumb above the hero. The decision varies per route and follows
+  // the node's component list, so both are recorded as cacheability metadata.
+  $route_match = \Drupal::routeMatch();
+  $node = $route_match->getParameter('node_revision') ?: $route_match->getParameter('node');
+
+  if ($node instanceof NodeInterface && _do_base_node_leads_with_hero($node)) {
+    return AccessResult::forbidden()->addCacheContexts(['route'])->addCacheableDependency($node);
+  }
+
+  return AccessResult::neutral()->addCacheContexts(['route']);
+}
+
+/**
+ * Checks whether a node's first layout component is a hero paragraph.
+ */
+function _do_base_node_leads_with_hero(NodeInterface $node): bool {
+  if (!$node->hasField('field_c_n_components')) {
+    return FALSE;
+  }
+
+  $first = $node->get('field_c_n_components')->referencedEntities()[0] ?? NULL;
+
+  return $first instanceof ParagraphInterface && $first->bundle() === 'hero';
 }
 
 /**
