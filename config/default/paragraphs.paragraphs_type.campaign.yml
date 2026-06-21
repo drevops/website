@@ -1,0 +1,10 @@
+uuid: 79b306cb-fcd9-43e0-b95a-034f777ab0a3
+langcode: en
+status: true
+dependencies: {  }
+id: campaign
+label: Campaign
+icon_uuid: null
+icon_default: null
+description: 'A featured campaign card with a label, heading, body and up to two action links.'
+behavior_plugins: {  }

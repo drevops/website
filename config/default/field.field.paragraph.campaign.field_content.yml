@@ -1,0 +1,22 @@
+uuid: a823814e-cf52-4d63-abe2-056dc9bee306
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_content
+    - paragraphs.paragraphs_type.campaign
+  module:
+    - text
+id: paragraph.campaign.field_content
+field_name: field_content
+entity_type: paragraph
+bundle: campaign
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long
