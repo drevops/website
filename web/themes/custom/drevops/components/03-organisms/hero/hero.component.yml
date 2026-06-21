@@ -1,0 +1,92 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Hero
+status: stable
+description: Page or section opener that renders one of six contextual variants.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: dark
+    type:
+      type: string
+      title: Type
+      description: Variant that sets the hero treatment for its context.
+      enum:
+        - home
+        - inner
+        - page
+        - contact
+        - article
+        - section
+      default: home
+    background_image:
+      type: object
+      title: Background image
+      description: Image shown behind the overlay for the article variant.
+      properties:
+        url:
+          type: string
+          title: URL
+          description: Image source URL.
+        alt:
+          type: string
+          title: Alt text
+          description: Image alt text.
+    actions:
+      type: array
+      title: Actions
+      description: Up to two call-to-action links.
+      maxItems: 2
+      items:
+        type: object
+        properties:
+          text:
+            type: string
+            title: Text
+            description: Link text.
+          url:
+            type: string
+            title: URL
+            description: Link URL.
+          type:
+            type: string
+            title: Type
+            description: Button style (primary, secondary, tertiary).
+          is_external:
+            type: boolean
+            title: External
+            description: Whether the link is external.
+          is_new_window:
+            type: boolean
+            title: New window
+            description: Whether to open the link in a new window.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier class
+      description: Additional CSS classes.
+slots:
+  eyebrow:
+    title: Eyebrow
+    description: Short label above the heading.
+  heading:
+    title: Heading
+    description: Main hero heading.
+  lead:
+    title: Lead
+    description: Supporting lead paragraph.
+  meta:
+    title: Meta
+    description: Article meta such as date and read time.
+  tags:
+    title: Tags
+    description: Article tags.

@@ -1,0 +1,101 @@
+{#
+/**
+ * @file
+ * Hero component.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - type: [string] Variant: home, inner, page, contact, article, section.
+ * - background_image: [object] Image for the article variant (url, alt).
+ * - actions: [array] Up to two call-to-action links (text, url, type,
+ *   is_external, is_new_window).
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ *
+ * Slots:
+ * - eyebrow: Short label above the heading.
+ * - heading: Main hero heading.
+ * - lead: Supporting lead paragraph.
+ * - meta: Article meta such as date and read time.
+ * - tags: Article tags.
+ */
+#}
+
+{% set type = type in ['home', 'inner', 'page', 'contact', 'article', 'section'] ? type : 'home' %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set type_class = 'component-hero--%s'|format(type) %}
+{% set modifier_class = '%s %s %s'|format(theme_class, type_class, modifier_class|default('')) %}
+
+{% set has_accent = type in ['home', 'contact'] %}
+{% set has_scroll = type == 'home' %}
+
+{% if type == 'article' %}
+  <header class="component-hero {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    {% if background_image.url is not empty %}
+      <div class="component-hero__image">
+        {{ include('civictheme:image', {
+          theme: theme,
+          url: background_image.url,
+          alt: background_image.alt,
+        }, false) }}
+        <div class="component-hero__overlay"></div>
+      </div>
+    {% endif %}
+
+    <div class="component-hero__content">
+      {% if meta is not empty %}
+        <div class="component-hero__meta">{{ meta }}</div>
+      {% endif %}
+
+      {% if heading is not empty %}
+        <h1 class="component-hero__title">{{ heading }}</h1>
+      {% endif %}
+
+      {% if tags is not empty %}
+        <div class="component-hero__tags">{{ tags }}</div>
+      {% endif %}
+    </div>
+  </header>
+{% else %}
+  <section class="component-hero {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="component-hero-inner {{ type == 'contact' ? 'component-hero-inner--narrow' }}">
+      {% if eyebrow is not empty %}
+        <p class="component-hero-eyebrow component-reveal">{{ eyebrow }}</p>
+      {% endif %}
+
+      {% if heading is not empty %}
+        <h1 class="component-hero-title component-reveal component-reveal-d1">
+          {{ heading }}
+          {% if has_accent %}<span class="component-hero-title__accent" aria-hidden="true"></span>{% endif %}
+        </h1>
+      {% endif %}
+
+      {% if lead is not empty %}
+        <p class="component-hero-lead component-reveal component-reveal-d2">{{ lead }}</p>
+      {% endif %}
+
+      {% if actions is not empty %}
+        <div class="component-hero-actions component-reveal component-reveal-d3">
+          {% for action in actions %}
+            {{ include('civictheme:button', {
+              theme: theme,
+              kind: 'link',
+              type: action.type|default('secondary'),
+              text: action.text,
+              url: action.url,
+              is_external: action.is_external,
+              is_new_window: action.is_new_window,
+            }, false) }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if has_scroll %}
+      <div class="component-hero-rule" aria-hidden="true"></div>
+      <div class="component-scroll-indicator" aria-hidden="true">
+        <div class="component-scroll-line"></div>
+      </div>
+    {% endif %}
+  </section>
+{% endif %}

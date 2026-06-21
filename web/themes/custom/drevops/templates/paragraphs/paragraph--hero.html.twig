@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Theme implementation to display the Hero component.
+ */
+#}
+{{ include('drevops:hero', {
+  theme: theme,
+  type: type,
+  background_image: background_image,
+  actions: actions,
+  eyebrow: eyebrow,
+  heading: title,
+  lead: lead,
+  attributes: component_attributes,
+}, with_context: false) }}

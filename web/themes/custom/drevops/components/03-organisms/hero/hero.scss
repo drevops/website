@@ -1,0 +1,327 @@
+//
+// Hero component styles.
+//
+// Ported from static-prototype (homepage, services, blog, blog-post, contact).
+// Brand colours are read from the dark palette as flat values so gradients and
+// color-mix resolve directly; the redesign uses identical brand anchors across
+// schemes, so the hero renders the same dark treatment whichever theme it
+// requests. Entrance motion reuses the shared .component-reveal library; the
+// continuous glow and scroll-pulse are gated behind prefers-reduced-motion.
+//
+
+$_hero-bg: ct-color-constant-dark('primary-9');
+$_hero-bg-contact: ct-color-constant-dark('primary-8');
+$_hero-teal: ct-color-constant-dark('secondary-6');
+$_hero-accent: ct-color-constant-dark('tertiary-3');
+$_hero-text: ct-color-constant-dark('neutral-1');
+$_hero-text-subtle: ct-color-constant-dark('primary-1');
+$_hero-text-muted: ct-color-constant-dark('primary-3');
+
+.component-hero {
+  $root: &;
+
+  & {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: 8.75rem ct-particle(8) ct-particle(10);
+    overflow: hidden;
+    background: $_hero-bg;
+    text-align: center;
+
+    // The hero is a full-width opener, so it breaks out of CivicTheme's
+    // constrained content column to span the viewport. The root clips
+    // horizontal overflow (see base/_infrastructure), so the viewport-wide
+    // width never adds a horizontal scrollbar.
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  // Teal glow.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: ct-particle(100);
+    height: ct-particle(75);
+    transform: translate(-50%, -55%);
+    background: radial-gradient(ellipse at center, color-mix(in srgb, #{$_hero-teal} 12%, transparent) 0%, color-mix(in srgb, #{$_hero-teal} 4%, transparent) 40%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #{$root}-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: ct-particle(4);
+    max-width: ct-particle(112);
+    margin: 0 auto;
+  }
+
+  #{$root}-inner--narrow {
+    max-width: ct-particle(88);
+  }
+
+  #{$root}-eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $_hero-teal;
+  }
+
+  #{$root}-title {
+    @include ct-typography('display-large');
+
+    & {
+      position: relative;
+      margin: 0;
+      color: $_hero-text;
+    }
+  }
+
+  #{$root}-title__accent {
+    display: block;
+    width: ct-particle(10);
+    height: 3px;
+    margin: ct-particle(3) auto 0;
+    background: linear-gradient(90deg, #{$_hero-teal}, #{$_hero-accent});
+    border-radius: 2px;
+  }
+
+  #{$root}-lead {
+    max-width: ct-particle(90);
+    margin: 0 auto;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: $_hero-text-subtle;
+  }
+
+  #{$root}-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: ct-particle(2);
+    margin-top: ct-particle(2);
+  }
+
+  // Decorative separator and scroll indicator (home only).
+  #{$root}-rule {
+    position: absolute;
+    right: 0;
+    bottom: 8.75rem;
+    left: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, #{$_hero-teal} 40%, transparent) 20%, color-mix(in srgb, #{$_hero-teal} 60%, transparent) 50%, color-mix(in srgb, #{$_hero-teal} 40%, transparent) 80%, transparent 100%);
+  }
+
+  #{$root} .component-scroll-indicator {
+    position: absolute;
+    bottom: ct-particle(5);
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-50%);
+  }
+
+  // Home: deep vignette over the glow.
+  &#{$root}--home::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, #{$_hero-bg} 60%, transparent) 100%);
+    pointer-events: none;
+  }
+
+  // Inner: shorter, dimmer glow, no scroll indicator.
+  &#{$root}--inner {
+    min-height: 70vh;
+    padding: ct-particle(20) ct-particle(8) ct-particle(10);
+
+    &::before {
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$_hero-teal} 10%, transparent) 0%, color-mix(in srgb, #{$_hero-teal} 3%, transparent) 40%, transparent 70%);
+    }
+  }
+
+  // Page and section: centred band, auto height, faded static glow, medium title.
+  &#{$root}--page,
+  &#{$root}--section {
+    min-height: auto;
+    padding: ct-particle(25) 0 ct-particle(10);
+
+    &::before {
+      width: ct-particle(112);
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$_hero-teal} 8%, transparent) 0%, transparent 65%);
+    }
+
+    #{$root}-title {
+      font-size: var(--ct-typography-display-font-size);
+    }
+  }
+
+  // Section sits inside the page flow, so it needs less top offset.
+  &#{$root}--section {
+    padding: ct-particle(12) 0;
+  }
+
+  // Contact: darker surface, narrow column.
+  &#{$root}--contact {
+    background: $_hero-bg-contact;
+    min-height: auto;
+    padding: ct-particle(25) 0 ct-particle(12);
+
+    &::before {
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$_hero-teal} 12%, transparent) 0%, color-mix(in srgb, #{$_hero-teal} 3%, transparent) 40%, transparent 70%);
+    }
+  }
+
+  // Article: image-backed header with overlay.
+  &#{$root}--article {
+    display: block;
+    min-height: ct-particle(65);
+    padding: 0;
+    text-align: left;
+  }
+
+  #{$root}__image {
+    position: absolute;
+    inset: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  #{$root}__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, color-mix(in srgb, #{$_hero-bg} 40%, transparent) 0%, color-mix(in srgb, #{$_hero-bg} 70%, transparent) 40%, #{$_hero-bg} 100%);
+  }
+
+  #{$root}__content {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    max-width: ct-particle(137);
+    margin: 0 auto;
+    padding: 0 ct-particle(8) ct-particle(8);
+  }
+
+  #{$root}__meta {
+    margin-bottom: ct-particle(3);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: $_hero-text-muted;
+  }
+
+  #{$root}__title {
+    @include ct-typography('display-large');
+
+    & {
+      max-width: ct-particle(100);
+      margin: 0 0 ct-particle(3);
+      font-size: var(--ct-typography-display-font-size);
+      color: $_hero-text;
+    }
+  }
+
+  #{$root}__tags {
+    margin-top: ct-particle(3);
+  }
+
+  // Continuous motion - gated so reduced-motion visitors get a still hero.
+  @media (prefers-reduced-motion: no-preference) {
+    &::before {
+      animation: component-hero-glow 8s ease-in-out infinite;
+    }
+
+    &#{$root}--page::before,
+    &#{$root}--section::before,
+    &#{$root}--contact::before {
+      animation: none;
+    }
+
+    #{$root} .component-scroll-line {
+      animation: component-hero-scroll-pulse 2s ease-in-out infinite;
+    }
+  }
+
+  @include ct-breakpoint-upto('m') {
+    & {
+      padding: ct-particle(13) ct-particle(3) ct-particle(10);
+    }
+
+    &#{$root}--inner {
+      min-height: 50vh;
+      padding: ct-particle(17) ct-particle(3) ct-particle(8);
+    }
+
+    &#{$root}--page,
+    &#{$root}--section,
+    &#{$root}--contact {
+      padding: ct-particle(17) ct-particle(3) ct-particle(5);
+    }
+
+    &#{$root}--article {
+      min-height: ct-particle(50);
+    }
+
+    #{$root}__content {
+      padding: 0 ct-particle(3) ct-particle(5);
+    }
+
+    #{$root}-lead {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+// Scroll indicator line (home).
+.component-scroll-line {
+  width: 1px;
+  height: ct-particle(6);
+  background: linear-gradient(to bottom, ct-color-constant-dark('secondary-6'), transparent);
+}
+
+@keyframes component-hero-glow {
+  0%,
+  100% {
+    opacity: 70%;
+    transform: translate(-50%, -55%) scale(1);
+  }
+
+  50% {
+    opacity: 100%;
+    transform: translate(-50%, -55%) scale(1.08);
+  }
+}
+
+@keyframes component-hero-scroll-pulse {
+  0%,
+  100% {
+    opacity: 30%;
+    transform: scaleY(1);
+  }
+
+  50% {
+    opacity: 90%;
+    transform: scaleY(1.15);
+  }
+}
