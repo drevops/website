@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Contact detail component.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - label: [string] Short label naming the contact method.
+ * - value: [object] The contact value (text, url, is_email).
+ * - note: [string] Supporting note shown beneath the value.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ */
+#}
+
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+
+<div class="component-contact-detail {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+  {% if label is not empty %}
+    <p class="component-contact-detail__label">{{ label }}</p>
+  {% endif %}
+
+  {% if value.text is not empty %}
+    {% if value.url is not empty %}
+      <a href="{{ value.url }}" class="component-contact-detail__value{{ value.is_email ? ' component-contact-detail__value--email' }}">{{ value.text }}</a>
+    {% else %}
+      <p class="component-contact-detail__value">{{ value.text }}</p>
+    {% endif %}
+  {% endif %}
+
+  {% if note is not empty %}
+    <p class="component-contact-detail__note">{{ note }}</p>
+  {% endif %}
+</div>

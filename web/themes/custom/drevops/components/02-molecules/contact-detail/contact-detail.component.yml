@@ -1,0 +1,48 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Contact detail
+status: stable
+description: A single contact method - a label, a value, and a supporting note. Email and phone values render as actionable links.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: dark
+    label:
+      type: string
+      title: Label
+      description: Short label naming the contact method.
+    value:
+      type: object
+      title: Value
+      description: The contact value and, for email or phone, the link that opens it.
+      properties:
+        text:
+          type: string
+          title: Text
+          description: The value shown to the visitor.
+        url:
+          type: string
+          title: URL
+          description: The mailto or tel link, when the value is actionable.
+        is_email:
+          type: boolean
+          title: Is email
+          description: Whether the value is an email address (drives the underline treatment).
+    note:
+      type: string
+      title: Note
+      description: Supporting note shown beneath the value.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier class
+      description: Additional CSS classes.

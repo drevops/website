@@ -1,0 +1,22 @@
+uuid: 2f6c4b09-e264-4b1b-ab9b-cf8e592a0cb3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_content
+    - paragraphs.paragraphs_type.contact_detail
+  module:
+    - text
+id: paragraph.contact_detail.field_c_p_content
+field_name: field_c_p_content
+entity_type: paragraph
+bundle: contact_detail
+label: Value
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

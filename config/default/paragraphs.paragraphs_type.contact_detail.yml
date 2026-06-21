@@ -1,0 +1,10 @@
+uuid: 5dfe18e3-5538-4ab9-9954-40499f521b2d
+langcode: en
+status: true
+dependencies: {  }
+id: contact_detail
+label: 'Contact detail'
+icon_uuid: null
+icon_default: null
+description: 'A single contact method - a label, a value, and a note. Email and phone values render as actionable links.'
+behavior_plugins: {  }
