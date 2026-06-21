@@ -78,9 +78,8 @@ class FeatureContext extends DrupalContext {
    *
    * No template renders the interactions hooks yet, so the reveal behaviour is
    * exercised against representative injected markup.
-   *
-   * @Then injected reveal content becomes visible
    */
+  #[\Behat\Step\Then('injected reveal content becomes visible')]
   public function assertInjectedRevealBecomesVisible(): void {
     $session = $this->getSession();
 
@@ -105,9 +104,8 @@ class FeatureContext extends DrupalContext {
    *
    * No template renders the interactions hooks yet, so the mobile navigation
    * behaviour is exercised against representative injected markup.
-   *
-   * @Then the injected mobile menu toggles open and closed
    */
+  #[\Behat\Step\Then('the injected mobile menu toggles open and closed')]
   public function assertInjectedMobileMenuToggles(): void {
     $session = $this->getSession();
 
