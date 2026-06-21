@@ -85,14 +85,15 @@ function _drevops_preprocess_paragraph__service_detail_field__index(array &$vari
   }
 
   $position = 0;
-  foreach ($parent->get($field_name) as $item) {
-    $sibling = $item->entity;
+  foreach ($parent->get($field_name) as $field_item_list) {
+    $values = $field_item_list->getValue();
+    $sibling = $field_item_list->get('entity')->getValue();
     if (!$sibling instanceof ParagraphInterface || $sibling->bundle() !== $paragraph->bundle()) {
       continue;
     }
 
     $position++;
-    if ((string) $item->target_id === (string) $paragraph->id()) {
+    if ((string) ($values['target_id'] ?? '') === (string) $paragraph->id()) {
       $variables['index'] = $position;
       return;
     }
