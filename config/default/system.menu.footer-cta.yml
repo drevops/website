@@ -1,0 +1,8 @@
+uuid: 082f0027-503a-4024-9e3c-46d917ca06d7
+langcode: en
+status: true
+dependencies: {  }
+id: footer-cta
+label: 'Footer: Call to action'
+description: 'DrevOps expanded footer menu.'
+locked: false

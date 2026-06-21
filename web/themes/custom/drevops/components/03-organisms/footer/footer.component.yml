@@ -1,0 +1,55 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Footer
+status: stable
+description: Expanded footer with a four-column grid and a bottom bar.
+replaces: civictheme:footer
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+    background_image:
+      type: string
+      title: Background Image
+      description: Content background inline image.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier Class
+      description: Additional CSS classes.
+slots:
+  content_top1:
+    title: Content Top 1
+    description: Top section first content slot.
+  content_top2:
+    title: Content Top 2
+    description: Top section second content slot.
+  content_middle1:
+    title: Content Middle 1
+    description: First column - brand logo and blurb.
+  content_middle2:
+    title: Content Middle 2
+    description: Second column - first link menu.
+  content_middle3:
+    title: Content Middle 3
+    description: Third column - second link menu.
+  content_middle4:
+    title: Content Middle 4
+    description: Fourth column - contact menu.
+  content_middle5:
+    title: Content Middle 5
+    description: Full-width middle slot.
+  content_bottom1:
+    title: Content Bottom 1
+    description: Bottom bar start - copyright.
+  content_bottom2:
+    title: Content Bottom 2
+    description: Bottom bar end - call to action.

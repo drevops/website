@@ -1,23 +1,23 @@
-uuid: 8a7bf8ec-1cb8-4dcf-89ba-4a0a01b5ef49
+uuid: 9475c28a-0cf8-461a-956e-3161e0cb82b6
 langcode: en
-status: false
+status: true
 dependencies:
   config:
-    - system.menu.civictheme-footer
+    - system.menu.footer-services
   module:
     - menu_block
   theme:
     - drevops
-id: drevops_footer_menu_1
+id: drevops_footer_services
 theme: drevops
-region: footer_middle_1
+region: footer_middle_2
 weight: 0
 provider: null
-plugin: 'menu_block:civictheme-footer'
+plugin: 'menu_block:footer-services'
 settings:
-  id: 'menu_block:civictheme-footer'
-  label: 'Footer menu 1'
-  label_display: ''
+  id: 'menu_block:footer-services'
+  label: Services
+  label_display: visible
   provider: menu_block
   follow: false
   follow_parent: child
@@ -25,10 +25,10 @@ settings:
   label_link: false
   label_type: block
   level: 1
-  depth: 1
+  depth: 0
   expand_all_items: false
-  parent: 'civictheme-footer:'
+  parent: 'footer-services:'
   render_parent: false
-  suggestion: civictheme_footer
+  suggestion: ''
   hide_on_nonactive: false
 visibility: {  }

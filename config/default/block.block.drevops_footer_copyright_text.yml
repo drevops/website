@@ -1,0 +1,20 @@
+uuid: 69851518-bc42-4d22-90e3-0b1e01d43cc7
+langcode: en
+status: true
+dependencies:
+  module:
+    - do_base
+  theme:
+    - drevops
+id: drevops_footer_copyright_text
+theme: drevops
+region: footer_bottom_1
+weight: 0
+provider: null
+plugin: do_base_footer_copyright
+settings:
+  id: do_base_footer_copyright
+  label: 'Footer copyright'
+  label_display: '0'
+  provider: do_base
+visibility: {  }

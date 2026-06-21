@@ -1,0 +1,8 @@
+uuid: 0f2964e7-ae7b-468d-a193-026d245d65c2
+langcode: en
+status: true
+dependencies: {  }
+id: footer-company
+label: 'Footer: Company'
+description: 'DrevOps expanded footer menu.'
+locked: false
