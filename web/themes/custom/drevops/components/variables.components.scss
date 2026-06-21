@@ -67,6 +67,14 @@ $ct-icon-sizes: (
 );
 
 //
+// Page.
+//
+// The canvas uses the base background (the deepest navy) so that raised
+// surfaces, which use the lighter background steps, sit above it.
+$ct-page-light-background-color: ct-color-light('background');
+$ct-page-dark-background-color: ct-color-dark('background');
+
+//
 // Banner.
 //
 $ct-banner-intro-min-height: 50vh !default;
