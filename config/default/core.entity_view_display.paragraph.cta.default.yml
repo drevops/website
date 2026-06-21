@@ -1,0 +1,23 @@
+uuid: 08669bc4-50c4-4dac-a54d-ef8374f28ce4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.cta.field_c_p_theme
+    - field.field.paragraph.cta.field_c_p_type
+    - field.field.paragraph.cta.field_link
+    - field.field.paragraph.cta.field_subtitle
+    - field.field.paragraph.cta.field_title
+    - paragraphs.paragraphs_type.cta
+id: paragraph.cta.default
+targetEntityType: paragraph
+bundle: cta
+mode: default
+content: {  }
+hidden:
+  field_c_p_theme: true
+  field_c_p_type: true
+  field_link: true
+  field_subtitle: true
+  field_title: true
+  search_api_excerpt: true

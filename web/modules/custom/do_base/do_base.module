@@ -36,6 +36,9 @@ function do_base_field_c_p_type_allowed_values(FieldStorageDefinitionInterface $
       'dot' => 'Dot',
       'icon' => 'Icon',
     ],
+    'cta' => [
+      'display' => 'Display',
+    ],
   ];
 
   $bundle = $entity?->bundle();

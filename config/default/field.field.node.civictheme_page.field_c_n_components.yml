@@ -22,6 +22,7 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_slider
     - paragraphs.paragraphs_type.civictheme_webform
     - paragraphs.paragraphs_type.contact_detail
+    - paragraphs.paragraphs_type.cta
     - paragraphs.paragraphs_type.divider
     - paragraphs.paragraphs_type.from_library
     - paragraphs.paragraphs_type.hero
@@ -67,6 +68,7 @@ settings:
       stat: stat
       contact_detail: contact_detail
       card_group: card_group
+      cta: cta
     negate: 0
     target_bundles_drag_drop:
       campaign:
@@ -167,6 +169,9 @@ settings:
         enabled: true
       contact_detail:
         weight: 61
+        enabled: true
+      cta:
+        weight: 63
         enabled: true
       divider:
         weight: 60

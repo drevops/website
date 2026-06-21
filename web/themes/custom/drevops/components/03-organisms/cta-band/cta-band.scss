@@ -1,0 +1,209 @@
+//
+// CTA Band component.
+//
+// A full-width closing call-to-action band ported from the static prototype's
+// closing CTA section. An oversized heading with its last word underlined sits
+// above a sub-line, a row of action buttons and a distinct email link, centred
+// on a raised surface. Colours resolve through per-theme local variables (dark
+// by default, light when ct-theme-light is set) so the band renders correctly
+// in either CivicTheme scheme; spacing uses the prototype's rem scale
+// (CivicTheme exposes no global spacing tokens). The entrance fade is provided
+// by the shared .component-reveal library, which gates itself behind
+// prefers-reduced-motion.
+//
+
+.ct-cta {
+  // Dark scheme is the default; ct-theme-light overrides below.
+  --ct-cta-surface-color: var(--ct-color-dark-background-light);
+  --ct-cta-heading-color: var(--ct-color-dark-heading);
+  --ct-cta-body-color: var(--ct-color-dark-body);
+  --ct-cta-accent-color: var(--ct-color-dark-interaction-background);
+  --ct-cta-accent-hover-color: var(--ct-color-dark-interaction-hover-background);
+
+  position: relative;
+  overflow: hidden;
+  padding: 10rem 0;
+  text-align: center;
+  background: var(--ct-cta-surface-color);
+
+  &.ct-theme-light {
+    --ct-cta-surface-color: var(--ct-color-light-background-light);
+    --ct-cta-heading-color: var(--ct-color-light-heading);
+    --ct-cta-body-color: var(--ct-color-light-body);
+    --ct-cta-accent-color: var(--ct-color-light-interaction-background);
+    --ct-cta-accent-hover-color: var(--ct-color-light-interaction-hover-background);
+  }
+
+  // Centred accent glow behind the content.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 700px;
+    height: 500px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse at center, color-mix(in srgb, var(--ct-cta-accent-color) 10%, transparent) 0%, color-mix(in srgb, var(--ct-cta-accent-color) 3%, transparent) 50%, transparent 70%);
+    pointer-events: none;
+  }
+
+  @media (width <= 768px) {
+    padding: 8.75rem 0;
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4rem;
+
+    @media (width <= 768px) {
+      padding: 0 1.5rem;
+    }
+  }
+
+  &__title {
+    margin: 0 0 3rem;
+    font-family: var(--ct-typography-display-font-name);
+    font-size: clamp(3.5rem, 8vw, 5.75rem);
+    font-weight: var(--ct-typography-heading-h1-font-weight);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ct-cta-heading-color);
+  }
+
+  // The last word of the heading carries a gradient underline.
+  &__underline {
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0.05em;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--ct-cta-accent-color), var(--ct-cta-accent-hover-color));
+    }
+  }
+
+  &__sub {
+    max-width: 640px;
+    margin: 0 auto 3.5rem;
+    font-size: var(--ct-typography-text-large-font-size);
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: var(--ct-cta-body-color);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+
+    @media (width <= 480px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__action {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    padding: 1rem 2rem;
+    font-family: var(--ct-typography-label-regular-font-name);
+    font-size: 0.875rem;
+    font-weight: var(--ct-typography-label-regular-font-weight);
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: color 0.4s ease, border-color 0.4s ease;
+
+    // Hover fill: a faint tint that wipes in from the left.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    &:hover {
+      text-decoration: none;
+
+      &::before {
+        transform: scaleX(1);
+      }
+    }
+
+    // The last action is the primary CTA: brand accent outline.
+    &--primary {
+      color: var(--ct-cta-accent-color);
+      border-color: color-mix(in srgb, var(--ct-cta-accent-color) 40%, transparent);
+
+      &::before {
+        background: color-mix(in srgb, var(--ct-cta-accent-color) 8%, transparent);
+      }
+
+      &:hover {
+        color: var(--ct-cta-accent-hover-color);
+        border-color: var(--ct-cta-accent-color);
+      }
+    }
+
+    // Earlier actions are secondary: neutral outline.
+    &--secondary {
+      color: var(--ct-cta-heading-color);
+      border-color: color-mix(in srgb, var(--ct-cta-heading-color) 30%, transparent);
+
+      &::before {
+        background: color-mix(in srgb, var(--ct-cta-heading-color) 8%, transparent);
+      }
+
+      &:hover {
+        color: var(--ct-cta-heading-color);
+        border-color: var(--ct-cta-heading-color);
+      }
+    }
+  }
+
+  &__email {
+    display: inline-block;
+    position: relative;
+    font-size: var(--ct-typography-heading-h3-font-size);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    color: var(--ct-cta-accent-color);
+    transition: color 0.4s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--ct-cta-accent-hover-color);
+      transition: width 0.4s ease;
+    }
+
+    &:hover {
+      text-decoration: none;
+      color: var(--ct-cta-accent-hover-color);
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}

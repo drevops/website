@@ -1,0 +1,67 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: CTA Band
+status: stable
+description: A full-width closing call-to-action band with an oversized heading whose last word is underlined, a sub-line, up to three action buttons and a distinct email link, on a raised surface.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: dark
+    type:
+      type: string
+      title: Type
+      description: Display variant of the band.
+      enum:
+        - display
+      default: display
+    heading:
+      type: string
+      title: Heading
+      description: Oversized heading. Its last word is rendered with an accent underline.
+    sub:
+      type: string
+      title: Sub-line
+      description: Supporting line shown below the heading.
+    actions:
+      type: array
+      title: Actions
+      description: Up to three action links. The last action renders as the primary button, the rest as secondary.
+      maxItems: 3
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+            title: URL
+            description: Action URL.
+          title:
+            type: string
+            title: Title
+            description: Action label.
+    email:
+      type: object
+      title: Email
+      description: A distinct email link shown beneath the actions.
+      properties:
+        url:
+          type: string
+          title: URL
+          description: The mailto URL.
+        label:
+          type: string
+          title: Label
+          description: The email address shown as the link text.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier class
+      description: Additional CSS classes.
