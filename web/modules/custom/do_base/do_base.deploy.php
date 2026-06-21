@@ -689,6 +689,162 @@ function _do_base_build_services_components(): array {
 }
 
 /**
+ * Seed the Contact page assembled from the shared components.
+ */
+function do_base_deploy_seed_contact_page(): string {
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  // Reassemble the existing Contact page when present so its /contact alias and
+  // revision history are preserved; create it only on a site that has none.
+  $existing = $node_storage->loadByProperties([
+    'type' => 'civictheme_page',
+    'title' => 'Contact',
+  ]);
+  $node = $existing ? reset($existing) : $node_storage->create([
+    'type' => 'civictheme_page',
+    'title' => 'Contact',
+    'status' => 1,
+    'path' => ['alias' => '/contact', 'pathauto' => 0],
+  ]);
+
+  // The components the page carried before the rebuild are deleted afterwards
+  // so swapping the stack does not leave orphaned paragraphs behind.
+  $superseded = $node->get('field_c_n_components')->referencedEntities();
+
+  // Building, attaching and cleaning up run inside one transaction so a failure
+  // part way through rolls back rather than leaving half-saved paragraphs
+  // orphaned instead of attached to the page.
+  $transaction = \Drupal::database()->startTransaction();
+
+  try {
+    $components = _do_base_build_contact_components();
+
+    $node->set('field_c_n_components', array_map(static fn (Paragraph $component): array => [
+      'target_id' => $component->id(),
+      'target_revision_id' => $component->getRevisionId(),
+    ], $components));
+    $node->save();
+
+    foreach ($superseded as $paragraph) {
+      $paragraph->delete();
+    }
+  }
+  catch (\Throwable $exception) {
+    $transaction->rollBack();
+
+    throw $exception;
+  }
+
+  return sprintf('Assembled the Contact page (node %s) from %d components.', $node->id(), count($components));
+}
+
+/**
+ * Build and save the Contact page components in their render order.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph[]
+ *   The saved hero and two-column contact-area paragraphs.
+ */
+function _do_base_build_contact_components(): array {
+  $save_paragraph = static function (array $values): Paragraph {
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    return $paragraph;
+  };
+
+  $reference = static fn (Paragraph $paragraph): array => [
+    'target_id' => $paragraph->id(),
+    'target_revision_id' => $paragraph->getRevisionId(),
+  ];
+
+  $components = [];
+
+  $components[] = $save_paragraph([
+    'type' => 'hero',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_type' => 'contact',
+    'field_c_p_title' => "Let's talk about your platform.",
+    'field_c_p_summary' => "Whether you need a new website, help upgrading from an end-of-life version, or ongoing support for the site you have, we're happy to have an honest conversation about where things stand.",
+  ]);
+
+  // Left column: the enquiry webform.
+  $main = $save_paragraph([
+    'type' => 'civictheme_webform',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_webform' => ['target_id' => 'contact'],
+  ]);
+
+  // Right column: the direct-contact details, a divider and the numbered steps.
+  $aside = [];
+
+  $details = [
+    [
+      'label' => 'Email us directly',
+      'value' => 'info@drevops.com',
+      'note' => 'We typically respond within one business day.',
+    ],
+    [
+      'label' => 'Call us',
+      'value' => '04 3009 3538',
+      'note' => 'Available weekdays, Melbourne time (AEST).',
+    ],
+    [
+      'label' => 'Based in',
+      'value' => 'Melbourne, Australia',
+      'note' => 'We work with organisations across Australia and New Zealand.',
+    ],
+  ];
+
+  foreach ($details as $detail) {
+    $aside[] = $save_paragraph([
+      'type' => 'contact_detail',
+      'field_c_p_theme' => 'dark',
+      'field_c_p_subtitle' => $detail['label'],
+      'field_c_p_content' => [
+        'value' => $detail['value'],
+        'format' => 'civictheme_plain_text',
+      ],
+      'field_c_p_summary' => $detail['note'],
+    ]);
+  }
+
+  $steps = [
+    "We'll review your message and respond within 24 hours.",
+    'A 30-minute call to understand your platform and goals.',
+    'A clear proposal with fixed-price quoting, no surprises.',
+  ];
+
+  $step_cards = [];
+  foreach ($steps as $step) {
+    $card = $save_paragraph([
+      'type' => 'card',
+      'field_c_p_type' => 'number',
+      'field_c_p_theme' => 'dark',
+      'field_c_p_title' => $step,
+    ]);
+
+    $step_cards[] = $reference($card);
+  }
+
+  $aside[] = $save_paragraph([
+    'type' => 'card_group',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_title' => 'What to expect',
+    'field_c_p_list_column_count' => 1,
+    'field_c_p_list_items' => $step_cards,
+  ]);
+
+  $components[] = $save_paragraph([
+    'type' => 'contact_area',
+    'field_c_p_theme' => 'dark',
+    'field_p_main' => [$reference($main)],
+    'field_p_aside' => array_map($reference, $aside),
+  ]);
+
+  return $components;
+}
+
+/**
  * Load the Blog topic term, creating it when the vocabulary allows.
  */
 function _do_base_ensure_blog_term(): ?TermInterface {

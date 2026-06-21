@@ -5,6 +5,10 @@ description: A group of cards laid out in one, two or four columns that stack on
 props:
   type: object
   properties:
+    title:
+      type: string
+      title: Title
+      description: Optional heading shown above the grid.
     columns:
       type: integer
       title: Columns

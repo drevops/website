@@ -9,7 +9,7 @@ Feature: Contact form
   Scenario: Anonymous user sees the enquiry form and its fields
     Given I am an anonymous user
     When I go to "/contact"
-    Then I should see the heading "Contact"
+    Then I should see the heading "Let's talk about your platform."
     And I should see "Name"
     And I should see "Email"
     And I should see "Organisation"

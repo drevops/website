@@ -13,6 +13,7 @@ require_once __DIR__ . '/includes/system_main_block.inc';
 require_once __DIR__ . '/includes/banner.inc';
 require_once __DIR__ . '/includes/paragraphs.inc';
 require_once __DIR__ . '/includes/contact_detail.inc';
+require_once __DIR__ . '/includes/contact_area.inc';
 require_once __DIR__ . '/includes/divider.inc';
 require_once __DIR__ . '/includes/hero.inc';
 require_once __DIR__ . '/includes/service_detail.inc';

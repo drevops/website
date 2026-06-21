@@ -1,0 +1,30 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Contact area
+status: stable
+description: A two-column contact area - the enquiry form beside the direct contact details and steps. Stacks to one column on narrow screens.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: dark
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier class
+      description: Additional CSS classes.
+slots:
+  main:
+    title: Main column
+    description: The enquiry form column.
+  aside:
+    title: Aside column
+    description: The direct contact details and steps column.
