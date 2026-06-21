@@ -128,39 +128,40 @@ function do_base_deploy_blog_read_time(array &$sandbox): string {
   }
 
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-  $batch_size = 25;
 
-  // Re-query blog posts that still have no read time and fill one batch per
-  // pass. A saved node drops out of the next query, so repeated passes drain
-  // the backlog without tracking offsets; the hook finishes once a pass finds
-  // nothing left. Editors can override the estimate at any time.
-  $ids = $node_storage->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('type', 'civictheme_page')
-    ->condition('field_c_n_topics', $term->id())
-    ->notExists('field_read_time')
-    ->range(0, $batch_size)
-    ->execute();
+  // Collect the backlog once, then drain it one batch per pass. Tracking the
+  // ids in the sandbox (rather than re-querying for an empty read time) means
+  // posts that are intentionally left blank do not keep reappearing, so the
+  // hook still terminates. Editors can override the estimate at any time.
+  if (!isset($sandbox['ids'])) {
+    $sandbox['ids'] = array_values($node_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'civictheme_page')
+      ->condition('field_c_n_topics', $term->id())
+      ->notExists('field_read_time')
+      ->execute());
+    $sandbox['backfilled'] = 0;
+  }
 
-  $processed = 0;
-
-  foreach ($ids as $id) {
+  foreach (array_splice($sandbox['ids'], 0, 25) as $id) {
     $node = $node_storage->load($id);
 
     if ($node instanceof FieldableEntityInterface && $node->hasField('field_read_time')) {
-      $minutes = max(1, (int) round(_do_base_count_words($node) / 200));
-      $node->set('field_read_time', sprintf('%d min read', $minutes));
-      $node->save();
-    }
+      $words = _do_base_count_words($node);
 
-    $processed++;
+      // Skip empty posts rather than label them "1 min read".
+      if ($words > 0) {
+        $minutes = max(1, (int) round($words / 200));
+        $node->set('field_read_time', sprintf('%d min read', $minutes));
+        $node->save();
+        $sandbox['backfilled']++;
+      }
+    }
   }
 
-  $backfilled = (int) ($sandbox['backfilled'] ?? 0) + $processed;
-  $sandbox['backfilled'] = $backfilled;
-  $sandbox['#finished'] = $processed === 0 ? 1 : 0;
+  $sandbox['#finished'] = empty($sandbox['ids']) ? 1 : 0;
 
-  return sprintf('Set the read time on %d blog post(s).', $backfilled);
+  return sprintf('Set the read time on %d blog post(s).', $sandbox['backfilled']);
 }
 
 /**
