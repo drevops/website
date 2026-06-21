@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.field_c_n_components
     - node.type.civictheme_page
+    - paragraphs.paragraphs_type.campaign
     - paragraphs.paragraphs_type.civictheme_accordion
     - paragraphs.paragraphs_type.civictheme_attachment
     - paragraphs.paragraphs_type.civictheme_automated_list
@@ -57,8 +58,12 @@ settings:
       from_library: from_library
       civictheme_message: civictheme_message
       hero: hero
+      campaign: campaign
     negate: 0
     target_bundles_drag_drop:
+      campaign:
+        weight: 61
+        enabled: true
       civictheme_accordion:
         weight: -58
         enabled: true

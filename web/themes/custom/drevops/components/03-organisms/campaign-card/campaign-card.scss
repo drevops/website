@@ -1,0 +1,163 @@
+//
+// Campaign Card component.
+//
+// A centred, bordered featured-campaign card with a soft corner glow, an accent
+// label, a heading, a body and up to two action buttons. The look is ported from
+// the static prototype's featured-campaign section; colours and typography use
+// CivicTheme's brand-mapped `--ct-*` tokens, spacing uses the prototype's rem
+// scale (CivicTheme exposes no global spacing tokens).
+//
+
+.ct-campaign-card {
+  position: relative;
+  overflow: hidden;
+  padding: 8.75rem 0;
+
+  // Soft corner glow in the brand accent.
+  &::before {
+    content: '';
+    position: absolute;
+    top: -160px;
+    left: -160px;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--ct-color-dark-interaction-background) 12%, transparent) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  &__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4rem;
+
+    @media (max-width: 768px) {
+      padding: 0 1.5rem;
+    }
+  }
+
+  &__card {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4.5rem 3.5rem;
+    text-align: center;
+    background: var(--ct-color-dark-background-light);
+    border: 1px solid var(--ct-color-dark-border);
+    border-radius: 1rem;
+
+    @media (max-width: 768px) {
+      padding: 3rem 1.5rem;
+    }
+  }
+
+  &__label {
+    margin: 0;
+    font-family: var(--ct-typography-label-regular-font-name);
+    font-size: var(--ct-typography-label-regular-font-size);
+    font-weight: var(--ct-typography-label-regular-font-weight);
+    line-height: var(--ct-typography-label-regular-line-height);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ct-color-dark-interaction-background);
+  }
+
+  &__title {
+    margin: 1.5rem 0;
+    font-family: var(--ct-typography-display-font-name);
+    font-size: var(--ct-typography-display-font-size);
+    font-weight: var(--ct-typography-display-font-weight);
+    line-height: 1.1;
+    letter-spacing: var(--ct-typography-display-letter-spacing);
+    color: var(--ct-color-dark-heading);
+  }
+
+  &__content {
+    max-width: 640px;
+    margin: 0 auto 3rem;
+    font-size: var(--ct-typography-text-large-font-size);
+    line-height: 1.6;
+    color: var(--ct-color-dark-body);
+
+    p {
+      margin: 0;
+
+      & + p {
+        margin-top: 1.5rem;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__action {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    padding: 1rem 2rem;
+    font-family: var(--ct-typography-label-regular-font-name);
+    font-size: 0.875rem;
+    font-weight: var(--ct-typography-label-regular-font-weight);
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: color 0.4s ease, border-color 0.4s ease;
+
+    // Hover fill: a faint tint that wipes in from the left.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    &:hover {
+      text-decoration: none;
+
+      &::before {
+        transform: scaleX(1);
+      }
+    }
+
+    // The last action is the primary CTA: brand accent outline.
+    &--primary {
+      color: var(--ct-color-dark-interaction-background);
+      border-color: color-mix(in srgb, var(--ct-color-dark-interaction-background) 40%, transparent);
+
+      &::before {
+        background: color-mix(in srgb, var(--ct-color-dark-interaction-background) 8%, transparent);
+      }
+
+      &:hover {
+        color: var(--ct-color-dark-interaction-hover-background);
+        border-color: var(--ct-color-dark-interaction-background);
+      }
+    }
+
+    // Earlier actions are secondary: neutral outline.
+    &--secondary {
+      color: var(--ct-color-dark-heading);
+      border-color: color-mix(in srgb, var(--ct-color-dark-heading) 30%, transparent);
+
+      &::before {
+        background: color-mix(in srgb, var(--ct-color-dark-heading) 8%, transparent);
+      }
+
+      &:hover {
+        color: var(--ct-color-dark-heading);
+        border-color: var(--ct-color-dark-heading);
+      }
+    }
+  }
+}

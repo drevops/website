@@ -1,0 +1,50 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Campaign Card
+status: stable
+description: A centred, bordered featured-campaign card with an accent label, heading, body and up to two action buttons.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: dark
+    label:
+      type: string
+      title: Label
+      description: Short accent label shown above the heading.
+    heading:
+      type: string
+      title: Heading
+      description: Campaign heading.
+    actions:
+      type: array
+      title: Actions
+      description: Up to two action links. The last action renders as the primary button, the rest as secondary.
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+            title: URL
+            description: Action URL.
+          title:
+            type: string
+            title: Title
+            description: Action label.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier class
+      description: Additional CSS classes.
+slots:
+  body:
+    title: Body
+    description: Campaign body content.

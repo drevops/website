@@ -1,0 +1,31 @@
+uuid: d8da9cd0-f389-4962-bcce-15f24257c573
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.campaign.field_c_p_theme
+    - field.field.paragraph.campaign.field_content
+    - field.field.paragraph.campaign.field_link
+    - field.field.paragraph.campaign.field_subtitle
+    - field.field.paragraph.campaign.field_title
+    - paragraphs.paragraphs_type.campaign
+  module:
+    - text
+id: paragraph.campaign.default
+targetEntityType: paragraph
+bundle: campaign
+mode: default
+content:
+  field_content:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_c_p_theme: true
+  field_link: true
+  field_subtitle: true
+  field_title: true
+  search_api_excerpt: true

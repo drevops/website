@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Theme implementation to display the Campaign paragraph.
+ */
+#}
+{% set campaign_actions = [] %}
+{% for item in paragraph.field_link %}
+  {% if item.uri is not empty %}
+    {% set campaign_actions = campaign_actions|merge([{
+      url: item.url.toString,
+      title: item.title,
+    }]) %}
+  {% endif %}
+{% endfor %}
+
+{{ include('drevops:campaign-card', {
+  theme: paragraph.field_c_p_theme.value|default('dark'),
+  label: paragraph.field_subtitle.value,
+  heading: paragraph.field_title.value,
+  body: content.field_content,
+  actions: campaign_actions,
+  attributes: component_attributes,
+}) }}

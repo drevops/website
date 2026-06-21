@@ -1,0 +1,50 @@
+{#
+/**
+ * @file
+ * Campaign Card component.
+ *
+ * Variables:
+ * - theme: [string] Theme variation: light, dark.
+ * - label: [string] Short accent label shown above the heading.
+ * - heading: [string] Campaign heading.
+ * - actions: [array] Up to two action links; the last renders as primary:
+ *   - url: [string] Action URL.
+ *   - title: [string] Action label.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ *
+ * Slots:
+ * - body: Campaign body content.
+ */
+#}
+
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default(''))|trim %}
+
+{% if heading is not empty %}
+  <div class="ct-campaign-card {{ modifier_class }}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="ct-campaign-card__inner">
+      <div class="ct-campaign-card__card component-reveal">
+        {% if label is not empty %}
+          <p class="ct-campaign-card__label">{{ label }}</p>
+        {% endif %}
+
+        <h2 class="ct-campaign-card__title">{{ heading }}</h2>
+
+        {% if body is not empty %}
+          <div class="ct-campaign-card__content">{{ body }}</div>
+        {% endif %}
+
+        {% if actions is not empty %}
+          <div class="ct-campaign-card__actions">
+            {% for action in actions %}
+              {% if action.url is not empty and action.title is not empty %}
+                <a href="{{ action.url }}" class="ct-campaign-card__action ct-campaign-card__action--{{ loop.last ? 'primary' : 'secondary' }}">{{ action.title }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
