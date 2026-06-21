@@ -77,6 +77,6 @@ Feature: Article body and code highlighting
   Scenario: The article body renders the dark brand code, table and quote treatments
     Given I am an anonymous user
     When I visit the "civictheme_page" content page with the title "[TEST] Page Article body"
-    Then the computed "background-color" of the element ".ct-basic-content pre code" should be "#2b394d"
-    And the computed "background-color" of the element ".ct-basic-content thead th" should be "#2b394d"
-    And the computed "border-left-color" of the element ".ct-basic-content blockquote" should be "#1e7582"
+    Then the computed "background-color" of the element "article .ct-basic-content pre code" should be "#2b394d"
+    And the computed "background-color" of the element "article .ct-basic-content thead th" should be "#2b394d"
+    And the computed "border-left-color" of the element "article .ct-basic-content blockquote" should be "#1e7582"
