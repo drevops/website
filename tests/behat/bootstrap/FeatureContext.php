@@ -39,6 +39,7 @@ use DrevOps\BehatSteps\WaitTrait;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\Then;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\DrupalExtension\Context\DrupalContext;
 use Drupal\paragraphs\Entity\Paragraph;
 
@@ -266,7 +267,7 @@ class FeatureContext extends DrupalContext {
   public function cardGroupCreateWithCards(string $columns, string $node_title, TableNode $cards): void {
     $node = $this->paragraphsFindEntity('node', 'civictheme_page', 'title', $node_title);
 
-    if (!$node) {
+    if (!$node instanceof ContentEntityInterface) {
       throw new \RuntimeException(sprintf('The civictheme_page node with the title "%s" was not found.', $node_title));
     }
 

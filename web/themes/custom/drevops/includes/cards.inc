@@ -67,8 +67,8 @@ function drevops_preprocess_paragraph__card_group(array &$variables): void {
   foreach (civictheme_get_field_referenced_entities($paragraph, 'field_c_p_list_items', $variables) as $card) {
     $index++;
     $build = $view_builder->view($card);
-    // Pass the position to the card so its number marker and reveal delay follow
-    // the order set by the editor.
+    // Pass the position to the card so its number marker and reveal delay
+    // follow the order set by the editor.
     $build['#card_index'] = $index;
     $cards[] = $build;
   }
