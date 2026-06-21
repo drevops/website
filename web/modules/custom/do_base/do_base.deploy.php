@@ -749,28 +749,109 @@ function _do_base_count_words(FieldableEntityInterface $entity): int {
  * page and replaces its component stack without orphaning the old paragraphs.
  */
 function do_base_deploy_ai_assisted_delivery(): string {
+  $intro_lead = "If you've got a Drupal site, keeping it running and building on it is probably a real investment."
+    . " We do the same senior, fully-tested work, often for around a third less on suitable work,"
+    . " because we've made the delivery faster, not because we cut corners.";
+  $costing_lead = "Send us a recent quote, your current scope, or just a link to your site."
+    . " We'll show you what the same work would cost with us, by hand and AI-assisted, side by side."
+    . " There's no call to sit through, and nothing to move. If the number lands close to what you pay"
+    . " now, you've lost nothing. If it's lower for the same quality, that's worth knowing.";
+  $lower_lead = "Put together, that often comes to around a third fewer hours on suitable work."
+    . " We don't apply a flat discount across the job. We work it out area by area and show you exactly"
+    . " where the hours move and where they don't.";
+  $who_lead = "We created Vortex, we maintain around 40 open-source repositories, and our own website is"
+    . " open source. We're the architect and main developer behind the CivicTheme design system, and"
+    . " we've delivered Australian government and GovCMS platforms since 2016. If it helps to see how"
+    . " we work, most of it is out in the open.";
+
+  $why_cards = [
+    [
+      'The layers around the work',
+      "Account management, coordination, and reporting all take time, and that time is real."
+        . " It's how most agencies are set up, and it shows up on every invoice.",
+    ],
+    [
+      'Winning and running the contract',
+      'Sales, proposals, and overhead are part of running a larger agency.'
+        . ' None of it is wrong, but it lands in the rate you pay.',
+    ],
+    [
+      'Starting from scratch each time',
+      'Without shared tooling, every new project pays again for the same groundwork:'
+        . ' setup, pipelines, configuration. It adds up, project after project.',
+    ],
+  ];
+  $how_cards = [
+    [
+      'You pay for the engineering',
+      "The people who scope your work are the people who build it."
+        . " There's no extra layer to fund in between.",
+    ],
+    [
+      'Our tooling does the heavy lifting',
+      "Vortex, our open-source platform, handles the setup, CI, and tooling on every project,"
+        . " so you're not paying to build that from scratch.",
+    ],
+    [
+      'Testing and CI from day one',
+      'Quality is built in rather than added at the end,'
+        . ' so less time goes into finding and fixing things later.',
+    ],
+    [
+      'AI on the repetitive work',
+      'AI helps with the parts that suit it, like migrations, boilerplate, tests, and'
+        . ' documentation, while the architecture, the integrations, and the judgement stay with senior people.',
+    ],
+  ];
+  $ai_cards = [
+    [
+      'Every change is reviewed and tested',
+      "It's the question we'd ask too. Every change is reviewed, and every build is tested and"
+        . " gated by CI before it ships. AI helps with the writing, never the checking. The guardrails"
+        . " are our own, and they're open source, so you can read exactly how they work.",
+    ],
+    [
+      'Your code and data stay yours',
+      "Nothing you share trains an AI model, nothing goes to a public AI service without your"
+        . " permission, and sensitive credentials are never shared. It's all in our Responsible AI policy.",
+    ],
+  ];
+
   $components = [
-    _do_base_ai_delivery_hero('inner', 'AI-assisted delivery', 'The same senior Drupal work, for less.', "If you've got a Drupal site, keeping it running and building on it is probably a real investment. We do the same senior, fully-tested work, often for around a third less on suitable work, because we've made the delivery faster, not because we cut corners.", ['uri' => 'internal:/contact', 'title' => 'See what it would cost']),
-    _do_base_ai_delivery_hero('section', 'A free, no-obligation costing', 'No commitment. Just a clear picture.', "Send us a recent quote, your current scope, or just a link to your site. We'll show you what the same work would cost with us, by hand and AI-assisted, side by side. There's no call to sit through, and nothing to move. If the number lands close to what you pay now, you've lost nothing. If it's lower for the same quality, that's worth knowing."),
-    _do_base_ai_delivery_hero('section', 'Why agency work costs what it does', "It's rarely about the work itself."),
-    _do_base_ai_delivery_card_group([
-      ['The layers around the work', "Account management, coordination, and reporting all take time, and that time is real. It's how most agencies are set up, and it shows up on every invoice."],
-      ['Winning and running the contract', 'Sales, proposals, and overhead are part of running a larger agency. None of it is wrong, but it lands in the rate you pay.'],
-      ['Starting from scratch each time', 'Without shared tooling, every new project pays again for the same groundwork: setup, pipelines, configuration. It adds up, project after project.'],
-    ]),
-    _do_base_ai_delivery_hero('section', 'How we keep it lower', 'Four things that bring the number down.', "Put together, that often comes to around a third fewer hours on suitable work. We don't apply a flat discount across the job. We work it out area by area and show you exactly where the hours move and where they don't."),
-    _do_base_ai_delivery_card_group([
-      ['You pay for the engineering', "The people who scope your work are the people who build it. There's no extra layer to fund in between."],
-      ['Our tooling does the heavy lifting', "Vortex, our open-source platform, handles the setup, CI, and tooling on every project, so you're not paying to build that from scratch."],
-      ['Testing and CI from day one', 'Quality is built in rather than added at the end, so less time goes into finding and fixing things later.'],
-      ['AI on the repetitive work', 'AI helps with the parts that suit it, like migrations, boilerplate, tests, and documentation, while the architecture, the integrations, and the judgement stay with senior people.'],
-    ]),
+    _do_base_ai_delivery_hero(
+      'inner',
+      'AI-assisted delivery',
+      'The same senior Drupal work, for less.',
+      $intro_lead,
+      ['uri' => 'internal:/contact', 'title' => 'See what it would cost'],
+    ),
+    _do_base_ai_delivery_hero(
+      'section',
+      'A free, no-obligation costing',
+      'No commitment. Just a clear picture.',
+      $costing_lead,
+    ),
+    _do_base_ai_delivery_hero(
+      'section',
+      'Why agency work costs what it does',
+      "It's rarely about the work itself.",
+    ),
+    _do_base_ai_delivery_card_group($why_cards),
+    _do_base_ai_delivery_hero(
+      'section',
+      'How we keep it lower',
+      'Four things that bring the number down.',
+      $lower_lead,
+    ),
+    _do_base_ai_delivery_card_group($how_cards),
     _do_base_ai_delivery_hero('section', 'A fair question about AI', 'Can AI-written code be trusted?'),
-    _do_base_ai_delivery_card_group([
-      ['Every change is reviewed and tested', "It's the question we'd ask too. Every change is reviewed, and every build is tested and gated by CI before it ships. AI helps with the writing, never the checking. The guardrails are our own, and they're open source, so you can read exactly how they work."],
-      ['Your code and data stay yours', "Nothing you share trains an AI model, nothing goes to a public AI service without your permission, and sensitive credentials are never shared. It's all in our Responsible AI policy."],
-    ]),
-    _do_base_ai_delivery_hero('section', "Who you'd be working with", 'Drupal is what we do.', "We created Vortex, we maintain around 40 open-source repositories, and our own website is open source. We're the architect and main developer behind the CivicTheme design system, and we've delivered Australian government and GovCMS platforms since 2016. If it helps to see how we work, most of it is out in the open."),
+    _do_base_ai_delivery_card_group($ai_cards),
+    _do_base_ai_delivery_hero(
+      'section',
+      "Who you'd be working with",
+      'Drupal is what we do.',
+      $who_lead,
+    ),
     _do_base_ai_delivery_cta(),
   ];
 
