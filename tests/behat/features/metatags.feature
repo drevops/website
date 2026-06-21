@@ -14,3 +14,11 @@ Feature: Page content metatags
     Then the response should contain "<title>Test Metatags Page | "
     And the response should contain "<meta name=\"description\" content=\"This is a test summary for metatags testing\""
     And the response should contain "<link rel=\"canonical\" href=\""
+
+  @api
+  Scenario: Pages expose the branded Open Graph and Twitter share image
+    Given I am an anonymous user
+    When I go to the homepage
+    Then the response should contain "<meta property=\"og:image\" content=\"http"
+    And the response should contain "<meta name=\"twitter:image\" content=\"http"
+    And the response should contain "/themes/custom/drevops/dist/assets/images/og-image.png\" />"
