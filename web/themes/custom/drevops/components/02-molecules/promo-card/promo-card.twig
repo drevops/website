@@ -57,7 +57,7 @@
 {% set is_card_clickable = with_link and is_title_click is empty %}
 {% set card_clickable_class = is_card_clickable ? 'ct-promo-card--card-clickable' : '' %}
 {% set image_over_class = image_over ? 'ct-promo-card--image-over' : '' %}
-{% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
 {% set modifier_class = '%s %s %s %s %s'|format(theme_class, with_image_class, image_over_class, card_clickable_class, modifier_class|default('')) %}
 
 {% if title is not empty %}

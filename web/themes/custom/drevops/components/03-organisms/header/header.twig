@@ -29,7 +29,7 @@
  */
 #}
 
-{% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
 {# Custom: Add sticky header class support. #}
 {% set sticky_class = is_sticky ? 'ct-header--sticky' : '' %}
 {% set modifier_class = '%s %s %s'|format(theme_class, sticky_class, modifier_class|default('')) %}

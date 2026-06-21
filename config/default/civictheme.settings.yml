@@ -55,7 +55,7 @@ components:
     external_new_window: true
     external_override_domains: {  }
   skip_link:
-    theme: light
+    theme: dark
   event_card:
     summary_length: 160
   navigation_card:

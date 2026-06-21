@@ -16,6 +16,7 @@ require_once __DIR__ . '/includes/page.inc';
 require_once __DIR__ . '/includes/node.inc';
 require_once __DIR__ . '/includes/cards.inc';
 require_once __DIR__ . '/includes/sidebar_navigation.inc';
+require_once __DIR__ . '/includes/skip_link.inc';
 require_once __DIR__ . '/includes/content_moderation.inc';
 
 /**
