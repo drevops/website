@@ -6,5 +6,6 @@
 //
 // These overrides will not be visible in the Storybook.
 // @todo Refactor build to use direct import from the CivicTheme theme.
+@import 'base/infrastructure';
 @import 'page/page';
 @import 'block/local-tasks';
