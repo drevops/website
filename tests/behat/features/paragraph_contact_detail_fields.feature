@@ -18,6 +18,7 @@ Feature: Contact detail fields
 
     And I should see the text "Value"
     And should see a "[name='field_c_n_components[0][subform][field_c_p_content][0][value]']" element
+    And should see a "[name='field_c_n_components[0][subform][field_c_p_content][0][value]'].required" element
 
     And I should see the text "Note"
     And should see a "[name='field_c_n_components[0][subform][field_c_p_summary][0][value]']" element
