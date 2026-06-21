@@ -9,3 +9,6 @@ label: 'Front page'
 tags:
   canonical_url: '[site:url]'
   shortlink: '[site:url]'
+  og_url: '[site:url]'
+  og_description: '[node:field_c_n_summary:value]'
+  twitter_cards_description: '[node:field_c_n_summary:value]'
