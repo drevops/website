@@ -90,6 +90,7 @@ Feature: AI-assisted delivery page
     And I should see an "article a.ct-cta__email" element
     And I should see the text "[TEST] The same senior Drupal work"
     And I should see the text "[TEST] A free no-obligation costing"
+    And I should see the text "[TEST] Send a quote or a link"
     And I should see the text "[TEST] It is rarely about work"
     And I should see the text "[TEST] Layers of work"
     And I should see the text "[TEST] Drupal is what we do"
@@ -103,7 +104,7 @@ Feature: AI-assisted delivery page
 
   @api
   Scenario: A content editor can assemble the page from the hero, dot-list card and CTA components
-    Given I am logged in as a user with the "Site Administrator" role
+    Given I am logged in as a user with the "Content Author" role
     When I visit "node/add/civictheme_page"
     Then the response should contain "Add Hero"
     And the response should contain "Add Card group"
