@@ -354,4 +354,26 @@ class FeatureContext extends DrupalContext {
     $node->save();
   }
 
+  /**
+   * Assert the document does not overflow horizontally at a given width.
+   *
+   * @code
+   * Then the page has no horizontal overflow at 375 pixels wide
+   * @endcode
+   */
+  #[Then('the page has no horizontal overflow at :width pixels wide')]
+  public function assertNoHorizontalOverflowAtWidth(string $width): void {
+    $session = $this->getSession();
+    $session->resizeWindow((int) $width, 900, 'current');
+
+    // Content wider than the viewport is what produces a horizontal scrollbar;
+    // the comparison is against the full viewport rather than the scrollbar-
+    // reduced client width, with a one-pixel tolerance for sub-pixel rounding.
+    $overflow = (int) $session->evaluateScript('Math.ceil(document.documentElement.scrollWidth - window.innerWidth)');
+
+    if ($overflow > 1) {
+      throw new \Exception(sprintf('The page overflows horizontally by %dpx at %spx wide.', $overflow, $width));
+    }
+  }
+
 }

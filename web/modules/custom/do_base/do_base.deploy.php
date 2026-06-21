@@ -227,6 +227,208 @@ function do_base_deploy_homepage_blog_teaser(): string {
 }
 
 /**
+ * Seed the Services page assembled from the shared components.
+ */
+function do_base_deploy_seed_services_page(): string {
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  // Reassemble the existing Services page when present so its /services alias
+  // and revision history are preserved; create it only on a site that has none.
+  $existing = $node_storage->loadByProperties([
+    'type' => 'civictheme_page',
+    'title' => 'Services',
+  ]);
+  $node = $existing ? reset($existing) : $node_storage->create([
+    'type' => 'civictheme_page',
+    'title' => 'Services',
+    'status' => 1,
+    'path' => ['alias' => '/services', 'pathauto' => 0],
+  ]);
+
+  // The components the page carried before the rebuild are deleted afterwards
+  // so swapping the stack does not leave orphaned paragraphs behind.
+  $superseded = $node->get('field_c_n_components')->referencedEntities();
+
+  // Building, attaching and cleaning up run inside one transaction so a failure
+  // part way through rolls back rather than leaving half-saved paragraphs
+  // orphaned instead of attached to the page.
+  $transaction = \Drupal::database()->startTransaction();
+
+  try {
+    $components = _do_base_build_services_components();
+
+    $node->set('field_c_n_components', array_map(static fn (Paragraph $component): array => [
+      'target_id' => $component->id(),
+      'target_revision_id' => $component->getRevisionId(),
+    ], $components));
+    $node->save();
+
+    foreach ($superseded as $paragraph) {
+      $paragraph->delete();
+    }
+  }
+  catch (\Throwable $exception) {
+    $transaction->rollBack();
+
+    throw $exception;
+  }
+
+  return sprintf('Assembled the Services page (node %s) from %d components.', $node->id(), count($components));
+}
+
+/**
+ * Build and save the Services page components in their render order.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph[]
+ *   The saved hero, service-detail, card-list and call-to-action paragraphs.
+ */
+function _do_base_build_services_components(): array {
+  $save_paragraph = static function (array $values): Paragraph {
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    return $paragraph;
+  };
+
+  $components = [];
+
+  $components[] = $save_paragraph([
+    'type' => 'hero',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_type' => 'inner',
+    'field_c_p_subtitle' => 'What we do',
+    'field_c_p_title' => 'Engineering that keeps your platform running.',
+    'field_c_p_summary' => "We build, support, and upgrade reliable websites for businesses and organisations that can't afford downtime, security gaps, or slow delivery. Now faster, with AI-assisted development at the same tested standard.",
+  ]);
+
+  $services = [
+    [
+      'title' => 'Website Delivery',
+      'tagline' => 'From requirements to production in one engagement.',
+      'description' => "<p>We build your site end to end, with automated testing and CI/CD baked in from the first commit. Architecture, development, design, and deployment handled together, so what launches is solid, not a prototype you'll be fixing after go-live.</p><p>AI-assisted delivery gets you there faster, at the same tested standard. Every project ships with a complete test suite, documentation, and a handover that actually works.</p>",
+      'includes' => [
+        'Architecture and technical planning',
+        'Custom design and development',
+        'Automated testing on every change',
+        'Continuous integration and deployment',
+        'Content migration and data import',
+        'Hosting setup and go-live support',
+      ],
+      'price_label' => 'Pricing',
+      'price' => 'Fixed price, agreed up front',
+      'action' => 'Discuss your project',
+    ],
+    [
+      'title' => 'Ongoing Support',
+      'tagline' => 'The people who built your site, keeping it running.',
+      'description' => '<p>Proactive maintenance from the people who built your site. Security updates, performance monitoring, and continuous improvement, all on a predictable prepaid arrangement.</p><p>No ticket queues, no outsourced support desks. You talk directly to the people who know your code.</p>',
+      'includes' => [
+        'Security patches and platform updates',
+        'Uptime and performance monitoring',
+        'Bug fixes and minor enhancements',
+        'Monthly reporting and recommendations',
+        'A direct line, no ticket queue',
+        'Priority response for critical issues',
+      ],
+      'price_label' => 'Support',
+      'price' => 'Prepaid, month to month',
+      'action' => 'Get a support quote',
+    ],
+    [
+      'title' => 'Upgrades & Migrations',
+      'tagline' => 'Move off end-of-life Drupal without breaking anything.',
+      'description' => '<p>Drupal 7 and 9 are end-of-life. Drupal 10 follows in December 2026. We handle the full migration with test coverage and zero-downtime deployments, so your organisation stays compliant and your users stay unaffected.</p><p>We assess your current platform, map out compatibility, migrate your custom code, and deliver an upgraded site with full test coverage, with AI speeding up the heavy lifting.</p>',
+      'includes' => [
+        'Platform audit and risk assessment',
+        'Module compatibility analysis',
+        'Custom code migration and refactoring',
+        'Data migration and content integrity checks',
+        'Automated test suite for the upgraded site',
+        'Zero-downtime deployment and rollback plan',
+      ],
+      'price_label' => 'Pricing',
+      'price' => 'Fixed price after a free assessment',
+      'action' => 'Book a free assessment',
+    ],
+  ];
+
+  foreach ($services as $service) {
+    $components[] = $save_paragraph([
+      'type' => 'service_detail',
+      'field_c_p_theme' => 'dark',
+      'field_c_p_title' => $service['title'],
+      'field_c_p_subtitle' => $service['tagline'],
+      'field_c_p_content' => [
+        'value' => $service['description'],
+        'format' => 'civictheme_rich_text',
+      ],
+      'field_p_includes' => $service['includes'],
+      'field_p_price_label' => $service['price_label'],
+      'field_p_price' => $service['price'],
+      'field_c_p_link' => [
+        'uri' => 'internal:/contact',
+        'title' => $service['action'],
+      ],
+    ]);
+  }
+
+  $approach = [
+    [
+      'title' => 'AI-accelerated delivery',
+      'description' => 'AI does the heavy lifting on production work, so you get the same tested quality in a fraction of the build time. Every change is still reviewed and tested before it ships.',
+    ],
+    [
+      'title' => 'Flat-rate pricing',
+      'description' => 'We quote a fixed price upfront. No hourly billing surprises, no retainer games, no scope creep charges.',
+    ],
+    [
+      'title' => 'Tested by default',
+      'description' => "Every platform ships with automated tests. If it's not tested, it doesn't deploy. No exceptions.",
+    ],
+    [
+      'title' => 'Direct communication',
+      'description' => 'You talk to the engineers building your site. No project managers relaying messages, no layers in between.',
+    ],
+  ];
+
+  $cards = [];
+  foreach ($approach as $point) {
+    $card = $save_paragraph([
+      'type' => 'card',
+      'field_c_p_type' => 'dot',
+      'field_c_p_theme' => 'dark',
+      'field_c_p_title' => $point['title'],
+      'field_c_p_summary' => $point['description'],
+    ]);
+
+    $cards[] = [
+      'target_id' => $card->id(),
+      'target_revision_id' => $card->getRevisionId(),
+    ];
+  }
+
+  $components[] = $save_paragraph([
+    'type' => 'card_group',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_list_column_count' => 2,
+    'field_c_p_list_items' => $cards,
+  ]);
+
+  $components[] = $save_paragraph([
+    'type' => 'cta',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_type' => 'display',
+    'field_title' => 'Ready to talk about your platform?',
+    'field_subtitle' => "Tell us where things stand. We'll be straight with you about whether we're the right fit.",
+    'field_link' => [
+      ['uri' => 'internal:/contact', 'title' => 'Get in touch'],
+    ],
+  ]);
+
+  return $components;
+}
+
+/**
  * Load the Blog topic term, creating it when the vocabulary allows.
  */
 function _do_base_ensure_blog_term(): ?TermInterface {
