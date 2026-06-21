@@ -34,13 +34,14 @@ function drevops_preprocess_paragraph__card(array &$variables): void {
 
   // The card group renders its cards and tags each with its 1-based position so
   // the number marker reflects the card's order rather than an authored value.
-  $variables['index'] = $variables['elements']['#card_index'] ?? 0;
+  // A card rendered outside a group still leads from one.
+  $variables['index'] = $variables['elements']['#card_index'] ?? 1;
 
   $variables['icon'] = NULL;
   $media = civictheme_get_field_value($paragraph, 'field_c_p_icon', TRUE, build: $variables);
   if ($media instanceof MediaInterface) {
     $image = civictheme_media_image_get_variables($media);
-    if ($image) {
+    if (!empty($image['url'])) {
       $variables['icon'] = [
         '#type' => 'inline_template',
         '#template' => civictheme_embed_svg($image['url'], ['ct-icon']),
