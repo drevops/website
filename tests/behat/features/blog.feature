@@ -25,7 +25,7 @@ Feature: Blog listing and homepage teaser
     And I should see "[TEST] Blog post summary"
     And I should see "7 min read"
     And the response should contain "ct-promo-card"
-    And the response should contain "/sites/default/files"
+    And the response should contain "/sites/default/files/styles/civictheme_promo_card"
 
     When I follow "[TEST] Blog Post One"
     Then I should get a "200" HTTP response
