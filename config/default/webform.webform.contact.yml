@@ -2,9 +2,15 @@ uuid: 718c4bd3-815c-45b7-8cb0-54290abe99bf
 langcode: en
 status: open
 dependencies:
+  module:
+    - honeypot
   enforced:
     module:
       - webform
+third_party_settings:
+  honeypot:
+    honeypot: true
+    time_restriction: false
 _core:
   default_config_hash: _je-MWeeJB6gfm6iECiqjcyNetfMFbn-YIInYwZ1gIk
 weight: 0
@@ -15,29 +21,38 @@ template: false
 archive: false
 id: contact
 title: Contact
-description: 'Basic email contact webform.'
+description: 'Enquiry form for the contact page.'
 categories: {  }
-elements: |
+elements: |-
   name:
-    '#title': 'Your Name'
     '#type': textfield
+    '#title': Name
     '#required': true
-    '#default_value': '[current-user:display-name]'
+    '#placeholder': 'Your full name'
   email:
-    '#title': 'Your Email'
     '#type': email
+    '#title': Email
     '#required': true
-    '#default_value': '[current-user:mail]'
-  subject:
-    '#title': Subject
+    '#placeholder': you@organisation.com
+  organisation:
     '#type': textfield
-    '#required': true
-    '#test': 'Testing contact webform from [site:name]'
+    '#title': Organisation
+    '#placeholder': 'Company or department'
+  topic:
+    '#type': select
+    '#title': 'What do you need help with?'
+    '#empty_option': 'Select a topic'
+    '#options':
+      new-build: 'New website build'
+      upgrade: 'Upgrade or migration'
+      support: 'Ongoing support'
+      audit: 'Platform audit or site check'
+      other: 'Something else'
   message:
-    '#title': Message
     '#type': textarea
-    '#required': true
-    '#test': 'Please ignore this email.'
+    '#title': 'Tell us more'
+    '#rows': 5
+    '#placeholder': "What's the current state of your platform? What are you looking to achieve?"
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'
@@ -83,6 +98,7 @@ settings:
   form_access_denied_message: ''
   form_access_denied_attributes: {  }
   form_file_limit: ''
+  form_file_limit_message: ''
   form_attributes: {  }
   form_method: ''
   form_action: ''
@@ -146,10 +162,10 @@ settings:
   draft_loaded_message: ''
   draft_pending_single_message: ''
   draft_pending_multiple_message: ''
-  confirmation_type: url_message
-  confirmation_url: '<front>'
+  confirmation_type: inline
+  confirmation_url: ''
   confirmation_title: ''
-  confirmation_message: 'Your message has been sent.'
+  confirmation_message: 'Thank you - your enquiry has been received. We will respond within one business day.'
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
@@ -246,12 +262,12 @@ handlers:
       from_mail: webmaster@drevops.com
       from_options: {  }
       from_name: _default
-      reply_to: ''
+      reply_to: '[webform_submission:values:email:raw]'
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: 'DrevOps Website - Contact form submission'
-      body: '[webform_submission:values:message:value]'
+      subject: 'DrevOps Website - New enquiry from [webform_submission:values:name]'
+      body: '[webform_submission:values]'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
