@@ -7,6 +7,6 @@ recaptcha_v3_guard:
 
 highlight_js.gherkin:
   js:
-    https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gherkin.min.js: { type: external, minified: true }
+    js/vendor/highlightjs/gherkin.min.js: { minified: true }
   dependencies:
     - highlight_js/highlight_js.js

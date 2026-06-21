@@ -52,6 +52,14 @@ libraries-override:
       theme:
         dist/civictheme.variables.css: dist/styles.variables.css
 
+  # Serve the Highlight.js runtime from vendored sub-theme assets instead of the
+  # module's cdnjs URLs, so rendering a code block makes no third-party request.
+  highlight_js/highlight_js.js: drevops/highlightjs
+
+  # Drop the module's cdnjs syntax-colour stylesheet; the sub-theme ships a dark
+  # token theme in SCSS that matches the brand instead.
+  highlight_js/highlight_js.style-github: false
+
 ckeditor5-stylesheets:
   - dist/styles.editor.css
   - dist/styles.variables.css

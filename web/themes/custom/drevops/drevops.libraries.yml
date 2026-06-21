@@ -15,3 +15,15 @@ css-variables:
   css:
     theme:
       dist/styles.variables.css: { preprocess: false, weight: 10 }
+
+# Self-hosted Highlight.js runtime, vendored to avoid a third-party CDN request
+# when rendering code blocks. Replaces the highlight_js module's CDN library via
+# the libraries-override in drevops.info.yml; the module's highlight-custom.js
+# init depends on the hljs and ClipboardJS globals these files provide.
+highlightjs:
+  js:
+    assets/vendor/highlightjs/highlight.min.js: { minified: true }
+    assets/vendor/highlightjs/clipboard.min.js: { minified: true }
+  dependencies:
+    - core/jquery
+    - core/drupal
