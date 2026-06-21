@@ -289,9 +289,11 @@ class FeatureContext extends DrupalContext {
           ->range(0, 1)
           ->execute();
 
-        if ($icon_ids) {
-          $values['field_c_p_icon'] = ['target_id' => reset($icon_ids)];
+        if (!$icon_ids) {
+          throw new \RuntimeException(sprintf('The civictheme_icon media "%s" was not found.', $row['icon']));
         }
+
+        $values['field_c_p_icon'] = ['target_id' => reset($icon_ids)];
       }
 
       $card = Paragraph::create($values);
