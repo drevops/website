@@ -1,5 +1,5 @@
 @dark_mode
-Feature: Dark colour scheme
+Feature: Site-wide dark mode
 
   As a site visitor
   I want every part of the site to use the dark colour scheme
