@@ -25,6 +25,7 @@ props:
       type: array
       title: Actions
       description: Up to two action links. The last action renders as the primary button, the rest as secondary.
+      maxItems: 2
       items:
         type: object
         properties:

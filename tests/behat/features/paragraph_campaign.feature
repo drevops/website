@@ -6,6 +6,7 @@ Feature: Campaign card
       | title                        | status |
       | [TEST] Page Campaign two     | 1      |
       | [TEST] Page Campaign one     | 1      |
+      | [TEST] Page Campaign light   | 1      |
 
   @api
   Scenario: Anonymous user sees a campaign card with label, heading, body and two actions
@@ -31,7 +32,7 @@ Feature: Campaign card
     And save screenshot
 
   @api
-  Scenario: A single action renders one primary button and keeps the layout intact
+  Scenario: A single action renders only a primary button
     Given I am an anonymous user
     And the following fields for the paragraph "campaign" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Campaign one":
       | field_title      | A single call to action      |
@@ -51,3 +52,17 @@ Feature: Campaign card
     Given I am logged in as a user with the "Site Administrator" role
     When I visit "node/add/civictheme_page"
     Then the response should contain "Add Campaign"
+
+  @api
+  Scenario: A campaign card honours the light theme
+    Given I am an anonymous user
+    And the following fields for the paragraph "campaign" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Campaign light":
+      | field_title      | A light scheme campaign      |
+      | field_c_p_theme  | light                        |
+      | field_link:title | Get in touch                 |
+      | field_link:uri   | https://example.com/contact  |
+
+    When I visit the "civictheme_page" content page with the title "[TEST] Page Campaign light"
+    Then I should see an "article .ct-campaign-card.ct-theme-light" element
+    And I should not see an "article .ct-campaign-card.ct-theme-dark" element
+    And I should see the link "Get in touch"

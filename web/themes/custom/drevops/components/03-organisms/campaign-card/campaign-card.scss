@@ -3,15 +3,33 @@
 //
 // A centred, bordered featured-campaign card with a soft corner glow, an accent
 // label, a heading, a body and up to two action buttons. The look is ported from
-// the static prototype's featured-campaign section; colours and typography use
-// CivicTheme's brand-mapped `--ct-*` tokens, spacing uses the prototype's rem
-// scale (CivicTheme exposes no global spacing tokens).
+// the static prototype's featured-campaign section. Colours resolve through
+// per-theme local variables (dark by default, light when ct-theme-light is set)
+// so the card renders correctly in either CivicTheme scheme; spacing uses the
+// prototype's rem scale (CivicTheme exposes no global spacing tokens).
 //
 
 .ct-campaign-card {
+  // Dark scheme is the default; ct-theme-light overrides below.
+  --ct-campaign-card-surface-color: var(--ct-color-dark-background-light);
+  --ct-campaign-card-border-color: var(--ct-color-dark-border);
+  --ct-campaign-card-heading-color: var(--ct-color-dark-heading);
+  --ct-campaign-card-body-color: var(--ct-color-dark-body);
+  --ct-campaign-card-accent-color: var(--ct-color-dark-interaction-background);
+  --ct-campaign-card-accent-hover-color: var(--ct-color-dark-interaction-hover-background);
+
   position: relative;
   overflow: hidden;
   padding: 8.75rem 0;
+
+  &.ct-theme-light {
+    --ct-campaign-card-surface-color: var(--ct-color-light-background-light);
+    --ct-campaign-card-border-color: var(--ct-color-light-border);
+    --ct-campaign-card-heading-color: var(--ct-color-light-heading);
+    --ct-campaign-card-body-color: var(--ct-color-light-body);
+    --ct-campaign-card-accent-color: var(--ct-color-light-interaction-background);
+    --ct-campaign-card-accent-hover-color: var(--ct-color-light-interaction-hover-background);
+  }
 
   // Soft corner glow in the brand accent.
   &::before {
@@ -21,7 +39,7 @@
     left: -160px;
     width: 520px;
     height: 520px;
-    background: radial-gradient(ellipse, color-mix(in srgb, var(--ct-color-dark-interaction-background) 12%, transparent) 0%, transparent 65%);
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--ct-campaign-card-accent-color) 12%, transparent) 0%, transparent 65%);
     pointer-events: none;
   }
 
@@ -30,7 +48,7 @@
     margin: 0 auto;
     padding: 0 4rem;
 
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
       padding: 0 1.5rem;
     }
   }
@@ -42,11 +60,11 @@
     margin: 0 auto;
     padding: 4.5rem 3.5rem;
     text-align: center;
-    background: var(--ct-color-dark-background-light);
-    border: 1px solid var(--ct-color-dark-border);
+    background: var(--ct-campaign-card-surface-color);
+    border: 1px solid var(--ct-campaign-card-border-color);
     border-radius: 1rem;
 
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
       padding: 3rem 1.5rem;
     }
   }
@@ -59,7 +77,7 @@
     line-height: var(--ct-typography-label-regular-line-height);
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--ct-color-dark-interaction-background);
+    color: var(--ct-campaign-card-accent-color);
   }
 
   &__title {
@@ -69,7 +87,7 @@
     font-weight: var(--ct-typography-display-font-weight);
     line-height: 1.1;
     letter-spacing: var(--ct-typography-display-letter-spacing);
-    color: var(--ct-color-dark-heading);
+    color: var(--ct-campaign-card-heading-color);
   }
 
   &__content {
@@ -77,7 +95,7 @@
     margin: 0 auto 3rem;
     font-size: var(--ct-typography-text-large-font-size);
     line-height: 1.6;
-    color: var(--ct-color-dark-body);
+    color: var(--ct-campaign-card-body-color);
 
     p {
       margin: 0;
@@ -132,31 +150,31 @@
 
     // The last action is the primary CTA: brand accent outline.
     &--primary {
-      color: var(--ct-color-dark-interaction-background);
-      border-color: color-mix(in srgb, var(--ct-color-dark-interaction-background) 40%, transparent);
+      color: var(--ct-campaign-card-accent-color);
+      border-color: color-mix(in srgb, var(--ct-campaign-card-accent-color) 40%, transparent);
 
       &::before {
-        background: color-mix(in srgb, var(--ct-color-dark-interaction-background) 8%, transparent);
+        background: color-mix(in srgb, var(--ct-campaign-card-accent-color) 8%, transparent);
       }
 
       &:hover {
-        color: var(--ct-color-dark-interaction-hover-background);
-        border-color: var(--ct-color-dark-interaction-background);
+        color: var(--ct-campaign-card-accent-hover-color);
+        border-color: var(--ct-campaign-card-accent-color);
       }
     }
 
     // Earlier actions are secondary: neutral outline.
     &--secondary {
-      color: var(--ct-color-dark-heading);
-      border-color: color-mix(in srgb, var(--ct-color-dark-heading) 30%, transparent);
+      color: var(--ct-campaign-card-heading-color);
+      border-color: color-mix(in srgb, var(--ct-campaign-card-heading-color) 30%, transparent);
 
       &::before {
-        background: color-mix(in srgb, var(--ct-color-dark-heading) 8%, transparent);
+        background: color-mix(in srgb, var(--ct-campaign-card-heading-color) 8%, transparent);
       }
 
       &:hover {
-        color: var(--ct-color-dark-heading);
-        border-color: var(--ct-color-dark-heading);
+        color: var(--ct-campaign-card-heading-color);
+        border-color: var(--ct-campaign-card-heading-color);
       }
     }
   }
