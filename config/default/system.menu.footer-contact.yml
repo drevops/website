@@ -1,0 +1,8 @@
+uuid: 45ee750b-a1b0-4fdf-acba-1f6d5c8b4aa2
+langcode: en
+status: true
+dependencies: {  }
+id: footer-contact
+label: 'Footer: Get in touch'
+description: 'DrevOps expanded footer menu.'
+locked: false

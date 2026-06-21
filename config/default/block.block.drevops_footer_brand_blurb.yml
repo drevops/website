@@ -1,0 +1,20 @@
+uuid: 5da7ede5-9e4c-4ef6-bbad-000cf05112af
+langcode: en
+status: true
+dependencies:
+  module:
+    - do_base
+  theme:
+    - drevops
+id: drevops_footer_brand_blurb
+theme: drevops
+region: footer_middle_1
+weight: 1
+provider: null
+plugin: do_base_footer_brand_blurb
+settings:
+  id: do_base_footer_brand_blurb
+  label: 'Footer brand blurb'
+  label_display: '0'
+  provider: do_base
+visibility: {  }

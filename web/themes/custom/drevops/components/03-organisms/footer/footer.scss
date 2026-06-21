@@ -1,0 +1,141 @@
+//
+// Expanded footer component styles.
+//
+// Ports the redesign footer from static-prototype/ (the `.component-footer-*`
+// blocks). Colours map to the CivicTheme dark palette via ct-color-constant-dark
+// so the values are baked at build time; spacing mirrors the prototype's
+// `--space-*` scale, which is not exposed as theme tokens.
+//
+
+.ct-footer {
+  // Primary step-8 surface, one step lighter than the page canvas (step-9).
+  background-color: ct-color-constant-dark('primary-8');
+  border-top: 0.0625rem solid color-mix(in srgb, #{ct-color-constant-dark('secondary-6')} 20%, transparent);
+  padding: 4.5rem 4rem 2.5rem;
+  color: ct-color-constant-dark('primary-3');
+
+  &__inner {
+    max-width: 75rem;
+    margin: 0 auto;
+  }
+
+  // Four-column grid: a wider brand column, two link columns, a contact column.
+  &__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.2fr;
+    gap: 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+  &__col {
+    // Column heading (the menu block label) rendered as a small uppercase label.
+    .block__title,
+    h2,
+    h3,
+    h4 {
+      margin: 0 0 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: ct-color-constant-dark('primary-1');
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    li {
+      margin: 0;
+    }
+
+    // The menus render through CivicTheme's link component in the light scheme;
+    // qualify with .ct-link so the dark-on-dark colours outrank it.
+    a,
+    a.ct-link {
+      font-size: 0.875rem;
+      line-height: 1.4;
+      color: ct-color-constant-dark('primary-3');
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        color: ct-color-constant-dark('secondary-1');
+        text-decoration: none;
+      }
+    }
+
+    // The prototype footer uses plain text links; drop CivicTheme's automatic
+    // external-link icon while keeping the visually-hidden "new tab" hint.
+    .ct-menu__item__link .ct-icon {
+      display: none;
+    }
+  }
+
+  // Brand column: logo above an introductory blurb.
+  &__col--brand {
+    .ct-logo,
+    img {
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      margin: 0;
+      max-width: 21.25rem;
+      font-size: 0.875rem;
+      line-height: 1.75;
+      color: ct-color-constant-dark('primary-3');
+    }
+  }
+
+  // Bottom bar: copyright on the left, a call-to-action link on the right.
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 0.0625rem solid color-mix(in srgb, white 6%, transparent);
+    font-size: 0.875rem;
+    color: ct-color-constant-dark('primary-3');
+
+    // The call to action uses the brand interaction teal so it stays legible on
+    // the dark surface (the prototype's muted teal fails contrast here).
+    a,
+    a.ct-link {
+      color: ct-color-constant-dark('secondary-2');
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        color: ct-color-constant-dark('secondary-1');
+        text-decoration: underline;
+      }
+    }
+
+    .ct-menu__item__link .ct-icon {
+      display: none;
+    }
+  }
+
+  @media (max-width: 48rem) {
+    padding: 3rem 1.5rem 2rem;
+
+    &__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    &__bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+  }
+}

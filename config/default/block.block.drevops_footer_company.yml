@@ -1,23 +1,23 @@
-uuid: 1e672f42-ba50-42ce-ab5a-3e215446f9a0
+uuid: a33034da-5517-4260-921c-a0f4049f3974
 langcode: en
-status: false
+status: true
 dependencies:
   config:
-    - system.menu.civictheme-footer
+    - system.menu.footer-company
   module:
     - menu_block
   theme:
     - drevops
-id: drevops_footer_menu_3
+id: drevops_footer_company
 theme: drevops
 region: footer_middle_3
 weight: 0
 provider: null
-plugin: 'menu_block:civictheme-footer'
+plugin: 'menu_block:footer-company'
 settings:
-  id: 'menu_block:civictheme-footer'
-  label: 'Footer menu 3'
-  label_display: ''
+  id: 'menu_block:footer-company'
+  label: Company
+  label_display: visible
   provider: menu_block
   follow: false
   follow_parent: child
@@ -25,10 +25,10 @@ settings:
   label_link: false
   label_type: block
   level: 1
-  depth: 1
+  depth: 0
   expand_all_items: false
-  parent: 'civictheme-footer:'
+  parent: 'footer-company:'
   render_parent: false
-  suggestion: civictheme_footer
+  suggestion: ''
   hide_on_nonactive: false
 visibility: {  }

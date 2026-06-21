@@ -1,0 +1,84 @@
+{#
+/**
+ * @file
+ * Expanded footer component.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - background_image: [string] Content background inline image.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ *
+ * Slots:
+ * - content_top1: Top section first content slot.
+ * - content_top2: Top section second content slot.
+ * - content_middle1: First column - brand logo and blurb.
+ * - content_middle2: Second column - first link menu.
+ * - content_middle3: Third column - second link menu.
+ * - content_middle4: Fourth column - contact menu.
+ * - content_middle5: Full-width middle slot.
+ * - content_bottom1: Bottom bar start - copyright.
+ * - content_bottom2: Bottom bar end - call to action.
+ *
+ * The per-slot `ct-footer__<section>__content-<slot>` classes keep each footer
+ * region individually addressable (see the Behat region map).
+ */
+#}
+
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+
+{% set has_top = content_top1 is not empty or content_top2 is not empty %}
+{% set has_grid = content_middle1 is not empty or content_middle2 is not empty or content_middle3 is not empty or content_middle4 is not empty %}
+{% set has_bottom = content_bottom1 is not empty or content_bottom2 is not empty %}
+
+{% if has_top or has_grid or content_middle5 is not empty or has_bottom %}
+  <footer class="ct-footer {{ modifier_class -}}" role="contentinfo" data-component-name="ct-footer" {% if background_image %}style="background-image: url('{{ background_image }}')"{% endif %} {% if attributes %}{{ attributes }}{% endif %}>
+    <div class="ct-footer__inner">
+
+      {% if has_top %}
+        <div class="ct-footer__top">
+          {% if content_top1 is not empty %}
+            <div class="ct-footer__top-item ct-footer__top__content-top1">{{ content_top1 }}</div>
+          {% endif %}
+          {% if content_top2 is not empty %}
+            <div class="ct-footer__top-item ct-footer__top__content-top2">{{ content_top2 }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if has_grid %}
+        <div class="ct-footer__grid">
+          {% if content_middle1 is not empty %}
+            <div class="ct-footer__col ct-footer__col--brand ct-footer__middle__content-middle1">{{ content_middle1 }}</div>
+          {% endif %}
+          {% if content_middle2 is not empty %}
+            <div class="ct-footer__col ct-footer__middle__content-middle2">{{ content_middle2 }}</div>
+          {% endif %}
+          {% if content_middle3 is not empty %}
+            <div class="ct-footer__col ct-footer__middle__content-middle3">{{ content_middle3 }}</div>
+          {% endif %}
+          {% if content_middle4 is not empty %}
+            <div class="ct-footer__col ct-footer__middle__content-middle4">{{ content_middle4 }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if content_middle5 is not empty %}
+        <div class="ct-footer__wide ct-footer__middle__content-middle5">{{ content_middle5 }}</div>
+      {% endif %}
+
+      {% if has_bottom %}
+        <div class="ct-footer__bar">
+          {% if content_bottom1 is not empty %}
+            <div class="ct-footer__bar-start ct-footer__bottom__content-bottom1">{{ content_bottom1 }}</div>
+          {% endif %}
+          {% if content_bottom2 is not empty %}
+            <div class="ct-footer__bar-end ct-footer__bottom__content-bottom2">{{ content_bottom2 }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    </div>
+  </footer>
+{% endif %}

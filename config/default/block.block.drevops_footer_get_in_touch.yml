@@ -1,23 +1,23 @@
-uuid: 8abde768-f545-4ae5-8fdd-2fcc89e211a8
+uuid: 551dc76b-6a50-4e7b-9202-240905a37208
 langcode: en
-status: false
+status: true
 dependencies:
   config:
-    - system.menu.civictheme-footer
+    - system.menu.footer-contact
   module:
     - menu_block
   theme:
     - drevops
-id: drevops_footer_menu_2
+id: drevops_footer_get_in_touch
 theme: drevops
-region: footer_middle_2
+region: footer_middle_4
 weight: 0
 provider: null
-plugin: 'menu_block:civictheme-footer'
+plugin: 'menu_block:footer-contact'
 settings:
-  id: 'menu_block:civictheme-footer'
-  label: 'Footer menu 2'
-  label_display: ''
+  id: 'menu_block:footer-contact'
+  label: 'Get in touch'
+  label_display: visible
   provider: menu_block
   follow: false
   follow_parent: child
@@ -25,10 +25,10 @@ settings:
   label_link: false
   label_type: block
   level: 1
-  depth: 1
+  depth: 0
   expand_all_items: false
-  parent: 'civictheme-footer:'
+  parent: 'footer-contact:'
   render_parent: false
-  suggestion: civictheme_footer
+  suggestion: ''
   hide_on_nonactive: false
 visibility: {  }
