@@ -11,15 +11,19 @@
 {% set cta_actions = [] %}
 {% set cta_email = null %}
 {% for item in paragraph.field_link %}
-  {% if item.uri is not empty %}
+  {% set link_url = item.url ? item.url.toString() : '' %}
+  {% if link_url is not empty %}
     {% if item.uri starts with 'mailto:' %}
-      {% set cta_email = {
-        url: item.url.toString(),
-        label: item.title|default(item.uri|replace({'mailto:': ''})),
-      } %}
+      {# Only the first email link is shown; the design carries a single address. #}
+      {% if cta_email is null %}
+        {% set cta_email = {
+          url: link_url,
+          label: item.title|default(item.uri|replace({'mailto:': ''})),
+        } %}
+      {% endif %}
     {% else %}
       {% set cta_actions = cta_actions|merge([{
-        url: item.url.toString(),
+        url: link_url,
         title: item.title,
       }]) %}
     {% endif %}
