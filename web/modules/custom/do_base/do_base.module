@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\csp\Csp;
 use Drupal\Core\Site\Settings;
+use Drupal\csp\Csp;
 
 /**
  * Allowed values for the shared paragraph component "type" selector.

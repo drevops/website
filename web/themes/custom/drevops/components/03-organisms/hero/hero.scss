@@ -9,13 +9,13 @@
 // continuous glow and scroll-pulse are gated behind prefers-reduced-motion.
 //
 
-$hero-bg: ct-color-constant-dark('primary-9');
-$hero-bg-contact: ct-color-constant-dark('primary-8');
-$hero-teal: ct-color-constant-dark('secondary-6');
-$hero-accent: ct-color-constant-dark('tertiary-3');
-$hero-text: ct-color-constant-dark('neutral-1');
-$hero-text-subtle: ct-color-constant-dark('primary-1');
-$hero-text-muted: ct-color-constant-dark('primary-3');
+$_hero-bg: ct-color-constant-dark('primary-9');
+$_hero-bg-contact: ct-color-constant-dark('primary-8');
+$_hero-teal: ct-color-constant-dark('secondary-6');
+$_hero-accent: ct-color-constant-dark('tertiary-3');
+$_hero-text: ct-color-constant-dark('neutral-1');
+$_hero-text-subtle: ct-color-constant-dark('primary-1');
+$_hero-text-muted: ct-color-constant-dark('primary-3');
 
 .component-hero {
   $root: &;
@@ -30,7 +30,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     min-height: 100vh;
     padding: 8.75rem ct-particle(8) ct-particle(10);
     overflow: hidden;
-    background: $hero-bg;
+    background: $_hero-bg;
     text-align: center;
 
     // The hero is a full-width opener, so it breaks out of CivicTheme's
@@ -51,7 +51,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     width: ct-particle(100);
     height: ct-particle(75);
     transform: translate(-50%, -55%);
-    background: radial-gradient(ellipse at center, color-mix(in srgb, #{$hero-teal} 12%, transparent) 0%, color-mix(in srgb, #{$hero-teal} 4%, transparent) 40%, transparent 70%);
+    background: radial-gradient(ellipse at center, color-mix(in srgb, #{$_hero-teal} 12%, transparent) 0%, color-mix(in srgb, #{$_hero-teal} 4%, transparent) 40%, transparent 70%);
     pointer-events: none;
   }
 
@@ -76,7 +76,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     font-weight: 400;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: $hero-teal;
+    color: $_hero-teal;
   }
 
   #{$root}-title {
@@ -85,7 +85,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     & {
       position: relative;
       margin: 0;
-      color: $hero-text;
+      color: $_hero-text;
     }
   }
 
@@ -94,7 +94,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     width: ct-particle(10);
     height: 3px;
     margin: ct-particle(3) auto 0;
-    background: linear-gradient(90deg, #{$hero-teal}, #{$hero-accent});
+    background: linear-gradient(90deg, #{$_hero-teal}, #{$_hero-accent});
     border-radius: 2px;
   }
 
@@ -104,7 +104,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     font-size: 1.25rem;
     line-height: 1.6;
     letter-spacing: 0.02em;
-    color: $hero-text-subtle;
+    color: $_hero-text-subtle;
   }
 
   #{$root}-actions {
@@ -122,7 +122,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     bottom: 8.75rem;
     left: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, #{$hero-teal} 40%, transparent) 20%, color-mix(in srgb, #{$hero-teal} 60%, transparent) 50%, color-mix(in srgb, #{$hero-teal} 40%, transparent) 80%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, #{$_hero-teal} 40%, transparent) 20%, color-mix(in srgb, #{$_hero-teal} 60%, transparent) 50%, color-mix(in srgb, #{$_hero-teal} 40%, transparent) 80%, transparent 100%);
   }
 
   #{$root} .component-scroll-indicator {
@@ -140,7 +140,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, #{$hero-bg} 60%, transparent) 100%);
+    background: radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, #{$_hero-bg} 60%, transparent) 100%);
     pointer-events: none;
   }
 
@@ -150,7 +150,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     padding: ct-particle(20) ct-particle(8) ct-particle(10);
 
     &::before {
-      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$hero-teal} 10%, transparent) 0%, color-mix(in srgb, #{$hero-teal} 3%, transparent) 40%, transparent 70%);
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$_hero-teal} 10%, transparent) 0%, color-mix(in srgb, #{$_hero-teal} 3%, transparent) 40%, transparent 70%);
     }
   }
 
@@ -162,7 +162,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
 
     &::before {
       width: ct-particle(112);
-      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$hero-teal} 8%, transparent) 0%, transparent 65%);
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$_hero-teal} 8%, transparent) 0%, transparent 65%);
     }
 
     #{$root}-title {
@@ -177,12 +177,12 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
 
   // Contact: darker surface, narrow column.
   &#{$root}--contact {
-    background: $hero-bg-contact;
+    background: $_hero-bg-contact;
     min-height: auto;
     padding: ct-particle(25) 0 ct-particle(12);
 
     &::before {
-      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$hero-teal} 12%, transparent) 0%, color-mix(in srgb, #{$hero-teal} 3%, transparent) 40%, transparent 70%);
+      background: radial-gradient(ellipse at center, color-mix(in srgb, #{$_hero-teal} 12%, transparent) 0%, color-mix(in srgb, #{$_hero-teal} 3%, transparent) 40%, transparent 70%);
     }
   }
 
@@ -209,7 +209,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
   #{$root}__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, color-mix(in srgb, #{$hero-bg} 40%, transparent) 0%, color-mix(in srgb, #{$hero-bg} 70%, transparent) 40%, #{$hero-bg} 100%);
+    background: linear-gradient(to bottom, color-mix(in srgb, #{$_hero-bg} 40%, transparent) 0%, color-mix(in srgb, #{$_hero-bg} 70%, transparent) 40%, #{$_hero-bg} 100%);
   }
 
   #{$root}__content {
@@ -228,7 +228,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
     font-size: 0.75rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: $hero-text-muted;
+    color: $_hero-text-muted;
   }
 
   #{$root}__title {
@@ -238,7 +238,7 @@ $hero-text-muted: ct-color-constant-dark('primary-3');
       max-width: ct-particle(100);
       margin: 0 0 ct-particle(3);
       font-size: var(--ct-typography-display-font-size);
-      color: $hero-text;
+      color: $_hero-text;
     }
   }
 
