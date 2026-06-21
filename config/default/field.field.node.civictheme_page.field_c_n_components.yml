@@ -14,12 +14,14 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_iframe
     - paragraphs.paragraphs_type.civictheme_manual_list
     - paragraphs.paragraphs_type.civictheme_map
+    - paragraphs.paragraphs_type.civictheme_message
     - paragraphs.paragraphs_type.civictheme_next_step
     - paragraphs.paragraphs_type.civictheme_promo
     - paragraphs.paragraphs_type.civictheme_slider
     - paragraphs.paragraphs_type.civictheme_webform
     - paragraphs.paragraphs_type.divider
     - paragraphs.paragraphs_type.from_library
+    - paragraphs.paragraphs_type.hero
   module:
     - entity_reference_revisions
 _core:
@@ -54,6 +56,7 @@ settings:
       divider: divider
       from_library: from_library
       civictheme_message: civictheme_message
+      hero: hero
     negate: 0
     target_bundles_drag_drop:
       civictheme_accordion:
@@ -151,5 +154,8 @@ settings:
         enabled: true
       from_library:
         weight: 62
+        enabled: true
+      hero:
+        weight: -60
         enabled: true
 field_type: entity_reference_revisions

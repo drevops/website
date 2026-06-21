@@ -1,0 +1,23 @@
+uuid: f9e75293-a39a-4d20-8425-cf17687a4644
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_theme
+    - paragraphs.paragraphs_type.hero
+  module:
+    - options
+id: paragraph.hero.field_c_p_theme
+field_name: field_c_p_theme
+entity_type: paragraph
+bundle: hero
+label: Theme
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: dark
+default_value_callback: ''
+settings: {  }
+field_type: list_string

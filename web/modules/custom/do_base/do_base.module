@@ -7,8 +7,44 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\csp\Csp;
 use Drupal\Core\Site\Settings;
+
+/**
+ * Allowed values for the shared paragraph component "type" selector.
+ *
+ * A single field storage backs the variant selector across several paragraph
+ * bundles, each offering its own set of variants, so the options are resolved
+ * from the host bundle rather than fixed on the storage. Without bundle context
+ * (settings forms, validation of already-stored values) every bundle's options
+ * are exposed so stored values stay valid.
+ */
+function do_base_field_c_p_type_allowed_values(FieldStorageDefinitionInterface $definition, ?FieldableEntityInterface $entity = NULL): array {
+  $bundle_values = [
+    'hero' => [
+      'home' => 'Home',
+      'inner' => 'Inner',
+      'page' => 'Page',
+      'contact' => 'Contact',
+      'article' => 'Article',
+      'section' => 'Section',
+    ],
+  ];
+
+  $bundle = $entity?->bundle();
+  if ($bundle !== NULL && isset($bundle_values[$bundle])) {
+    return $bundle_values[$bundle];
+  }
+
+  $all = [];
+  foreach ($bundle_values as $values) {
+    $all += $values;
+  }
+
+  return $all;
+}
 
 /**
  * Implements hook_mail_alter().
