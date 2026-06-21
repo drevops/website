@@ -1,0 +1,19 @@
+uuid: a9064079-1daa-4f72-bc79-0d0aa491c20c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_stat_label
+    - paragraphs.paragraphs_type.stat_item
+id: paragraph.stat_item.field_stat_label
+field_name: field_stat_label
+entity_type: paragraph
+bundle: stat_item
+label: Label
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

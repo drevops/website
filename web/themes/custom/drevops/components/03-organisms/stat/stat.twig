@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Stat grid component.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - subtitle: [string] Small label shown above the grid.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ *
+ * Slots:
+ * - items: The rendered stat item components.
+ #}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+
+{% if items is not empty %}
+  <div class="ct-stat {{ modifier_class -}}" data-component-name="ct-stat" {% if attributes %}{{ attributes }}{% endif %}>
+    <div class="ct-stat__inner">
+      {% if subtitle is not empty %}
+        <p class="ct-stat__subtitle component-reveal">{{ subtitle }}</p>
+      {% endif %}
+      <div class="ct-stat__grid">
+        {{ items }}
+      </div>
+    </div>
+  </div>
+{% endif %}

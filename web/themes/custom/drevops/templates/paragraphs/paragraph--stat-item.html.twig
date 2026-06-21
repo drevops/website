@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Theme implementation to display the Stat item component.
+ *
+ * Rendered through the SDC component id so Drupal attaches the component's
+ * library (stat-item.css) when it is placed.
+ */
+#}
+{{ include('drevops:stat-item', {
+  value: value,
+  suffix: suffix,
+  label: label,
+  attributes: component_attributes,
+}, with_context = false) }}

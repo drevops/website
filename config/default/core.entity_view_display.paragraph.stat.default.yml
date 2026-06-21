@@ -1,0 +1,29 @@
+uuid: 58edac6f-d860-4cc4-9bcb-87553b622076
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stat.field_c_p_theme
+    - field.field.paragraph.stat.field_items
+    - field.field.paragraph.stat.field_subtitle
+    - paragraphs.paragraphs_type.stat
+  module:
+    - entity_reference_revisions
+id: paragraph.stat.default
+targetEntityType: paragraph
+bundle: stat
+mode: default
+content:
+  field_items:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_c_p_theme: true
+  field_subtitle: true
+  search_api_excerpt: true

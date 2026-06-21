@@ -1,0 +1,34 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Stat item
+status: stable
+description: A single statistic - a value that counts up, an optional suffix and a label.
+props:
+  type: object
+  properties:
+    value:
+      type: string
+      title: Value
+      description: The target number the statistic counts up to.
+    suffix:
+      type: string
+      title: Suffix
+      description: Short text shown beside the value (for example %, +, yrs).
+    label:
+      type: string
+      title: Label
+      description: Caption describing the statistic.
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier Class
+      description: Additional CSS classes.
