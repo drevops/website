@@ -404,4 +404,53 @@ class FeatureContext extends DrupalContext {
     }
   }
 
+  /**
+   * Assert the assembled components render in the given top-to-bottom order.
+   *
+   * Each row is one expected marker - "hero:inner", "hero:section",
+   * "card-group" or "cta" - matched against the document order of the rendered
+   * hero, card group and CTA components.
+   */
+  #[Then('the page components render in this order:')]
+  public function assertComponentsRenderInOrder(TableNode $table): void {
+    $expected = array_map(static fn(array $row): string => trim((string) reset($row)), $table->getRows());
+
+    $script = "(function () {\n"
+      . "  var root = document.querySelector('article') || document;\n"
+      . "  return Array.prototype.slice.call(root.querySelectorAll('.component-hero, .ct-card-group, .ct-cta')).map(function (element) {\n"
+      . "    if (element.matches('.component-hero--inner')) { return 'hero:inner'; }\n"
+      . "    if (element.matches('.component-hero--section')) { return 'hero:section'; }\n"
+      . "    if (element.matches('.ct-card-group')) { return 'card-group'; }\n"
+      . "    if (element.matches('.ct-cta')) { return 'cta'; }\n"
+      . "    return 'unknown';\n"
+      . "  });\n"
+      . "})()";
+
+    $actual = (array) $this->getSession()->evaluateScript($script);
+
+    if ($actual !== $expected) {
+      throw new \Exception(sprintf('Components render as [%s] but expected [%s].', implode(', ', $actual), implode(', ', $expected)));
+    }
+  }
+
+  /**
+   * Assert the page does not scroll horizontally at the given viewport width.
+   *
+   * Full-bleed components span the viewport, so the measured scrollbar gutter
+   * is allowed for while still catching real overflow that would force a
+   * horizontal scrollbar on a phone.
+   */
+  #[Then('the page reflows without horizontal scrolling at :width pixels wide')]
+  public function assertReflowsWithoutHorizontalScrolling(int $width): void {
+    $session = $this->getSession();
+    $session->resizeWindow($width, 900, 'current');
+
+    $overflow = (int) $session->evaluateScript('document.documentElement.scrollWidth - document.documentElement.clientWidth');
+    $scrollbar = (int) $session->evaluateScript('window.innerWidth - document.documentElement.clientWidth');
+
+    if ($overflow > $scrollbar + 1) {
+      throw new \Exception(sprintf('The page scrolls horizontally by %dpx at %dpx wide.', $overflow, $width));
+    }
+  }
+
 }

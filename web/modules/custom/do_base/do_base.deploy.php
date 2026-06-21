@@ -16,6 +16,7 @@ use Drupal\civictheme\CivicthemeColorManager;
 use Drupal\civictheme\CivicthemeConstants;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
@@ -737,4 +738,281 @@ function _do_base_count_words(FieldableEntityInterface $entity): int {
   }
 
   return $count;
+}
+
+/**
+ * Seed the AI-assisted delivery page from the shared CivicTheme components.
+ *
+ * The page opens with a hero paragraph and stacks hero "section" intro bands,
+ * dot-list card groups and a CTA band, every component in the dark scheme.
+ * Idempotent: the node is keyed on a fixed UUID, so re-running updates the same
+ * page and replaces its component stack without orphaning the old paragraphs.
+ */
+function do_base_deploy_ai_assisted_delivery(): string {
+  $intro_lead = "If you've got a Drupal site, keeping it running and building on it is probably a real investment."
+    . " We do the same senior, fully-tested work, often for around a third less on suitable work,"
+    . " because we've made the delivery faster, not because we cut corners.";
+  $costing_lead = "Send us a recent quote, your current scope, or just a link to your site."
+    . " We'll show you what the same work would cost with us, by hand and AI-assisted, side by side."
+    . " There's no call to sit through, and nothing to move. If the number lands close to what you pay"
+    . " now, you've lost nothing. If it's lower for the same quality, that's worth knowing.";
+  $lower_lead = "Put together, that often comes to around a third fewer hours on suitable work."
+    . " We don't apply a flat discount across the job. We work it out area by area and show you exactly"
+    . " where the hours move and where they don't.";
+  $who_lead = "We created Vortex, we maintain around 40 open-source repositories, and our own website is"
+    . " open source. We're the architect and main developer behind the CivicTheme design system, and"
+    . " we've delivered Australian government and GovCMS platforms since 2016. If it helps to see how"
+    . " we work, most of it is out in the open.";
+
+  $why_cards = [
+    [
+      'The layers around the work',
+      "Account management, coordination, and reporting all take time, and that time is real."
+        . " It's how most agencies are set up, and it shows up on every invoice.",
+    ],
+    [
+      'Winning and running the contract',
+      'Sales, proposals, and overhead are part of running a larger agency.'
+        . ' None of it is wrong, but it lands in the rate you pay.',
+    ],
+    [
+      'Starting from scratch each time',
+      'Without shared tooling, every new project pays again for the same groundwork:'
+        . ' setup, pipelines, configuration. It adds up, project after project.',
+    ],
+  ];
+  $how_cards = [
+    [
+      'You pay for the engineering',
+      "The people who scope your work are the people who build it."
+        . " There's no extra layer to fund in between.",
+    ],
+    [
+      'Our tooling does the heavy lifting',
+      "Vortex, our open-source platform, handles the setup, CI, and tooling on every project,"
+        . " so you're not paying to build that from scratch.",
+    ],
+    [
+      'Testing and CI from day one',
+      'Quality is built in rather than added at the end,'
+        . ' so less time goes into finding and fixing things later.',
+    ],
+    [
+      'AI on the repetitive work',
+      'AI helps with the parts that suit it, like migrations, boilerplate, tests, and'
+        . ' documentation, while the architecture, the integrations, and the judgement stay with senior people.',
+    ],
+  ];
+  $ai_cards = [
+    [
+      'Every change is reviewed and tested',
+      "It's the question we'd ask too. Every change is reviewed, and every build is tested and"
+        . " gated by CI before it ships. AI helps with the writing, never the checking. The guardrails"
+        . " are our own, and they're open source, so you can read exactly how they work.",
+    ],
+    [
+      'Your code and data stay yours',
+      "Nothing you share trains an AI model, nothing goes to a public AI service without your"
+        . " permission, and sensitive credentials are never shared. It's all in our Responsible AI policy.",
+    ],
+  ];
+
+  $components = [
+    _do_base_ai_delivery_hero(
+      'inner',
+      'AI-assisted delivery',
+      'The same senior Drupal work, for less.',
+      $intro_lead,
+      ['uri' => 'internal:/contact', 'title' => 'See what it would cost'],
+    ),
+    _do_base_ai_delivery_hero(
+      'section',
+      'A free, no-obligation costing',
+      'No commitment. Just a clear picture.',
+      $costing_lead,
+    ),
+    _do_base_ai_delivery_hero(
+      'section',
+      'Why agency work costs what it does',
+      "It's rarely about the work itself.",
+    ),
+    _do_base_ai_delivery_card_group($why_cards),
+    _do_base_ai_delivery_hero(
+      'section',
+      'How we keep it lower',
+      'Four things that bring the number down.',
+      $lower_lead,
+    ),
+    _do_base_ai_delivery_card_group($how_cards),
+    _do_base_ai_delivery_hero('section', 'A fair question about AI', 'Can AI-written code be trusted?'),
+    _do_base_ai_delivery_card_group($ai_cards),
+    _do_base_ai_delivery_hero(
+      'section',
+      "Who you'd be working with",
+      'Drupal is what we do.',
+      $who_lead,
+    ),
+    _do_base_ai_delivery_cta(),
+  ];
+
+  $uuid = 'd9a7c2e4-3b1f-4e8a-9c6d-2f5b8e1a4c70';
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $existing = $storage->loadByProperties(['uuid' => $uuid]);
+  $node = $existing ? reset($existing) : Node::create(['type' => 'civictheme_page', 'uuid' => $uuid]);
+
+  if (!$node instanceof NodeInterface) {
+    return 'AI-assisted delivery node could not be resolved - skipped.';
+  }
+
+  // Capture the paragraphs the node referenced before this run so they can be
+  // removed only after the node is re-saved against the new stack - a failed
+  // save then never leaves the page pointing at deleted paragraphs.
+  $stale = _do_base_ai_delivery_stale_paragraphs($node);
+
+  $node->set('title', 'AI-assisted delivery');
+  $node->set('status', NodeInterface::PUBLISHED);
+  $node->set('field_c_n_summary', 'Already on Drupal? See what your next project would cost with us. We cost the same senior, fully-tested work two ways, by hand and AI-assisted, so you see the difference before you change a thing.');
+  // The hero spans the viewport, so the page runs full-width with no side
+  // navigation column offsetting (and clipping) the full-bleed components.
+  $node->set('field_c_n_hide_sidebar', TRUE);
+  $node->set('field_c_n_components', array_map(static fn(Paragraph $paragraph): array => [
+    'target_id' => $paragraph->id(),
+    'target_revision_id' => $paragraph->getRevisionId(),
+  ], $components));
+  $node->set('path', ['alias' => '/ai-assisted-delivery', 'pathauto' => 0]);
+  $node->save();
+
+  foreach ($stale as $paragraph) {
+    $paragraph->delete();
+  }
+
+  return 'AI-assisted delivery page seeded.';
+}
+
+/**
+ * Build and save a hero paragraph in the dark scheme.
+ *
+ * @param string $type
+ *   The hero variant: "inner" for the page opener, "section" for intro bands.
+ * @param string $eyebrow
+ *   The short label above the heading.
+ * @param string $heading
+ *   The hero heading.
+ * @param string $lead
+ *   The supporting lead paragraph, or an empty string to omit it.
+ * @param array $action
+ *   An optional single link as ['uri' => ..., 'title' => ...].
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph
+ *   The saved hero paragraph.
+ */
+function _do_base_ai_delivery_hero(string $type, string $eyebrow, string $heading, string $lead = '', array $action = []): Paragraph {
+  $values = [
+    'type' => 'hero',
+    'field_c_p_type' => $type,
+    'field_c_p_theme' => 'dark',
+    'field_c_p_subtitle' => $eyebrow,
+    'field_c_p_title' => $heading,
+  ];
+
+  if ($lead !== '') {
+    $values['field_c_p_summary'] = $lead;
+  }
+
+  if ($action !== []) {
+    $values['field_c_p_links'] = [$action];
+  }
+
+  $hero = Paragraph::create($values);
+  $hero->save();
+
+  return $hero;
+}
+
+/**
+ * Build and save a single-column dot-list card group in the dark scheme.
+ *
+ * @param array $cards
+ *   A list of [title, description] pairs, one per dot card.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph
+ *   The saved card group paragraph referencing the saved cards.
+ */
+function _do_base_ai_delivery_card_group(array $cards): Paragraph {
+  $items = [];
+
+  foreach ($cards as [$title, $description]) {
+    $card = Paragraph::create([
+      'type' => 'card',
+      'field_c_p_type' => 'dot',
+      'field_c_p_theme' => 'dark',
+      'field_c_p_title' => $title,
+      'field_c_p_summary' => $description,
+    ]);
+    $card->save();
+
+    $items[] = ['target_id' => $card->id(), 'target_revision_id' => $card->getRevisionId()];
+  }
+
+  $group = Paragraph::create([
+    'type' => 'card_group',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_list_column_count' => 1,
+    'field_c_p_list_items' => $items,
+  ]);
+  $group->save();
+
+  return $group;
+}
+
+/**
+ * Build and save the closing CTA band in the dark scheme.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph
+ *   The saved CTA paragraph.
+ */
+function _do_base_ai_delivery_cta(): Paragraph {
+  $cta = Paragraph::create([
+    'type' => 'cta',
+    'field_c_p_type' => 'display',
+    'field_c_p_theme' => 'dark',
+    'field_title' => 'See what your project would cost.',
+    'field_subtitle' => "Send your scope, your last quote, or just your site. We'll take it from there.",
+    'field_link' => [
+      ['uri' => 'internal:/contact', 'title' => 'See what it would cost'],
+      ['uri' => 'mailto:info@drevops.com', 'title' => 'info@drevops.com'],
+    ],
+  ]);
+  $cta->save();
+
+  return $cta;
+}
+
+/**
+ * Collect the paragraphs a node references, including nested card items.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The node whose component stack is being replaced.
+ *
+ * @return \Drupal\paragraphs\ParagraphInterface[]
+ *   The referenced top-level paragraphs and any card group children.
+ */
+function _do_base_ai_delivery_stale_paragraphs(NodeInterface $node): array {
+  if (!$node->hasField('field_c_n_components')) {
+    return [];
+  }
+
+  $stale = [];
+
+  foreach ($node->get('field_c_n_components')->referencedEntities() as $component) {
+    $stale[] = $component;
+
+    if ($component->bundle() === 'card_group' && $component->hasField('field_c_p_list_items')) {
+      foreach ($component->get('field_c_p_list_items')->referencedEntities() as $child) {
+        $stale[] = $child;
+      }
+    }
+  }
+
+  return $stale;
 }
