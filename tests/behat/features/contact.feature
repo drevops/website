@@ -37,7 +37,7 @@ Feature: Contact form
     And I select "Upgrade or migration" from "What do you need help with?"
     And I fill in "Tell us more" with "[TEST] We need help upgrading our Drupal 7 site."
     And I press "Send message"
-    Then I should see "your enquiry has been received"
+    Then I should see "Thank you - your enquiry has been received."
     And an email should be sent to the "webmaster@drevops.com"
 
   @api @javascript
@@ -57,4 +57,4 @@ Feature: Contact form
     And I fill in "Email" with "spam@example.com"
     And I fill in "url" with "https://spam.example.com"
     And I press "Send message"
-    Then I should not see "your enquiry has been received"
+    Then I should not see "Thank you - your enquiry has been received."
