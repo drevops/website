@@ -1,0 +1,10 @@
+uuid: bf6b7c84-230b-429c-a622-4c0d6fc2ad2f
+langcode: en
+status: true
+dependencies: {  }
+id: card
+label: Card
+icon_uuid: null
+icon_default: null
+description: 'A single card that leads with a number, a dot or an icon.'
+behavior_plugins: {  }

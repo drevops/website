@@ -1,0 +1,23 @@
+uuid: 63939959-e408-44a1-a2c6-f5f4bb3aebc6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.card.field_c_p_icon
+    - field.field.paragraph.card.field_c_p_summary
+    - field.field.paragraph.card.field_c_p_theme
+    - field.field.paragraph.card.field_c_p_title
+    - field.field.paragraph.card.field_c_p_type
+    - paragraphs.paragraphs_type.card
+id: paragraph.card.default
+targetEntityType: paragraph
+bundle: card
+mode: default
+content: {  }
+hidden:
+  field_c_p_icon: true
+  field_c_p_summary: true
+  field_c_p_theme: true
+  field_c_p_title: true
+  field_c_p_type: true
+  search_api_excerpt: true

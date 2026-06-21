@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Theme implementation to display the Card paragraph.
+ */
+#}
+{{ include('drevops:card', {
+  type: type,
+  index: index,
+  title: title,
+  description: description,
+  icon: icon,
+  theme: theme,
+  attributes: component_attributes,
+}, with_context: false) }}

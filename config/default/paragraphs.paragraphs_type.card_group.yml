@@ -1,0 +1,10 @@
+uuid: b774b652-3814-4e81-8517-54164302bece
+langcode: en
+status: true
+dependencies: {  }
+id: card_group
+label: 'Card group'
+icon_uuid: null
+icon_default: null
+description: 'A group of cards laid out in one, two, three or four columns.'
+behavior_plugins: {  }

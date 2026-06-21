@@ -1,0 +1,56 @@
+uuid: 83af51a9-7e41-4d48-94b5-f9a6c7dde1f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.card.field_c_p_icon
+    - field.field.paragraph.card.field_c_p_summary
+    - field.field.paragraph.card.field_c_p_theme
+    - field.field.paragraph.card.field_c_p_title
+    - field.field.paragraph.card.field_c_p_type
+    - paragraphs.paragraphs_type.card
+  module:
+    - media_library
+id: paragraph.card.default
+targetEntityType: paragraph
+bundle: card
+mode: default
+content:
+  field_c_p_icon:
+    type: media_library_widget
+    weight: 3
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+  field_c_p_summary:
+    type: string_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_theme:
+    type: options_buttons
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_c_p_title:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_c_p_type:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

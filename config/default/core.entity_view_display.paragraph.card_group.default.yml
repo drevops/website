@@ -1,0 +1,19 @@
+uuid: 11f24c40-6237-4bc9-a205-118296964bde
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.card_group.field_c_p_list_column_count
+    - field.field.paragraph.card_group.field_c_p_list_items
+    - field.field.paragraph.card_group.field_c_p_theme
+    - paragraphs.paragraphs_type.card_group
+id: paragraph.card_group.default
+targetEntityType: paragraph
+bundle: card_group
+mode: default
+content: {  }
+hidden:
+  field_c_p_list_column_count: true
+  field_c_p_list_items: true
+  field_c_p_theme: true
+  search_api_excerpt: true

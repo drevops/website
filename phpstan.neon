@@ -50,3 +50,8 @@ parameters:
         - web/themes/custom/*/tests/*
         - tests/phpunit/*
       reportUnmatched: false
+    - # Behat step definitions cannot use constructor injection, so \Drupal::
+      # static calls are the correct pattern in this context.
+      message: '#\\\Drupal calls should be avoided in classes, use dependency injection instead#'
+      paths:
+        - tests/behat/bootstrap/*

@@ -1,0 +1,21 @@
+uuid: 1723f408-9e4b-4bdd-b2bf-4b9166c4ef2b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_type
+    - paragraphs.paragraphs_type.card
+  module:
+    - options
+id: paragraph.card.field_c_p_type
+field_name: field_c_p_type
+entity_type: paragraph
+bundle: card
+label: Type
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

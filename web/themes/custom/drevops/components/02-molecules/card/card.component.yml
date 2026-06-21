@@ -1,0 +1,44 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Card
+status: stable
+description: A single card that leads with a number, a dot or an icon marker, followed by a title and description.
+props:
+  type: object
+  properties:
+    type:
+      type: string
+      title: Marker type
+      description: Which marker leads the card.
+      enum:
+        - number
+        - dot
+        - icon
+      default: dot
+    index:
+      type: integer
+      title: Index
+      description: 1-based position within the group; shown as the number marker and used for the staggered reveal delay.
+    title:
+      type: string
+      title: Title
+    description:
+      type: string
+      title: Description
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: dark
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+    modifier_class:
+      type: string
+      title: Modifier class
+slots:
+  icon:
+    title: Icon
+    description: Inline SVG markup for the icon marker.

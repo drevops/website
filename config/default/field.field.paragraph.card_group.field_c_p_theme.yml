@@ -1,0 +1,23 @@
+uuid: 5a3e6c20-3e26-4f25-b063-7382380c05eb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_theme
+    - paragraphs.paragraphs_type.card_group
+  module:
+    - options
+id: paragraph.card_group.field_c_p_theme
+field_name: field_c_p_theme
+entity_type: paragraph
+bundle: card_group
+label: Theme
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: dark
+default_value_callback: ''
+settings: {  }
+field_type: list_string
