@@ -16,6 +16,7 @@ use Drupal\civictheme\CivicthemeColorManager;
 use Drupal\civictheme\CivicthemeConstants;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
+use Drupal\media\MediaInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -815,14 +816,213 @@ function _do_base_build_contact_components(): array {
 }
 
 /**
+ * Add the page hero to the top of the blog landing page when it is missing.
+ */
+function do_base_deploy_blog_landing_hero(): string {
+  $path = \Drupal::service('path_alias.manager')->getPathByAlias('/blog');
+
+  if (!preg_match('#^/node/(\d+)$#', $path, $matches)) {
+    return 'The /blog alias does not resolve to a node; skipped the blog landing hero.';
+  }
+
+  $node = \Drupal::entityTypeManager()->getStorage('node')->load((int) $matches[1]);
+
+  if (!$node instanceof FieldableEntityInterface || !$node->hasField('field_c_n_components')) {
+    return 'The blog landing page has no components field; skipped the blog landing hero.';
+  }
+
+  // Idempotency guard: the hero always leads the stack once added.
+  $components = $node->get('field_c_n_components')->referencedEntities();
+
+  if (isset($components[0]) && $components[0]->bundle() === 'hero') {
+    return 'The blog landing hero is already present.';
+  }
+
+  $hero = Paragraph::create([
+    'type' => 'hero',
+    'field_c_p_type' => 'page',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_subtitle' => 'Blog',
+    'field_c_p_title' => 'Practical engineering insights from the teams we work with.',
+  ]);
+  $hero->save();
+
+  // The hero opens the page, so it is prepended ahead of the existing list.
+  $items = $node->get('field_c_n_components')->getValue();
+  array_unshift($items, ['target_id' => $hero->id(), 'target_revision_id' => $hero->getRevisionId()]);
+  $node->set('field_c_n_components', $items);
+  $node->save();
+
+  return 'Added the page hero to the blog landing page.';
+}
+
+/**
+ * Seed a sample blog post that demonstrates the assembled post layout.
+ */
+function do_base_deploy_blog_sample_post(): string {
+  $title = 'Why Your Drupal CI Pipeline Is Slower Than It Should Be';
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  // Idempotency guard: identify the seeded post by its title.
+  $existing = $node_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'civictheme_page')
+    ->condition('title', $title)
+    ->execute();
+
+  if (!empty($existing)) {
+    return 'The sample blog post is already present.';
+  }
+
+  $blog = _do_base_ensure_blog_term();
+
+  if (!$blog instanceof TermInterface) {
+    return 'The Blog topic term is unavailable; skipped the sample blog post.';
+  }
+
+  // The Blog term marks the page for the listing; the rest render as content
+  // tags in the article hero.
+  $topics = [['target_id' => $blog->id()]];
+
+  foreach (['Drupal', 'DevOps', 'CI/CD', 'Performance'] as $name) {
+    $term = _do_base_ensure_topic_term($name);
+
+    if ($term instanceof TermInterface) {
+      $topics[] = ['target_id' => $term->id()];
+    }
+  }
+
+  $image = _do_base_first_image_media();
+
+  $hero = Paragraph::create([
+    'type' => 'hero',
+    'field_c_p_type' => 'article',
+    'field_c_p_theme' => 'dark',
+  ]);
+
+  if ($image instanceof MediaInterface) {
+    $hero->set('field_c_p_image', ['target_id' => $image->id()]);
+  }
+
+  $hero->save();
+
+  $body = Paragraph::create([
+    'type' => 'civictheme_content',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_vertical_spacing' => 'both',
+    'field_c_p_content' => [
+      'value' => _do_base_sample_post_body(),
+      'format' => 'civictheme_rich_text',
+    ],
+  ]);
+  $body->save();
+
+  $cta = Paragraph::create([
+    'type' => 'cta',
+    'field_c_p_type' => 'display',
+    'field_c_p_theme' => 'dark',
+    'field_title' => 'Ship faster with a pipeline that keeps up.',
+    'field_subtitle' => 'Get a free 30-minute review of your Drupal CI configuration.',
+    'field_link' => [
+      ['uri' => 'internal:/contact', 'title' => 'Start a conversation'],
+      ['uri' => 'mailto:info@drevops.com', 'title' => 'info@drevops.com'],
+    ],
+  ]);
+  $cta->save();
+
+  $created = (new \DateTimeImmutable('2026-03-18 09:00:00'))->getTimestamp();
+
+  $node = Node::create([
+    'type' => 'civictheme_page',
+    'title' => $title,
+    'status' => 1,
+    'created' => $created,
+    'changed' => $created,
+    'field_c_n_topics' => $topics,
+    'field_c_n_summary' => 'We measured 24 Drupal CI pipelines and found the same fixable problems everywhere. Here is how to cut build times from 18 minutes to under 5.',
+    'field_read_time' => '8 min read',
+    'field_c_n_components' => [$hero, $body, $cta],
+  ]);
+
+  if ($image instanceof MediaInterface) {
+    $node->set('field_c_n_thumbnail', ['target_id' => $image->id()]);
+  }
+
+  $node->save();
+
+  return sprintf('Created the sample blog post (node %d).', $node->id());
+}
+
+/**
+ * Load an existing image media item to use as seeded hero imagery.
+ */
+function _do_base_first_image_media(): ?MediaInterface {
+  $storage = \Drupal::entityTypeManager()->getStorage('media');
+
+  $ids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('bundle', 'civictheme_image')
+    ->condition('status', 1)
+    ->sort('mid')
+    ->range(0, 1)
+    ->execute();
+
+  if (empty($ids)) {
+    return NULL;
+  }
+
+  $media = $storage->load(reset($ids));
+
+  return $media instanceof MediaInterface ? $media : NULL;
+}
+
+/**
+ * The rich body of the seeded sample blog post, taken from the prototype.
+ */
+function _do_base_sample_post_body(): string {
+  return <<<'HTML'
+<p class="ct-text-large">Most Drupal teams accept slow CI pipelines as a fact of life. Builds that take fifteen minutes, test suites that time out, and deployments that need a coffee break. It does not have to be this way.</p>
+<p>We have audited dozens of Drupal CI pipelines across government, education and enterprise organisations. The same problems come up repeatedly. Here is what we find and how to fix it.</p>
+<h2>The usual suspects</h2>
+<p>Before reaching for solutions, it helps to understand where the time actually goes in a typical Drupal CI build. What you genuinely need for CI is smaller than most teams assume:</p>
+<ul>
+<li>Schema and configuration, usually under five megabytes.</li>
+<li>A small set of representative content nodes.</li>
+<li>User accounts for the test roles.</li>
+<li>Taxonomy terms and menu structures.</li>
+</ul>
+<h2>Stop pulling full Docker images on every build</h2>
+<p>The single biggest time sink is rebuilding or pulling Docker images on every run. Build a dedicated CI image with your PHP extensions and system dependencies baked in, push it to your registry, and reference it directly:</p>
+<pre><code class="language-yaml">jobs:
+  test:
+    docker:
+      - image: ghcr.io/your-org/drupal-ci:php8.3
+    steps:
+      - checkout
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/phpunit</code></pre>
+<p>This alone typically cuts two to four minutes off every build.</p>
+<blockquote><p>Fast CI is not a luxury. It is the difference between developers who test before merging and developers who push to main and hope for the best.</p></blockquote>
+<p>If your Drupal CI pipeline takes more than five minutes, there is room to improve.</p>
+HTML;
+}
+
+/**
  * Load the Blog topic term, creating it when the vocabulary allows.
  */
 function _do_base_ensure_blog_term(): ?TermInterface {
+  return _do_base_ensure_topic_term('Blog');
+}
+
+/**
+ * Load a topic term by name, creating it when the vocabulary allows.
+ */
+function _do_base_ensure_topic_term(string $name): ?TermInterface {
   $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
   $existing = $storage->loadByProperties([
     'vid' => 'civictheme_topics',
-    'name' => 'Blog',
+    'name' => $name,
   ]);
 
   if (!empty($existing)) {
@@ -833,7 +1033,7 @@ function _do_base_ensure_blog_term(): ?TermInterface {
     return NULL;
   }
 
-  $term = $storage->create(['vid' => 'civictheme_topics', 'name' => 'Blog']);
+  $term = $storage->create(['vid' => 'civictheme_topics', 'name' => $name]);
   $term->save();
 
   return $term;
