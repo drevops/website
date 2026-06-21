@@ -3,11 +3,11 @@
  * @file
  * Stat count-up behaviour.
  *
- * Animates each '.ct-stat-item__count' from zero to its 'data-target' value when
- * the stat grid scrolls into view, using an easeOut curve. Visitors who prefer
- * reduced motion, and anyone without IntersectionObserver, keep the final value
- * the template already renders. Each element is animated once and ignored on
- * subsequent attaches.
+ * Animates each '.ct-stat-item__count' from zero to its 'data-target' value
+ * when the stat grid scrolls into view, using an easeOut curve. Visitors who
+ * prefer reduced motion, and anyone without IntersectionObserver, keep the
+ * final value the template already renders. Each element is animated once and
+ * ignored on subsequent attaches.
  */
 function DrevOpsStatCounter() {
   const counters = document.querySelectorAll(
@@ -71,7 +71,8 @@ function DrevOpsStatCounter() {
       return;
     }
 
-    // Without motion or an observer, keep the final value the template rendered.
+    // Without motion or an observer, keep the final value the template
+    // already rendered.
     if (reduceMotion || target === 0 || !observer) {
       element.textContent = String(target);
 
