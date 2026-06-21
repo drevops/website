@@ -11,13 +11,13 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .component-reveal {
-    opacity: 0;
+    opacity: 0%;
     transform: translateY(40px);
     transition: opacity 0.9s ease, transform 0.9s ease;
   }
 
   .component-reveal.visible {
-    opacity: 1;
+    opacity: 100%;
     transform: translateY(0);
   }
 
