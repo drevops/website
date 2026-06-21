@@ -12,7 +12,7 @@
   <ul class="component-nav-links">
     {% for item in items %}
       <li class="component-nav-links__item">
-        {{ link(item.title, item.url, item.in_active_trail ? {class: ['component-nav-active'], 'aria-current': 'page'} : {}) }}
+        {{ link(item.title, item.url, item.in_active_trail ? {class: ['component-nav-active'], 'aria-current': 'location'} : {}) }}
       </li>
     {% endfor %}
   </ul>
