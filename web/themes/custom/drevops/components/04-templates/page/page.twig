@@ -137,7 +137,7 @@
   {% endblock %}
 
   {% block back_to_top_block %}
-    {# Custom: Use include() instead of {% include only %}. #}
-    {{ include('civictheme:back-to-top') }}
+    {# Custom: Use include() instead of {% include only %} and inherit the page theme. #}
+    {{ include('civictheme:back-to-top', { theme: theme|default('dark') }) }}
   {% endblock %}
 </div>
