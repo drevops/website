@@ -1,0 +1,10 @@
+uuid: 592829ad-f98f-47d5-969a-3edeeed56d00
+langcode: en
+status: true
+dependencies: {  }
+id: cta
+label: 'CTA band'
+icon_uuid: null
+icon_default: null
+description: 'A full-width closing call-to-action band with an oversized heading, a sub-line, action buttons and an email link.'
+behavior_plugins: {  }

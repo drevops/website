@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Theme implementation to display the CTA band paragraph.
+ *
+ * The shared Actions link field carries both buttons and an optional email
+ * link; the mailto: entry is rendered as the distinct email link, the rest as
+ * action buttons.
+ */
+#}
+{% set cta_actions = [] %}
+{% set cta_email = null %}
+{% for item in paragraph.field_link %}
+  {% set link_url = item.url ? item.url.toString() : '' %}
+  {% if link_url is not empty %}
+    {% if item.uri starts with 'mailto:' %}
+      {# Only the first email link is shown; the design carries a single address. #}
+      {% if cta_email is null %}
+        {% set cta_email = {
+          url: link_url,
+          label: item.title|default(item.uri|replace({'mailto:': ''})),
+        } %}
+      {% endif %}
+    {% else %}
+      {% set cta_actions = cta_actions|merge([{
+        url: link_url,
+        title: item.title,
+      }]) %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{{ include('drevops:cta-band', {
+  theme: paragraph.field_c_p_theme.value|default('dark'),
+  type: paragraph.field_c_p_type.value|default('display'),
+  heading: paragraph.field_title.value,
+  sub: paragraph.field_subtitle.value,
+  actions: cta_actions,
+  email: cta_email,
+  attributes: component_attributes,
+}) }}

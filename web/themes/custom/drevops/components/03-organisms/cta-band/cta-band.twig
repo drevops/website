@@ -1,0 +1,57 @@
+{#
+/**
+ * @file
+ * CTA Band component.
+ *
+ * Variables:
+ * - theme: [string] Theme variation: light, dark.
+ * - type: [string] Display variant.
+ * - heading: [string] Oversized heading; its last word is underlined.
+ * - sub: [string] Supporting line shown below the heading.
+ * - actions: [array] Up to three action links; the last renders as primary:
+ *   - url: [string] Action URL.
+ *   - title: [string] Action label.
+ * - email: [object] Distinct email link shown beneath the actions:
+ *   - url: [string] The mailto URL.
+ *   - label: [string] The email address shown as the link text.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ */
+#}
+
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set type_class = 'ct-cta--%s'|format(type|default('display')) %}
+{% set modifier_class = '%s %s %s'|format(theme_class, type_class, modifier_class|default(''))|trim %}
+
+{% set heading_words = heading|default('')|trim|split(' ')|filter(word => word is not empty) %}
+{% set last_word = heading_words|last %}
+{% set lead_words = heading_words|slice(0, heading_words|length - 1)|join(' ') %}
+
+{% if heading is not empty %}
+  <div class="ct-cta {{ modifier_class }}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="ct-cta__inner component-reveal">
+      <h2 class="ct-cta__title">
+        {%- if lead_words is not empty %}{{ lead_words }} {% endif -%}
+        <span class="ct-cta__underline">{{ last_word }}</span>
+      </h2>
+
+      {% if sub is not empty %}
+        <p class="ct-cta__sub">{{ sub }}</p>
+      {% endif %}
+
+      {% if actions is not empty %}
+        <div class="ct-cta__actions">
+          {% for action in actions %}
+            {% if action.url is not empty and action.title is not empty %}
+              <a href="{{ action.url }}" class="ct-cta__action ct-cta__action--{{ loop.last ? 'primary' : 'secondary' }}">{{ action.title }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if email.url is not empty and email.label is not empty %}
+        <a href="{{ email.url }}" class="ct-cta__email">{{ email.label }}</a>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

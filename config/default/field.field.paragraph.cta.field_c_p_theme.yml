@@ -1,0 +1,23 @@
+uuid: 99368b83-5916-4219-9389-e70fed93c38b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_theme
+    - paragraphs.paragraphs_type.cta
+  module:
+    - options
+id: paragraph.cta.field_c_p_theme
+field_name: field_c_p_theme
+entity_type: paragraph
+bundle: cta
+label: Theme
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: dark
+default_value_callback: ''
+settings: {  }
+field_type: list_string
