@@ -30,7 +30,7 @@
 {% set has_scroll = type == 'home' %}
 
 {% if type == 'article' %}
-  <header class="component-hero component-hero--article {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+  <header class="component-hero {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     {% if background_image.url is not empty %}
       <div class="component-hero__image">
         {{ include('civictheme:image', {

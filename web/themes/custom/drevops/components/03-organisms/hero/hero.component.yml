@@ -42,6 +42,7 @@ props:
       type: array
       title: Actions
       description: Up to two call-to-action links.
+      maxItems: 2
       items:
         type: object
         properties:
