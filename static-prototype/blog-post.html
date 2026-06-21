@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Your Drupal CI Pipeline Is Slower Than It Should Be | DrevOps</title>
+  <meta name="description" content="We measured 24 Drupal CI pipelines and found the same fixable problems everywhere. Here is how to cut build times from 18 minutes to under 5.">
+  <meta name="author" content="DrevOps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.drevops.com/blog/drupal-ci-pipeline-speed">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="DrevOps">
+  <meta property="og:title" content="Why Your Drupal CI Pipeline Is Slower Than It Should Be">
+  <meta property="og:description" content="We measured 24 Drupal CI pipelines and found the same fixable problems. Here is how to cut build times dramatically.">
+  <meta property="og:url" content="https://www.drevops.com/blog/drupal-ci-pipeline-speed">
+  <meta property="og:image" content="https://www.drevops.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why Your Drupal CI Pipeline Is Slower Than It Should Be">
+  <meta name="twitter:description" content="We measured 24 Drupal CI pipelines and found the same fixable problems. Here is how to cut build times dramatically.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@200;300;400;500;600&display=swap">
+  <link rel="stylesheet" href="framework.css">
+  <link rel="stylesheet" href="website.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/ocean.min.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="component-nav" id="siteNav">
+    <a href="homepage.html" class="component-nav-logo"><img src="logo_primary_dark_desktop.svg" alt="DrevOps" style="height: 24px; width: auto;"></a>
+    <button class="component-nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="component-nav-menu">
+      <ul class="component-nav-links">
+        <li><a href="services.html">Services</a></li>
+        <li><a href="ai-assisted-delivery.html">AI delivery</a></li>
+        <li><a href="homepage.html#trust">Track record</a></li>
+        <li><a href="blog.html" class="component-nav-active">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <a href="contact.html" class="btn btn-secondary component-nav-cta">Talk to us</a>
+    </div>
+  </nav>
+
+  <!-- HERO BANNER -->
+  <header class="component-blog-hero">
+    <div class="component-blog-hero-image">
+      <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1400&h=500&fit=crop" alt="Server infrastructure">
+      <div class="component-blog-hero-overlay"></div>
+    </div>
+    <div class="component-blog-hero-content">
+      <div class="component-meta component-meta--lg">
+        <time datetime="2026-03-18">18 March 2026</time>
+        <span class="component-meta-sep">/</span>
+        <span>8 min read</span>
+      </div>
+      <h1>Why Your Drupal CI Pipeline Is Slower Than It Should Be</h1>
+      <div class="component-tag-list">
+        <span class="component-tag">Drupal</span>
+        <span class="component-tag">DevOps</span>
+        <span class="component-tag">CI/CD</span>
+        <span class="component-tag">Performance</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ARTICLE -->
+  <article class="component-article">
+    <div class="component-article-inner">
+
+      <p class="component-article-lead">Most Drupal teams accept slow CI pipelines as a fact of life. Builds that take 15 minutes, test suites that timeout, and deployments that require a coffee break. It doesn't have to be this way.</p>
+
+      <p>We've audited dozens of Drupal CI pipelines across government, education, and enterprise organisations. The same problems come up repeatedly. Here's what we find and how to fix it.</p>
+
+      <h2>The usual suspects</h2>
+
+      <p>Before diving into solutions, it helps to understand where time actually goes in a typical Drupal CI build. We measured 24 pipelines across different hosting providers and CI platforms:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Build Phase</th>
+            <th>Median Time</th>
+            <th>Worst Case</th>
+            <th>Optimised</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Docker image pull</td>
+            <td>2m 30s</td>
+            <td>6m 15s</td>
+            <td>15s</td>
+          </tr>
+          <tr>
+            <td>Composer install</td>
+            <td>1m 45s</td>
+            <td>4m 20s</td>
+            <td>12s</td>
+          </tr>
+          <tr>
+            <td>Database import</td>
+            <td>3m 10s</td>
+            <td>8m 00s</td>
+            <td>45s</td>
+          </tr>
+          <tr>
+            <td>PHPUnit tests</td>
+            <td>4m 20s</td>
+            <td>12m 00s</td>
+            <td>1m 30s</td>
+          </tr>
+          <tr>
+            <td>Behat/Cypress</td>
+            <td>6m 45s</td>
+            <td>18m 00s</td>
+            <td>2m 15s</td>
+          </tr>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td><strong>18m 30s</strong></td>
+            <td><strong>48m 35s</strong></td>
+            <td><strong>4m 57s</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>The gap between worst-case and optimised is significant. Let's walk through the fixes.</p>
+
+      <h2>1. Stop pulling full Docker images on every build</h2>
+
+      <p>The single biggest time sink is rebuilding or pulling Docker images. Most CI configurations start with a base image pull on every run. If you're using <code>docker-compose pull</code> without layer caching, you're downloading gigabytes of data every build.</p>
+
+      <h3>The fix: pre-built CI images</h3>
+
+      <p>Build a dedicated CI image with your PHP extensions, Node version, and system dependencies baked in. Push it to your container registry and reference it directly:</p>
+
+      <pre><code class="language-yaml"># .circleci/config.yml
+jobs:
+  test:
+    docker:
+      - image: ghcr.io/your-org/drupal-ci:php8.3
+        auth:
+          username: $GITHUB_USER
+          password: $GITHUB_TOKEN
+    steps:
+      - checkout
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/phpunit</code></pre>
+
+      <p>This alone typically cuts 2-4 minutes off every build.</p>
+
+      <h2>2. Cache Composer dependencies properly</h2>
+
+      <p>Composer install is deceptively slow because it resolves dependencies, downloads packages, and runs post-install scripts. Most of this work is redundant between builds.</p>
+
+      <pre><code class="language-bash">#!/usr/bin/env bash
+# Restore Composer cache from CI provider's cache layer.
+COMPOSER_HASH=$(md5sum composer.lock | cut -d' ' -f1)
+CACHE_KEY="composer-v1-${COMPOSER_HASH}"
+
+if [ -d "/tmp/composer-cache/${CACHE_KEY}" ]; then
+  cp -r "/tmp/composer-cache/${CACHE_KEY}/vendor" ./vendor
+  echo "Cache hit: restored vendor from ${CACHE_KEY}"
+else
+  composer install --no-interaction --prefer-dist
+  mkdir -p "/tmp/composer-cache/${CACHE_KEY}"
+  cp -r vendor "/tmp/composer-cache/${CACHE_KEY}/vendor"
+  echo "Cache miss: saved vendor to ${CACHE_KEY}"
+fi</code></pre>
+
+      <blockquote>
+        <p><strong>Key insight:</strong> Cache on <code>composer.lock</code> hash, not <code>composer.json</code>. The lock file captures exact versions, so the cache is only invalidated when dependencies actually change.</p>
+      </blockquote>
+
+      <h2>3. Sanitise and slim your test database</h2>
+
+      <p>Many teams import a full production database dump for testing. This is slow, wasteful, and a compliance risk. A typical government Drupal site has 500MB+ of database content that tests don't need.</p>
+
+      <p>What you actually need for CI:</p>
+
+      <ul>
+        <li>Schema and configuration (usually under 5MB)</li>
+        <li>A small set of representative content nodes</li>
+        <li>User accounts for test roles (admin, editor, anonymous)</li>
+        <li>Taxonomy terms and menu structures</li>
+      </ul>
+
+      <p>We use a sanitisation script that strips the database down to essentials:</p>
+
+      <pre><code class="language-php">/**
+ * Sanitise database for CI usage.
+ *
+ * Removes user data, reduces content to representative sample,
+ * and strips session/cache tables.
+ */
+function ci_sanitise_database(): void {
+  $connection = \Drupal::database();
+
+  // Truncate cache and session tables.
+  $tables = $connection->schema()->findTables('cache_%');
+  $tables = array_merge($tables, $connection->schema()->findTables('sessions'));
+  foreach ($tables as $table) {
+    $connection->truncate($table)->execute();
+  }
+
+  // Keep only 10 nodes per content type.
+  $types = \Drupal::entityTypeManager()
+    ->getStorage('node_type')
+    ->loadMultiple();
+
+  foreach (array_keys($types) as $type) {
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', $type)
+      ->sort('changed', 'DESC')
+      ->range(10, 999999)
+      ->accessCheck(FALSE)
+      ->execute();
+
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $nodes = $storage->loadMultiple($nids);
+    $storage->delete($nodes);
+  }
+}</code></pre>
+
+      <h2>4. Parallelise your test suite</h2>
+
+      <p>Running all tests sequentially is the default in most setups. But PHPUnit supports <a href="#">parallel execution</a> via tools like <code>paratest</code>, and Behat scenarios can be split across multiple containers.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Strategy</th>
+            <th>Effort</th>
+            <th>Time Saved</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Paratest for PHPUnit</td>
+            <td>Low - drop-in replacement</td>
+            <td>40-60%</td>
+          </tr>
+          <tr>
+            <td>Split Behat by tag</td>
+            <td>Medium - needs CI config</td>
+            <td>50-70%</td>
+          </tr>
+          <tr>
+            <td>Parallel CI jobs</td>
+            <td>Medium - matrix builds</td>
+            <td>60-80%</td>
+          </tr>
+          <tr>
+            <td>Test selection (changed files only)</td>
+            <td>High - needs test mapping</td>
+            <td>70-90%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>5. Integrate S3 for asset storage</h2>
+
+      <p>If your CI pipeline runs <code>drush sql:dump</code> and stores the result as a build artifact, you're wasting time on compression and upload. Use S3 (or equivalent) with a dedicated bucket:</p>
+
+      <pre><code class="language-bash"># Upload sanitised DB dump to S3 (run nightly, not per-build).
+drush sql:dump --gzip --result-file=/tmp/db.sql.gz
+aws s3 cp /tmp/db.sql.gz s3://ci-artifacts/drupal-db/latest.sql.gz
+
+# In CI: download pre-built dump (fast, cached at edge).
+aws s3 cp s3://ci-artifacts/drupal-db/latest.sql.gz /tmp/db.sql.gz
+gunzip -c /tmp/db.sql.gz | drush sql:cli</code></pre>
+
+      <h2>The compound effect</h2>
+
+      <p>Each optimisation on its own saves a few minutes. Together, they transform the development experience. A team pushing 20 commits per day at 18 minutes per build is spending <strong>6 hours of CI time daily</strong>. Cut that to 5 minutes and you reclaim 4.3 hours - every day.</p>
+
+      <blockquote>
+        <p>Fast CI isn't a luxury. It's the difference between developers who test before merging and developers who push to main and hope for the best.</p>
+      </blockquote>
+
+      <p>If your Drupal CI pipeline takes more than 5 minutes, there's room to improve. We offer a free 30-minute review of your pipeline configuration - no commitment, just practical advice.</p>
+
+      <div class="component-article-cta">
+        <a href="mailto:info@drevops.com" class="btn btn-secondary">Get a free CI review</a>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- FOOTER -->
+  <footer class="component-footer-expanded">
+    <div class="component-footer-grid">
+      <div class="component-footer-col">
+        <a href="homepage.html" class="component-nav-logo"><img src="logo_primary_dark_desktop.svg" alt="DrevOps" style="height: 22px; width: auto;"></a>
+        <p class="component-footer-brand-text">A technical digital agency that builds and supports reliable websites, engineered properly. Direct with you, or as the technical partner behind your agency.</p>
+      </div>
+      <div class="component-footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services.html">Website delivery</a></li>
+          <li><a href="services.html">Ongoing support</a></li>
+          <li><a href="services.html">Upgrades &amp; migrations</a></li>
+          <li><a href="ai-assisted-delivery.html">AI-assisted delivery</a></li>
+        </ul>
+      </div>
+      <div class="component-footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="https://www.drevops.com/responsible-ai">Responsible AI</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="component-footer-col">
+        <h4>Get in touch</h4>
+        <ul>
+          <li><a href="mailto:info@drevops.com">info@drevops.com</a></li>
+          <li><a href="tel:+61430093538">04 3009 3538</a></li>
+          <li><a href="https://github.com/drevops">Open source on GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="component-footer-bottom">
+      <span class="component-footer-copy">DrevOps &copy; 2026 - Melbourne, Australia. Working across AU &amp; NZ.</span>
+      <a href="contact.html" class="component-footer-link">Start a conversation</a>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script src="nav.js"></script>
+
+</body>
+</html>

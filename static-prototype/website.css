@@ -1,0 +1,130 @@
+/*
+ * ============================================================
+ * DrevOps — Website Infrastructure
+ * ============================================================
+ *
+ * Site-wide infrastructure: reset, body, and grain overlay.
+ * All reusable patterns (nav, footer, section, reveal,
+ * animations) live in the component library.
+ *
+ * Load order:
+ *   1. variables.css   (tokens)
+ *   2. framework.css   (base elements)
+ *   3. components.css  (component-* component library)
+ *   4. website.css     (this file — site infrastructure)
+ *
+ * ============================================================
+ */
+
+/* ── Token overrides for website context ── */
+:root {
+  --display-1-font-size: clamp(56px, 8vw, 92px);
+  --display-2-font-size: clamp(40px, 5vw, 56px);
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--page-bg);
+  color: var(--text-color);
+  font-family: var(--font-family-secondary);
+  font-weight: var(--font-weight);
+  line-height: var(--line-height-lg);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Grain overlay ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  background-repeat: repeat;
+}
+
+/* ════════════════════════════════════════════════════════════
+   WEBSITE REDESIGN ADDITIONS (2026-06-17)
+   New shared components for the evergreen homepage frame,
+   the featured-campaign slot, the blog slot, testimonials,
+   the mobile nav, and the expanded footer.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Nav: header CTA + mobile menu ── */
+.component-nav-menu { display: flex; align-items: center; gap: var(--space-y-6); }
+.component-nav-cta { white-space: nowrap; }
+.component-nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 42px; height: 42px; padding: 9px; background: none; border: none; cursor: pointer; }
+.component-nav-toggle span { display: block; height: 2px; width: 100%; background: var(--text-color); border-radius: 2px; transition: transform .3s ease, opacity .3s ease; }
+.component-nav.is-open .component-nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.component-nav.is-open .component-nav-toggle span:nth-child(2) { opacity: 0; }
+.component-nav.is-open .component-nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .component-nav-toggle { display: flex; z-index: 1001; }
+  /* Drop the nav's backdrop-filter on mobile: it creates a containing block that would trap the full-screen menu inside the nav bar. */
+  .component-nav { backdrop-filter: none; -webkit-backdrop-filter: none; background: color-mix(in srgb, var(--page-bg) 92%, transparent); }
+  .component-nav-menu {
+    position: fixed; inset: 0; flex-direction: column; justify-content: center; gap: var(--space-y-5);
+    background: color-mix(in srgb, var(--page-bg) 97%, transparent);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    transform: translateX(100%); transition: transform .35s ease;
+  }
+  .component-nav.is-open .component-nav-menu { transform: translateX(0); }
+  .component-nav-links { display: flex; flex-direction: column; align-items: center; gap: var(--space-y-4); }
+  .component-nav-links a { font-size: var(--font-size-lg); }
+  .component-nav-cta { margin-top: var(--space-y-2); }
+}
+
+/* ── Audience band (who this is for) ── */
+.component-audience { background: var(--surface-subtle-color); padding: var(--layout-rhythm-md) 0; }
+.component-audience-inner { max-width: 840px; margin: 0 auto; text-align: center; }
+.component-audience-text { font-size: var(--heading-h4-font-size); font-weight: var(--body-font-weight); color: var(--text-subtle-color); line-height: var(--line-height-lg); margin-top: var(--space-y-4); }
+
+/* ── Featured campaign slot ── */
+.component-campaign { background: var(--page-bg); padding: var(--layout-rhythm-md) 0; position: relative; overflow: hidden; }
+.component-campaign::before { content: ''; position: absolute; top: -160px; left: -160px; width: 520px; height: 520px; background: radial-gradient(ellipse, color-mix(in srgb, var(--color-secondary-6) 12%, transparent) 0%, transparent 65%); pointer-events: none; }
+.component-campaign-card { max-width: 860px; margin: 0 auto; text-align: center; position: relative; z-index: 2; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-y-9) var(--space-x-7); background: var(--surface-subtle-color); }
+.component-campaign-title { font-family: var(--font-family-primary); font-size: var(--display-2-font-size); font-weight: var(--font-weight-normal); color: var(--text-color); letter-spacing: -0.02em; line-height: var(--line-height-xs); margin: var(--space-y-3) 0; }
+.component-campaign-text { font-size: var(--body-font-size); color: var(--text-subtle-color); line-height: var(--line-height-lg); max-width: 640px; margin: 0 auto var(--space-y-6); }
+.component-campaign-actions { display: flex; gap: var(--space-y-3); justify-content: center; align-items: center; flex-wrap: wrap; }
+
+/* ── Testimonials ── */
+.component-testimonials { background: var(--page-bg); padding: var(--layout-rhythm-md) 0; }
+.component-testimonial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-y-4); margin-top: var(--space-y-8); }
+.component-testimonial { border: 1px solid var(--border-subtle-color); border-radius: var(--radius-md); padding: var(--space-y-7); background: var(--surface-subtle-color); }
+.component-testimonial-quote { font-family: var(--font-family-primary); font-size: var(--heading-h4-font-size); font-weight: var(--body-font-weight); color: var(--text-color); line-height: var(--line-height-md); }
+.component-testimonial-attr { margin-top: var(--space-y-4); font-size: var(--font-size-sm); color: var(--text-muted-color); }
+@media (max-width: 768px) { .component-testimonial-grid { grid-template-columns: 1fr; } }
+
+/* ── Blog slot (homepage) header row ── */
+.component-section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-y-3); flex-wrap: wrap; margin-bottom: var(--space-y-7); }
+.component-section-head .component-section-label { margin-bottom: 0; }
+.component-section-link { font-size: var(--caption-font-size); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-secondary-6); text-decoration: none; }
+
+/* ── CTA section actions (buttons) ── */
+.component-cta-actions { display: flex; gap: var(--space-y-3); justify-content: center; align-items: center; flex-wrap: wrap; margin-top: var(--space-y-5); }
+
+/* ── Expanded footer ── */
+.component-footer-expanded { background: var(--color-primary-8); border-top: 1px solid color-mix(in srgb, var(--color-secondary-6) 20%, transparent); padding: var(--space-y-9) var(--space-x-8) var(--space-y-5); }
+.component-footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: var(--space-y-6); max-width: 1200px; margin: 0 auto var(--space-y-7); }
+.component-footer-brand-text { font-size: var(--font-size-sm); color: var(--text-muted-color); line-height: var(--line-height-lg); margin-top: var(--space-y-3); max-width: 340px; }
+.component-footer-col h4 { font-size: var(--label-font-size); letter-spacing: var(--label-letter-spacing); text-transform: uppercase; color: var(--text-subtle-color); margin-bottom: var(--space-y-3); font-weight: var(--font-weight-normal); }
+.component-footer-col ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-y-2); }
+.component-footer-col a { font-size: var(--font-size-sm); color: var(--text-muted-color); text-decoration: none; }
+.component-footer-col a:hover { color: var(--link-hover-color); background: none; }
+.component-footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: var(--space-y-4); border-top: 1px solid color-mix(in srgb, white 6%, transparent); display: flex; justify-content: space-between; align-items: center; gap: var(--space-y-2); }
+@media (max-width: 768px) { .component-footer-grid { grid-template-columns: 1fr 1fr; } .component-footer-bottom { flex-direction: column; text-align: center; } }
+
