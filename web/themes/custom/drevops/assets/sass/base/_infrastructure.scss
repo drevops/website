@@ -2,8 +2,16 @@
 // Site infrastructure styles.
 //
 // Site-wide presentation that sits outside any single component: the global
-// grain overlay and smooth in-page scrolling.
+// grain overlay, horizontal-overflow clipping and smooth in-page scrolling.
 //
+
+// Full-bleed sections (such as the hero) span the viewport width by breaking
+// out of the constrained content column. Clipping horizontal overflow on the
+// root keeps that viewport-wide width from adding a horizontal scrollbar while
+// leaving vertical scrolling untouched.
+html {
+  overflow-x: clip;
+}
 
 // Grain overlay.
 //
