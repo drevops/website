@@ -9,34 +9,123 @@
 //
 // stylelint-disable scss/dollar-variable-pattern
 
-// Example to override existing CivicTheme's palette color and define
-// custom colors, which will automatically appear in Storybook.
+// DrevOps brand palette, mirrored verbatim from the design tokens at the top of
+// static-prototype/framework.css. Eleven steps per family: step 1 is the
+// lightest, step 11 the darkest. The values are absolute, so the same map feeds
+// both CivicTheme schemes defined below.
+$drevops-palette: (
+  'primary-1': #eff6ff,
+  'primary-2': #c8d9f3,
+  'primary-3': #abbcd5,
+  'primary-4': #8fa0b8,
+  'primary-5': #75849c,
+  'primary-6': #5b6a80,
+  'primary-7': #425166,
+  'primary-8': #2b394d,
+  'primary-9': #152235,
+  'primary-10': #030d1e,
+  'primary-11': #000108,
+  'secondary-1': #e1fbff,
+  'secondary-2': #96e7f4,
+  'secondary-3': #79c9d7,
+  'secondary-4': #5cacba,
+  'secondary-5': #3f919d,
+  'secondary-6': #1e7582,
+  'secondary-7': #045a65,
+  'secondary-8': #044048,
+  'secondary-9': #00272d,
+  'secondary-10': #001013,
+  'secondary-11': #000202,
+  'tertiary-1': #fff2ef,
+  'tertiary-2': #ffc9bc,
+  'tertiary-3': #ff9c86,
+  'tertiary-4': #ed775e,
+  'tertiary-5': #cd5b43,
+  'tertiary-6': #ae3f28,
+  'tertiary-7': #902107,
+  'tertiary-8': #691301,
+  'tertiary-9': #430800,
+  'tertiary-10': #210200,
+  'tertiary-11': #050000,
+  'neutral-1': #fff,
+  'neutral-2': #f0f0f0,
+  'neutral-3': #d4d4d4,
+  'neutral-4': #b0b0b0,
+  'neutral-5': #8c8c8c,
+  'neutral-6': #6b6b6b,
+  'neutral-7': #4d4d4d,
+  'neutral-8': #333,
+  'neutral-9': #1f1f1f,
+  'neutral-10': #0f0f0f,
+  'neutral-11': #000,
+  'pass-1': #effbf1,
+  'pass-2': #d6f5dd,
+  'pass-3': #b5edc2,
+  'pass-4': #8ce3a0,
+  'pass-5': #63da7e,
+  'pass-6': #3ad05c,
+  'pass-7': #29ad47,
+  'pass-8': #208436,
+  'pass-9': #165b25,
+  'pass-10': #0e3a18,
+  'pass-11': #08210e,
+  'fail-1': #fceeef,
+  'fail-2': #f7d4d7,
+  'fail-3': #f1b1b7,
+  'fail-4': #ea858f,
+  'fail-5': #e25a67,
+  'fail-6': #db2e3f,
+  'fail-7': #b7202e,
+  'fail-8': #8b1823,
+  'fail-9': #601118,
+  'fail-10': #3d0b0f,
+  'fail-11': #230609,
+  'warn-1': #fffaeb,
+  'warn-2': #fff2cc,
+  'warn-3': #ffe8a3,
+  'warn-4': #ffdb70,
+  'warn-5': #ffcf3d,
+  'warn-6': #ffc20a,
+  'warn-7': #d6a100,
+  'warn-8': #a37a00,
+  'warn-9': #705400,
+  'warn-10': #473600,
+  'warn-11': #291f00,
+  'info-1': #f1f8f9,
+  'info-2': #dcedef,
+  'info-3': #bfdee3,
+  'info-4': #9cccd3,
+  'info-5': #78b9c4,
+  'info-6': #55a7b4,
+  'info-7': #418995,
+  'info-8': #326971,
+  'info-9': #22484e,
+  'info-10': #162e32,
+  'info-11': #0c1a1c,
+);
 
+// Brand anchors drive CivicTheme's derived semantic palette: brand1 the teal
+// interaction colour, brand2 the navy canvas, brand3 the coral accent. The
+// 'light' and 'dark' schemes are given identical anchors so every component
+// renders the dark brand regardless of the scheme it requests.
 $ct-colors-brands: (
   'light': (
-    'brand1': #00698f,
-    'brand2': #e6e9eb,
-    'brand3': #121313,
+    'brand1': #96e7f4,
+    'brand2': #152235,
+    'brand3': #ff9c86,
   ),
   'dark': (
-    'brand1': #61daff,
-    'brand2': #003a4f,
-    'brand3': #00698f,
+    'brand1': #96e7f4,
+    'brand2': #152235,
+    'brand3': #ff9c86,
   )
 );
 
-// Example to override existing CivicTheme's palette color variants.
+// Expose the full step palette as named colours in both schemes so components
+// and Storybook can reference any step.
 $ct-colors: (
-  // Override palette color variant.
-  'light': (
-    'success': green,
-    'custom1': brown,
-  ),
-  'dark': (
-    'custom1': red,
-    'custom2': orange,
-    'custom3': blue,
-  ),
+  'light': $drevops-palette,
+  'dark': $drevops-palette,
 );
 
 // Display and headings use Plus Jakarta Sans (primary); body text uses Outfit

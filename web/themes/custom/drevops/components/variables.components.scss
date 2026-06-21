@@ -66,9 +66,13 @@ $ct-icon-sizes: (
   ),
 );
 
-// Example to override component's variable - Back to Top should have a
-// 'custom1' colour background.
-$ct-back-to-top-light-background-color: ct-color-light('custom1');
+//
+// Page.
+//
+// The canvas uses the base background (the deepest navy) so that raised
+// surfaces, which use the lighter background steps, sit above it.
+$ct-page-light-background-color: ct-color-light('background');
+$ct-page-dark-background-color: ct-color-dark('background');
 
 //
 // Banner.
