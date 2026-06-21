@@ -1,0 +1,23 @@
+uuid: 53ded269-1ebc-435c-bae3-87da703d896f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_theme
+    - paragraphs.paragraphs_type.contact_detail
+  module:
+    - options
+id: paragraph.contact_detail.field_c_p_theme
+field_name: field_c_p_theme
+entity_type: paragraph
+bundle: contact_detail
+label: Theme
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: dark
+default_value_callback: ''
+settings: {  }
+field_type: list_string

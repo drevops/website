@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Theme implementation to display the Contact detail component.
+ */
+#}
+{{ include('drevops:contact-detail', {
+  theme: theme,
+  label: label,
+  value: value,
+  note: note,
+  attributes: component_attributes,
+}, with_context: false) }}

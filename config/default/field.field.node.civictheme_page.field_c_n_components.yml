@@ -20,6 +20,7 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_promo
     - paragraphs.paragraphs_type.civictheme_slider
     - paragraphs.paragraphs_type.civictheme_webform
+    - paragraphs.paragraphs_type.contact_detail
     - paragraphs.paragraphs_type.divider
     - paragraphs.paragraphs_type.from_library
     - paragraphs.paragraphs_type.hero
@@ -63,6 +64,7 @@ settings:
       campaign: campaign
       service_detail: service_detail
       stat: stat
+      contact_detail: contact_detail
     negate: 0
     target_bundles_drag_drop:
       campaign:
@@ -157,6 +159,9 @@ settings:
         enabled: false
       civictheme_webform:
         weight: -46
+        enabled: true
+      contact_detail:
+        weight: 61
         enabled: true
       divider:
         weight: 60

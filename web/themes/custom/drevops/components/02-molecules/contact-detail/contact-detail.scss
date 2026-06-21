@@ -1,0 +1,77 @@
+//
+// Contact detail component styles.
+//
+// Ported from static-prototype (contact, the direct-contact column). Brand
+// colours are read from the dark palette as flat values so the contact detail
+// renders the same dark treatment whichever theme it requests, matching the
+// rest of the redesign. Email values carry an animated underline; phone values
+// are plain tel links; non-actionable values render as static text.
+//
+
+$_contact-detail-text: ct-color-constant-dark('neutral-1');
+$_contact-detail-muted: ct-color-constant-dark('primary-3');
+$_contact-detail-accent: ct-color-constant-dark('tertiary-3');
+$_contact-detail-teal: ct-color-constant-dark('secondary-6');
+
+.component-contact-detail {
+  $root: &;
+
+  & {
+    margin-bottom: ct-particle(5);
+  }
+
+  #{$root}__label {
+    margin: 0 0 ct-particle(1);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $_contact-detail-accent;
+  }
+
+  #{$root}__value {
+    display: block;
+    margin: 0 0 ct-particle(1);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: $_contact-detail-text;
+    text-decoration: none;
+  }
+
+  a#{$root}__value {
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $_contact-detail-teal;
+      text-decoration: none;
+    }
+  }
+
+  #{$root}__value--email {
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: $_contact-detail-teal;
+      transition: width 0.4s ease;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  #{$root}__note {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 200;
+    line-height: 1.5;
+    color: $_contact-detail-muted;
+  }
+}
