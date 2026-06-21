@@ -44,7 +44,10 @@ function _drevops_preprocess_paragraph__contact_detail_field__value(array &$vari
     }
     elseif (preg_match('/^\+?[0-9 ()-]{6,}$/', $text)) {
       $digits = preg_replace('/[^0-9]/', '', $text);
-      $value['url'] = 'tel:' . (str_starts_with($text, '+') ? '+' : '') . $digits;
+
+      if ($digits !== '') {
+        $value['url'] = 'tel:' . (str_starts_with($text, '+') ? '+' : '') . $digits;
+      }
     }
   }
 
