@@ -46,10 +46,12 @@ Feature: Page content metatags
     And the response should contain "/themes/custom/drevops/dist/assets/images/og-image.png\" />"
 
   @api
-  Scenario: Content editor can override metatags on a page
+  Scenario: Content editor can access the metatags override fields on a page
     Given I am logged in as a user with the "civictheme_content_author" role
     And the following civictheme_page content:
       | title                  | status |
       | Test Metatags Override | 1      |
     When I visit the "civictheme_page" content edit page with the title "Test Metatags Override"
     Then I should see "Metatags"
+    And I should see "Open Graph"
+    And I should see "Twitter Cards"
