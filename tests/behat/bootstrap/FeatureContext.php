@@ -156,6 +156,34 @@ class FeatureContext extends DrupalContext {
   }
 
   /**
+   * Assert the homepage reflows on a phone viewport without horizontal scrolling.
+   *
+   * Full-bleed sections such as the hero intentionally span the whole viewport
+   * width (including the strip under the vertical scrollbar), and the root
+   * clips that overflow so it never becomes a scrollbar. The content is
+   * therefore allowed to extend past the client width by the scrollbar width,
+   * but anything beyond that is a real layout overflow on small screens.
+   */
+  #[\Behat\Step\Then('the homepage reflows without horizontal scrolling on a phone')]
+  public function assertHomepageNoHorizontalScrollingOnPhone(): void {
+    $session = $this->getSession();
+
+    $session->resizeWindow(390, 844, 'current');
+    $session->executeScript('Drupal.attachBehaviors(document);');
+
+    $scroll_width = (int) $session->evaluateScript('return document.documentElement.scrollWidth;');
+    $client_width = (int) $session->evaluateScript('return document.documentElement.clientWidth;');
+    $viewport_width = (int) $session->evaluateScript('return window.innerWidth;');
+
+    $overflow = $scroll_width - $client_width;
+    $scrollbar = $viewport_width - $client_width;
+
+    if ($overflow > $scrollbar + 1) {
+      throw new \Exception(sprintf('The homepage overflows horizontally by %dpx beyond the full-bleed allowance on a 390px phone viewport.', $overflow - $scrollbar));
+    }
+  }
+
+  /**
    * Assert the rendered mobile menu opens, locks scrolling and closes on link.
    */
   #[\Behat\Step\Then('the site mobile menu opens, locks scrolling and closes on link activation')]
