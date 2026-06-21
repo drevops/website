@@ -6,3 +6,5 @@ id: node__civictheme_page
 label: 'Content: Page'
 tags:
   description: '[node:field_c_n_summary:value]'
+  og_description: '[node:field_c_n_summary:value]'
+  twitter_cards_description: '[node:field_c_n_summary:value]'
