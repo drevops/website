@@ -930,7 +930,7 @@ function do_base_deploy_blog_sample_post(): string {
   ]);
   $cta->save();
 
-  $created = (new \DateTimeImmutable('2026-03-18 09:00:00'))->getTimestamp();
+  $created = new \DateTimeImmutable('2026-03-18 09:00:00')->getTimestamp();
 
   $node = Node::create([
     'type' => 'civictheme_page',

@@ -18,7 +18,7 @@
 {% endset %}
 
 {% set tags_slot %}
-  {% if has_tags %}{% include 'civictheme:tag-list' with { theme: theme, tags: article_tags } only %}{% endif %}
+  {% if has_tags %}{% include 'civictheme:tag-list' with {theme: theme, tags: article_tags} only %}{% endif %}
 {% endset %}
 
 {{ include('drevops:hero', {
