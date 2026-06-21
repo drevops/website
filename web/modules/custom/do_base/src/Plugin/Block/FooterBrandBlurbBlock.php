@@ -6,6 +6,7 @@ namespace Drupal\do_base\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
@@ -26,6 +27,8 @@ final class FooterBrandBlurbBlock extends BlockBase {
       '#type' => 'html_tag',
       '#tag' => 'p',
       '#value' => $this->t('A technical digital agency that builds and supports reliable websites, engineered properly. Direct with you, or as the technical partner behind your agency.'),
+      // Static brand copy: cache permanently.
+      '#cache' => ['max-age' => Cache::PERMANENT],
     ];
   }
 
