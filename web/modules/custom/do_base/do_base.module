@@ -83,7 +83,7 @@ function do_base_block_access(BlockInterface $block, string $operation, AccountI
 }
 
 /**
- * Check whether a node's first component is a hero paragraph.
+ * Checks whether a node's first layout component is a hero paragraph.
  */
 function _do_base_node_leads_with_hero(NodeInterface $node): bool {
   if (!$node->hasField('field_c_n_components')) {
