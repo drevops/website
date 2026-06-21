@@ -7,7 +7,7 @@
  * are assembled from the parent post in the paragraph preprocess.
  */
 #}
-{% set has_date = article_date is defined and article_date is not empty %}
+{% set has_date = article_date is defined and article_date is not empty and article_date_iso is defined and article_date_iso is not empty %}
 {% set has_read_time = read_time is defined and read_time is not empty %}
 {% set has_tags = article_tags is defined and article_tags is not empty %}
 

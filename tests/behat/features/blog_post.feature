@@ -6,9 +6,11 @@ Feature: Blog post assembly
   So that I can read DrevOps articles in context
 
   Background:
+    # The "Blog" topic is provisioned by a deploy hook and shared across the
+    # listing tests, so it is referenced rather than created here to avoid its
+    # teardown removing the seeded term.
     Given the following "civictheme_topics" terms:
       | name           |
-      | Blog           |
       | [TEST] Topic A |
       | [TEST] Topic B |
 
@@ -59,6 +61,7 @@ Feature: Blog post assembly
     And I should see an "article .component-hero__tags .ct-tag" element
     And I should see "[TEST] Topic A"
     And I should see "[TEST] Topic B"
+    And I should not see "Blog" in the "article .component-hero__tags" element
 
   @api
   Scenario: The article body and the closing call to action render in the dark scheme

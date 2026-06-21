@@ -90,7 +90,7 @@ function _do_base_node_leads_with_hero(NodeInterface $node): bool {
     return FALSE;
   }
 
-  $first = $node->get('field_c_n_components')->referencedEntities()[0] ?? NULL;
+  $first = $node->get('field_c_n_components')->first()?->entity;
 
   return $first instanceof ParagraphInterface && $first->bundle() === 'hero';
 }
