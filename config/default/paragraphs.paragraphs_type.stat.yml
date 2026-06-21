@@ -1,0 +1,10 @@
+uuid: bd7828b7-4260-49ea-a9dd-7ee7c2919efa
+langcode: en
+status: true
+dependencies: {  }
+id: stat
+label: 'Stat grid'
+icon_uuid: null
+icon_default: null
+description: 'A grid of statistics that count up when scrolled into view.'
+behavior_plugins: {  }

@@ -158,6 +158,29 @@ class FeatureContext extends DrupalContext {
   }
 
   /**
+   * Assert that every stat counter animates up to its target value.
+   */
+  #[\Behat\Step\Then('the stat counters reach their target values')]
+  public function assertStatCountersReachTargets(): void {
+    $session = $this->getSession();
+
+    $script = "(function () {"
+      . " var counters = document.querySelectorAll('.ct-stat-item__count[data-target]');"
+      . " if (!counters.length) { return false; }"
+      . " for (var i = 0; i < counters.length; i++) {"
+      . " if (counters[i].textContent.trim() !== counters[i].getAttribute('data-target')) { return false; }"
+      . " }"
+      . " return true;"
+      . " })()";
+
+    $reached = $session->wait(5000, $script);
+
+    if (!$reached) {
+      throw new \Exception('The stat counters did not reach their target values.');
+    }
+  }
+
+  /**
    * Asserts that an element's computed CSS property resolves to a colour.
    *
    * Works for colour properties (returned by the browser as rgb/rgba) and for

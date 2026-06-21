@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Stat item component.
+ *
+ * Props:
+ * - value: [string] The target number the statistic counts up to.
+ * - suffix: [string] Short text shown beside the value (for example %, +, yrs).
+ * - label: [string] Caption describing the statistic.
+ * - theme: [string] Theme variation (light or dark).
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ *
+ * The count starts rendered at its final value so it is correct without
+ * JavaScript and for reduced-motion visitors; stat-counter.js resets it to zero
+ * and animates up only when motion is allowed.
+ #}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s component-reveal %s'|format(theme_class, modifier_class|default('')) %}
+
+<div class="ct-stat-item {{ modifier_class -}}" {% if attributes %}{{ attributes }}{% endif %}>
+  <div class="ct-stat-item__number">
+    <span class="ct-stat-item__count" data-target="{{ value }}">{{ value }}</span>
+    {%- if suffix is not empty %}<span class="ct-stat-item__suffix">{{ suffix }}</span>{% endif -%}
+  </div>
+  {% if label is not empty %}
+    <p class="ct-stat-item__label">{{ label }}</p>
+  {% endif %}
+</div>

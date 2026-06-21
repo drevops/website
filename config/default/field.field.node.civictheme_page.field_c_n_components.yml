@@ -24,6 +24,7 @@ dependencies:
     - paragraphs.paragraphs_type.from_library
     - paragraphs.paragraphs_type.hero
     - paragraphs.paragraphs_type.service_detail
+    - paragraphs.paragraphs_type.stat
   module:
     - entity_reference_revisions
 _core:
@@ -61,6 +62,7 @@ settings:
       hero: hero
       campaign: campaign
       service_detail: service_detail
+      stat: stat
     negate: 0
     target_bundles_drag_drop:
       campaign:
@@ -167,5 +169,8 @@ settings:
         enabled: true
       service_detail:
         weight: -49
+        enabled: true
+      stat:
+        weight: 61
         enabled: true
 field_type: entity_reference_revisions

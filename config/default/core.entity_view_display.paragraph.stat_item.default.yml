@@ -1,0 +1,19 @@
+uuid: be0936f1-c395-4377-90c2-747da9115e78
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.stat_item.field_stat_label
+    - field.field.paragraph.stat_item.field_stat_suffix
+    - field.field.paragraph.stat_item.field_stat_value
+    - paragraphs.paragraphs_type.stat_item
+id: paragraph.stat_item.default
+targetEntityType: paragraph
+bundle: stat_item
+mode: default
+content: {  }
+hidden:
+  field_stat_label: true
+  field_stat_suffix: true
+  field_stat_value: true
+  search_api_excerpt: true

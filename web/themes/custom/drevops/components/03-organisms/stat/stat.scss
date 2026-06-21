@@ -1,0 +1,107 @@
+//
+// Stat grid component.
+//
+// Ports the redesign stats section from static-prototype/ (the `components/stat.css`
+// block and the `#stats` markup). Colours map to the CivicTheme dark palette via
+// ct-color-constant-dark so the values are baked at build time; spacing mirrors the
+// prototype's `--space-*` scale, which is not exposed as theme tokens.
+//
+
+// The hairline that frames the grid and divides its cells.
+$ct-stat-border: 0.0625rem solid color-mix(in srgb, #{ct-color-constant-dark('secondary-6')} 18%, transparent);
+
+.ct-stat {
+  position: relative;
+  overflow: hidden;
+  padding: 8.75rem 0;
+  background-color: color-mix(in srgb, white 6%, #{ct-color-constant-dark('primary-9')});
+
+  // Soft brand glow anchored off the bottom-right corner.
+  &::before {
+    content: '';
+    position: absolute;
+    right: -12.5rem;
+    bottom: -12.5rem;
+    width: 37.5rem;
+    height: 37.5rem;
+    background: radial-gradient(ellipse, color-mix(in srgb, #{ct-color-constant-dark('secondary-6')} 7%, transparent) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 75rem;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+
+  &__subtitle {
+    margin: 0 0 3rem;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: ct-color-constant-dark('primary-3');
+  }
+
+  // A 2x2 grid framed by a hairline, with interior dividers drawn on the first
+  // three cells (right border on the left column, bottom border on the top row).
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: $ct-stat-border;
+  }
+
+  &__grid .ct-stat-item {
+    &:nth-child(1) {
+      border-right: $ct-stat-border;
+      border-bottom: $ct-stat-border;
+    }
+
+    &:nth-child(2) {
+      border-bottom: $ct-stat-border;
+    }
+
+    &:nth-child(3) {
+      border-right: $ct-stat-border;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &__grid .ct-stat-item {
+      &:nth-child(2) {
+        transition-delay: 0.1s;
+      }
+
+      &:nth-child(3) {
+        transition-delay: 0.2s;
+      }
+
+      &:nth-child(4) {
+        transition-delay: 0.3s;
+      }
+    }
+  }
+
+  @media (max-width: 48rem) {
+    padding: 6.25rem 0;
+
+    &__inner {
+      padding: 0 1.5rem;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__grid .ct-stat-item {
+      &:nth-child(1),
+      &:nth-child(2),
+      &:nth-child(3) {
+        border-right: none;
+        border-bottom: $ct-stat-border;
+      }
+    }
+  }
+}

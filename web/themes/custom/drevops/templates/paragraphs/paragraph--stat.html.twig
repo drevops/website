@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Theme implementation to display the Stat grid component.
+ *
+ * Rendered through the SDC component id so Drupal attaches the component's
+ * library (stat.css and the shared count-up behaviour) when it is placed.
+ */
+#}
+{{ include('drevops:stat', {
+  theme: theme,
+  subtitle: subtitle,
+  items: content.field_items,
+  attributes: component_attributes,
+}, with_context: false) }}
