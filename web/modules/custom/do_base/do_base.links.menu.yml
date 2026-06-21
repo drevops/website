@@ -9,53 +9,39 @@ do_base.admin_config_site:
 do_base.footer_services.website_delivery:
   title: 'Website delivery'
   menu_name: footer-services
-  route_name: entity.node.canonical
-  route_parameters:
-    node: 5
+  url: 'internal:/services'
   weight: 0
 do_base.footer_services.ongoing_support:
   title: 'Ongoing support'
   menu_name: footer-services
-  route_name: entity.node.canonical
-  route_parameters:
-    node: 18
+  url: 'internal:/services/support-plans'
   weight: 1
 do_base.footer_services.upgrades_migrations:
   title: 'Upgrades & migrations'
   menu_name: footer-services
-  route_name: entity.node.canonical
-  route_parameters:
-    node: 26
+  url: 'internal:/services/migrations'
   weight: 2
 do_base.footer_services.ai_assisted_delivery:
   title: 'AI-assisted delivery'
   menu_name: footer-services
-  route_name: entity.node.canonical
-  route_parameters:
-    node: 38
+  url: 'internal:/ai-integration-automation'
   weight: 3
 
 # Footer: Company.
 do_base.footer_company.blog:
   title: 'Blog'
   menu_name: footer-company
-  route_name: entity.node.canonical
-  route_parameters:
-    node: 3
+  url: 'internal:/blog'
   weight: 0
 do_base.footer_company.responsible_ai:
   title: 'Responsible AI'
   menu_name: footer-company
-  route_name: entity.node.canonical
-  route_parameters:
-    node: 37
+  url: 'internal:/responsible-ai'
   weight: 1
 do_base.footer_company.contact:
   title: 'Contact'
   menu_name: footer-company
-  route_name: entity.node.canonical
-  route_parameters:
-    node: 8
+  url: 'internal:/contact'
   weight: 2
 
 # Footer: Get in touch.
@@ -75,11 +61,9 @@ do_base.footer_contact.github:
   url: 'https://github.com/drevops'
   weight: 2
 
-# Footer: Call to action.
+# Footer: Call to action. Shares the contact page with the Company > Contact link.
 do_base.footer_cta.start_conversation:
   title: 'Start a conversation'
   menu_name: footer-cta
-  route_name: entity.node.canonical
-  route_parameters:
-    node: 8
+  url: 'internal:/contact'
   weight: 0
