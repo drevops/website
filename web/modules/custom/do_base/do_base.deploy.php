@@ -24,7 +24,14 @@ function do_base_deploy_civictheme_colors(): string {
   // updates the stored palette but leaves the previous stylesheet on disk, so
   // purging it forces a rebuild from the imported configuration on the next
   // request - keeping the rendered colours in sync with the committed config.
-  \Drupal::classResolver(CivicthemeColorManager::class)->invalidateCache();
+  // A failed purge must not abort the deployment, so the error is reported
+  // rather than thrown.
+  try {
+    \Drupal::classResolver(CivicthemeColorManager::class)->invalidateCache();
+  }
+  catch (\Throwable $exception) {
+    return 'Failed to purge CivicTheme generated colour stylesheets: ' . $exception->getMessage();
+  }
 
   return 'Purged CivicTheme generated colour stylesheets for rebuild from configuration.';
 }

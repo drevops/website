@@ -11,8 +11,8 @@
 
 // DrevOps brand palette, mirrored verbatim from the design tokens at the top of
 // static-prototype/framework.css. Eleven steps per family: step 1 is the
-// lightest, step 11 the darkest. Values are absolute, so a single map is shared
-// by both schemes - the site renders a single dark scheme.
+// lightest, step 11 the darkest. The values are absolute, so the same map feeds
+// both CivicTheme schemes defined below.
 $drevops-palette: (
   'primary-1': #eff6ff,
   'primary-2': #c8d9f3,
@@ -47,17 +47,17 @@ $drevops-palette: (
   'tertiary-9': #430800,
   'tertiary-10': #210200,
   'tertiary-11': #050000,
-  'neutral-1': #ffffff,
+  'neutral-1': #fff,
   'neutral-2': #f0f0f0,
   'neutral-3': #d4d4d4,
   'neutral-4': #b0b0b0,
   'neutral-5': #8c8c8c,
   'neutral-6': #6b6b6b,
   'neutral-7': #4d4d4d,
-  'neutral-8': #333333,
+  'neutral-8': #333,
   'neutral-9': #1f1f1f,
   'neutral-10': #0f0f0f,
-  'neutral-11': #000000,
+  'neutral-11': #000,
   'pass-1': #effbf1,
   'pass-2': #d6f5dd,
   'pass-3': #b5edc2,
@@ -105,7 +105,9 @@ $drevops-palette: (
 );
 
 // Brand anchors drive CivicTheme's derived semantic palette: brand1 the teal
-// interaction colour, brand2 the navy canvas, brand3 the coral accent.
+// interaction colour, brand2 the navy canvas, brand3 the coral accent. The
+// 'light' and 'dark' schemes are given identical anchors so every component
+// renders the dark brand regardless of the scheme it requests.
 $ct-colors-brands: (
   'light': (
     'brand1': #96e7f4,
