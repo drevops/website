@@ -51,6 +51,7 @@ module:
   help: 0
   highlight_js: 0
   history: 0
+  honeypot: 0
   image: 0
   image_captcha: 0
   inline_form_errors: 0
