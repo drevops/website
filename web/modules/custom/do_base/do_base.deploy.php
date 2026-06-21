@@ -10,9 +10,15 @@
 declare(strict_types=1);
 
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\File\FileExists;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\civictheme\CivicthemeColorManager;
 use Drupal\civictheme\CivicthemeConstants;
+use Drupal\file\Entity\File;
+use Drupal\media\Entity\Media;
+use Drupal\node\NodeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\taxonomy\TermInterface;
 
@@ -165,45 +171,235 @@ function do_base_deploy_blog_read_time(array &$sandbox): string {
 }
 
 /**
- * Add the "From the blog" teaser to the front page when it is not present.
+ * Assemble the front page from the shared components.
  */
-function do_base_deploy_homepage_blog_teaser(): string {
-  $front = \Drupal::config('system.site')->get('page.front');
+function do_base_deploy_homepage_assemble(): string {
+  $node = _do_base_resolve_front_page_node();
 
-  if (empty($front)) {
-    return 'No front page is configured; skipped the homepage blog teaser.';
+  if (!$node instanceof NodeInterface || !$node->hasField('field_c_n_components')) {
+    return 'No suitable front-page node; skipped the homepage assembly.';
   }
 
-  $path = \Drupal::service('path_alias.manager')->getPathByAlias($front);
-
-  if (!preg_match('#^/node/(\d+)$#', $path, $matches)) {
-    return 'The front page is not a node; skipped the homepage blog teaser.';
+  // A hero opener as the first component means the page is already assembled, so
+  // a re-run leaves the editor's later changes untouched.
+  $existing = $node->get('field_c_n_components')->referencedEntities();
+  $first = reset($existing);
+  if ($first instanceof ParagraphInterface && $first->bundle() === 'hero') {
+    return 'The homepage is already assembled.';
   }
 
-  $node = \Drupal::entityTypeManager()->getStorage('node')->load((int) $matches[1]);
+  $sections = array_filter([
+    _do_base_homepage_paragraph([
+      'type' => 'hero',
+      'field_c_p_type' => 'home',
+      'field_c_p_subtitle' => 'Reliable websites, delivered faster',
+      'field_c_p_title' => "Your website can't afford to wait.",
+      'field_c_p_summary' => 'We build and support reliable websites for businesses and organisations that depend on them. Now delivered faster with AI-assisted development.',
+      'field_c_p_links' => [['uri' => 'internal:/contact', 'title' => 'Talk to us']],
+      'field_c_p_theme' => 'dark',
+    ]),
+    _do_base_homepage_paragraph([
+      'type' => 'hero',
+      'field_c_p_type' => 'section',
+      'field_c_p_title' => 'For teams whose website is real infrastructure.',
+      'field_c_p_summary' => "Your website isn't a brochure. It's where a lot of your work actually happens, which means it needs to be built properly and looked after over time. That's the work we do: complete, reliable websites for mid-market organisations and the teams who depend on them. And if we're not the right fit, we'll say so.",
+      'field_c_p_theme' => 'dark',
+    ]),
+    _do_base_build_homepage_card_group(1, [
+      ['type' => 'number', 'title' => 'Website Delivery', 'summary' => "We build your site with automated testing and CI/CD from the first commit, so what launches is solid from day one, not a prototype you'll be fixing after go-live. AI-assisted delivery gets you there faster, at the same tested standard."],
+      ['type' => 'number', 'title' => 'Ongoing Support', 'summary' => 'Proactive maintenance from the people who built your platform. Security updates, monitoring, continuous improvement, and a direct line with no layers in between.'],
+      ['type' => 'number', 'title' => 'Upgrades & Migrations', 'summary' => 'Running an end-of-life Drupal 7 or 9 site? We handle the full migration with test coverage and zero-downtime deployments, so you stay compliant and your users never notice the switch.'],
+      ['type' => 'number', 'title' => 'Website as a Service', 'summary' => 'A professional, managed website for smaller organisations. A proven build, then hosting, security updates, and maintenance handled for a flat monthly fee. No lock-in, no surprises, and a simple way in that can grow into more.'],
+    ]),
+    _do_base_build_homepage_card_group(1, [
+      ['type' => 'dot', 'title' => 'The same standard, in fewer hours', 'summary' => 'AI takes on the repetitive production work, so a build that used to take weeks can take days. We quote it both ways and you decide. The tests, the CI, and the code you can read on GitHub all stay the same.'],
+      ['type' => 'dot', 'title' => 'Wondering whether AI-written code can be trusted?', 'summary' => "It's a fair thing to ask. Here's how we think about it: every change is still reviewed, and every build is tested and gated by CI before it ships. AI helps with the writing, never the checking. The guardrails that make this safe are our own, and they're open source, so you can see exactly how they work."],
+      ['type' => 'dot', 'title' => 'Your code and data stay yours', 'summary' => "Nothing you share trains an AI model, and nothing goes to a public AI service without your say-so. We've written down exactly how we handle it in our Responsible AI policy."],
+    ]),
+    _do_base_homepage_paragraph([
+      'type' => 'campaign',
+      'field_subtitle' => 'For teams already on Drupal',
+      'field_title' => 'Curious what your next project would cost with us?',
+      'field_content' => [
+        'value' => "Send us a recent quote, your current scope, or just a link to your site. We'll show you what the same work would cost with us, by hand and AI-assisted, so you can see the difference for yourself. There's no commitment, and nothing to move. Sometimes it just helps to know what your options are.",
+        'format' => 'civictheme_rich_text',
+      ],
+      'field_link' => [
+        ['uri' => 'internal:/contact', 'title' => 'See what it would cost'],
+        ['uri' => 'internal:/ai-integration-automation', 'title' => 'See how we work'],
+      ],
+      'field_c_p_theme' => 'dark',
+    ]),
+    _do_base_build_homepage_stat('The essentials', [
+      ['value' => '1', 'suffix' => ' day', 'label' => 'To set up CI/CD on a new project'],
+      ['value' => '10', 'suffix' => ' yrs', 'label' => 'Delivering reliable platforms'],
+      ['value' => '40', 'suffix' => '+', 'label' => 'Open-source tools we maintain'],
+      ['value' => '100', 'suffix' => '%', 'label' => 'Of projects ship with automated tests'],
+    ]),
+    _do_base_build_homepage_card_group(2, [
+      ['type' => 'icon', 'title' => 'Victorian Government', 'summary' => "Delivered Australia's first Docker-based government Drupal platform.", 'icon' => _do_base_ensure_homepage_icon('Homepage track record: Government', 'government.svg')],
+      ['type' => 'icon', 'title' => 'Australian Defence', 'summary' => 'Multiple classified platforms with complex security and compliance requirements.', 'icon' => _do_base_ensure_homepage_icon('Homepage track record: Defence', 'defence.svg')],
+      ['type' => 'icon', 'title' => 'GovCMS', 'summary' => "Drupal platform delivery on Australia's government hosting infrastructure.", 'icon' => _do_base_ensure_homepage_icon('Homepage track record: GovCMS', 'govcms.svg')],
+      ['type' => 'icon', 'title' => 'Education', 'summary' => 'University platforms with ongoing support, leading to internal referrals across departments.', 'icon' => _do_base_ensure_homepage_icon('Homepage track record: Education', 'education.svg')],
+    ]),
+    _do_base_build_homepage_card_group(1, [
+      ['type' => 'dot', 'title' => 'Automated testing is not optional', 'summary' => "Every platform ships with a full test suite. Functional, unit, and visual regression tests run on every commit. If it's not tested, it doesn't deploy."],
+      ['type' => 'dot', 'title' => 'One team, zero handovers', 'summary' => 'We handle development, DevOps, and production support. One team with full context, no vendors blaming each other, no knowledge lost between handoffs.'],
+      ['type' => 'dot', 'title' => 'Pricing that makes sense', 'summary' => "Flat-rate pricing with standard and rapid response options. We'll tell you what it costs upfront. No retainer games, no billable surprises, no markup on markup."],
+      ['type' => 'dot', 'title' => 'Direct line to the engineers', 'summary' => 'You talk to the people building your platform. We manage the project without adding layers between you and the work. Fast communication, honest updates, no runaround.'],
+    ]),
+    _do_base_build_homepage_card_group(1, [
+      ['type' => 'number', 'title' => 'Discovery', 'summary' => 'We review your website, understand your requirements and constraints, and scope the work, including whether AI-assisted delivery is the right fit. You get a clear proposal with flat-rate pricing before any work begins.'],
+      ['type' => 'number', 'title' => 'Delivery', 'summary' => 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.'],
+      ['type' => 'number', 'title' => 'Ongoing support', 'summary' => 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'],
+    ]),
+    _do_base_build_homepage_blog_teaser(),
+    _do_base_homepage_paragraph([
+      'type' => 'cta',
+      'field_c_p_type' => 'display',
+      'field_title' => "Let's talk about your website.",
+      'field_subtitle' => "Tell us where things stand, what's working, and what's not. We'll be straight with you about whether we're the right fit.",
+      'field_link' => [
+        ['uri' => 'internal:/contact', 'title' => 'Start a conversation'],
+        ['uri' => 'internal:/ai-integration-automation', 'title' => 'See what it would cost'],
+        ['uri' => 'mailto:info@drevops.com', 'title' => 'info@drevops.com'],
+      ],
+      'field_c_p_theme' => 'dark',
+    ]),
+  ]);
 
-  if (!$node instanceof FieldableEntityInterface || !$node->hasField('field_c_n_components')) {
-    return 'The front page has no components field; skipped the homepage blog teaser.';
+  $references = [];
+  foreach ($sections as $paragraph) {
+    $references[] = ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()];
   }
 
-  // Idempotency guard: identify our teaser by its title so re-runs do not add a
-  // second copy.
-  foreach ($node->get('field_c_n_components')->referencedEntities() as $component) {
-    if ($component->bundle() === 'civictheme_automated_list' && $component->hasField('field_c_p_title') && $component->get('field_c_p_title')->value === 'From the blog') {
-      return 'The homepage blog teaser is already present.';
+  // The hero leads the page, so the inherited CivicTheme banner is emptied here
+  // and the banner block is hidden on the front page through its visibility.
+  foreach (['field_c_n_banner_title', 'field_c_n_banner_type', 'field_c_n_banner_background', 'field_c_n_banner_blend_mode', 'field_c_n_banner_components'] as $banner_field) {
+    if ($node->hasField($banner_field)) {
+      $node->set($banner_field, NULL);
     }
   }
 
+  $node->set('field_c_n_components', $references);
+  $node->save();
+
+  return sprintf('Assembled the homepage from %d shared components.', count($references));
+}
+
+/**
+ * Resolve the front-page node, creating one when the site has none.
+ */
+function _do_base_resolve_front_page_node(): ?NodeInterface {
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  $front = (string) \Drupal::config('system.site')->get('page.front');
+
+  if ($front !== '') {
+    $path = \Drupal::service('path_alias.manager')->getPathByAlias($front);
+
+    if (preg_match('#^/node/(\d+)$#', $path, $matches)) {
+      $node = $node_storage->load((int) $matches[1]);
+
+      if ($node instanceof NodeInterface) {
+        return $node;
+      }
+    }
+  }
+
+  $node = $node_storage->create(['type' => 'civictheme_page', 'title' => 'Homepage', 'status' => 1]);
+  $node->save();
+
+  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/node/' . $node->id())->save();
+
+  return $node;
+}
+
+/**
+ * Create and save a homepage section paragraph from a values array.
+ */
+function _do_base_homepage_paragraph(array $values): Paragraph {
+  $paragraph = Paragraph::create($values);
+  $paragraph->save();
+
+  return $paragraph;
+}
+
+/**
+ * Build a card group paragraph from a list of card definitions.
+ *
+ * Each card definition is an array of 'type', 'title', 'summary' and an
+ * optional 'icon' media id. Cards inherit the group's dark scheme and the card
+ * group renders the positional number marker from their order.
+ */
+function _do_base_build_homepage_card_group(int $columns, array $cards): Paragraph {
+  $references = [];
+
+  foreach ($cards as $card) {
+    $values = [
+      'type' => 'card',
+      'field_c_p_type' => $card['type'],
+      'field_c_p_title' => $card['title'],
+      'field_c_p_summary' => $card['summary'],
+      'field_c_p_theme' => 'dark',
+    ];
+
+    if (!empty($card['icon'])) {
+      $values['field_c_p_icon'] = ['target_id' => $card['icon']];
+    }
+
+    $paragraph = _do_base_homepage_paragraph($values);
+    $references[] = ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()];
+  }
+
+  return _do_base_homepage_paragraph([
+    'type' => 'card_group',
+    'field_c_p_list_column_count' => $columns,
+    'field_c_p_theme' => 'dark',
+    'field_c_p_list_items' => $references,
+  ]);
+}
+
+/**
+ * Build a stat grid paragraph from a list of stat item definitions.
+ *
+ * Each item is an array of 'value', 'suffix' and 'label'; the value seeds the
+ * count-up animation target.
+ */
+function _do_base_build_homepage_stat(string $subtitle, array $items): Paragraph {
+  $references = [];
+
+  foreach ($items as $item) {
+    $paragraph = _do_base_homepage_paragraph([
+      'type' => 'stat_item',
+      'field_stat_value' => $item['value'],
+      'field_stat_suffix' => $item['suffix'],
+      'field_stat_label' => $item['label'],
+    ]);
+    $references[] = ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()];
+  }
+
+  return _do_base_homepage_paragraph([
+    'type' => 'stat',
+    'field_subtitle' => $subtitle,
+    'field_c_p_theme' => 'dark',
+    'field_items' => $references,
+  ]);
+}
+
+/**
+ * Build the "From the blog" automated list teaser for the front page.
+ *
+ * Mirrors the /blog listing so the teaser renders the same promo cards, limited
+ * to the three latest posts with a link through to the full listing.
+ */
+function _do_base_build_homepage_blog_teaser(): ?Paragraph {
   $term = _do_base_ensure_blog_term();
 
   if (!$term instanceof TermInterface) {
-    return 'The Blog topic term is unavailable; skipped the homepage blog teaser.';
+    return NULL;
   }
 
-  // Mirror the configuration of the /blog listing so the teaser renders the
-  // same promo cards, limited to the three latest posts with a link through to
-  // the full listing.
-  $teaser = Paragraph::create([
+  return _do_base_homepage_paragraph([
     'type' => 'civictheme_automated_list',
     'field_c_p_title' => 'From the blog',
     'field_c_p_theme' => 'dark',
@@ -218,12 +414,52 @@ function do_base_deploy_homepage_blog_teaser(): string {
     'field_c_p_list_limit' => 3,
     'field_c_p_list_link_above' => ['uri' => 'internal:/blog', 'title' => 'All articles'],
   ]);
-  $teaser->save();
+}
 
-  $node->get('field_c_n_components')->appendItem($teaser);
-  $node->save();
+/**
+ * Load or create a CivicTheme icon media from a shipped SVG asset.
+ *
+ * Returns the media id, or NULL when the icon cannot be created so the card
+ * still renders without an icon marker rather than aborting the deployment.
+ */
+function _do_base_ensure_homepage_icon(string $name, string $filename): ?int {
+  try {
+    $media_storage = \Drupal::entityTypeManager()->getStorage('media');
 
-  return 'Added the "From the blog" teaser to the front page.';
+    $existing = $media_storage->loadByProperties(['bundle' => 'civictheme_icon', 'name' => $name]);
+    if (!empty($existing)) {
+      return (int) reset($existing)->id();
+    }
+
+    $source = \Drupal::service('extension.list.module')->getPath('do_base') . '/assets/homepage-icons/' . $filename;
+    if (!is_file($source)) {
+      return NULL;
+    }
+
+    $file_system = \Drupal::service('file_system');
+    $directory = 'public://homepage-icons';
+    if (!$file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
+      return NULL;
+    }
+
+    $uri = $file_system->copy($source, $directory . '/' . $filename, FileExists::Replace);
+
+    $file = File::create(['uri' => $uri, 'status' => 1]);
+    $file->save();
+
+    $media = Media::create([
+      'bundle' => 'civictheme_icon',
+      'name' => $name,
+      'status' => 1,
+      'field_c_m_icon' => ['target_id' => $file->id()],
+    ]);
+    $media->save();
+
+    return (int) $media->id();
+  }
+  catch (\Throwable $exception) {
+    return NULL;
+  }
 }
 
 /**
