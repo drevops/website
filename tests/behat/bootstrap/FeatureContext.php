@@ -36,8 +36,11 @@ use DrevOps\BehatSteps\LinkTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\WaitTrait;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\DrupalContext;
+use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Defines application features from the specific context.
@@ -244,6 +247,73 @@ class FeatureContext extends DrupalContext {
     }
 
     return $color;
+  }
+
+  /**
+   * Create a card group with nested cards on a civictheme_page node.
+   *
+   * The library's ParagraphsTrait attaches only a single, flat paragraph, so a
+   * card group (which references child card paragraphs) needs a dedicated step.
+   *
+   * @code
+   * Given a card group with 2 columns and the following cards on the "[TEST] Page" page:
+   *   | type   | title         | description       | icon           |
+   *   | number | [TEST] First  | [TEST] First body |                |
+   *   | icon   | [TEST] Second | [TEST] Body two   | [TEST] DO Icon |
+   * @endcode
+   */
+  #[Given('a card group with :columns columns and the following cards on the :node_title page:')]
+  public function cardGroupCreateWithCards(string $columns, string $node_title, TableNode $cards): void {
+    $node = $this->paragraphsFindEntity('node', 'civictheme_page', 'title', $node_title);
+
+    if (!$node) {
+      throw new \RuntimeException(sprintf('The civictheme_page node with the title "%s" was not found.', $node_title));
+    }
+
+    $card_refs = [];
+
+    foreach ($cards->getHash() as $row) {
+      $values = [
+        'type' => 'card',
+        'field_c_p_type' => $row['type'],
+        'field_c_p_title' => $row['title'],
+        'field_c_p_summary' => $row['description'] ?? '',
+        'field_c_p_theme' => 'dark',
+      ];
+
+      if (!empty($row['icon'])) {
+        $icon_ids = \Drupal::entityQuery('media')
+          ->accessCheck(FALSE)
+          ->condition('bundle', 'civictheme_icon')
+          ->condition('name', $row['icon'])
+          ->range(0, 1)
+          ->execute();
+
+        if ($icon_ids) {
+          $values['field_c_p_icon'] = ['target_id' => reset($icon_ids)];
+        }
+      }
+
+      $card = Paragraph::create($values);
+      $card->save();
+      static::$paragraphEntities[] = $card;
+
+      $card_refs[] = ['target_id' => $card->id(), 'target_revision_id' => $card->getRevisionId()];
+    }
+
+    $group = Paragraph::create([
+      'type' => 'card_group',
+      'field_c_p_list_column_count' => (int) $columns,
+      'field_c_p_theme' => 'dark',
+      'field_c_p_list_items' => $card_refs,
+    ]);
+    $group->save();
+    static::$paragraphEntities[] = $group;
+
+    $components = $node->get('field_c_n_components')->getValue();
+    $components[] = ['target_id' => $group->id(), 'target_revision_id' => $group->getRevisionId()];
+    $node->set('field_c_n_components', $components);
+    $node->save();
   }
 
 }
