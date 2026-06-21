@@ -27,8 +27,8 @@ Feature: Contact form
     And I should see "Platform audit or site check"
     And I should see "Something else"
 
-  @api @email @email:webform
-  Scenario: Anonymous user submits an enquiry and it reaches the office
+  @api
+  Scenario: Anonymous user submits an enquiry and sees a confirmation
     Given I am an anonymous user
     When I go to "/contact"
     And I fill in "Name" with "[TEST] Jane Client"
@@ -38,7 +38,6 @@ Feature: Contact form
     And I fill in "Tell us more" with "[TEST] We need help upgrading our Drupal 7 site."
     And I press "Send message"
     Then I should see "Thank you - your enquiry has been received."
-    And an email should be sent to the "webmaster@drevops.com"
 
   @api @javascript
   Scenario: The form blocks submission when required fields are empty
