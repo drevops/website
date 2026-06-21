@@ -1,0 +1,183 @@
+//
+// Service detail component styles.
+//
+// Ported from static-prototype (services.html). Brand colours are read from the
+// dark palette as flat values so color-mix resolves directly; the redesign uses
+// identical brand anchors across schemes, so the component renders the same dark
+// treatment whichever theme it requests. Spacing maps to the particle scale
+// (the prototype's --space-*-N equals ct-particle(N)).
+//
+
+$_sd-bg: ct-color-constant-dark('primary-9');
+$_sd-teal: ct-color-constant-dark('secondary-6');
+$_sd-accent: ct-color-constant-dark('tertiary-3');
+$_sd-text: ct-color-constant-dark('neutral-1');
+$_sd-text-subtle: ct-color-constant-dark('primary-1');
+$_sd-text-muted: ct-color-constant-dark('primary-3');
+
+.component-service-detail {
+  $root: &;
+
+  & {
+    padding: ct-particle(7);
+    margin-bottom: ct-particle(6);
+    background: $_sd-bg;
+    border: 1px solid color-mix(in srgb, #{$_sd-teal} 18%, transparent);
+    border-radius: ct-particle(1);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  // Header: leading number beside the title and tagline.
+  #{$root}-header {
+    display: flex;
+    align-items: flex-start;
+    gap: ct-particle(4);
+    margin-bottom: ct-particle(5);
+    padding-bottom: ct-particle(4);
+    border-bottom: 1px solid color-mix(in srgb, #fff 6%, transparent);
+  }
+
+  .component-service-number {
+    flex-shrink: 0;
+    font-family: ct-font('primary');
+    font-size: ct-particle(8);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: $_sd-teal;
+    opacity: 0.2;
+    user-select: none;
+  }
+
+  #{$root}-title {
+    margin-bottom: ct-particle(1);
+    font-family: ct-font('primary');
+    font-size: 1.875rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: $_sd-text;
+  }
+
+  #{$root}-tagline {
+    font-size: 1rem;
+    font-weight: 200;
+    color: $_sd-text-muted;
+  }
+
+  // Body: description beside the inclusions list.
+  #{$root}-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: ct-particle(6);
+    margin-bottom: ct-particle(5);
+  }
+
+  #{$root}-desc p {
+    margin-bottom: ct-particle(2);
+    font-size: 1rem;
+    font-weight: 200;
+    line-height: 1.75;
+    color: $_sd-text-subtle;
+  }
+
+  #{$root}-includes {
+    .component-label {
+      margin: 0 0 ct-particle(2);
+      font-size: 0.6875rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $_sd-text-muted;
+    }
+
+    .component-label--accent {
+      color: $_sd-accent;
+    }
+
+    ul {
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      position: relative;
+      padding: ct-particle(1) 0 ct-particle(1) ct-particle(3);
+      font-size: 0.875rem;
+      font-weight: 200;
+      line-height: 1.5;
+      color: $_sd-text-subtle;
+      border-bottom: 1px solid color-mix(in srgb, #fff 3%, transparent);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 16px;
+        left: 0;
+        width: 6px;
+        height: 6px;
+        background: $_sd-teal;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  // Footer: pricing beside the action button.
+  #{$root}-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: ct-particle(4);
+    border-top: 1px solid color-mix(in srgb, #fff 6%, transparent);
+  }
+
+  .component-pricing-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: $_sd-text-muted;
+  }
+
+  .component-pricing-value {
+    font-family: ct-font('primary');
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: $_sd-teal;
+  }
+
+  @include ct-breakpoint-upto('m') {
+    & {
+      padding: ct-particle(4) ct-particle(3);
+    }
+
+    #{$root}-header {
+      flex-direction: column;
+      gap: ct-particle(2);
+    }
+
+    .component-service-number {
+      font-size: ct-particle(6);
+    }
+
+    #{$root}-body {
+      grid-template-columns: 1fr;
+      gap: ct-particle(4);
+    }
+
+    #{$root}-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: ct-particle(3);
+    }
+  }
+}

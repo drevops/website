@@ -1,0 +1,19 @@
+uuid: 3b59a639-78cf-434b-b0d1-c0a78fed58a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_subtitle
+    - paragraphs.paragraphs_type.service_detail
+id: paragraph.service_detail.field_c_p_subtitle
+field_name: field_c_p_subtitle
+entity_type: paragraph
+bundle: service_detail
+label: Tagline
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -14,6 +14,7 @@ require_once __DIR__ . '/includes/banner.inc';
 require_once __DIR__ . '/includes/paragraphs.inc';
 require_once __DIR__ . '/includes/divider.inc';
 require_once __DIR__ . '/includes/hero.inc';
+require_once __DIR__ . '/includes/service_detail.inc';
 require_once __DIR__ . '/includes/manual_list.inc';
 require_once __DIR__ . '/includes/page.inc';
 require_once __DIR__ . '/includes/node.inc';

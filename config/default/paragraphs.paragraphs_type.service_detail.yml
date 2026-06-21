@@ -1,0 +1,10 @@
+uuid: 684818c3-2b3a-4639-8d87-2f456c4fc63a
+langcode: en
+status: true
+dependencies: {  }
+id: service_detail
+label: 'Service detail'
+icon_uuid: null
+icon_default: null
+description: 'A service presented in full with a description, an inclusions list and a pricing footer.'
+behavior_plugins: {  }
