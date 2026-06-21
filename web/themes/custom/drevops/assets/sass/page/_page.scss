@@ -34,7 +34,7 @@ body {
 
       // Lay the featured card out horizontally from the 'm' breakpoint up, so
       // its image and content sit side by side like the design's hero post.
-      @media (min-width: 768px) {
+      @media (width >= 768px) {
         .ct-promo-card {
           flex-direction: row;
           align-items: stretch;
