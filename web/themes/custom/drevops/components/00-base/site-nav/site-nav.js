@@ -19,10 +19,16 @@ function DrevOpsSiteNav() {
     return;
   }
 
+  let previousBodyOverflow = '';
+
   const setOpen = (isOpen) => {
+    if (isOpen) {
+      previousBodyOverflow = document.body.style.overflow;
+    }
+
     nav.classList.toggle('is-open', isOpen);
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    document.body.style.overflow = isOpen ? 'hidden' : previousBodyOverflow;
   };
 
   toggle.addEventListener('click', () => {

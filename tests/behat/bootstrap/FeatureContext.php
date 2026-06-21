@@ -85,6 +85,7 @@ class FeatureContext extends DrupalContext {
 
     $script = "
       var element = document.createElement('div');
+      element.id = 'test-reveal-target';
       element.className = 'component-reveal';
       element.textContent = '[TEST] Reveal target';
       document.body.insertBefore(element, document.body.firstChild);
@@ -92,7 +93,7 @@ class FeatureContext extends DrupalContext {
     ";
     $session->executeScript($script);
 
-    $revealed = $session->wait(5000, "document.querySelector('.component-reveal.visible')");
+    $revealed = $session->wait(5000, "document.querySelector('#test-reveal-target.visible')");
 
     if (!$revealed) {
       throw new \Exception('The injected reveal element did not become visible.');
