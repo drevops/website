@@ -13,6 +13,14 @@ props:
       enum:
         - light
         - dark
+    cta_url:
+      type: string
+      title: CTA URL
+      description: Call-to-action link target (defaults to /contact).
+    cta_text:
+      type: string
+      title: CTA Text
+      description: Call-to-action label (defaults to "Talk to us").
     attributes:
       type: Drupal\Core\Template\Attribute
       title: Attributes

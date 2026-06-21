@@ -16,6 +16,8 @@
  *
  * Props:
  * - theme: [string] Theme variation (light or dark).
+ * - cta_url: [string] Call-to-action link target (defaults to /contact).
+ * - cta_text: [string] Call-to-action label (defaults to "Talk to us").
  * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
  * - modifier_class: [string] Additional CSS classes.
  *
@@ -39,7 +41,7 @@
 
   <div class="component-nav-menu" id="siteNavMenu">
     {{ do_primary_navigation() }}
-    <a href="/contact" class="component-nav-cta">{{ 'Talk to us'|t }}</a>
+    <a href="{{ cta_url|default('/contact') }}" class="component-nav-cta">{{ cta_text|default('Talk to us'|t) }}</a>
     {% if content_middle3 is not empty %}
       <div class="ct-header__content-middle3">{{ content_middle3 }}</div>
     {% endif %}
