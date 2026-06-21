@@ -24,6 +24,10 @@ function DrevOpsStatCounter() {
   const easeOut = (t) => 1 - ((1 - t) ** 3);
 
   const countUp = (element, target) => {
+    if (!Number.isFinite(target)) {
+      return;
+    }
+
     const duration = target < 20 ? 1200 : 2000;
     let start = null;
 
@@ -63,13 +67,13 @@ function DrevOpsStatCounter() {
 
     const target = parseInt(element.getAttribute('data-target'), 10);
 
-    if (Number.isNaN(target)) {
+    if (Number.isNaN(target) || target < 0) {
       return;
     }
 
     // Without motion or an observer, keep the final value the template rendered.
     if (reduceMotion || target === 0 || !observer) {
-      element.textContent = target;
+      element.textContent = String(target);
 
       return;
     }
