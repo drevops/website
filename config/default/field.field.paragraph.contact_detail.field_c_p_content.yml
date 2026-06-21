@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.paragraph.field_c_p_content
+    - filter.format.plain_text
     - paragraphs.paragraphs_type.contact_detail
   module:
     - text
@@ -18,5 +19,6 @@ translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  allowed_formats: {  }
+  allowed_formats:
+    - plain_text
 field_type: text_long

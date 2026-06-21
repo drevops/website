@@ -16,19 +16,19 @@ Feature: Contact detail render
     And the following fields for the paragraph "contact_detail" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Contact detail":
       | field_c_p_subtitle       | Email us directly                  |
       | field_c_p_content:value  | info@drevops.com                   |
-      | field_c_p_content:format | basic_html                         |
+      | field_c_p_content:format | plain_text                         |
       | field_c_p_summary        | We typically respond within a day. |
       | field_c_p_theme          | dark                               |
     And the following fields for the paragraph "contact_detail" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Contact detail":
       | field_c_p_subtitle       | Call us                             |
       | field_c_p_content:value  | 04 3009 3538                        |
-      | field_c_p_content:format | basic_html                          |
+      | field_c_p_content:format | plain_text                          |
       | field_c_p_summary        | Available weekdays, Melbourne time. |
       | field_c_p_theme          | dark                                |
     And the following fields for the paragraph "contact_detail" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Contact detail":
       | field_c_p_subtitle       | Based in                         |
       | field_c_p_content:value  | Melbourne, Australia             |
-      | field_c_p_content:format | basic_html                       |
+      | field_c_p_content:format | plain_text                       |
       | field_c_p_summary        | We work across Australia and NZ. |
       | field_c_p_theme          | dark                             |
 
