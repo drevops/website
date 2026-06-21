@@ -25,6 +25,7 @@ dependencies:
     - field.field.node.civictheme_page.field_c_n_topics
     - field.field.node.civictheme_page.field_c_n_vertical_spacing
     - field.field.node.civictheme_page.field_n_metatags
+    - field.field.node.civictheme_page.field_read_time
     - node.type.civictheme_page
   module:
     - layout_builder
@@ -80,6 +81,7 @@ hidden:
   field_c_n_topics: true
   field_c_n_vertical_spacing: true
   field_n_metatags: true
+  field_read_time: true
   langcode: true
   links: true
   search_api_excerpt: true

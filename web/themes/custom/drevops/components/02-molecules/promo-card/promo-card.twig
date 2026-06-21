@@ -16,6 +16,7 @@
  * - date: [string] Start date and time.
  * - date_end_iso: [string] End time in ISO format.
  * - date_end: [string] Formatted end time.
+ * - read_time: [string] Estimated reading time, for example "8 min read".
  * - link: [object] Card link object.
  *   Each property contains:
  *   - url: [string] Link URL.
@@ -43,6 +44,7 @@
  * - content_top_block
  * - subtitle_block
  * - date_block
+ * - read_time_block
  * - title_block
  * - content_middle_block
  * - summary_block
@@ -122,6 +124,18 @@
                 content: date_content,
                 icon: date_end ? 'calendar-2' : null,
                 icon_placement: 'before',
+              } only %}
+            </div>
+          {% endif %}
+        {% endblock %}
+
+        {% block read_time_block %}
+          {% if read_time is not empty %}
+            <div class="ct-promo-card__read-time">
+              {% include 'civictheme:tag' with {
+                theme: theme,
+                type: 'tertiary',
+                content: read_time,
               } only %}
             </div>
           {% endif %}

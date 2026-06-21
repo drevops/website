@@ -54,6 +54,10 @@ props:
       type: string
       title: End Date
       description: Formatted end time.
+    read_time:
+      type: string
+      title: Read time
+      description: Estimated reading time, for example "8 min read".
     link:
       type: object
       title: Link

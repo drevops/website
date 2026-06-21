@@ -1,0 +1,19 @@
+uuid: 26c49fd3-207b-4f0a-b8d0-57f32c964fd9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_read_time
+    - node.type.civictheme_page
+id: node.civictheme_page.field_read_time
+field_name: field_read_time
+entity_type: node
+bundle: civictheme_page
+label: 'Read time'
+description: 'Estimated reading time shown on teasers and cards, for example "8 min read".'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
