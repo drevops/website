@@ -1,6 +1,6 @@
 uuid: e7008f1c-ea1e-4a79-b4b8-fce24e5437cc
 langcode: en
-status: true
+status: false
 dependencies:
   content:
     - 'block_content:civictheme_mobile_navigation:b7f36176-620f-4178-aadd-9b448c610986'

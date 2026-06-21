@@ -4,3 +4,8 @@ services:
     arguments: ['@theme.manager']
     tags:
       - { name: twig.extension }
+  do_base.twig.navigation:
+    class: Drupal\do_base\Twig\NavigationExtension
+    arguments: ['@menu.link_tree']
+    tags:
+      - { name: twig.extension }

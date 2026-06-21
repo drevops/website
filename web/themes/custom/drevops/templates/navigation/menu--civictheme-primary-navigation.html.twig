@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Primary navigation rendered as the redesign's flat nav list.
+ *
+ * The header bar shows a single level of links, so only the top level is
+ * emitted. The active trail link carries `component-nav-active` for the
+ * highlighted state.
+ */
+#}
+{% if items %}
+  <ul class="component-nav-links">
+    {% for item in items %}
+      <li class="component-nav-links__item">
+        {{ link(item.title, item.url, item.in_active_trail ? {class: ['component-nav-active'], 'aria-current': 'location'} : {}) }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

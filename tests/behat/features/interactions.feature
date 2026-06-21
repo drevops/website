@@ -17,9 +17,3 @@ Feature: Front-end interactions library
     Given I am an anonymous user
     When I go to the homepage
     Then injected reveal content becomes visible
-
-  @api @javascript
-  Scenario: The mobile menu opens, locks scrolling and closes on link activation
-    Given I am an anonymous user
-    When I go to the homepage
-    Then the injected mobile menu toggles open and closed

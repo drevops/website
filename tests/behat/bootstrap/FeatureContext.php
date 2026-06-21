@@ -102,38 +102,38 @@ class FeatureContext extends DrupalContext {
   }
 
   /**
-   * Assert the mobile menu toggles open and closed and locks body scrolling.
-   *
-   * No template renders the interactions hooks yet, so the mobile navigation
-   * behaviour is exercised against representative injected markup.
+   * Assert the header stays pinned to the top of the viewport while scrolling.
    */
-  #[\Behat\Step\Then('the injected mobile menu toggles open and closed')]
-  public function assertInjectedMobileMenuToggles(): void {
+  #[\Behat\Step\Then('the site header stays pinned to the top of the viewport on scroll')]
+  public function assertHeaderStaysAtTop(): void {
     $session = $this->getSession();
 
-    $script = "
-      var nav = document.createElement('nav');
-      nav.id = 'siteNav';
-      nav.className = 'component-nav';
-      var toggle = document.createElement('button');
-      toggle.id = 'navToggle';
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.textContent = 'Menu';
-      var menu = document.createElement('div');
-      menu.className = 'component-nav-menu';
-      var links = document.createElement('div');
-      links.className = 'component-nav-links';
-      var link = document.createElement('a');
-      link.setAttribute('href', '#test-interaction');
-      link.textContent = '[TEST] Menu link';
-      links.appendChild(link);
-      menu.appendChild(links);
-      nav.appendChild(toggle);
-      nav.appendChild(menu);
-      document.body.insertBefore(nav, document.body.firstChild);
-      Drupal.attachBehaviors(document.body);
-    ";
-    $session->executeScript($script);
+    $session->executeScript('window.scrollTo(0, 800);');
+    $top = $session->evaluateScript("document.getElementById('siteNav').getBoundingClientRect().top");
+
+    if (abs((float) $top) > 5.0) {
+      throw new \Exception(sprintf('The header is not pinned to the top of the viewport after scrolling (top: %s).', $top));
+    }
+  }
+
+  /**
+   * Assert the rendered mobile menu opens, locks scrolling and closes on link.
+   */
+  #[\Behat\Step\Then('the site mobile menu opens, locks scrolling and closes on link activation')]
+  public function assertMobileMenuToggles(): void {
+    $session = $this->getSession();
+
+    // Narrow the viewport so the toggle is shown and the menu becomes a
+    // slide-in panel.
+    $session->resizeWindow(390, 844, 'current');
+
+    // Bind the navigation behaviour to the rendered header; re-attaching is a
+    // no-op when the initial page load already attached it.
+    $session->executeScript('Drupal.attachBehaviors(document);');
+
+    // The behaviour restores whatever overflow the body had before opening, so
+    // capture it to assert against rather than assuming an empty string.
+    $initial_overflow = (string) $session->evaluateScript("document.body.style.overflow || ''");
 
     $session->executeScript("document.getElementById('navToggle').click();");
     $opened_js = "document.getElementById('siteNav').classList.contains('is-open')"
@@ -144,13 +144,16 @@ class FeatureContext extends DrupalContext {
       throw new \Exception('The mobile menu did not open and lock body scrolling.');
     }
 
-    $session->executeScript("document.querySelector('#siteNav .component-nav-links a').click();");
+    // Activating a link inside the menu closes it and restores scrolling. The
+    // link target is neutralised first so the assertion is not lost to a page
+    // navigation.
+    $session->executeScript("var link = document.querySelector('#siteNav .component-nav-links a'); link.setAttribute('href', '#'); link.click();");
     $closed_js = "!document.getElementById('siteNav').classList.contains('is-open')"
-      . " && document.body.style.overflow === ''";
+      . " && document.body.style.overflow === " . json_encode($initial_overflow);
     $closed = $session->wait(3000, $closed_js);
 
     if (!$closed) {
-      throw new \Exception('The mobile menu did not close and restore body scrolling.');
+      throw new \Exception('The mobile menu did not close on link activation.');
     }
   }
 

@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\civictheme\CivicthemeConstants;
+
 require_once __DIR__ . '/includes/system_main_block.inc';
 require_once __DIR__ . '/includes/banner.inc';
 require_once __DIR__ . '/includes/paragraphs.inc';
@@ -59,6 +61,18 @@ function drevops_preprocess_block(array &$variables): void {
  */
 function drevops_preprocess_page(array &$variables): void {
   _drevops_preprocess_page($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for menu templates.
+ */
+function drevops_preprocess_menu(array &$variables): void {
+  // CivicTheme menus fall back to the light scheme when a theme is not
+  // supplied, which leaves them light on the site's dark canvas. Default any
+  // non-dark menu to dark so navigation matches the surrounding chrome.
+  if (($variables['theme'] ?? CivicthemeConstants::THEME_LIGHT) !== CivicthemeConstants::THEME_DARK) {
+    $variables['theme'] = CivicthemeConstants::THEME_DARK;
+  }
 }
 
 /**
