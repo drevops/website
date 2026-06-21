@@ -85,9 +85,9 @@ function _drevops_preprocess_paragraph__service_detail_field__index(array &$vari
   }
 
   $position = 0;
-  foreach ($parent->get($field_name) as $field_item_list) {
-    $values = $field_item_list->getValue();
-    $sibling = $field_item_list->get('entity')->getValue();
+  foreach ($parent->get($field_name) as $field_item) {
+    $values = $field_item->getValue();
+    $sibling = $field_item->get('entity')->getValue();
     if (!$sibling instanceof ParagraphInterface || $sibling->bundle() !== $paragraph->bundle()) {
       continue;
     }
