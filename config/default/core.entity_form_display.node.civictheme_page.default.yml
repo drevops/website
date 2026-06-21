@@ -24,6 +24,7 @@ dependencies:
     - field.field.node.civictheme_page.field_c_n_topics
     - field.field.node.civictheme_page.field_c_n_vertical_spacing
     - field.field.node.civictheme_page.field_n_metatags
+    - field.field.node.civictheme_page.field_read_time
     - node.type.civictheme_page
     - workflows.workflow.civictheme_editorial
   module:
@@ -362,6 +363,14 @@ content:
     settings:
       sidebar: true
       use_details: true
+    third_party_settings: {  }
+  field_read_time:
+    type: string_textfield
+    weight: 30
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select
