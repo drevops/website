@@ -33,6 +33,13 @@ function DrevOpsSiteNav() {
     link.addEventListener('click', () => setOpen(false));
   });
 
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && nav.classList.contains('is-open')) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
   toggle.setAttribute('data-site-nav-bound', '');
 }
 
