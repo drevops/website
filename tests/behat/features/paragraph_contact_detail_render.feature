@@ -5,14 +5,12 @@ Feature: Contact detail render
   I want each contact method to show its label, value and note
   So that I can reach the team through the right channel
 
-  Background:
+  @api @javascript
+  Scenario: Contact details stack with actionable email and phone links
     Given the following "civictheme_page" content:
       | title                      | status |
       | [TEST] Page Contact detail | 1      |
-
-  @api @javascript
-  Scenario: Contact details stack with actionable email and phone links
-    Given I am an anonymous user
+    And I am an anonymous user
     And the following fields for the paragraph "contact_detail" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Contact detail":
       | field_c_p_subtitle       | Email us directly                  |
       | field_c_p_content:value  | info@drevops.com                   |
