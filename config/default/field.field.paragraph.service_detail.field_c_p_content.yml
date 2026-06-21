@@ -1,0 +1,24 @@
+uuid: eed0405b-d4d5-4a9a-ab60-6da223516371
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_content
+    - filter.format.civictheme_rich_text
+    - paragraphs.paragraphs_type.service_detail
+  module:
+    - text
+id: paragraph.service_detail.field_c_p_content
+field_name: field_c_p_content
+entity_type: paragraph
+bundle: service_detail
+label: Description
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - civictheme_rich_text
+field_type: text_long

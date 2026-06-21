@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Theme implementation to display the Service detail component.
+ */
+#}
+{{ include('drevops:service-detail', {
+  theme: theme,
+  index: index,
+  title: title,
+  tagline: tagline,
+  description: description,
+  includes: includes,
+  price_label: price_label,
+  price: price,
+  action: action,
+  attributes: component_attributes,
+}, with_context: false) }}

@@ -1,0 +1,85 @@
+{#
+/**
+ * @file
+ * Service detail component.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - index: [integer] Position among siblings, shown as a leading number.
+ * - includes: [array] List of inclusion strings shown beside the description.
+ * - price_label: [string] Short label above the price.
+ * - price: [string] Pricing value.
+ * - action: [object] Footer call-to-action (text, url, is_external,
+ *   is_new_window).
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ *
+ * Slots:
+ * - title: Service name.
+ * - tagline: Short supporting line under the title.
+ * - description: Rich-text body describing the service.
+ */
+#}
+
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+
+<div class="component-service-detail {{ modifier_class|trim }}"{% if attributes is defined and attributes is not null %} {{ attributes }}{% endif %}>
+  <div class="component-service-detail-header">
+    <span class="component-service-number">{{ '%02d'|format(index|default(1)) }}</span>
+    <div>
+      {% if title is not empty %}
+        <h2 class="component-service-detail-title">{{ title }}</h2>
+      {% endif %}
+      {% if tagline is not empty %}
+        <p class="component-service-detail-tagline">{{ tagline }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if description is not empty or includes is not empty %}
+    <div class="component-service-detail-body">
+      {% if description is not empty %}
+        <div class="component-service-detail-desc">{{ description }}</div>
+      {% endif %}
+
+      {% if includes is not empty %}
+        <div class="component-service-detail-includes">
+          <p class="component-label component-label--accent">What's included</p>
+          <ul>
+            {% for item in includes %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if price_label is not empty or price is not empty or action.url is not empty %}
+    <div class="component-service-detail-footer">
+      {% if price_label is not empty or price is not empty %}
+        <div>
+          {% if price_label is not empty %}
+            <span class="component-pricing-label">{{ price_label }}</span>
+          {% endif %}
+          {% if price is not empty %}
+            <span class="component-pricing-value">{{ price }}</span>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if action.url is not empty %}
+        {{ include('civictheme:button', {
+          theme: theme,
+          kind: 'link',
+          type: 'secondary',
+          text: action.text,
+          url: action.url,
+          is_external: action.is_external,
+          is_new_window: action.is_new_window,
+        }, with_context: false) }}
+      {% endif %}
+    </div>
+  {% endif %}
+</div>

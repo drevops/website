@@ -1,0 +1,73 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Service detail
+status: stable
+description: A service presented in full with a numbered header, a two-column body and a pricing footer.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: dark
+    index:
+      type: integer
+      title: Index
+      description: Position of this service among its siblings, shown as a leading number.
+      default: 1
+    includes:
+      type: array
+      title: What's included
+      description: List of inclusions shown beside the description.
+      items:
+        type: string
+    price_label:
+      type: string
+      title: Price label
+      description: Short label above the price, such as "Pricing".
+    price:
+      type: string
+      title: Price
+      description: Pricing value, which may carry qualifiers such as "Fixed price after a free assessment".
+    action:
+      type: object
+      title: Action
+      description: Call-to-action link shown in the footer.
+      properties:
+        text:
+          type: string
+          title: Text
+          description: Link text.
+        url:
+          type: string
+          title: URL
+          description: Link URL.
+        is_external:
+          type: boolean
+          title: External
+          description: Whether the link is external.
+        is_new_window:
+          type: boolean
+          title: New window
+          description: Whether to open the link in a new window.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+      description: Additional HTML attributes.
+    modifier_class:
+      type: string
+      title: Modifier class
+      description: Additional CSS classes.
+slots:
+  title:
+    title: Title
+    description: Service name.
+  tagline:
+    title: Tagline
+    description: Short supporting line under the title.
+  description:
+    title: Description
+    description: Rich-text body describing the service.
