@@ -39,3 +39,21 @@ Feature: Blog listing and homepage teaser
     Then I should see "From the blog"
     And I should see "All articles"
     And the response should contain "ct-promo-card"
+
+  @api
+  Scenario: The blog landing opens with the page hero and hides the legacy banner
+    Given the following "civictheme_page" content:
+      | title               | status |
+      | [TEST] Blog Landing | 1      |
+    And the following fields for the paragraph "hero" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Blog Landing":
+      | field_c_p_type     | page                      |
+      | field_c_p_theme    | dark                      |
+      | field_c_p_subtitle | [TEST] Blog               |
+      | field_c_p_title    | [TEST] Practical insights |
+    And I am an anonymous user
+
+    When I visit the "civictheme_page" content page with the title "[TEST] Blog Landing"
+    Then I should see an "article .component-hero.component-hero--page" element
+    And I should see an "article .component-hero--page .component-hero-eyebrow" element
+    And I should see "[TEST] Practical insights"
+    And I should not see an ".ct-banner" element
