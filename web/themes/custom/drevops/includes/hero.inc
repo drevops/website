@@ -63,7 +63,7 @@ function _drevops_preprocess_paragraph__hero_field__actions(array &$variables): 
   $actions = [];
 
   foreach (array_slice($variables['links'], 0, 2) as $index => $link) {
-    $actions[] = $link + ['type' => $styles[$index]];
+    $actions[] = array_merge($link, ['type' => $styles[$index]]);
   }
 
   $variables['actions'] = $actions;
