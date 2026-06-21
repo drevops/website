@@ -38,8 +38,10 @@ Feature: Service detail render
     And I should see the text "[TEST] From requirements to production"
     And I should see the text "[TEST] We build your site end to end."
     And I should see the text "[TEST] Architecture"
+    And I should see the text "Pricing"
     And I should see the text "[TEST] Fixed price up front"
     And I should see the text "Discuss your project"
+    And the response should contain "https://example.com/contact"
     And save screenshot
 
   @api
