@@ -18,14 +18,14 @@ use Twig\TwigFunction;
  */
 final class NavigationExtension extends AbstractExtension {
 
-  public function __construct(protected readonly MenuLinkTreeInterface $menuTree) {}
+  public function __construct(protected readonly MenuLinkTreeInterface $menuLinkTree) {}
 
   /**
    * {@inheritdoc}
    */
   public function getFunctions(): array {
     return [
-      new TwigFunction('do_primary_navigation', [$this, 'primaryNavigation']),
+      new TwigFunction('do_primary_navigation', $this->primaryNavigation(...)),
     ];
   }
 
@@ -39,11 +39,11 @@ final class NavigationExtension extends AbstractExtension {
    *   A render array for the menu, or an empty array when it has no links.
    */
   public function primaryNavigation(string $menu_name = 'civictheme-primary-navigation'): array {
-    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($menu_name);
+    $parameters = $this->menuLinkTree->getCurrentRouteMenuTreeParameters($menu_name);
     $parameters->setMaxDepth(1);
     $parameters->onlyEnabledLinks();
 
-    $tree = $this->menuTree->load($menu_name, $parameters);
+    $tree = $this->menuLinkTree->load($menu_name, $parameters);
 
     if ($tree === []) {
       return [];
@@ -53,9 +53,9 @@ final class NavigationExtension extends AbstractExtension {
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
     ];
-    $tree = $this->menuTree->transform($tree, $manipulators);
+    $tree = $this->menuLinkTree->transform($tree, $manipulators);
 
-    return $this->menuTree->build($tree);
+    return $this->menuLinkTree->build($tree);
   }
 
 }
