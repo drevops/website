@@ -29,6 +29,10 @@
 {% set has_accent = type in ['home', 'contact'] %}
 {% set has_scroll = type == 'home' %}
 
+{# The section variant opens a region within a page rather than the page itself,
+   so its heading is an h2 to keep a single h1 per page. #}
+{% set title_tag = type == 'section' ? 'h2' : 'h1' %}
+
 {% if type == 'article' %}
   <header class="component-hero {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     {% if background_image.url is not empty %}
@@ -64,10 +68,10 @@
       {% endif %}
 
       {% if heading is not empty %}
-        <h1 class="component-hero-title component-reveal component-reveal-d1">
+        <{{ title_tag }} class="component-hero-title component-reveal component-reveal-d1">
           {{ heading }}
           {% if has_accent %}<span class="component-hero-title__accent" aria-hidden="true"></span>{% endif %}
-        </h1>
+        </{{ title_tag }}>
       {% endif %}
 
       {% if lead is not empty %}
