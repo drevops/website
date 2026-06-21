@@ -487,35 +487,41 @@ function _do_base_ensure_homepage_icon(string $name, string $filename): ?int {
 }
 
 /**
- * Seed the Services page assembled from the shared components.
+ * Reassemble a civictheme_page from a freshly built component stack.
+ *
+ * The page is located by its title so an existing page keeps its alias and
+ * revision history, and is created at the given alias only when none exists.
+ * Building, attaching and cleaning up the superseded paragraphs run inside one
+ * transaction so a failure part way through rolls back rather than leaving
+ * half-saved paragraphs orphaned instead of attached to the page.
+ *
+ * @param string $title
+ *   The page title used to locate or create the node.
+ * @param string $alias
+ *   The path alias applied when the node is created.
+ * @param callable(): \Drupal\paragraphs\Entity\Paragraph[] $build_components
+ *   Builds and returns the ordered components to attach to the page.
  */
-function do_base_deploy_seed_services_page(): string {
+function _do_base_seed_page(string $title, string $alias, callable $build_components): string {
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
 
-  // Reassemble the existing Services page when present so its /services alias
-  // and revision history are preserved; create it only on a site that has none.
   $existing = $node_storage->loadByProperties([
     'type' => 'civictheme_page',
-    'title' => 'Services',
+    'title' => $title,
   ]);
   $node = $existing ? reset($existing) : $node_storage->create([
     'type' => 'civictheme_page',
-    'title' => 'Services',
+    'title' => $title,
     'status' => 1,
-    'path' => ['alias' => '/services', 'pathauto' => 0],
+    'path' => ['alias' => $alias, 'pathauto' => 0],
   ]);
 
-  // The components the page carried before the rebuild are deleted afterwards
-  // so swapping the stack does not leave orphaned paragraphs behind.
   $superseded = $node->get('field_c_n_components')->referencedEntities();
 
-  // Building, attaching and cleaning up run inside one transaction so a failure
-  // part way through rolls back rather than leaving half-saved paragraphs
-  // orphaned instead of attached to the page.
   $transaction = \Drupal::database()->startTransaction();
 
   try {
-    $components = _do_base_build_services_components();
+    $components = $build_components();
 
     $node->set('field_c_n_components', array_map(static fn (Paragraph $component): array => [
       'target_id' => $component->id(),
@@ -533,7 +539,14 @@ function do_base_deploy_seed_services_page(): string {
     throw $exception;
   }
 
-  return sprintf('Assembled the Services page (node %s) from %d components.', $node->id(), count($components));
+  return sprintf('Assembled the %s page (node %s) from %d components.', $title, $node->id(), count($components));
+}
+
+/**
+ * Seed the Services page assembled from the shared components.
+ */
+function do_base_deploy_seed_services_page(): string {
+  return _do_base_seed_page('Services', '/services', _do_base_build_services_components(...));
 }
 
 /**
@@ -683,6 +696,119 @@ function _do_base_build_services_components(): array {
     'field_link' => [
       ['uri' => 'internal:/contact', 'title' => 'Get in touch'],
     ],
+  ]);
+
+  return $components;
+}
+
+/**
+ * Seed the Contact page assembled from the shared components.
+ */
+function do_base_deploy_seed_contact_page(): string {
+  return _do_base_seed_page('Contact', '/contact', _do_base_build_contact_components(...));
+}
+
+/**
+ * Build and save the Contact page components in their render order.
+ *
+ * @return \Drupal\paragraphs\Entity\Paragraph[]
+ *   The saved hero and two-column contact-area paragraphs.
+ */
+function _do_base_build_contact_components(): array {
+  $save_paragraph = static function (array $values): Paragraph {
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    return $paragraph;
+  };
+
+  $reference = static fn (Paragraph $paragraph): array => [
+    'target_id' => $paragraph->id(),
+    'target_revision_id' => $paragraph->getRevisionId(),
+  ];
+
+  $components = [];
+
+  $components[] = $save_paragraph([
+    'type' => 'hero',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_type' => 'contact',
+    'field_c_p_title' => "Let's talk about your platform.",
+    'field_c_p_summary' => "Whether you need a new website, help upgrading from an end-of-life version, or ongoing support for the site you have, we're happy to have an honest conversation about where things stand.",
+  ]);
+
+  // Left column: the enquiry webform.
+  $main = $save_paragraph([
+    'type' => 'civictheme_webform',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_webform' => ['target_id' => 'contact'],
+  ]);
+
+  // Right column: the direct-contact details, a divider and the numbered steps.
+  $aside = [];
+
+  $details = [
+    [
+      'label' => 'Email us directly',
+      'value' => 'info@drevops.com',
+      'note' => 'We typically respond within one business day.',
+    ],
+    [
+      'label' => 'Call us',
+      'value' => '04 3009 3538',
+      'note' => 'Available weekdays, Melbourne time (AEST).',
+    ],
+    [
+      'label' => 'Based in',
+      'value' => 'Melbourne, Australia',
+      'note' => 'We work with organisations across Australia and New Zealand.',
+    ],
+  ];
+
+  foreach ($details as $detail) {
+    $aside[] = $save_paragraph([
+      'type' => 'contact_detail',
+      'field_c_p_theme' => 'dark',
+      'field_c_p_subtitle' => $detail['label'],
+      'field_c_p_content' => [
+        'value' => $detail['value'],
+        'format' => 'civictheme_plain_text',
+      ],
+      'field_c_p_summary' => $detail['note'],
+    ]);
+  }
+
+  $steps = [
+    "We'll review your message and respond within 24 hours.",
+    'A 30-minute call to understand your platform and goals.',
+    'A clear proposal with fixed-price quoting, no surprises.',
+  ];
+
+  $step_cards = [];
+  foreach ($steps as $step) {
+    $card = $save_paragraph([
+      'type' => 'card',
+      'field_c_p_type' => 'number',
+      'field_c_p_theme' => 'dark',
+      'field_c_p_title' => $step,
+    ]);
+
+    $step_cards[] = $reference($card);
+  }
+
+  $aside[] = $save_paragraph([
+    'type' => 'card_group',
+    'field_c_p_theme' => 'dark',
+    'field_c_p_title' => 'What to expect',
+    'field_c_p_list_column_count' => 1,
+    'field_c_p_list_items' => $step_cards,
+  ]);
+
+  $components[] = $save_paragraph([
+    'type' => 'contact_area',
+    'field_c_p_theme' => 'dark',
+    'field_p_main' => [$reference($main)],
+    'field_p_aside' => array_map($reference, $aside),
   ]);
 
   return $components;

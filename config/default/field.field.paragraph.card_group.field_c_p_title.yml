@@ -1,0 +1,19 @@
+uuid: 8b4bdf82-4b8a-43f5-b764-e26c8d30871e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_title
+    - paragraphs.paragraphs_type.card_group
+id: paragraph.card_group.field_c_p_title
+field_name: field_c_p_title
+entity_type: paragraph
+bundle: card_group
+label: Title
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

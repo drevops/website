@@ -6,6 +6,7 @@ dependencies:
     - field.field.paragraph.card_group.field_c_p_list_column_count
     - field.field.paragraph.card_group.field_c_p_list_items
     - field.field.paragraph.card_group.field_c_p_theme
+    - field.field.paragraph.card_group.field_c_p_title
     - paragraphs.paragraphs_type.card_group
 id: paragraph.card_group.default
 targetEntityType: paragraph
@@ -16,4 +17,5 @@ hidden:
   field_c_p_list_column_count: true
   field_c_p_list_items: true
   field_c_p_theme: true
+  field_c_p_title: true
   search_api_excerpt: true

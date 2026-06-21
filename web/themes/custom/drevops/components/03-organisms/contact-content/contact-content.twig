@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Contact area component.
+ *
+ * A two-column layout: the enquiry form in the main column and the direct
+ * contact details and steps in the aside column. Stacks to a single column on
+ * narrow screens.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ * - modifier_class: [string] Additional CSS classes.
+ *
+ * Slots:
+ * - main: The enquiry form column.
+ * - aside: The direct contact details and steps column.
+ */
+#}
+
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
+
+{% if main is not empty or aside is not empty %}
+  <section class="component-contact-content {{ modifier_class|trim }}"{% if attributes is defined and attributes is not null %} {{ attributes }}{% endif %}>
+    <div class="component-grid-contact">
+      <div class="component-contact-content__main">{{ main }}</div>
+      <div class="component-contact-col">{{ aside }}</div>
+    </div>
+  </section>
+{% endif %}

@@ -1,0 +1,58 @@
+//
+// Contact area component styles.
+//
+// Ported from static-prototype (contact). Lays the enquiry form beside the
+// direct-contact column and collapses to a single column on narrow screens.
+// The component sits inside CivicTheme's constrained content column, so it
+// needs no max-width of its own. Spacing uses the prototype's particle scale.
+//
+
+$_contact-divider: ct-color-constant-dark('secondary-6');
+
+.component-contact-content {
+  & {
+    padding: ct-particle(12) 0 ct-particle(16);
+  }
+
+  @media (width <= 768px) {
+    & {
+      padding: ct-particle(8) 0 ct-particle(10);
+    }
+  }
+}
+
+.component-grid-contact {
+  & {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: ct-particle(10);
+    align-items: start;
+  }
+
+  @media (width <= 768px) {
+    & {
+      grid-template-columns: 1fr;
+      gap: ct-particle(8);
+    }
+  }
+}
+
+.component-contact-col {
+  & {
+    padding-top: ct-particle(1);
+  }
+
+  // A subtle gradient rule separates the direct-contact details from the
+  // "what to expect" steps, matching the prototype's contact-column divider.
+  .ct-card-group {
+    margin-top: ct-particle(6);
+  }
+
+  .ct-card-group::before {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-bottom: ct-particle(6);
+    background: linear-gradient(90deg, color-mix(in srgb, #{$_contact-divider} 30%, transparent) 0%, transparent 100%);
+  }
+}

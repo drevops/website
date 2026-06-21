@@ -56,6 +56,7 @@ function drevops_preprocess_paragraph__card(array &$variables): void {
 function drevops_preprocess_paragraph__card_group(array &$variables): void {
   $paragraph = $variables['paragraph'];
 
+  $variables['title'] = civictheme_get_field_value($paragraph, 'field_c_p_title');
   $variables['column_count'] = (int) (civictheme_get_field_value($paragraph, 'field_c_p_list_column_count') ?? 1);
 
   _civictheme_preprocess_paragraph__paragraph_field__theme($variables);

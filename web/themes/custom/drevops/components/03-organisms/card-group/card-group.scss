@@ -10,6 +10,15 @@
 //
 
 .ct-card-group {
+  &__title {
+    margin: 0 0 ct-particle(3);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: ct-color-constant-dark('tertiary-3');
+  }
+
   &__grid {
     display: grid;
     grid-template-columns: 1fr;

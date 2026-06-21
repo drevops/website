@@ -1,0 +1,31 @@
+uuid: 1211edc8-2fa6-41e8-85f8-7a3c58d32850
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_main
+    - paragraphs.paragraphs_type.civictheme_webform
+    - paragraphs.paragraphs_type.contact_area
+  module:
+    - entity_reference_revisions
+id: paragraph.contact_area.field_p_main
+field_name: field_p_main
+entity_type: paragraph
+bundle: contact_area
+label: 'Main column'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      civictheme_webform: civictheme_webform
+    negate: 0
+    target_bundles_drag_drop:
+      civictheme_webform:
+        weight: 0
+        enabled: true
+field_type: entity_reference_revisions

@@ -1,0 +1,10 @@
+uuid: db42d2c9-ca49-43b3-860b-68fdbbee2773
+langcode: en
+status: true
+dependencies: {  }
+id: contact_area
+label: 'Contact area'
+icon_uuid: null
+icon_default: null
+description: 'A two-column contact area: an enquiry form beside the contact details and steps.'
+behavior_plugins: {  }

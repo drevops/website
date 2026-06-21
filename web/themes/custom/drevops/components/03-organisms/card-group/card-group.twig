@@ -11,6 +11,9 @@
  *
  * Slots:
  * - cards: The rendered list of card components.
+ *
+ * Props:
+ * - title: [string] Optional heading shown above the grid.
  */
 #}
 
@@ -20,6 +23,9 @@
 
 {% if cards is not empty %}
   <div class="{{ modifier_class }}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    {% if title is not empty %}
+      <p class="ct-card-group__title">{{ title }}</p>
+    {% endif %}
     <div class="ct-card-group__grid">
       {{ cards }}
     </div>

@@ -1,0 +1,41 @@
+uuid: 7ffd7f0d-dfe7-47e4-98e4-05aecf1678a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_aside
+    - paragraphs.paragraphs_type.card_group
+    - paragraphs.paragraphs_type.contact_area
+    - paragraphs.paragraphs_type.contact_detail
+    - paragraphs.paragraphs_type.divider
+  module:
+    - entity_reference_revisions
+id: paragraph.contact_area.field_p_aside
+field_name: field_p_aside
+entity_type: paragraph
+bundle: contact_area
+label: 'Aside column'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      contact_detail: contact_detail
+      divider: divider
+      card_group: card_group
+    negate: 0
+    target_bundles_drag_drop:
+      card_group:
+        weight: 2
+        enabled: true
+      contact_detail:
+        weight: 0
+        enabled: true
+      divider:
+        weight: 1
+        enabled: true
+field_type: entity_reference_revisions
