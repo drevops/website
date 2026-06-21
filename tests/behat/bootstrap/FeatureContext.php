@@ -36,6 +36,7 @@ use DrevOps\BehatSteps\LinkTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\WaitTrait;
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\Then;
@@ -77,6 +78,40 @@ class FeatureContext extends DrupalContext {
   use UserTrait;
   use WaitTrait;
   use WatchdogTrait;
+
+  /**
+   * Attaches a Content paragraph with a formatted rich-text body to a page.
+   *
+   * The body is supplied verbatim as a PyString so multi-line HTML containing
+   * code, commas and semicolons is preserved without the field-table parser
+   * escaping, and the text format is set explicitly so the rich-text filters
+   * (HTML restriction and Highlight.js) apply on render.
+   */
+  #[Given('the :bundle :entity_type :title has a :format content paragraph:')]
+  public function articleAddContentParagraph(string $bundle, string $entity_type, string $title, string $format, PyStringNode $body): void {
+    $parent = $this->paragraphsFindEntity($entity_type, $bundle, 'title', $title);
+
+    if (!$parent instanceof ContentEntityInterface) {
+      throw new \RuntimeException(sprintf('The %s %s "%s" was not found.', $bundle, $entity_type, $title));
+    }
+
+    $paragraph = Paragraph::create([
+      'type' => 'civictheme_content',
+      'field_c_p_content' => ['value' => $body->getRaw(), 'format' => $format],
+      'field_c_p_theme' => 'dark',
+    ]);
+    $paragraph->setParentEntity($parent, 'field_c_n_components')->save();
+
+    $components = $parent->get('field_c_n_components')->getValue();
+    $components[] = [
+      'target_id' => $paragraph->id(),
+      'target_revision_id' => $paragraph->getRevisionId(),
+    ];
+    $parent->set('field_c_n_components', $components);
+    $parent->save();
+
+    static::$paragraphEntities[] = $paragraph;
+  }
 
   /**
    * Assert that content using the reveal hook becomes visible.

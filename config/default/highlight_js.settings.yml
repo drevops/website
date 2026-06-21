@@ -1,6 +1,6 @@
 copy_enable: true
 copy_bg_transparent: false
-copy_bg_color: '#4243b1'
+copy_bg_color: '#1e7582'
 copy_txt_color: '#ffffff'
 copy_btn_text: ''
 copy_success_text: ''
@@ -9,4 +9,4 @@ role_copy_access: {  }
 languages: {  }
 theme: github
 success_bg_transparent: false
-success_bg_color: '#4243b1'
+success_bg_color: '#1e7582'

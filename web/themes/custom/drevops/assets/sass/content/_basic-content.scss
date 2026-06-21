@@ -1,0 +1,170 @@
+//
+// Rich article body for the CivicTheme Basic Content component.
+//
+// CivicTheme's `ct-content()` mixin already styles headings, paragraphs, links
+// and lists on the dark brand scheme. This partial layers the blog article
+// treatments from static-prototype/blog-post.html that the mixin does not
+// provide: a lead paragraph separator, striped dark-header tables, a set-apart
+// blockquote, inline-code chips and fenced code blocks with a self-hosted
+// Highlight.js token theme (the module's cdnjs stylesheet is disabled via the
+// libraries-override in drevops.info.yml, so the syntax colours live here).
+//
+// Colours reference the dark-scheme custom properties emitted by the CivicTheme
+// variables stylesheet; spacing mirrors the prototype's rem scale, which is not
+// exposed as theme tokens. The `theme.scss` build does not inject CivicTheme's
+// SCSS functions, so values use `var(--ct-*)` tokens rather than `ct-*()`.
+//
+
+.ct-basic-content {
+  // Article tokens mapped to the dark brand palette, mirroring the prototype's
+  // per-scheme token block so the rules below read like the source design.
+  --article-accent: var(--ct-color-dark-secondary-6);
+  --article-text: #fff;
+  --article-text-subtle: var(--ct-color-dark-primary-1);
+  --article-surface: color-mix(in srgb, #fff 6%, var(--ct-color-dark-primary-9));
+  --article-border-subtle: color-mix(in srgb, #fff 6%, transparent);
+  --article-code-bg: var(--ct-color-dark-primary-8);
+  --article-code-text: var(--ct-color-dark-primary-1);
+  --article-code-border: color-mix(in srgb, var(--ct-color-dark-secondary-6) 18%, transparent);
+
+  // ── Lead paragraph ──
+  // The opening "Large" paragraph is set off from the body by a hairline rule.
+  .ct-text-large:first-child {
+    padding-bottom: 2.5rem;
+    color: var(--article-text-subtle);
+    border-bottom: 1px solid var(--article-border-subtle);
+  }
+
+  // ── Inline code ──
+  // A coral chip on a raised surface. Block code inside <pre> resets this below.
+  code {
+    padding: 0.125rem 0.375rem;
+    font-size: 0.875em;
+    color: var(--ct-color-dark-tertiary-3);
+    background: var(--article-surface);
+    border-radius: 0.25rem;
+  }
+
+  // ── Fenced code blocks ──
+  // A bordered, rounded panel; the inner <code> scrolls horizontally so long
+  // lines never widen the article column.
+  pre {
+    overflow: hidden;
+    margin: 1.5rem 0 2rem;
+    border: 1px solid var(--article-code-border);
+    border-radius: 0.5rem;
+
+    code {
+      display: block;
+      overflow-x: auto;
+      padding: 1.5rem;
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      color: var(--article-code-text);
+      background: var(--article-code-bg);
+      border: 0;
+      border-radius: 0;
+    }
+
+    // Highlight.js token theme, tuned to the brand: teal keywords, green
+    // strings, coral numbers and titles on the navy code panel. Scoped to <pre>
+    // so it never recolours inline code, which keeps the chip styling above.
+    .hljs-comment,
+    .hljs-quote {
+      font-style: italic;
+      color: var(--ct-color-dark-primary-4);
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-built_in,
+    .hljs-name,
+    .hljs-tag,
+    .hljs-literal,
+    .hljs-section,
+    .hljs-link {
+      color: var(--ct-color-dark-secondary-2);
+    }
+
+    .hljs-string,
+    .hljs-regexp,
+    .hljs-addition,
+    .hljs-attribute,
+    .hljs-symbol,
+    .hljs-bullet {
+      color: var(--ct-color-dark-pass-4);
+    }
+
+    .hljs-number,
+    .hljs-title,
+    .hljs-type,
+    .hljs-selector-id,
+    .hljs-selector-class,
+    .hljs-meta {
+      color: var(--ct-color-dark-tertiary-3);
+    }
+
+    .hljs-attr,
+    .hljs-variable,
+    .hljs-template-variable {
+      color: var(--ct-color-dark-tertiary-2);
+    }
+
+    .hljs-deletion {
+      color: var(--ct-color-dark-fail-4);
+    }
+
+    .hljs-emphasis {
+      font-style: italic;
+    }
+
+    .hljs-strong {
+      font-weight: 700;
+    }
+  }
+
+  // ── Tables ──
+  // The prototype stripes every article table and gives it an uppercase header
+  // on a raised surface, independent of the optional CivicTheme table classes.
+  table {
+    width: 100%;
+    margin: 1.5rem 0 2rem;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-align: left;
+    text-transform: uppercase;
+    color: var(--article-text);
+    background: var(--article-code-bg);
+  }
+
+  tbody td {
+    padding: 0.5rem 1rem;
+    color: var(--article-text-subtle);
+    border-bottom: 1px solid var(--article-border-subtle);
+  }
+
+  tbody tr:nth-child(even) td {
+    background: var(--article-surface);
+  }
+
+  // ── Blockquote ──
+  // Set apart with a teal rule, a raised surface and rounded trailing corners,
+  // replacing CivicTheme's left-stripe pseudo-element.
+  blockquote {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--article-surface);
+    border-left: 3px solid var(--article-accent);
+    border-radius: 0 0.5rem 0.5rem 0;
+
+    &::before {
+      display: none;
+    }
+  }
+}
