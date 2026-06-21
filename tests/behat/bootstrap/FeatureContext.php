@@ -36,6 +36,7 @@ use DrevOps\BehatSteps\LinkTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\WaitTrait;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\DrupalContext;
 
 /**
@@ -151,6 +152,72 @@ class FeatureContext extends DrupalContext {
     if (!$closed) {
       throw new \Exception('The mobile menu did not close and restore body scrolling.');
     }
+  }
+
+  /**
+   * Asserts that an element's computed CSS property resolves to a colour.
+   *
+   * Works for colour properties (returned by the browser as rgb/rgba) and for
+   * CSS custom properties (returned as the authored hex value), normalising
+   * both the actual and expected values to an "r,g,b" triplet before comparing.
+   *
+   * @param string $selector
+   *   The CSS selector of the element to inspect.
+   * @param string $property
+   *   The CSS property or custom property name (e.g. "background-color" or
+   *   "--ct-color-dark-background").
+   * @param string $expected
+   *   The expected colour as a hex or rgb/rgba value.
+   */
+  #[Then('the computed :property of the element :selector should be :expected')]
+  public function assertElementComputedCssColor(string $selector, string $property, string $expected): void {
+    $script = sprintf(
+      '(function () { var element = document.querySelector(%s); return element ? window.getComputedStyle(element).getPropertyValue(%s) : null; })()',
+      json_encode($selector),
+      json_encode($property),
+    );
+
+    $actual = $this->getSession()->evaluateScript($script);
+
+    if ($actual === NULL) {
+      throw new \Exception(sprintf('Element "%s" was not found on the page.', $selector));
+    }
+
+    $actual_color = self::normaliseColor((string) $actual);
+    $expected_color = self::normaliseColor($expected);
+
+    if ($actual_color !== $expected_color) {
+      throw new \Exception(sprintf('Expected computed "%s" of element "%s" to be "%s" (%s), but got "%s" (%s).', $property, $selector, $expected, $expected_color, trim((string) $actual), $actual_color));
+    }
+  }
+
+  /**
+   * Normalises a CSS colour value to an "r,g,b" triplet for comparison.
+   *
+   * @param string $color
+   *   A colour as a 3- or 6-digit hex value or an rgb()/rgba() expression.
+   *
+   * @return string
+   *   The "r,g,b" triplet, or the trimmed input when it cannot be parsed.
+   */
+  protected static function normaliseColor(string $color): string {
+    $color = trim($color);
+
+    if (preg_match('/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $color)) {
+      $hex = ltrim($color, '#');
+
+      if (strlen($hex) === 3) {
+        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+      }
+
+      return sprintf('%d,%d,%d', hexdec(substr($hex, 0, 2)), hexdec(substr($hex, 2, 2)), hexdec(substr($hex, 4, 2)));
+    }
+
+    if (preg_match('/rgba?\(\s*(\d+)[\s,]+(\d+)[\s,]+(\d+)/', $color, $matches)) {
+      return sprintf('%d,%d,%d', $matches[1], $matches[2], $matches[3]);
+    }
+
+    return $color;
   }
 
 }
