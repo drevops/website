@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Card group component.
+ *
+ * Variables:
+ * - columns: [integer] Number of columns at desktop width: 1, 2, 3, 4.
+ * - theme: [string] Theme variation: light, dark.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ *
+ * Slots:
+ * - cards: The rendered list of card components.
+ */
+#}
+
+{% set columns = columns in [1, 2, 3, 4] ? columns : 1 %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set modifier_class = 'ct-card-group ct-card-group--cols-%d %s %s'|format(columns, theme_class, modifier_class|default(''))|trim %}
+
+{% if cards is not empty %}
+  <div class="{{ modifier_class }}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="ct-card-group__grid">
+      {{ cards }}
+    </div>
+  </div>
+{% endif %}

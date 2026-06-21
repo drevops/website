@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Card component.
+ *
+ * Variables:
+ * - type: [string] Marker type: number, dot, icon.
+ * - index: [integer] 1-based position; shown as the number marker and drives
+ *   the staggered reveal delay.
+ * - title: [string] Card title.
+ * - description: [string] Card description.
+ * - theme: [string] Theme variation: light, dark.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ *
+ * Slots:
+ * - icon: Inline SVG markup for the icon marker.
+ */
+#}
+
+{% set index = index|default(0) %}
+{% set type = type in ['number', 'dot', 'icon'] ? type : 'dot' %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
+{% set delay_class = index > 0 ? 'component-reveal-d%d'|format(min(index, 6)) : '' %}
+{% set modifier_class = 'ct-card ct-card--%s %s component-reveal %s %s'|format(type, theme_class, delay_class, modifier_class|default(''))|trim %}
+
+{% if title is not empty %}
+  <div class="{{ modifier_class }}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="ct-card__marker" aria-hidden="true">
+      {% if type == 'number' %}
+        <span class="ct-card__number">{{ index > 0 ? (index < 10 ? '0' ~ index : index) }}</span>
+      {% elseif type == 'icon' %}
+        <span class="ct-card__icon">{{ icon }}</span>
+      {% else %}
+        <span class="ct-card__dot"></span>
+      {% endif %}
+    </div>
+
+    <div class="ct-card__body">
+      <p class="ct-card__title">{{ title }}</p>
+
+      {% if description is not empty %}
+        <p class="ct-card__description">{{ description }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

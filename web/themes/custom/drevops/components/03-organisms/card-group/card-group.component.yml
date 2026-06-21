@@ -1,0 +1,35 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Card group
+status: stable
+description: A group of cards laid out in one, two or four columns that stack on narrow screens.
+props:
+  type: object
+  properties:
+    columns:
+      type: integer
+      title: Columns
+      description: Number of columns at desktop width.
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      default: 1
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: dark
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Attributes
+    modifier_class:
+      type: string
+      title: Modifier class
+slots:
+  cards:
+    title: Cards
+    description: The rendered list of card components.

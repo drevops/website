@@ -1,0 +1,44 @@
+//
+// Card group component.
+//
+// Lays the cards out in one, two, three or four columns and collapses to a
+// single column on narrow screens. A single-column group leads each card's
+// marker beside the body; multi-column groups stack the marker above the body,
+// matching the static prototype's approach and trust grids. Spacing uses the
+// prototype's rem scale (CivicTheme exposes no global spacing tokens). Cards
+// reveal with a staggered fade via the shared reveal utilities.
+//
+
+.ct-card-group {
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  &--cols-2 &__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &--cols-3 &__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &--cols-4 &__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  // Multi-column groups stack each card's marker above the body.
+  &--cols-2 .ct-card,
+  &--cols-3 .ct-card,
+  &--cols-4 .ct-card {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (width <= 768px) {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -1,0 +1,78 @@
+//
+// Card component.
+//
+// A single card that leads with a number, a dot or an icon marker, followed by
+// a title and description. Ported from the static prototype's service list, dot
+// list and trust grid. Colours resolve through per-theme local variables (dark
+// by default, light when ct-theme-light is set); spacing uses the prototype's
+// rem scale (CivicTheme exposes no global spacing tokens). The marker leads
+// beside the body by default; the card group stacks it above the body in
+// multi-column layouts.
+//
+
+.ct-card {
+  --ct-card-marker-color: var(--ct-color-dark-interaction-background);
+  --ct-card-title-color: var(--ct-color-dark-heading);
+  --ct-card-body-color: var(--ct-color-dark-body);
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: start;
+
+  &.ct-theme-light {
+    --ct-card-marker-color: var(--ct-color-light-interaction-background);
+    --ct-card-title-color: var(--ct-color-light-heading);
+    --ct-card-body-color: var(--ct-color-light-body);
+  }
+
+  &__marker {
+    display: flex;
+    align-items: flex-start;
+    color: var(--ct-card-marker-color);
+  }
+
+  &__number {
+    font-family: var(--ct-typography-display-font-name);
+    font-size: 3.5rem;
+    font-weight: var(--ct-typography-display-font-weight);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    opacity: 40%;
+    user-select: none;
+  }
+
+  &__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-top: 0.625rem;
+    border-radius: 50%;
+    background: var(--ct-card-marker-color);
+  }
+
+  &__icon {
+    display: inline-flex;
+
+    svg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--ct-typography-heading-4-font-name);
+    font-size: var(--ct-typography-heading-4-font-size);
+    font-weight: var(--ct-typography-heading-4-font-weight);
+    line-height: var(--ct-typography-heading-4-line-height);
+    letter-spacing: var(--ct-typography-heading-4-letter-spacing);
+    color: var(--ct-card-title-color);
+  }
+
+  &__description {
+    margin: 0.5rem 0 0;
+    font-size: var(--ct-typography-text-small-font-size);
+    line-height: 1.6;
+    color: var(--ct-card-body-color);
+  }
+}

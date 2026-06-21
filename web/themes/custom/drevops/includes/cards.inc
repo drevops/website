@@ -11,12 +11,68 @@ use Drupal\civictheme\CivicthemeConstants;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\media\MediaInterface;
 
 /**
  * Implements template_preprocess_paragraph().
  */
 function drevops_preprocess_paragraph__civictheme_promo_card(array &$variables): void {
   _drevops_preprocess_paragraph__paragraph_field__summary($variables);
+}
+
+/**
+ * Implements template_preprocess_paragraph().
+ */
+function drevops_preprocess_paragraph__card(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+
+  $variables['type'] = civictheme_get_field_value($paragraph, 'field_c_p_type') ?? 'dot';
+  $variables['title'] = civictheme_get_field_value($paragraph, 'field_c_p_title');
+  $variables['description'] = drevops_get_field_value__summary($paragraph);
+
+  _civictheme_preprocess_paragraph__paragraph_field__theme($variables);
+
+  // The card group renders its cards and tags each with its 1-based position so
+  // the number marker reflects the card's order rather than an authored value.
+  $variables['index'] = $variables['elements']['#card_index'] ?? 0;
+
+  $variables['icon'] = NULL;
+  $media = civictheme_get_field_value($paragraph, 'field_c_p_icon', TRUE, build: $variables);
+  if ($media instanceof MediaInterface) {
+    $image = civictheme_media_image_get_variables($media);
+    if ($image) {
+      $variables['icon'] = [
+        '#type' => 'inline_template',
+        '#template' => civictheme_embed_svg($image['url'], ['ct-icon']),
+      ];
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_paragraph().
+ */
+function drevops_preprocess_paragraph__card_group(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+
+  $variables['column_count'] = (int) (civictheme_get_field_value($paragraph, 'field_c_p_list_column_count') ?? 1);
+
+  _civictheme_preprocess_paragraph__paragraph_field__theme($variables);
+
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('paragraph');
+
+  $cards = [];
+  $index = 0;
+  foreach (civictheme_get_field_referenced_entities($paragraph, 'field_c_p_list_items', $variables) as $card) {
+    $index++;
+    $build = $view_builder->view($card);
+    // Pass the position to the card so its number marker and reveal delay follow
+    // the order set by the editor.
+    $build['#card_index'] = $index;
+    $cards[] = $build;
+  }
+
+  $variables['cards'] = $cards;
 }
 
 /**
