@@ -1,0 +1,47 @@
+//
+// Reveal behaviour styles.
+//
+// Scroll-triggered fade-up with staggered delay utilities. The 'visible'
+// class is added by reveal.js once the element scrolls into view.
+//
+// The hidden starting state and the transition are applied only when the
+// visitor has not requested reduced motion, so reduced-motion visitors see
+// content in its final position with no entrance animation.
+//
+
+@media (prefers-reduced-motion: no-preference) {
+  .component-reveal {
+    opacity: 0%;
+    transform: translateY(40px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .component-reveal.visible {
+    opacity: 100%;
+    transform: translateY(0);
+  }
+
+  .component-reveal-d1 {
+    transition-delay: 0.1s;
+  }
+
+  .component-reveal-d2 {
+    transition-delay: 0.2s;
+  }
+
+  .component-reveal-d3 {
+    transition-delay: 0.3s;
+  }
+
+  .component-reveal-d4 {
+    transition-delay: 0.4s;
+  }
+
+  .component-reveal-d5 {
+    transition-delay: 0.5s;
+  }
+
+  .component-reveal-d6 {
+    transition-delay: 0.6s;
+  }
+}

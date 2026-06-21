@@ -73,4 +73,84 @@ class FeatureContext extends DrupalContext {
   use WaitTrait;
   use WatchdogTrait;
 
+  /**
+   * Assert that content using the reveal hook becomes visible.
+   *
+   * No template renders the interactions hooks yet, so the reveal behaviour is
+   * exercised against representative injected markup.
+   */
+  #[\Behat\Step\Then('injected reveal content becomes visible')]
+  public function assertInjectedRevealBecomesVisible(): void {
+    $session = $this->getSession();
+
+    $script = "
+      var element = document.createElement('div');
+      element.id = 'test-reveal-target';
+      element.className = 'component-reveal';
+      element.textContent = '[TEST] Reveal target';
+      document.body.insertBefore(element, document.body.firstChild);
+      Drupal.attachBehaviors(document.body);
+    ";
+    $session->executeScript($script);
+
+    $revealed = $session->wait(5000, "document.querySelector('#test-reveal-target.visible')");
+
+    if (!$revealed) {
+      throw new \Exception('The injected reveal element did not become visible.');
+    }
+  }
+
+  /**
+   * Assert the mobile menu toggles open and closed and locks body scrolling.
+   *
+   * No template renders the interactions hooks yet, so the mobile navigation
+   * behaviour is exercised against representative injected markup.
+   */
+  #[\Behat\Step\Then('the injected mobile menu toggles open and closed')]
+  public function assertInjectedMobileMenuToggles(): void {
+    $session = $this->getSession();
+
+    $script = "
+      var nav = document.createElement('nav');
+      nav.id = 'siteNav';
+      nav.className = 'component-nav';
+      var toggle = document.createElement('button');
+      toggle.id = 'navToggle';
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.textContent = 'Menu';
+      var menu = document.createElement('div');
+      menu.className = 'component-nav-menu';
+      var links = document.createElement('div');
+      links.className = 'component-nav-links';
+      var link = document.createElement('a');
+      link.setAttribute('href', '#test-interaction');
+      link.textContent = '[TEST] Menu link';
+      links.appendChild(link);
+      menu.appendChild(links);
+      nav.appendChild(toggle);
+      nav.appendChild(menu);
+      document.body.insertBefore(nav, document.body.firstChild);
+      Drupal.attachBehaviors(document.body);
+    ";
+    $session->executeScript($script);
+
+    $session->executeScript("document.getElementById('navToggle').click();");
+    $opened_js = "document.getElementById('siteNav').classList.contains('is-open')"
+      . " && document.body.style.overflow === 'hidden'";
+    $opened = $session->wait(3000, $opened_js);
+
+    if (!$opened) {
+      throw new \Exception('The mobile menu did not open and lock body scrolling.');
+    }
+
+    $session->executeScript("document.querySelector('#siteNav .component-nav-links a').click();");
+    $closed_js = "!document.getElementById('siteNav').classList.contains('is-open')"
+      . " && document.body.style.overflow === ''";
+    $closed = $session->wait(3000, $closed_js);
+
+    if (!$closed) {
+      throw new \Exception('The mobile menu did not close and restore body scrolling.');
+    }
+  }
+
 }
