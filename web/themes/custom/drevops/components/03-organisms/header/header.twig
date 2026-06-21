@@ -1,144 +1,54 @@
 {#
 /**
  * @file
- * CivicTheme Header component.
+ * DrevOps site header.
+ *
+ * Renders the redesign's fixed navigation bar: brand logo, primary menu, a
+ * call-to-action and a mobile toggle. The toggle, the open state and the
+ * close-on-link behaviour are driven by the site navigation behaviour, which
+ * binds to the `siteNav`/`navToggle` ids and the `component-nav-*` classes
+ * emitted here.
+ *
+ * The brand sits in the middle-2 region and the remaining header regions are
+ * kept as optional placement targets (rendered only when a block is present),
+ * so the bar stays clean by default while blocks can still be placed in any
+ * header region.
  *
  * Props:
  * - theme: [string] Theme variation (light or dark).
- * - is_sticky: [boolean] Whether header is sticky.
  * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
  * - modifier_class: [string] Additional CSS classes.
  *
  * Slots:
- * - content_top1: Top section first content slot.
- * - content_top2: Top section second content slot.
- * - content_top3: Top section third content slot.
- * - content_middle1: Middle section first content slot.
- * - content_middle2: Middle section second content slot.
- * - content_middle3: Middle section third content slot.
- * - content_bottom1: Bottom section content slot.
- *
- * Blocks:
- * - content_top1_block
- * - content_top2_block
- * - content_top3_block
- * - content_middle1_block
- * - content_middle2_block
- * - content_middle3_block
- * - content_bottom1_block
+ * - content_top1..3, content_middle1..3, content_bottom1: Header regions.
  */
 #}
 
 {% set theme_class = 'ct-theme-%s'|format(theme|default('dark')) %}
-{# Custom: Add sticky header class support. #}
-{% set sticky_class = is_sticky ? 'ct-header--sticky' : '' %}
-{% set modifier_class = '%s %s %s'|format(theme_class, sticky_class, modifier_class|default('')) %}
+{% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
 
-{% if content_top1 is not empty or content_top2 is not empty or content_top3 is not empty or content_middle1 is not empty or content_middle2 is not empty or content_middle3 is not empty or content_bottom1 is not empty %}
-  <header class="ct-header {{ modifier_class -}}" role="banner" {% if attributes %}{{ attributes }}{% endif %}>
+<header role="banner" id="siteNav" class="component-nav {{ modifier_class|trim }}"{% if attributes %} {{ attributes }}{% endif %}>
 
-    {% if content_top1 is not empty or content_top2 is not empty or content_top3 is not empty %}
-      <div class="ct-header__top hide-xxs show-m">
+  <div class="component-nav-logo ct-header__content-middle2">
+    {{ content_middle2 }}
+  </div>
 
-        {% if content_top1 is not empty %}
-          {% block content_top1_block %}
-            <div class="container">
-              <div class="row">
-                <div class="col-xxs-12">
-                  <div class="ct-header__content-top1">
-                    {{ content_top1 }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endblock %}
-        {% endif %}
+  <button class="component-nav-toggle" id="navToggle" type="button" aria-label="{{ 'Toggle menu'|t }}" aria-controls="siteNavMenu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 
-        {% if content_top2 is not empty or content_top3 is not empty %}
-          <div class="container">
-            <div class="row">
-
-              {% block content_top2_block %}
-                <div class="col-xxs-12 col-m-4">
-                  <div class="ct-header__content-top2">
-                    {{ content_top2 }}
-                  </div>
-                </div>
-              {% endblock %}
-
-              {% block content_top3_block %}
-                <div class="col-xxs-12 col-m-8">
-                  <div class="ct-header__content-top3">
-                    {{ content_top3 }}
-                  </div>
-                </div>
-              {% endblock %}
-
-            </div>
-          </div>
-        {% endif %}
-      </div>
+  <div class="component-nav-menu" id="siteNavMenu">
+    {{ do_primary_navigation() }}
+    <a href="/contact" class="component-nav-cta">{{ 'Talk to us'|t }}</a>
+    {% if content_middle3 is not empty %}
+      <div class="ct-header__content-middle3">{{ content_middle3 }}</div>
     {% endif %}
+  </div>
 
-    {% if content_middle1 is not empty or content_middle2 is not empty or content_middle3 is not empty %}
-      <div class="ct-header__middle">
+  {% if content_top1 is not empty %}<div class="ct-header__content-top1">{{ content_top1 }}</div>{% endif %}
+  {% if content_top2 is not empty %}<div class="ct-header__content-top2">{{ content_top2 }}</div>{% endif %}
+  {% if content_top3 is not empty %}<div class="ct-header__content-top3">{{ content_top3 }}</div>{% endif %}
+  {% if content_middle1 is not empty %}<div class="ct-header__content-middle1">{{ content_middle1 }}</div>{% endif %}
+  {% if content_bottom1 is not empty %}<div class="ct-header__content-bottom1">{{ content_bottom1 }}</div>{% endif %}
 
-        {% if content_middle1 is not empty %}
-          {% block content_middle1_block %}
-            <div class="container">
-              <div class="row">
-                <div class="col-xxs-12">
-                  <div class="ct-header__content-middle1">
-                    {{ content_middle1 }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endblock %}
-        {% endif %}
-
-        {% if content_middle2 is not empty or content_middle3 is not empty %}
-          <div class="container">
-            <div class="row row--no-wrap">
-              {% if content_middle2 is not empty %}
-                {% block content_middle2_block %}
-                  <div class="col col--no-grow">
-                    <div class="ct-header__content-middle2">
-                      {{ content_middle2 }}
-                    </div>
-                  </div>
-                {% endblock %}
-              {% endif %}
-
-              {% if content_middle3 is not empty %}
-                {% block content_middle3_block %}
-                  <div class="col">
-                    <div class="ct-header__content-middle3">
-                      {{ content_middle3 }}
-                    </div>
-                  </div>
-                {% endblock %}
-              {% endif %}
-            </div>
-          </div>
-        {% endif %}
-      </div>
-    {% endif %}
-
-    {% if content_bottom1 is not empty %}
-      <div class="ct-header__bottom">
-        {% block content_bottom1_block %}
-          <div class="container">
-            <div class="row">
-              <div class="col-xxs-12">
-                <div class="ct-header__content-bottom1">
-                  {{ content_bottom1 }}
-                </div>
-              </div>
-            </div>
-          </div>
-        {% endblock %}
-      </div>
-    {% endif %}
-  </header>
-{% endif %}
+</header>

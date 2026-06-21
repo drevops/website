@@ -1,6 +1,6 @@
 uuid: 0d7f4f98-6640-4c54-b613-90dca3e03be4
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - system.menu.civictheme-secondary-navigation
