@@ -176,12 +176,12 @@ function do_base_deploy_blog_read_time(array &$sandbox): string {
 function do_base_deploy_homepage_assemble(): string {
   $node = _do_base_resolve_front_page_node();
 
-  if (!$node instanceof NodeInterface || !$node->hasField('field_c_n_components')) {
-    return 'No suitable front-page node; skipped the homepage assembly.';
+  if (!$node->hasField('field_c_n_components')) {
+    return 'The front page has no components field; skipped the homepage assembly.';
   }
 
-  // A hero opener as the first component means the page is already assembled, so
-  // a re-run leaves the editor's later changes untouched.
+  // A hero opener as the first component means the page is already assembled,
+  // so a re-run leaves the editor's later changes untouched.
   $existing = $node->get('field_c_n_components')->referencedEntities();
   $first = reset($existing);
   if ($first instanceof ParagraphInterface && $first->bundle() === 'hero') {
@@ -206,15 +206,15 @@ function do_base_deploy_homepage_assemble(): string {
       'field_c_p_theme' => 'dark',
     ]),
     _do_base_build_homepage_card_group(1, [
-      ['type' => 'number', 'title' => 'Website Delivery', 'summary' => "We build your site with automated testing and CI/CD from the first commit, so what launches is solid from day one, not a prototype you'll be fixing after go-live. AI-assisted delivery gets you there faster, at the same tested standard."],
-      ['type' => 'number', 'title' => 'Ongoing Support', 'summary' => 'Proactive maintenance from the people who built your platform. Security updates, monitoring, continuous improvement, and a direct line with no layers in between.'],
-      ['type' => 'number', 'title' => 'Upgrades & Migrations', 'summary' => 'Running an end-of-life Drupal 7 or 9 site? We handle the full migration with test coverage and zero-downtime deployments, so you stay compliant and your users never notice the switch.'],
-      ['type' => 'number', 'title' => 'Website as a Service', 'summary' => 'A professional, managed website for smaller organisations. A proven build, then hosting, security updates, and maintenance handled for a flat monthly fee. No lock-in, no surprises, and a simple way in that can grow into more.'],
+      _do_base_homepage_card('number', 'Website Delivery', "We build your site with automated testing and CI/CD from the first commit, so what launches is solid from day one, not a prototype you'll be fixing after go-live. AI-assisted delivery gets you there faster, at the same tested standard."),
+      _do_base_homepage_card('number', 'Ongoing Support', 'Proactive maintenance from the people who built your platform. Security updates, monitoring, continuous improvement, and a direct line with no layers in between.'),
+      _do_base_homepage_card('number', 'Upgrades & Migrations', 'Running an end-of-life Drupal 7 or 9 site? We handle the full migration with test coverage and zero-downtime deployments, so you stay compliant and your users never notice the switch.'),
+      _do_base_homepage_card('number', 'Website as a Service', 'A professional, managed website for smaller organisations. A proven build, then hosting, security updates, and maintenance handled for a flat monthly fee. No lock-in, no surprises, and a simple way in that can grow into more.'),
     ]),
     _do_base_build_homepage_card_group(1, [
-      ['type' => 'dot', 'title' => 'The same standard, in fewer hours', 'summary' => 'AI takes on the repetitive production work, so a build that used to take weeks can take days. We quote it both ways and you decide. The tests, the CI, and the code you can read on GitHub all stay the same.'],
-      ['type' => 'dot', 'title' => 'Wondering whether AI-written code can be trusted?', 'summary' => "It's a fair thing to ask. Here's how we think about it: every change is still reviewed, and every build is tested and gated by CI before it ships. AI helps with the writing, never the checking. The guardrails that make this safe are our own, and they're open source, so you can see exactly how they work."],
-      ['type' => 'dot', 'title' => 'Your code and data stay yours', 'summary' => "Nothing you share trains an AI model, and nothing goes to a public AI service without your say-so. We've written down exactly how we handle it in our Responsible AI policy."],
+      _do_base_homepage_card('dot', 'The same standard, in fewer hours', 'AI takes on the repetitive production work, so a build that used to take weeks can take days. We quote it both ways and you decide. The tests, the CI, and the code you can read on GitHub all stay the same.'),
+      _do_base_homepage_card('dot', 'Wondering whether AI-written code can be trusted?', "It's a fair thing to ask. Here's how we think about it: every change is still reviewed, and every build is tested and gated by CI before it ships. AI helps with the writing, never the checking. The guardrails that make this safe are our own, and they're open source, so you can see exactly how they work."),
+      _do_base_homepage_card('dot', 'Your code and data stay yours', "Nothing you share trains an AI model, and nothing goes to a public AI service without your say-so. We've written down exactly how we handle it in our Responsible AI policy."),
     ]),
     _do_base_homepage_paragraph([
       'type' => 'campaign',
@@ -237,21 +237,21 @@ function do_base_deploy_homepage_assemble(): string {
       ['value' => '100', 'suffix' => '%', 'label' => 'Of projects ship with automated tests'],
     ]),
     _do_base_build_homepage_card_group(2, [
-      ['type' => 'icon', 'title' => 'Victorian Government', 'summary' => "Delivered Australia's first Docker-based government Drupal platform.", 'icon' => _do_base_ensure_homepage_icon('Homepage track record: Government', 'government.svg')],
-      ['type' => 'icon', 'title' => 'Australian Defence', 'summary' => 'Multiple classified platforms with complex security and compliance requirements.', 'icon' => _do_base_ensure_homepage_icon('Homepage track record: Defence', 'defence.svg')],
-      ['type' => 'icon', 'title' => 'GovCMS', 'summary' => "Drupal platform delivery on Australia's government hosting infrastructure.", 'icon' => _do_base_ensure_homepage_icon('Homepage track record: GovCMS', 'govcms.svg')],
-      ['type' => 'icon', 'title' => 'Education', 'summary' => 'University platforms with ongoing support, leading to internal referrals across departments.', 'icon' => _do_base_ensure_homepage_icon('Homepage track record: Education', 'education.svg')],
+      _do_base_homepage_card('icon', 'Victorian Government', "Delivered Australia's first Docker-based government Drupal platform.", _do_base_ensure_homepage_icon('Homepage track record: Government', 'government.svg')),
+      _do_base_homepage_card('icon', 'Australian Defence', 'Multiple classified platforms with complex security and compliance requirements.', _do_base_ensure_homepage_icon('Homepage track record: Defence', 'defence.svg')),
+      _do_base_homepage_card('icon', 'GovCMS', "Drupal platform delivery on Australia's government hosting infrastructure.", _do_base_ensure_homepage_icon('Homepage track record: GovCMS', 'govcms.svg')),
+      _do_base_homepage_card('icon', 'Education', 'University platforms with ongoing support, leading to internal referrals across departments.', _do_base_ensure_homepage_icon('Homepage track record: Education', 'education.svg')),
     ]),
     _do_base_build_homepage_card_group(1, [
-      ['type' => 'dot', 'title' => 'Automated testing is not optional', 'summary' => "Every platform ships with a full test suite. Functional, unit, and visual regression tests run on every commit. If it's not tested, it doesn't deploy."],
-      ['type' => 'dot', 'title' => 'One team, zero handovers', 'summary' => 'We handle development, DevOps, and production support. One team with full context, no vendors blaming each other, no knowledge lost between handoffs.'],
-      ['type' => 'dot', 'title' => 'Pricing that makes sense', 'summary' => "Flat-rate pricing with standard and rapid response options. We'll tell you what it costs upfront. No retainer games, no billable surprises, no markup on markup."],
-      ['type' => 'dot', 'title' => 'Direct line to the engineers', 'summary' => 'You talk to the people building your platform. We manage the project without adding layers between you and the work. Fast communication, honest updates, no runaround.'],
+      _do_base_homepage_card('dot', 'Automated testing is not optional', "Every platform ships with a full test suite. Functional, unit, and visual regression tests run on every commit. If it's not tested, it doesn't deploy."),
+      _do_base_homepage_card('dot', 'One team, zero handovers', 'We handle development, DevOps, and production support. One team with full context, no vendors blaming each other, no knowledge lost between handoffs.'),
+      _do_base_homepage_card('dot', 'Pricing that makes sense', "Flat-rate pricing with standard and rapid response options. We'll tell you what it costs upfront. No retainer games, no billable surprises, no markup on markup."),
+      _do_base_homepage_card('dot', 'Direct line to the engineers', 'You talk to the people building your platform. We manage the project without adding layers between you and the work. Fast communication, honest updates, no runaround.'),
     ]),
     _do_base_build_homepage_card_group(1, [
-      ['type' => 'number', 'title' => 'Discovery', 'summary' => 'We review your website, understand your requirements and constraints, and scope the work, including whether AI-assisted delivery is the right fit. You get a clear proposal with flat-rate pricing before any work begins.'],
-      ['type' => 'number', 'title' => 'Delivery', 'summary' => 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.'],
-      ['type' => 'number', 'title' => 'Ongoing support', 'summary' => 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'],
+      _do_base_homepage_card('number', 'Discovery', 'We review your website, understand your requirements and constraints, and scope the work, including whether AI-assisted delivery is the right fit. You get a clear proposal with flat-rate pricing before any work begins.'),
+      _do_base_homepage_card('number', 'Delivery', 'Your site is built with automated testing and CI/CD from the first commit, with AI accelerating the production work and every change reviewed before it lands. Regular check-ins, transparent progress, and no surprises at the end.'),
+      _do_base_homepage_card('number', 'Ongoing support', 'The same people who built your site maintain it. Security updates, continuous improvement, and proactive monitoring on a prepaid support arrangement.'),
     ]),
     _do_base_build_homepage_blog_teaser(),
     _do_base_homepage_paragraph([
@@ -269,13 +269,21 @@ function do_base_deploy_homepage_assemble(): string {
   ]);
 
   $references = [];
-  foreach ($sections as $paragraph) {
-    $references[] = ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()];
+  foreach ($sections as $section) {
+    $references[] = ['target_id' => $section->id(), 'target_revision_id' => $section->getRevisionId()];
   }
 
   // The hero leads the page, so the inherited CivicTheme banner is emptied here
   // and the banner block is hidden on the front page through its visibility.
-  foreach (['field_c_n_banner_title', 'field_c_n_banner_type', 'field_c_n_banner_background', 'field_c_n_banner_blend_mode', 'field_c_n_banner_components'] as $banner_field) {
+  $banner_fields = [
+    'field_c_n_banner_title',
+    'field_c_n_banner_type',
+    'field_c_n_banner_background',
+    'field_c_n_banner_blend_mode',
+    'field_c_n_banner_components',
+  ];
+
+  foreach ($banner_fields as $banner_field) {
     if ($node->hasField($banner_field)) {
       $node->set($banner_field, NULL);
     }
@@ -290,7 +298,7 @@ function do_base_deploy_homepage_assemble(): string {
 /**
  * Resolve the front-page node, creating one when the site has none.
  */
-function _do_base_resolve_front_page_node(): ?NodeInterface {
+function _do_base_resolve_front_page_node(): NodeInterface {
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
   $front = (string) \Drupal::config('system.site')->get('page.front');
 
@@ -322,6 +330,21 @@ function _do_base_homepage_paragraph(array $values): Paragraph {
   $paragraph->save();
 
   return $paragraph;
+}
+
+/**
+ * Build a card definition for a homepage card group.
+ *
+ * The icon is an optional CivicTheme icon media id used by the icon variant;
+ * the number and dot variants leave it unset.
+ */
+function _do_base_homepage_card(string $type, string $title, string $summary, ?int $icon = NULL): array {
+  return [
+    'type' => $type,
+    'title' => $title,
+    'summary' => $summary,
+    'icon' => $icon,
+  ];
 }
 
 /**
@@ -457,7 +480,7 @@ function _do_base_ensure_homepage_icon(string $name, string $filename): ?int {
 
     return (int) $media->id();
   }
-  catch (\Throwable $exception) {
+  catch (\Throwable) {
     return NULL;
   }
 }

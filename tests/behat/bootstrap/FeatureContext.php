@@ -156,7 +156,7 @@ class FeatureContext extends DrupalContext {
   }
 
   /**
-   * Assert the homepage reflows on a phone viewport without horizontal scrolling.
+   * Assert the homepage reflows on a phone without horizontal scrolling.
    *
    * Full-bleed sections such as the hero intentionally span the whole viewport
    * width (including the strip under the vertical scrollbar), and the root
