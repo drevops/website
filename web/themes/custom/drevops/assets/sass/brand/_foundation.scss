@@ -9,10 +9,11 @@
 //
 
 :root {
-  // Display presets carry the design's two fluid sizes so any display heading
-  // scales smoothly between a narrow and a wide viewport.
-  --ct-typography-display-large-font-size: clamp(56px, 8vw, 92px);
-  --ct-typography-display-font-size: clamp(40px, 5vw, 56px);
+  // Display presets carry the design's two fluid sizes (56-92px / 40-56px) so
+  // any display heading scales smoothly between a narrow and a wide viewport.
+  // Bounds use rem so they honour the user's root font-size preference.
+  --ct-typography-display-large-font-size: clamp(3.5rem, 8vw, 5.75rem);
+  --ct-typography-display-font-size: clamp(2.5rem, 5vw, 3.5rem);
 
   // The hero and page titles render as <h1>, so making heading-1 fluid keeps
   // the most prominent heading readable across widths while preserving its
@@ -22,12 +23,14 @@
 
 // A faint film-grain overlay gives every page the redesign's tactile surface.
 // Fixed and non-interactive so it covers the viewport without affecting layout
-// or pointer events.
+// or pointer events. The z-index sits above page content (which tops out at 11)
+// but below CivicTheme's interactive layer - tooltips and popovers at 99,
+// navigation and dialogs at 1000 - so the grain never films over them.
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 50;
   pointer-events: none;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");

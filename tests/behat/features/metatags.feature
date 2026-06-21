@@ -19,6 +19,6 @@ Feature: Page content metatags
   Scenario: Pages expose the branded Open Graph and Twitter share image
     Given I am an anonymous user
     When I go to the homepage
-    Then the response should contain "<meta property=\"og:image\" content=\""
-    And the response should contain "/themes/custom/drevops/dist/assets/images/og-image.png"
-    And the response should contain "<meta name=\"twitter:image\" content=\""
+    Then the response should contain "<meta property=\"og:image\" content=\"http"
+    And the response should contain "<meta name=\"twitter:image\" content=\"http"
+    And the response should contain "/themes/custom/drevops/dist/assets/images/og-image.png\" />"
