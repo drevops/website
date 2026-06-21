@@ -487,35 +487,41 @@ function _do_base_ensure_homepage_icon(string $name, string $filename): ?int {
 }
 
 /**
- * Seed the Services page assembled from the shared components.
+ * Reassemble a civictheme_page from a freshly built component stack.
+ *
+ * The page is located by its title so an existing page keeps its alias and
+ * revision history, and is created at the given alias only when none exists.
+ * Building, attaching and cleaning up the superseded paragraphs run inside one
+ * transaction so a failure part way through rolls back rather than leaving
+ * half-saved paragraphs orphaned instead of attached to the page.
+ *
+ * @param string $title
+ *   The page title used to locate or create the node.
+ * @param string $alias
+ *   The path alias applied when the node is created.
+ * @param callable(): \Drupal\paragraphs\Entity\Paragraph[] $build_components
+ *   Builds and returns the ordered components to attach to the page.
  */
-function do_base_deploy_seed_services_page(): string {
+function _do_base_seed_page(string $title, string $alias, callable $build_components): string {
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
 
-  // Reassemble the existing Services page when present so its /services alias
-  // and revision history are preserved; create it only on a site that has none.
   $existing = $node_storage->loadByProperties([
     'type' => 'civictheme_page',
-    'title' => 'Services',
+    'title' => $title,
   ]);
   $node = $existing ? reset($existing) : $node_storage->create([
     'type' => 'civictheme_page',
-    'title' => 'Services',
+    'title' => $title,
     'status' => 1,
-    'path' => ['alias' => '/services', 'pathauto' => 0],
+    'path' => ['alias' => $alias, 'pathauto' => 0],
   ]);
 
-  // The components the page carried before the rebuild are deleted afterwards
-  // so swapping the stack does not leave orphaned paragraphs behind.
   $superseded = $node->get('field_c_n_components')->referencedEntities();
 
-  // Building, attaching and cleaning up run inside one transaction so a failure
-  // part way through rolls back rather than leaving half-saved paragraphs
-  // orphaned instead of attached to the page.
   $transaction = \Drupal::database()->startTransaction();
 
   try {
-    $components = _do_base_build_services_components();
+    $components = $build_components();
 
     $node->set('field_c_n_components', array_map(static fn (Paragraph $component): array => [
       'target_id' => $component->id(),
@@ -533,7 +539,14 @@ function do_base_deploy_seed_services_page(): string {
     throw $exception;
   }
 
-  return sprintf('Assembled the Services page (node %s) from %d components.', $node->id(), count($components));
+  return sprintf('Assembled the %s page (node %s) from %d components.', $title, $node->id(), count($components));
+}
+
+/**
+ * Seed the Services page assembled from the shared components.
+ */
+function do_base_deploy_seed_services_page(): string {
+  return _do_base_seed_page('Services', '/services', _do_base_build_services_components(...));
 }
 
 /**
@@ -692,50 +705,7 @@ function _do_base_build_services_components(): array {
  * Seed the Contact page assembled from the shared components.
  */
 function do_base_deploy_seed_contact_page(): string {
-  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-
-  // Reassemble the existing Contact page when present so its /contact alias and
-  // revision history are preserved; create it only on a site that has none.
-  $existing = $node_storage->loadByProperties([
-    'type' => 'civictheme_page',
-    'title' => 'Contact',
-  ]);
-  $node = $existing ? reset($existing) : $node_storage->create([
-    'type' => 'civictheme_page',
-    'title' => 'Contact',
-    'status' => 1,
-    'path' => ['alias' => '/contact', 'pathauto' => 0],
-  ]);
-
-  // The components the page carried before the rebuild are deleted afterwards
-  // so swapping the stack does not leave orphaned paragraphs behind.
-  $superseded = $node->get('field_c_n_components')->referencedEntities();
-
-  // Building, attaching and cleaning up run inside one transaction so a failure
-  // part way through rolls back rather than leaving half-saved paragraphs
-  // orphaned instead of attached to the page.
-  $transaction = \Drupal::database()->startTransaction();
-
-  try {
-    $components = _do_base_build_contact_components();
-
-    $node->set('field_c_n_components', array_map(static fn (Paragraph $component): array => [
-      'target_id' => $component->id(),
-      'target_revision_id' => $component->getRevisionId(),
-    ], $components));
-    $node->save();
-
-    foreach ($superseded as $paragraph) {
-      $paragraph->delete();
-    }
-  }
-  catch (\Throwable $exception) {
-    $transaction->rollBack();
-
-    throw $exception;
-  }
-
-  return sprintf('Assembled the Contact page (node %s) from %d components.', $node->id(), count($components));
+  return _do_base_seed_page('Contact', '/contact', _do_base_build_contact_components(...));
 }
 
 /**
