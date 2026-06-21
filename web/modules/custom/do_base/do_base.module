@@ -39,8 +39,8 @@ function do_base_field_c_p_type_allowed_values(FieldStorageDefinitionInterface $
   }
 
   $all = [];
-  foreach ($bundle_values as $values) {
-    $all += $values;
+  foreach ($bundle_values as $bundle_value) {
+    $all += $bundle_value;
   }
 
   return $all;
