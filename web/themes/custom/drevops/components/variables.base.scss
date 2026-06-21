@@ -39,79 +39,23 @@ $ct-colors: (
   ),
 );
 
-// Example to define 2 custom local fonts which will automatically appear
-// in Storybook.
+// Display and headings use Plus Jakarta Sans (primary); body text uses Outfit
+// (secondary). Both load from Google Fonts with the weight ranges the brand
+// relies on (Plus Jakarta Sans 400-800, Outfit 200-600).
 $ct-fonts: (
+  'primary': (
+    'family': '"Plus Jakarta Sans", sans-serif',
+    'types': (
+      (
+        'uri': 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
+      ),
+    ),
+  ),
   'secondary': (
-    'family': 'Rubik, sans-serif',
+    'family': '"Outfit", sans-serif',
     'types': (
       (
-        'uri': 'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap',
-      ),
-    ),
-  ),
-  'tertiary': (
-    'family': 'Roboto, sans-serif',
-    'types': (
-      (
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Regular.eot',
-        ),
-      ),
-      (
-        'italic': true,
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Italic.eot',
-        ),
-      ),
-      (
-        'weight': 'bold',
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Bold.eot',
-        ),
-      ),
-      (
-        'italic': true,
-        'weight': 'bold',
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-BoldItalic.eot',
-        ),
-      ),
-      (
-        'weight': 300,
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Thin.eot',
-        ),
-      ),
-      (
-        'weight': 700,
-        'uri': (
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.ttf',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.woff',
-          '#{$ct-assets-directory}fonts/Roboto/Roboto-Black.eot',
-        ),
-      ),
-    ),
-  ),
-  'quartary': (
-    'family': '"Dancing Script", serif',
-    'types': (
-      (
-        'uri': (
-          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.ttf',
-          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.woff',
-          '#{$ct-assets-directory}fonts/DancingScript/DancingScript-Regular.woff2',
-        ),
+        'uri': 'https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap',
       ),
     ),
   ),

@@ -9,3 +9,5 @@ label: Global
 tags:
   canonical_url: '[current-page:url]'
   title: '[current-page:title] | [site:name]'
+  og_image: '[site:url]themes/custom/drevops/dist/assets/images/og-image.png'
+  twitter_cards_image: '[site:url]themes/custom/drevops/dist/assets/images/og-image.png'
