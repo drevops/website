@@ -19,6 +19,9 @@
  * - content_middle5: Full-width middle slot.
  * - content_bottom1: Bottom bar start - copyright.
  * - content_bottom2: Bottom bar end - call to action.
+ *
+ * The per-slot `ct-footer__<section>__content-<slot>` classes keep each footer
+ * region individually addressable (see the Behat region map).
  */
 #}
 
@@ -36,10 +39,10 @@
       {% if has_top %}
         <div class="ct-footer__top">
           {% if content_top1 is not empty %}
-            <div class="ct-footer__top-item">{{ content_top1 }}</div>
+            <div class="ct-footer__top-item ct-footer__top__content-top1">{{ content_top1 }}</div>
           {% endif %}
           {% if content_top2 is not empty %}
-            <div class="ct-footer__top-item">{{ content_top2 }}</div>
+            <div class="ct-footer__top-item ct-footer__top__content-top2">{{ content_top2 }}</div>
           {% endif %}
         </div>
       {% endif %}
@@ -47,31 +50,31 @@
       {% if has_grid %}
         <div class="ct-footer__grid">
           {% if content_middle1 is not empty %}
-            <div class="ct-footer__col ct-footer__col--brand">{{ content_middle1 }}</div>
+            <div class="ct-footer__col ct-footer__col--brand ct-footer__middle__content-middle1">{{ content_middle1 }}</div>
           {% endif %}
           {% if content_middle2 is not empty %}
-            <div class="ct-footer__col">{{ content_middle2 }}</div>
+            <div class="ct-footer__col ct-footer__middle__content-middle2">{{ content_middle2 }}</div>
           {% endif %}
           {% if content_middle3 is not empty %}
-            <div class="ct-footer__col">{{ content_middle3 }}</div>
+            <div class="ct-footer__col ct-footer__middle__content-middle3">{{ content_middle3 }}</div>
           {% endif %}
           {% if content_middle4 is not empty %}
-            <div class="ct-footer__col">{{ content_middle4 }}</div>
+            <div class="ct-footer__col ct-footer__middle__content-middle4">{{ content_middle4 }}</div>
           {% endif %}
         </div>
       {% endif %}
 
       {% if content_middle5 is not empty %}
-        <div class="ct-footer__wide">{{ content_middle5 }}</div>
+        <div class="ct-footer__wide ct-footer__middle__content-middle5">{{ content_middle5 }}</div>
       {% endif %}
 
       {% if has_bottom %}
         <div class="ct-footer__bar">
           {% if content_bottom1 is not empty %}
-            <div class="ct-footer__bar-start">{{ content_bottom1 }}</div>
+            <div class="ct-footer__bar-start ct-footer__bottom__content-bottom1">{{ content_bottom1 }}</div>
           {% endif %}
           {% if content_bottom2 is not empty %}
-            <div class="ct-footer__bar-end">{{ content_bottom2 }}</div>
+            <div class="ct-footer__bar-end ct-footer__bottom__content-bottom2">{{ content_bottom2 }}</div>
           {% endif %}
         </div>
       {% endif %}
