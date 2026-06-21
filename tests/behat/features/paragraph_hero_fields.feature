@@ -35,6 +35,7 @@ Feature: Hero fields
     And should see a "[name='field_c_n_components[0][subform][field_c_p_links][0][uri]']" element
 
     And I should see the text "Background image"
+    And should see a ".field--name-field-c-p-image" element
 
     And I should see the text "Theme"
     And should see a "[name='field_c_n_components[0][subform][field_c_p_theme]']" element
