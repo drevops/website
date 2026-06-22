@@ -43,16 +43,16 @@ $ct-spacing-map: (
 // ct-mb-m-1 - margin-bottom 1 on medium screens and up
 // ct-mt-m-1 - margin-top 1 on medium screens and up
 
-$_all-sizes: map.merge($ct-spacing-sizes-default, $ct-spacing-sizes);
+$_ct-all-sizes: map.merge($ct-spacing-sizes-default, $ct-spacing-sizes);
 
 // Define spacing properties and their CSS counterparts
-$_spacing-properties: (
+$_ct-spacing-properties: (
   'm': 'margin',
   'p': 'padding'
 );
 
 // Define directional modifiers
-$_spacing-directions: (
+$_ct-spacing-directions: (
   '': '',
   't': '-top',
   'r': '-right',
@@ -63,12 +63,12 @@ $_spacing-directions: (
 );
 
 // Generate spacing utilities - single loop for both base and responsive classes
-@each $breakpoint-name, $breakpoint-sizes in $_all-sizes {
+@each $breakpoint-name, $breakpoint-sizes in $_ct-all-sizes {
   @if $breakpoint-name == 'xxs' {
     // Generate base classes (no breakpoint prefix) from xxs only
     @each $size-name, $size-value in $breakpoint-sizes {
-      @each $prop-key, $prop-name in $_spacing-properties {
-        @each $dir-key, $dir-value in $_spacing-directions {
+      @each $prop-key, $prop-name in $_ct-spacing-properties {
+        @each $dir-key, $dir-value in $_ct-spacing-directions {
           @if $dir-key == 'x' or $dir-key == 'y' {
             // Handle x and y axis spacing
             $axis: list.nth($dir-value, 1);
@@ -93,8 +93,8 @@ $_spacing-directions: (
     // Generate responsive classes
     @include ct-breakpoint($breakpoint-name) {
       @each $size-name, $size-value in $breakpoint-sizes {
-        @each $prop-key, $prop-name in $_spacing-properties {
-          @each $dir-key, $dir-value in $_spacing-directions {
+        @each $prop-key, $prop-name in $_ct-spacing-properties {
+          @each $dir-key, $dir-value in $_ct-spacing-directions {
             @if $dir-key == 'x' or $dir-key == 'y' {
               // Handle x and y axis spacing
               $axis: list.nth($dir-value, 1);
