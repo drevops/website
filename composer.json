@@ -12,10 +12,11 @@
         "drupal/admin_toolbar": "^3.6.3",
         "drupal/ai_image_alt_text": "^1.0.2",
         "drupal/ai_provider_openai": "^1.2.1",
-        "drupal/civictheme": "~1.12.2",
+        "drupal/civictheme": "~1.13.0",
         "drupal/clamav": "^2.1",
         "drupal/cloudflare": "^2@beta",
         "drupal/coffee": "^2.0.1",
+        "drupal/components": "^3.2",
         "drupal/config_split": "^2.0.2",
         "drupal/config_update": "^2@alpha",
         "drupal/core-composer-scaffold": "~11.3.12",
@@ -61,13 +62,13 @@
         "behat/behat": "^3.31.0",
         "dantleech/gherkin-lint": "^0.2.4",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.2.1",
-        "drevops/behat-format-progress-fail": "^1.4",
-        "drevops/behat-screenshot": "^2.3",
-        "drevops/behat-steps": "^3.10.0",
+        "drevops/behat-format-progress-fail": "^1.5",
+        "drevops/behat-screenshot": "^2.4.1",
+        "drevops/behat-steps": "^3.11",
         "drevops/phpcs-standard": "^0.7.0",
         "drupal/coder": "^9@alpha",
-        "drupal/drupal-driver": "^3.0@alpha",
-        "drupal/drupal-extension": "^6.0@alpha",
+        "drupal/drupal-driver": "^3.2@alpha",
+        "drupal/drupal-extension": "^6.1",
         "ergebnis/composer-normalize": "^2.52.0",
         "lullabot/mink-selenium2-driver": "^1.7.4",
         "lullabot/php-webdriver": "^2.0.7",
@@ -128,14 +129,19 @@
             "pyrech/composer-changelogs": true,
             "tbachert/spi": true
         },
-        "audit": {
-            "abandoned": "report",
-            "block-insecure": true
-        },
         "bump-after-update": true,
         "discard-changes": true,
         "platform": {
             "php": "8.4.20"
+        },
+        "policy": {
+            "advisories": {
+                "block": false,
+                "audit": "fail"
+            },
+            "abandoned": {
+                "audit": "report"
+            }
         },
         "sort-packages": true
     },

@@ -48,6 +48,7 @@ props:
         - top
         - bottom
         - both
+        - none
     footer_theme:
       type: string
       title: Footer theme

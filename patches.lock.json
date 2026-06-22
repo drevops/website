@@ -1,12 +1,12 @@
 {
-    "_hash": "e229b07bdfadbc048ad3725db4d36669255391275e5a71ed48f918ea0a21e1e6",
+    "_hash": "3db242e40f1c2e468f8cea8ccf1e67aaa720b593f315477731f63218693f876e",
     "patches": {
         "drupal/civictheme": [
             {
                 "package": "drupal/civictheme",
                 "description": "Remove Shortcut from theme dependency",
                 "url": "patches/civictheme-remove-shortcut-mr19.diff",
-                "sha256": "c9e5dca969c253d74dc05371df40ef722603c46a65a3ef706b6de5e70a901f05",
+                "sha256": "afa85d791d2da959be363553ddc7778d19b56e827feab15b06233ef236396821",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"

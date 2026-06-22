@@ -4,7 +4,7 @@
  * Theme implementation for Manual list.
  */
 #}
-{% extends '@organisms/list/list.twig' %}
+{% extends 'drevops:list' %}
 
 {% set layout = layout in ['grid', 'spotlight'] ? layout : 'grid' %}
 
@@ -40,7 +40,7 @@
     {% endblock %}
 
     <div class="ct-list__rows layout-{{ layout }}">
-      {{ include('@base/' ~ layout ~ '/' ~ layout ~ '.twig', {
+      {% include (layout == 'spotlight' ? 'drevops:spotlight' : 'civictheme:grid') with {
         theme: theme,
         title: title,
         template_column_count: column_count,
@@ -48,7 +48,7 @@
         items: rows,
         with_background: with_background,
         row_class: 'row--equal-heights-content row--vertically-spaced',
-      }, false) }}
+      } only %}
     </div>
 
     {% block rows_below_block %}

@@ -7,7 +7,7 @@
 # @see https://hub.docker.com/r/uselagoon/php-8.4-cli-drupal/tags
 # @see https://github.com/uselagoon/lagoon-images/tree/main/images/php-cli-drupal
 
-FROM uselagoon/php-8.4-cli-drupal:26.5.1
+FROM uselagoon/php-8.4-cli-drupal:26.6.0
 
 # Add missing variables.
 # @todo Remove once https://github.com/uselagoon/lagoon/issues/3121 is resolved.
@@ -89,9 +89,9 @@ RUN mkdir -p -m 2775 "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/$
 
 RUN if [ "${VORTEX_FRONTEND_BUILD_SKIP}" != "1" ]; then \
       theme_path="/app/${WEBROOT}/themes/custom/${DRUPAL_THEME}"; \
-      yarn --cwd="${theme_path}" install --frozen-lockfile --no-progress && \
-      yarn --cwd="${theme_path}" run build && \
-      yarn cache clean; \
+      npm --prefix "${theme_path}" ci --no-progress && \
+      npm --prefix "${theme_path}" run build && \
+      npm cache clean --force; \
     fi
 
 WORKDIR /app

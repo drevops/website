@@ -1,0 +1,2738 @@
+/* === variables.css === */
+/*
+ * ============================================================
+ * DrevOps — Token System
+ * ============================================================
+ *
+ * ARCHITECTURE
+ * ------------
+ * Palette
+ *   11 colour steps per family. Step 1 = lightest, step 11 = darkest.
+ *
+ * Primitive Tokens
+ *   Flat values on a scale: font sizes, weights, spacing, radii.
+ *   No var() references. No opinion about usage.
+ *
+ * Semantic Tokens
+ *   Reusable UI decisions that reference primitives.
+ *   Typography bundles (heading, body, caption, label).
+ *   Colour assignments (scheme-aware via data-color-scheme).
+ *
+ * ============================================================
+ */
+
+
+/* ══════════════════════════════════════════════════════════════
+   PALETTE
+   Eleven derived steps per brand colour. Step 1 = lightest,
+   step 11 = near-black. The brand base colour sits near step 9.
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  /* primary */
+  --color-primary-1: #EFF6FF;
+  --color-primary-2: #C8D9F3;
+  --color-primary-3: #ABBCD5;
+  --color-primary-4: #8FA0B8;
+  --color-primary-5: #75849C;
+  --color-primary-6: #5B6A80;
+  --color-primary-7: #425166;
+  --color-primary-8: #2B394D;
+  --color-primary-9: #152235;
+  --color-primary-10: #030D1E;
+  --color-primary-11: #000108;
+
+  /* secondary */
+  --color-secondary-1: #E1FBFF;
+  --color-secondary-2: #96E7F4;
+  --color-secondary-3: #79C9D7;
+  --color-secondary-4: #5CACBA;
+  --color-secondary-5: #3F919D;
+  --color-secondary-6: #1E7582;
+  --color-secondary-7: #045A65;
+  --color-secondary-8: #044048;
+  --color-secondary-9: #00272D;
+  --color-secondary-10: #001013;
+  --color-secondary-11: #000202;
+
+  /* tertiary */
+  --color-tertiary-1: #FFF2EF;
+  --color-tertiary-2: #FFC9BC;
+  --color-tertiary-3: #FF9C86;
+  --color-tertiary-4: #ED775E;
+  --color-tertiary-5: #CD5B43;
+  --color-tertiary-6: #AE3F28;
+  --color-tertiary-7: #902107;
+  --color-tertiary-8: #691301;
+  --color-tertiary-9: #430800;
+  --color-tertiary-10: #210200;
+  --color-tertiary-11: #050000;
+
+  /* neutral */
+  --color-neutral-1: #FFFFFF;
+  --color-neutral-2: #F0F0F0;
+  --color-neutral-3: #D4D4D4;
+  --color-neutral-4: #B0B0B0;
+  --color-neutral-5: #8C8C8C;
+  --color-neutral-6: #6B6B6B;
+  --color-neutral-7: #4D4D4D;
+  --color-neutral-8: #333333;
+  --color-neutral-9: #1F1F1F;
+  --color-neutral-10: #0F0F0F;
+  --color-neutral-11: #000000;
+
+  /* pass */
+  --color-pass-1: #EFFBF1;
+  --color-pass-2: #D6F5DD;
+  --color-pass-3: #B5EDC2;
+  --color-pass-4: #8CE3A0;
+  --color-pass-5: #63DA7E;
+  --color-pass-6: #3AD05C;
+  --color-pass-7: #29AD47;
+  --color-pass-8: #208436;
+  --color-pass-9: #165B25;
+  --color-pass-10: #0E3A18;
+  --color-pass-11: #08210E;
+
+  /* fail */
+  --color-fail-1: #FCEEEF;
+  --color-fail-2: #F7D4D7;
+  --color-fail-3: #F1B1B7;
+  --color-fail-4: #EA858F;
+  --color-fail-5: #E25A67;
+  --color-fail-6: #DB2E3F;
+  --color-fail-7: #B7202E;
+  --color-fail-8: #8B1823;
+  --color-fail-9: #601118;
+  --color-fail-10: #3D0B0F;
+  --color-fail-11: #230609;
+
+  /* warn */
+  --color-warn-1: #FFFAEB;
+  --color-warn-2: #FFF2CC;
+  --color-warn-3: #FFE8A3;
+  --color-warn-4: #FFDB70;
+  --color-warn-5: #FFCF3D;
+  --color-warn-6: #FFC20A;
+  --color-warn-7: #D6A100;
+  --color-warn-8: #A37A00;
+  --color-warn-9: #705400;
+  --color-warn-10: #473600;
+  --color-warn-11: #291F00;
+
+  /* info */
+  --color-info-1: #F1F8F9;
+  --color-info-2: #DCEDEF;
+  --color-info-3: #BFDEE3;
+  --color-info-4: #9CCCD3;
+  --color-info-5: #78B9C4;
+  --color-info-6: #55A7B4;
+  --color-info-7: #418995;
+  --color-info-8: #326971;
+  --color-info-9: #22484E;
+  --color-info-10: #162E32;
+  --color-info-11: #0C1A1C;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PRIMITIVE TOKENS
+   Flat values on a scale — never change by theme context.
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  /* Font Family */
+  --font-family-primary:   'Plus Jakarta Sans', sans-serif;
+  --font-family-secondary: 'Outfit', sans-serif;
+  --font-family-mono:      'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+
+  /* Font Size */
+  --font-size-2xs: 0.6875rem;
+  --font-size-xs:  0.75rem;
+  --font-size-sm:  0.875rem;
+  --font-size-md:  1rem;
+  --font-size-lg:  1.25rem;
+  --font-size-xl:  1.5rem;
+  --font-size-2xl: 1.875rem;
+  --font-size-3xl: 2.25rem;
+  --font-size-4xl: 3rem;
+  --font-size-5xl: 4rem;
+
+  /* Font Weight */
+  --font-weight-thin:      100;
+  --font-weight-extralight: 200;
+  --font-weight-light:     300;
+  --font-weight-normal:    400;
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+
+  /* Line Height */
+  --line-height-xs: 1.1;
+  --line-height-sm: 1.2;
+  --line-height-md: 1.5;
+  --line-height-lg: 1.75;
+  --line-height-xl: 2;
+
+  /* Space */
+  --space-x-1:  0.5rem;
+  --space-x-2:  1rem;
+  --space-x-3:  1.5rem;
+  --space-x-4:  2rem;
+  --space-x-5:  2.5rem;
+  --space-x-6:  3rem;
+  --space-x-7:  3.5rem;
+  --space-x-8:  4rem;
+  --space-x-9:  4.5rem;
+  --space-x-10: 5rem;
+  --space-y-1:  0.5rem;
+  --space-y-2:  1rem;
+  --space-y-3:  1.5rem;
+  --space-y-4:  2rem;
+  --space-y-5:  2.5rem;
+  --space-y-6:  3rem;
+  --space-y-7:  3.5rem;
+  --space-y-8:  4rem;
+  --space-y-9:  4.5rem;
+  --space-y-10: 5rem;
+
+  /* Section rhythm - vertical padding for page sections */
+  --layout-rhythm-sm: 6.25rem;
+  --layout-rhythm-md: 8.75rem;
+  --layout-rhythm-lg: 10rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SEMANTIC TOKENS — Typography
+   Reusable UI decisions that reference primitives.
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  /* Heading */
+  --heading-font-family:  var(--font-family-primary);
+  --heading-font-weight:  var(--font-weight-bold);
+  --heading-line-height:  var(--line-height-sm);
+  --heading-h1-font-size: var(--font-size-3xl);
+  --heading-h2-font-size: var(--font-size-2xl);
+  --heading-h3-font-size: var(--font-size-xl);
+  --heading-h4-font-size: var(--font-size-lg);
+  --heading-h5-font-size: var(--font-size-md);
+  --heading-h6-font-size: var(--font-size-sm);
+
+  /* Display */
+  --display-font-family:  var(--font-family-primary);
+  --display-font-weight:  var(--font-weight-bold);
+  --display-line-height:  var(--line-height-xs);
+  --display-1-font-size:  var(--font-size-5xl);
+  --display-2-font-size:  var(--font-size-4xl);
+
+  /* Body */
+  --body-font-family:  var(--font-family-secondary);
+  --body-font-size:    var(--font-size-md);
+  --body-font-weight:  var(--font-weight-extralight);
+  --body-line-height:  var(--line-height-md);
+
+  /* Caption */
+  --caption-font-size:   var(--font-size-xs);
+  --caption-line-height: var(--line-height-md);
+
+  /* Label */
+  --label-font-size:      var(--font-size-2xs);
+  --label-font-weight:    var(--font-weight-normal);
+  --label-letter-spacing: 0.2em;
+  --label-text-transform: uppercase;
+
+  /* Link (non-scheme-aware) */
+  --link-decoration:       underline;
+  --link-hover-decoration: none;
+  --link-underline-offset: 0.15em;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SEMANTIC TOKENS — Colour
+   Scheme-aware — remapped by data-color-scheme.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Light theme (default) ── */
+:root {
+  /* Text */
+  --text-color:        var(--color-primary-9);
+  --text-subtle-color: var(--color-primary-7);
+  --text-muted-color:  var(--color-primary-6);
+  --text-accent-color: var(--color-tertiary-5);
+
+  /* Links */
+  --link-color:         var(--color-secondary-5);
+  --link-hover-color:   var(--color-secondary-4);
+  --link-visited-color: var(--text-muted-color);
+
+  /* Surfaces */
+  --page-color:           var(--color-primary-9);
+  --page-bg:        #FFFFFF;
+  --surface-color:        var(--color-primary-1);
+  --surface-subtle-color: color-mix(in oklch, var(--color-primary-9), white 95%);
+  --surface-muted-color:  color-mix(in oklch, var(--color-primary-9), white 98%);
+
+  /* Borders */
+  --border-color:        var(--color-primary-1);
+  --border-subtle-color: color-mix(in srgb, var(--color-primary-9) 8%, transparent);
+  --border-muted-color:  color-mix(in srgb, var(--color-primary-9) 4%, transparent);
+
+  /* Buttons */
+  --btn-primary-bg:          transparent;
+  --btn-primary-color:       var(--color-primary-7);
+  --btn-primary-border:      color-mix(in srgb, var(--color-primary-9) 40%, transparent);
+  --btn-primary-hover-bg:    color-mix(in srgb, var(--color-primary-9) 8%, transparent);
+  --btn-primary-hover-color: var(--color-primary-9);
+  --btn-secondary-bg:          transparent;
+  --btn-secondary-color:       var(--color-secondary-5);
+  --btn-secondary-border:      color-mix(in srgb, var(--color-secondary-5) 40%, transparent);
+  --btn-secondary-hover-bg:    color-mix(in srgb, var(--color-secondary-6) 8%, transparent);
+  --btn-secondary-hover-color: var(--color-secondary-5);
+  --btn-tertiary-bg:          transparent;
+  --btn-tertiary-color:       var(--color-tertiary-5);
+  --btn-tertiary-border:      color-mix(in srgb, var(--color-tertiary-5) 40%, transparent);
+  --btn-tertiary-hover-bg:    color-mix(in srgb, var(--color-tertiary-6) 8%, transparent);
+  --btn-tertiary-hover-color: var(--color-tertiary-5);
+
+  /* Code */
+  --code-bg:           var(--surface-color);
+  --code-color:        var(--color-primary-9);
+  --code-border:       var(--border-color);
+  --code-inline-bg:    var(--surface-color);
+  --code-inline-color: var(--color-tertiary-5);
+
+  /* Tags */
+  --tag-bg:    var(--surface-color);
+  --tag-color: var(--color-secondary-5);
+
+  /* Tables (article context) */
+  --table-header-bg:    var(--surface-color);
+  --table-header-color: var(--color-primary-9);
+  --table-stripe-bg:    var(--surface-subtle-color);
+
+  /* CTA */
+  --cta-bg: var(--surface-subtle-color);
+}
+
+/* ── Dark theme ── */
+[data-color-scheme="dark"] {
+  /* Text */
+  --text-color:        #FFFFFF;
+  --text-subtle-color: var(--color-primary-1);
+  --text-muted-color:  var(--color-primary-3);
+  --text-accent-color: var(--color-tertiary-3);
+
+  /* Links */
+  --link-color:      var(--color-secondary-2);
+  --link-hover-color: var(--color-secondary-1);
+
+  /* Surfaces */
+  --page-color:           #FFFFFF;
+  --page-bg:        var(--color-primary-9);
+  --surface-color:        var(--color-primary-8);
+  --surface-subtle-color: color-mix(in srgb, white 6%, var(--color-primary-9));
+  --surface-muted-color:  color-mix(in srgb, white 3%, var(--color-primary-9));
+
+  /* Borders */
+  --border-color:        color-mix(in srgb, var(--color-secondary-6) 18%, transparent);
+  --border-subtle-color: color-mix(in srgb, white 6%, transparent);
+  --border-muted-color:  color-mix(in srgb, white 3%, transparent);
+
+  /* Buttons */
+  --btn-primary-bg:          transparent;
+  --btn-primary-color:       var(--color-primary-1);
+  --btn-primary-border:      color-mix(in srgb, var(--color-primary-1) 40%, transparent);
+  --btn-primary-hover-bg:    color-mix(in srgb, var(--color-primary-1) 8%, transparent);
+  --btn-primary-hover-color: #FFFFFF;
+  --btn-secondary-bg:          transparent;
+  --btn-secondary-color:       var(--color-secondary-2);
+  --btn-secondary-border:      color-mix(in srgb, var(--color-secondary-2) 40%, transparent);
+  --btn-secondary-hover-bg:    color-mix(in srgb, var(--color-secondary-6) 8%, transparent);
+  --btn-secondary-hover-color: #FFFFFF;
+  --btn-tertiary-bg:          transparent;
+  --btn-tertiary-color:       var(--color-tertiary-3);
+  --btn-tertiary-border:      color-mix(in srgb, var(--color-tertiary-3) 40%, transparent);
+  --btn-tertiary-hover-bg:    color-mix(in srgb, var(--color-tertiary-6) 8%, transparent);
+  --btn-tertiary-hover-color: #FFFFFF;
+
+  /* Code */
+  --code-bg:           var(--color-primary-8);
+  --code-color:        var(--color-primary-1);
+  --code-border:       var(--border-color);
+  --code-inline-bg:    var(--surface-color);
+  --code-inline-color: var(--color-tertiary-3);
+
+  /* Tags */
+  --tag-bg:    var(--surface-color);
+  --tag-color: var(--color-secondary-2);
+
+  /* Tables (article context) */
+  --table-header-bg:    var(--surface-color);
+  --table-header-color: #FFFFFF;
+  --table-stripe-bg:    var(--surface-subtle-color);
+
+  /* CTA */
+  --cta-bg: var(--color-primary-8);
+}
+
+/* === framework.css === */
+/*
+ * ============================================================
+ * DrevOps — Framework
+ * ============================================================
+ *
+ * Component styles that consume design tokens from variables.css.
+ * Bare element selectors define the default look of standard
+ * HTML elements within the design system.
+ *
+ * ============================================================
+ */
+
+/* ── Rendering context ── */
+.body {
+  background-color: var(--page-bg);
+  font-family: var(--body-font-family);
+  color: var(--page-color);
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--body-line-height);
+}
+
+/* Printable document context — grey preview background for screen editing only. */
+@media screen { .body-print { background: #E8E8E8; } }
+
+/* ── Mark (accent highlight) ── */
+mark {
+  background: none;
+  color: var(--text-accent-color);
+}
+
+/* ── Links ── */
+a {
+  color: var(--link-color);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color 0.15s, background 0.15s;
+  padding: 0 2px;
+  margin: 0 -2px;
+  border-radius: 2px;
+}
+a:hover {
+  color: var(--page-bg);
+  background: var(--link-color);
+  text-decoration: var(--link-hover-decoration);
+}
+a[data-color="accent"] { color: var(--text-accent-color); }
+a[data-color="accent"]:hover { color: var(--page-bg); background: var(--text-accent-color); }
+
+/* ── Headings ── */
+h1 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h1-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-sm);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-3);
+}
+h2 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h2-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-sm);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-2);
+}
+h3 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--line-height-sm);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-2);
+}
+h4 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--line-height-sm);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-1);
+}
+h5 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h5-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--line-height-sm);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-1);
+}
+h6 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h6-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--line-height-sm);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-1);
+}
+
+/* ── Progress bar ── */
+.progress-bar {
+  display: flex;
+  align-items: stretch;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  height: 44px;
+  margin: var(--space-y-2) 0 var(--space-y-3) 0;
+}
+.progress-step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: var(--color-neutral-2);
+  color: var(--text-muted-color);
+  font-weight: var(--font-weight-normal);
+}
+.progress-step:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.progress-step:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.progress-step-complete {
+  background: var(--color-primary-1);
+  color: var(--color-primary-6);
+  font-weight: var(--font-weight-semibold);
+}
+.progress-step-current {
+  background: var(--color-secondary-6);
+  color: #FFFFFF;
+  font-weight: var(--font-weight-bold);
+}
+.progress-step-label {
+  font-size: var(--font-size-2xs);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.progress-arrow {
+  flex-shrink: 0;
+  width: 14px;
+  height: 44px;
+}
+
+/* ── Body text ── */
+p {
+  color: var(--text-color);
+}
+
+/* ── Text colour utilities ── */
+.text-accent {
+  position: relative;
+  color: var(--text-accent-color);
+}
+.text-muted {
+  position: relative;
+  color: var(--text-muted-color);
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-block;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+  padding: var(--space-y-2) var(--space-x-4);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.4s ease, border-color 0.4s ease;
+}
+.btn:hover { text-decoration: none; background: none; }
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.btn:hover::before { transform: scaleX(1); }
+.btn:disabled, .btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-color);
+  border-color: var(--btn-primary-border);
+}
+.btn-primary::before { background: var(--btn-primary-hover-bg); }
+.btn-primary:hover {
+  color: var(--btn-primary-hover-color);
+  border-color: var(--btn-primary-color);
+}
+
+.btn-secondary {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-color);
+  border-color: var(--btn-secondary-border);
+}
+.btn-secondary::before { background: var(--btn-secondary-hover-bg); }
+.btn-secondary:hover {
+  color: var(--btn-secondary-hover-color);
+  border-color: var(--btn-secondary-color);
+}
+
+.btn-tertiary {
+  background: var(--btn-tertiary-bg);
+  color: var(--btn-tertiary-color);
+  border-color: var(--btn-tertiary-border);
+}
+.btn-tertiary::before { background: var(--btn-tertiary-hover-bg); }
+.btn-tertiary:hover {
+  color: var(--btn-tertiary-hover-color);
+  border-color: var(--btn-tertiary-color);
+}
+
+/* ── Tables ── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  line-height: var(--line-height-md);
+}
+
+th {
+  background: var(--table-header-bg);
+  color: var(--table-header-color);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+}
+
+td {
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+tr:nth-child(even) td {
+  background: var(--table-stripe-bg);
+}
+
+/* Table cell padding scoped to .print-page to avoid overriding
+   component-specific table padding (e.g. site check). */
+.print-page th { padding: var(--space-y-1) var(--space-x-2); }
+.print-page td { padding: var(--space-y-1) var(--space-x-2); }
+
+/* ── Form elements ── */
+label {
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted-color);
+  display: block;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+select,
+textarea {
+  font-family: var(--font-family-secondary);
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-color);
+  background: var(--surface-subtle-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-y-2) var(--space-x-2);
+  outline: none;
+  width: 100%;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  -webkit-appearance: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted-color);
+  font-weight: var(--body-font-weight);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-secondary-6);
+  background: var(--surface-muted-color);
+}
+
+select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234A9BA8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ── Margin utilities ── */
+.m0  { margin: 0 }
+.mt0 { margin-top: 0 }
+.mr0 { margin-right: 0 }
+.mb0 { margin-bottom: 0 }
+.ml0 { margin-left: 0 }
+.mx0 { margin-left: 0; margin-right: 0 }
+.my0 { margin-top: 0; margin-bottom: 0 }
+
+.m1  { margin: var(--space-y-1) }
+.mt1 { margin-top: var(--space-y-1) }
+.mr1 { margin-right: var(--space-y-1) }
+.mb1 { margin-bottom: var(--space-y-1) }
+.ml1 { margin-left: var(--space-y-1) }
+.mx1 { margin-left: var(--space-y-1); margin-right: var(--space-y-1) }
+.my1 { margin-top: var(--space-y-1); margin-bottom: var(--space-y-1) }
+
+.m2  { margin: var(--space-y-2) }
+.mt2 { margin-top: var(--space-y-2) }
+.mr2 { margin-right: var(--space-y-2) }
+.mb2 { margin-bottom: var(--space-y-2) }
+.ml2 { margin-left: var(--space-y-2) }
+.mx2 { margin-left: var(--space-y-2); margin-right: var(--space-y-2) }
+.my2 { margin-top: var(--space-y-2); margin-bottom: var(--space-y-2) }
+
+.m3  { margin: var(--space-y-3) }
+.mt3 { margin-top: var(--space-y-3) }
+.mr3 { margin-right: var(--space-y-3) }
+.mb3 { margin-bottom: var(--space-y-3) }
+.ml3 { margin-left: var(--space-y-3) }
+.mx3 { margin-left: var(--space-y-3); margin-right: var(--space-y-3) }
+.my3 { margin-top: var(--space-y-3); margin-bottom: var(--space-y-3) }
+
+.m4  { margin: var(--space-y-4) }
+.mt4 { margin-top: var(--space-y-4) }
+.mr4 { margin-right: var(--space-y-4) }
+.mb4 { margin-bottom: var(--space-y-4) }
+.ml4 { margin-left: var(--space-y-4) }
+.mx4 { margin-left: var(--space-y-4); margin-right: var(--space-y-4) }
+.my4 { margin-top: var(--space-y-4); margin-bottom: var(--space-y-4) }
+
+.m5  { margin: var(--space-y-5) }
+.mt5 { margin-top: var(--space-y-5) }
+.mr5 { margin-right: var(--space-y-5) }
+.mb5 { margin-bottom: var(--space-y-5) }
+.ml5 { margin-left: var(--space-y-5) }
+.mx5 { margin-left: var(--space-y-5); margin-right: var(--space-y-5) }
+.my5 { margin-top: var(--space-y-5); margin-bottom: var(--space-y-5) }
+
+.m6  { margin: var(--space-y-6) }
+.mt6 { margin-top: var(--space-y-6) }
+.mr6 { margin-right: var(--space-y-6) }
+.mb6 { margin-bottom: var(--space-y-6) }
+.ml6 { margin-left: var(--space-y-6) }
+.mx6 { margin-left: var(--space-y-6); margin-right: var(--space-y-6) }
+.my6 { margin-top: var(--space-y-6); margin-bottom: var(--space-y-6) }
+
+.m7  { margin: var(--space-y-7) }
+.mt7 { margin-top: var(--space-y-7) }
+.mr7 { margin-right: var(--space-y-7) }
+.mb7 { margin-bottom: var(--space-y-7) }
+.ml7 { margin-left: var(--space-y-7) }
+.mx7 { margin-left: var(--space-y-7); margin-right: var(--space-y-7) }
+.my7 { margin-top: var(--space-y-7); margin-bottom: var(--space-y-7) }
+
+.m8  { margin: var(--space-y-8) }
+.mt8 { margin-top: var(--space-y-8) }
+.mr8 { margin-right: var(--space-y-8) }
+.mb8 { margin-bottom: var(--space-y-8) }
+.ml8 { margin-left: var(--space-y-8) }
+.mx8 { margin-left: var(--space-y-8); margin-right: var(--space-y-8) }
+.my8 { margin-top: var(--space-y-8); margin-bottom: var(--space-y-8) }
+
+.m9  { margin: var(--space-y-9) }
+.mt9 { margin-top: var(--space-y-9) }
+.mr9 { margin-right: var(--space-y-9) }
+.mb9 { margin-bottom: var(--space-y-9) }
+.ml9 { margin-left: var(--space-y-9) }
+.mx9 { margin-left: var(--space-y-9); margin-right: var(--space-y-9) }
+.my9 { margin-top: var(--space-y-9); margin-bottom: var(--space-y-9) }
+
+.m10  { margin: var(--space-y-10) }
+.mt10 { margin-top: var(--space-y-10) }
+.mr10 { margin-right: var(--space-y-10) }
+.mb10 { margin-bottom: var(--space-y-10) }
+.ml10 { margin-left: var(--space-y-10) }
+.mx10 { margin-left: var(--space-y-10); margin-right: var(--space-y-10) }
+.my10 { margin-top: var(--space-y-10); margin-bottom: var(--space-y-10) }
+
+/* Negative margins */
+.mxn1 { margin-left: calc(var(--space-y-1) * -1); margin-right: calc(var(--space-y-1) * -1) }
+.mxn2 { margin-left: calc(var(--space-y-2) * -1); margin-right: calc(var(--space-y-2) * -1) }
+.mxn3 { margin-left: calc(var(--space-y-3) * -1); margin-right: calc(var(--space-y-3) * -1) }
+.mxn4 { margin-left: calc(var(--space-y-4) * -1); margin-right: calc(var(--space-y-4) * -1) }
+.mxn5 { margin-left: calc(var(--space-y-5) * -1); margin-right: calc(var(--space-y-5) * -1) }
+.mxn6 { margin-left: calc(var(--space-y-6) * -1); margin-right: calc(var(--space-y-6) * -1) }
+.mxn7 { margin-left: calc(var(--space-y-7) * -1); margin-right: calc(var(--space-y-7) * -1) }
+.mxn8 { margin-left: calc(var(--space-y-8) * -1); margin-right: calc(var(--space-y-8) * -1) }
+.mxn9 { margin-left: calc(var(--space-y-9) * -1); margin-right: calc(var(--space-y-9) * -1) }
+.mxn10 { margin-left: calc(var(--space-y-10) * -1); margin-right: calc(var(--space-y-10) * -1) }
+
+/* Auto margins */
+.ml-auto { margin-left: auto }
+.mr-auto { margin-right: auto }
+.mx-auto { margin-left: auto; margin-right: auto }
+
+/* ── Padding utilities ── */
+.p0  { padding: 0 }
+.pt0 { padding-top: 0 }
+.pr0 { padding-right: 0 }
+.pb0 { padding-bottom: 0 }
+.pl0 { padding-left: 0 }
+.px0 { padding-left: 0; padding-right: 0 }
+.py0 { padding-top: 0; padding-bottom: 0 }
+
+.p1  { padding: var(--space-y-1) }
+.pt1 { padding-top: var(--space-y-1) }
+.pr1 { padding-right: var(--space-y-1) }
+.pb1 { padding-bottom: var(--space-y-1) }
+.pl1 { padding-left: var(--space-y-1) }
+.px1 { padding-left: var(--space-y-1); padding-right: var(--space-y-1) }
+.py1 { padding-top: var(--space-y-1); padding-bottom: var(--space-y-1) }
+
+.p2  { padding: var(--space-y-2) }
+.pt2 { padding-top: var(--space-y-2) }
+.pr2 { padding-right: var(--space-y-2) }
+.pb2 { padding-bottom: var(--space-y-2) }
+.pl2 { padding-left: var(--space-y-2) }
+.px2 { padding-left: var(--space-y-2); padding-right: var(--space-y-2) }
+.py2 { padding-top: var(--space-y-2); padding-bottom: var(--space-y-2) }
+
+.p3  { padding: var(--space-y-3) }
+.pt3 { padding-top: var(--space-y-3) }
+.pr3 { padding-right: var(--space-y-3) }
+.pb3 { padding-bottom: var(--space-y-3) }
+.pl3 { padding-left: var(--space-y-3) }
+.px3 { padding-left: var(--space-y-3); padding-right: var(--space-y-3) }
+.py3 { padding-top: var(--space-y-3); padding-bottom: var(--space-y-3) }
+
+.p4  { padding: var(--space-y-4) }
+.pt4 { padding-top: var(--space-y-4) }
+.pr4 { padding-right: var(--space-y-4) }
+.pb4 { padding-bottom: var(--space-y-4) }
+.pl4 { padding-left: var(--space-y-4) }
+.px4 { padding-left: var(--space-y-4); padding-right: var(--space-y-4) }
+.py4 { padding-top: var(--space-y-4); padding-bottom: var(--space-y-4) }
+
+.p5  { padding: var(--space-y-5) }
+.pt5 { padding-top: var(--space-y-5) }
+.pr5 { padding-right: var(--space-y-5) }
+.pb5 { padding-bottom: var(--space-y-5) }
+.pl5 { padding-left: var(--space-y-5) }
+.px5 { padding-left: var(--space-y-5); padding-right: var(--space-y-5) }
+.py5 { padding-top: var(--space-y-5); padding-bottom: var(--space-y-5) }
+
+.p6  { padding: var(--space-y-6) }
+.pt6 { padding-top: var(--space-y-6) }
+.pr6 { padding-right: var(--space-y-6) }
+.pb6 { padding-bottom: var(--space-y-6) }
+.pl6 { padding-left: var(--space-y-6) }
+.px6 { padding-left: var(--space-y-6); padding-right: var(--space-y-6) }
+.py6 { padding-top: var(--space-y-6); padding-bottom: var(--space-y-6) }
+
+.p7  { padding: var(--space-y-7) }
+.pt7 { padding-top: var(--space-y-7) }
+.pr7 { padding-right: var(--space-y-7) }
+.pb7 { padding-bottom: var(--space-y-7) }
+.pl7 { padding-left: var(--space-y-7) }
+.px7 { padding-left: var(--space-y-7); padding-right: var(--space-y-7) }
+.py7 { padding-top: var(--space-y-7); padding-bottom: var(--space-y-7) }
+
+.p8  { padding: var(--space-y-8) }
+.pt8 { padding-top: var(--space-y-8) }
+.pr8 { padding-right: var(--space-y-8) }
+.pb8 { padding-bottom: var(--space-y-8) }
+.pl8 { padding-left: var(--space-y-8) }
+.px8 { padding-left: var(--space-y-8); padding-right: var(--space-y-8) }
+.py8 { padding-top: var(--space-y-8); padding-bottom: var(--space-y-8) }
+
+.p9  { padding: var(--space-y-9) }
+.pt9 { padding-top: var(--space-y-9) }
+.pr9 { padding-right: var(--space-y-9) }
+.pb9 { padding-bottom: var(--space-y-9) }
+.pl9 { padding-left: var(--space-y-9) }
+.px9 { padding-left: var(--space-y-9); padding-right: var(--space-y-9) }
+.py9 { padding-top: var(--space-y-9); padding-bottom: var(--space-y-9) }
+
+.p10  { padding: var(--space-y-10) }
+.pt10 { padding-top: var(--space-y-10) }
+.pr10 { padding-right: var(--space-y-10) }
+.pb10 { padding-bottom: var(--space-y-10) }
+.pl10 { padding-left: var(--space-y-10) }
+.px10 { padding-left: var(--space-y-10); padding-right: var(--space-y-10) }
+.py10 { padding-top: var(--space-y-10); padding-bottom: var(--space-y-10) }
+
+/* ── PDF document cover ── */
+.print-cover {
+  width: 210mm;
+  height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  padding: 40mm 25mm;
+}
+.print-cover-logo { width: 180px; margin-bottom: var(--space-y-6); }
+.print-cover-title {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-h2-font-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-3);
+}
+.print-cover-client {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-h1-font-size);
+  font-weight: var(--heading-font-weight);
+  color: var(--text-color);
+  line-height: var(--heading-line-height);
+}
+.print-cover-project {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-h1-font-size);
+  font-weight: var(--heading-font-weight);
+  color: var(--text-color);
+  line-height: var(--heading-line-height);
+  margin-bottom: var(--space-y-3);
+}
+.print-cover-version {
+  font-family: var(--body-font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-light);
+  color: var(--text-muted-color);
+}
+.print-cover-prepared {
+  position: absolute;
+  bottom: 40mm;
+  left: 25mm;
+  text-align: left;
+  font-family: var(--body-font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  line-height: var(--line-height-lg);
+  color: var(--text-color);
+}
+.print-cover-prepared strong { font-weight: var(--font-weight-semibold); }
+
+/* ── PDF document preview (browser editing) ── */
+.print-page {
+  max-width: 210mm;
+  margin: 0 auto;
+  background: #FFFFFF;
+  padding: var(--space-y-4) var(--space-x-5);
+}
+.print-pdf-header, .print-pdf-footer { display: none; }
+
+/* ── PDF document body text ── */
+.print-page p { margin-bottom: var(--space-y-1); font-weight: var(--font-weight-light); }
+.print-page ol, .print-page ul { margin: var(--space-y-1) 0 var(--space-y-2) var(--space-x-3); font-weight: var(--font-weight-light); }
+.print-page li { margin-bottom: 0.25rem; }
+
+/* ── PDF document tables ── */
+.print-page table { margin: var(--space-y-2) 0; }
+.print-page th { font-size: var(--font-size-xs); }
+.print-page td { font-size: var(--font-size-sm); font-weight: var(--font-weight-light); }
+.print-page td code { word-break: break-all; }
+.num { text-align: right; }
+.phase-total { text-align: right; font-weight: var(--font-weight-semibold); font-family: var(--heading-font-family); }
+.totals td { font-weight: var(--font-weight-semibold); font-family: var(--heading-font-family); border-top: 2px solid var(--text-color); border-bottom: none; background: var(--table-header-bg); }
+.total-highlight { color: var(--color-tertiary-5); font-weight: var(--font-weight-bold); }
+
+/* ── Severity / status badges ── */
+.badge-critical, .badge-high, .badge-medium, .badge-low, .badge-certain, .badge-none {
+  display: inline-block;
+  padding: 2px var(--space-x-1);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--heading-font-family);
+  letter-spacing: 0.05em;
+}
+.badge-critical { background: var(--color-fail-7); color: #FFFFFF; }
+.badge-high { background: var(--color-tertiary-5); color: #FFFFFF; }
+.badge-medium { background: var(--color-warn-7); color: #FFFFFF; }
+.badge-low { background: var(--color-info-7); color: #FFFFFF; }
+.badge-certain { background: var(--color-fail-8); color: #FFFFFF; }
+.badge-none { background: var(--color-neutral-4); color: var(--color-neutral-9); }
+
+/* ── Footnote ── */
+.footnote { font-size: var(--font-size-xs); color: var(--text-muted-color); font-style: italic; margin-top: var(--space-y-1); }
+
+/* ── Sign-off ── */
+.signoff { margin-top: var(--space-y-5); }
+.signoff .name { font-family: var(--heading-font-family); font-weight: var(--heading-font-weight); }
+.signoff .role { font-family: var(--heading-font-family); font-weight: var(--font-weight-semibold); font-size: var(--font-size-sm); }
+.signoff .legal { margin-top: var(--space-y-2); font-size: var(--font-size-xs); color: var(--text-muted-color); line-height: var(--line-height-lg); }
+
+/* ── PDF print styles ── */
+@media print {
+  body { background: #FFFFFF; }
+  .print-page { max-width: none; padding: 0; margin: 0; background: transparent; }
+  .print-page h1 { page-break-before: always; }
+  .print-page h1:first-of-type { page-break-before: avoid; }
+  .print-page h1, .print-page h2 { page-break-after: avoid; }
+  thead { display: table-header-group; }
+  .print-page tr { page-break-inside: avoid; }
+  .print-page .signoff { page-break-inside: avoid; }
+  .print-page .progress-bar { page-break-inside: avoid; }
+}
+
+/* === components (resolved manifest) === */
+/* --- components/hero.css --- */
+/*
+ * DrevOps — Hero Component
+ */
+
+/* Base hero — full viewport height with glow */
+.component-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--page-bg);
+  overflow: hidden;
+  padding: calc(var(--space-y-10) * 1.75) var(--space-x-8) var(--space-y-10);
+}
+
+/* Atmospheric teal glow */
+.component-hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 12%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 4%, transparent) 40%, transparent 70%);
+  pointer-events: none;
+  animation: heroGlow 8s ease-in-out infinite;
+}
+
+/* Deep vignette (homepage only — applied via modifier) */
+.component-hero--home::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, var(--page-bg) 60%, transparent) 100%);
+  pointer-events: none;
+}
+
+/* Shorter hero for inner pages */
+.component-hero--inner {
+  min-height: 70vh;
+  padding: calc(var(--space-y-10) * 2) var(--space-x-8) var(--space-y-10);
+}
+
+.component-hero--inner::before {
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 10%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 3%, transparent) 40%, transparent 70%);
+}
+
+/* Blog/contact hero variant — centered text, no min-height */
+.component-hero--page {
+  min-height: auto;
+  padding: 200px 0 var(--space-y-10);
+  text-align: center;
+}
+
+.component-hero--page::before {
+  width: 900px;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 8%, transparent) 0%, transparent 65%);
+  animation: none;
+}
+
+/* Contact hero with darker bg */
+.component-hero--contact {
+  background: var(--color-primary-8);
+}
+
+.component-hero--contact::before {
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 12%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 3%, transparent) 40%, transparent 70%);
+  animation: none;
+}
+
+.component-hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+}
+
+.component-hero-inner--narrow {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.component-hero-eyebrow {
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-secondary-6);
+  margin-bottom: var(--space-y-4);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards 0.2s;
+}
+
+.component-hero-subtitle {
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-y-7);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards 1.2s;
+}
+
+.component-hero-cta {
+  margin-top: 2em;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards 1.5s;
+}
+
+.component-hero-rule {
+  position: absolute;
+  bottom: calc(var(--space-y-10) * 1.75);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--color-secondary-6) 40%, transparent) 20%, color-mix(in srgb, var(--color-secondary-6) 60%, transparent) 50%, color-mix(in srgb, var(--color-secondary-6) 40%, transparent) 80%, transparent 100%);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 2s;
+}
+
+.component-scroll-indicator {
+  position: absolute;
+  bottom: var(--space-y-5);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-y-1);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 2.2s;
+}
+
+.component-scroll-line {
+  width: 1px;
+  height: var(--space-y-6);
+  background: linear-gradient(to bottom, var(--color-secondary-6), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-hero {
+    padding: calc(var(--space-y-10) * 1.25) var(--space-y-3) var(--space-x-10);
+  }
+
+  .component-hero--inner {
+    padding: calc(var(--space-y-10) * 1.75) var(--space-y-3) var(--space-x-8);
+    min-height: 50vh;
+  }
+
+  .component-hero--page {
+    padding: calc(var(--space-y-10) * 1.75) 0 var(--space-y-5);
+  }
+
+  .component-hero--contact {
+    padding: calc(var(--space-y-10) * 1.75) 0 var(--space-x-8);
+  }
+}
+
+/* --- components/display.css --- */
+/*
+ * DrevOps — Display Headings & Text Decorations
+ */
+
+/* Display 1 — largest heading (hero, CTA sections) */
+.component-display-1 {
+  font-family: var(--font-family-primary);
+  font-size: var(--display-1-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--display-line-height);
+  letter-spacing: -0.02em;
+  color: var(--text-color);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease forwards 0.4s;
+}
+
+/* Display 1 without animation (for CTA sections) */
+.component-display-1--static {
+  opacity: 1;
+  transform: none;
+  animation: none;
+  font-weight: var(--font-weight-normal);
+  line-height: var(--display-line-height);
+  margin-bottom: var(--space-y-6);
+}
+
+/* Display 2 — section headings */
+.component-display-2 {
+  font-family: var(--font-family-primary);
+  font-size: var(--display-2-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.02em;
+  line-height: var(--display-line-height);
+}
+
+/* Accent-coloured word (coral) */
+.component-word-accent {
+  color: var(--text-accent-color);
+}
+
+/* Gradient underline decoration */
+.component-underlined {
+  position: relative;
+  display: inline-block;
+}
+
+.component-underlined::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-secondary-6), var(--link-hover-color));
+}
+
+/* --- components/label.css --- */
+/*
+ * DrevOps — Label Component
+ *
+ * Unified small-caps label pattern used across the site.
+ */
+
+/* Base label — muted colour */
+.component-label {
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: var(--label-text-transform);
+  color: var(--text-muted-color);
+}
+
+/* Accent variant */
+.component-label--accent {
+  color: var(--text-accent-color);
+}
+
+/* Subtle variant */
+.component-label--subtle {
+  color: var(--text-subtle-color);
+}
+
+/* Section label with line prefix */
+.component-section-label {
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: var(--label-text-transform);
+  color: var(--text-accent-color);
+  display: flex;
+  align-items: center;
+  gap: var(--space-x-2);
+  margin-bottom: var(--space-y-8);
+}
+
+.component-section-label::before {
+  content: '';
+  display: block;
+  width: var(--space-x-6);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.component-section-label--compact {
+  margin-bottom: var(--space-y-4);
+}
+
+/* --- components/stat.css --- */
+/*
+ * DrevOps — Stat Grid Component
+ */
+
+.component-stat {
+  background: var(--surface-subtle-color);
+  padding: calc(var(--space-y-10) * 1.75) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.component-stat::before {
+  content: '';
+  position: absolute;
+  bottom: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--color-secondary-6) 7%, transparent) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.component-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border-color);
+  position: relative;
+  z-index: 2;
+}
+
+.component-stat-cell {
+  padding: var(--space-y-9) var(--space-x-7);
+  position: relative;
+}
+
+.component-stat-cell:nth-child(1) { border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+.component-stat-cell:nth-child(2) { border-bottom: 1px solid var(--border-color); }
+.component-stat-cell:nth-child(3) { border-right: 1px solid var(--border-color); }
+
+.component-stat-number {
+  font-family: var(--font-family-primary);
+  font-size: clamp(72px, 8vw, 108px);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-6);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-y-2);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.component-stat-suffix {
+  font-size: 0.45em;
+  font-weight: var(--font-weight-normal);
+  opacity: 0.8;
+  letter-spacing: 0;
+}
+
+.component-stat-label {
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-subtle-color);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-stat {
+    padding: calc(var(--space-y-10) * 1.25) 0;
+  }
+
+  .component-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .component-stat-cell:nth-child(1),
+  .component-stat-cell:nth-child(2),
+  .component-stat-cell:nth-child(3) {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .component-stat-cell {
+    padding: var(--space-y-6) var(--space-x-4);
+  }
+}
+
+/* --- components/trust.css --- */
+/*
+ * DrevOps — Trust Grid Component
+ */
+
+.component-trust {
+  background: var(--page-bg);
+  padding: calc(var(--space-y-10) * 1.75) 0;
+  position: relative;
+}
+
+.component-trust-header {
+  text-align: center;
+  margin-bottom: var(--space-y-10);
+}
+
+.component-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-y-4);
+}
+
+.component-trust-item {
+  text-align: center;
+  padding: var(--space-y-5) var(--space-x-3);
+  border: 1px solid var(--border-subtle-color);
+  border-radius: var(--radius-sm);
+}
+
+.component-trust-icon {
+  color: var(--color-secondary-6);
+  margin-bottom: var(--space-y-3);
+}
+
+.component-trust-label {
+  font-size: var(--body-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-2);
+}
+
+.component-trust-desc {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-trust {
+    padding: calc(var(--space-y-10) * 1.25) 0;
+  }
+
+  .component-trust-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-y-2);
+  }
+}
+
+/* --- components/list.css --- */
+/*
+ * DrevOps — List Component
+ *
+ * Unified vertical list used for "Why us", "How we work",
+ * and any dot+title+description pattern.
+ */
+
+.component-list {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.component-list-item {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--space-y-3);
+  align-items: start;
+  padding: var(--space-y-5) 0;
+  border-bottom: 1px solid var(--border-subtle-color);
+}
+
+.component-list-item:first-child {
+  border-top: 1px solid var(--border-subtle-color);
+}
+
+.component-list-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-secondary-6);
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.component-list-title {
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-1);
+  letter-spacing: -0.01em;
+}
+
+.component-list-desc {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+}
+
+/* --- components/service.css --- */
+/*
+ * DrevOps — Service Component
+ *
+ * Compact service list used on homepage and process sections.
+ */
+
+.component-service-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.component-service-item {
+  padding: var(--space-y-8) 0;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0 var(--space-y-6);
+  align-items: start;
+  position: relative;
+}
+
+.component-service-divider {
+  height: 1px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-secondary-6) 50%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 15%, transparent) 50%, transparent 100%);
+  margin: 0;
+}
+
+.component-service-number {
+  font-family: var(--font-family-primary);
+  font-size: 80px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-6);
+  opacity: 0.18;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  user-select: none;
+}
+
+.component-service-body {
+  /* Semantic wrapper for service item content (title + desc). No additional styles needed. */
+}
+
+.component-service-title {
+  font-family: var(--font-family-primary);
+  font-size: 32px;
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-y-3);
+  line-height: var(--line-height-sm);
+}
+
+.component-service-desc {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  max-width: 560px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-service-item {
+    grid-template-columns: 1fr;
+    gap: var(--space-y-2);
+    padding: var(--space-y-6) 0;
+  }
+
+  .component-service-number {
+    font-size: 48px;
+  }
+}
+
+/* --- components/service-detail.css --- */
+/*
+ * DrevOps — Service Detail Component
+ *
+ * Expanded service detail panels used on the services page.
+ */
+
+.component-service-detail {
+  background: var(--page-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-y-7);
+  margin-bottom: var(--space-y-6);
+}
+
+.component-service-detail:last-child {
+  margin-bottom: 0;
+}
+
+.component-service-detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-y-4);
+  margin-bottom: var(--space-y-5);
+  padding-bottom: var(--space-y-4);
+  border-bottom: 1px solid var(--border-subtle-color);
+}
+
+.component-service-detail-header .component-service-number {
+  font-size: 64px;
+  opacity: 0.2;
+  flex-shrink: 0;
+}
+
+.component-service-detail-title {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h2-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-y-1);
+}
+
+.component-service-detail-tagline {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-muted-color);
+}
+
+.component-service-detail-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-y-6);
+  margin-bottom: var(--space-y-5);
+}
+
+.component-service-detail-desc p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: var(--space-y-2);
+}
+
+.component-service-detail-includes ul {
+  list-style: none;
+  padding: 0;
+}
+
+.component-service-detail-includes li {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+  padding: var(--space-y-1) 0 var(--space-x-1) var(--space-y-3);
+  position: relative;
+  border-bottom: 1px solid var(--border-muted-color);
+}
+
+.component-service-detail-includes li:last-child {
+  border-bottom: none;
+}
+
+.component-service-detail-includes li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-secondary-6);
+  position: absolute;
+  left: 0;
+  top: 16px;
+}
+
+.component-service-detail-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-y-4);
+  border-top: 1px solid var(--border-subtle-color);
+}
+
+.component-pricing-label {
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted-color);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.component-pricing-value {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-secondary-6);
+  letter-spacing: -0.01em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-service-detail {
+    padding: var(--space-y-4) var(--space-x-3);
+  }
+
+  .component-service-detail-header {
+    flex-direction: column;
+    gap: var(--space-y-2);
+  }
+
+  .component-service-detail-header .component-service-number {
+    font-size: 48px;
+  }
+
+  .component-service-detail-body {
+    grid-template-columns: 1fr;
+    gap: var(--space-y-4);
+  }
+
+  .component-service-detail-footer {
+    flex-direction: column;
+    gap: var(--space-y-3);
+    align-items: flex-start;
+  }
+}
+
+/* --- components/grid.css --- */
+/*
+ * DrevOps — Grid Component
+ *
+ * Reusable grid layouts for content sections.
+ */
+
+/* Two-column content grid (approach section) */
+.component-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-y-6) var(--space-y-8);
+}
+
+.component-grid-2-item {
+  padding: var(--space-y-4) 0;
+}
+
+.component-grid-2-item .component-list-dot {
+  margin-top: 0;
+  margin-bottom: var(--space-y-3);
+}
+
+.component-grid-2-item h3 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  margin-bottom: var(--space-y-2);
+  letter-spacing: -0.01em;
+}
+
+.component-grid-2-item p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+}
+
+/* Two-column contact grid */
+.component-grid-contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-y-10);
+  align-items: start;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-grid-2 {
+    grid-template-columns: 1fr;
+    gap: var(--space-y-4);
+  }
+
+  .component-grid-contact {
+    grid-template-columns: 1fr;
+    gap: var(--space-x-8);
+  }
+}
+
+/* --- components/cta.css --- */
+/*
+ * DrevOps — CTA Section Component
+ */
+
+.component-cta {
+  background: var(--cta-bg);
+  padding: calc(var(--space-y-10) * 2) 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.component-cta::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-secondary-6) 10%, transparent) 0%, color-mix(in srgb, var(--color-secondary-6) 3%, transparent) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+.component-cta-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.component-cta-sub {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  margin-bottom: var(--space-y-7);
+  letter-spacing: 0.02em;
+}
+
+.component-cta-email {
+  display: inline-block;
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--link-color);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  position: relative;
+}
+
+.component-cta-email:hover {
+  background: none;
+  text-decoration: none;
+}
+
+.component-cta-email::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--link-hover-color);
+  transition: width 0.4s ease;
+}
+
+.component-cta-email:hover::after {
+  width: 100%;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-cta {
+    padding: calc(var(--space-y-10) * 1.75) 0;
+  }
+}
+
+/* --- components/tag.css --- */
+/*
+ * DrevOps — Tag Component
+ */
+
+.component-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-x-1);
+}
+
+.component-tag {
+  display: inline-block;
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: var(--label-text-transform);
+  color: var(--tag-color);
+  background: var(--tag-bg);
+  padding: var(--space-y-1) var(--space-x-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle-color);
+}
+
+.component-tag--sm {
+  font-size: var(--font-size-2xs);
+  padding: var(--space-y-1) var(--space-x-1);
+}
+
+/* --- components/meta.css --- */
+/*
+ * DrevOps — Meta Component
+ *
+ * Shared meta line (date, read time) used in blog cards and posts.
+ */
+
+.component-meta {
+  font-size: var(--label-font-size);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted-color);
+  margin-bottom: var(--space-y-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-y-1);
+}
+
+.component-meta--lg {
+  font-size: var(--caption-font-size);
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-y-3);
+  gap: var(--space-y-2);
+}
+
+.component-meta-sep {
+  color: var(--color-secondary-6);
+  opacity: 0.4;
+}
+
+.component-meta--lg .component-meta-sep {
+  opacity: 0.5;
+}
+
+/* --- components/blog-card.css --- */
+/*
+ * DrevOps — Blog Card Component
+ */
+
+/* ── Featured post ── */
+.component-blog-featured {
+  background: var(--page-bg);
+  padding: 0 0 var(--space-y-8);
+}
+
+.component-blog-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  text-decoration: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.component-blog-feature:hover {
+  border-color: var(--color-secondary-6);
+  background: none;
+  text-decoration: none;
+}
+
+.component-blog-feature-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.component-blog-feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.component-blog-feature:hover .component-blog-feature-image img {
+  transform: scale(1.03);
+}
+
+.component-blog-feature-content {
+  padding: var(--space-y-6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.component-blog-feature-content h2 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h2-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.01em;
+  line-height: var(--line-height-sm);
+  margin-bottom: var(--space-y-2);
+}
+
+.component-blog-feature-content p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: var(--space-y-3);
+}
+
+/* ── Card grid section ── */
+.component-blog-grid-section {
+  background: var(--surface-muted-color);
+  padding: var(--space-y-10) 0 calc(var(--space-y-10) * 1.75);
+}
+
+.component-blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-y-4);
+}
+
+/* ── Individual card ── */
+.component-blog-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  background: var(--page-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.component-blog-card:hover {
+  border-color: var(--color-secondary-6);
+  transform: translateY(-4px);
+  background: var(--page-bg);
+  text-decoration: none;
+}
+
+.component-blog-card-image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.component-blog-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.component-blog-card:hover .component-blog-card-image img {
+  transform: scale(1.05);
+}
+
+.component-blog-card-body {
+  padding: var(--space-y-3);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.component-blog-card-body h3 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  line-height: var(--line-height-sm);
+  margin-bottom: var(--space-y-2);
+  letter-spacing: -0.01em;
+}
+
+.component-blog-card-body p {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+  margin-bottom: var(--space-y-2);
+  flex: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-blog-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .component-blog-feature-content {
+    padding: var(--space-y-3);
+  }
+
+  .component-blog-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-y-3);
+  }
+
+  .component-blog-grid-section {
+    padding: var(--space-y-6) 0 var(--space-x-10);
+  }
+}
+
+/* --- components/blog-hero.css --- */
+/*
+ * DrevOps — Blog Hero Component
+ *
+ * Hero banner with featured image and gradient overlay,
+ * used on blog post pages.
+ */
+
+.component-blog-hero {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.component-blog-hero-image {
+  position: absolute;
+  inset: 0;
+}
+
+.component-blog-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.component-blog-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--page-bg) 40%, transparent) 0%,
+    color-mix(in srgb, var(--page-bg) 70%, transparent) 40%,
+    var(--page-bg) 100%
+  );
+}
+
+.component-blog-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-x-8) var(--space-y-8);
+  width: 100%;
+}
+
+.component-blog-hero-content h1 {
+  font-family: var(--font-family-primary);
+  font-size: var(--display-2-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--display-line-height);
+  letter-spacing: -0.02em;
+  color: var(--text-color);
+  margin-bottom: var(--space-y-3);
+  max-width: 800px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-blog-hero {
+    min-height: 400px;
+  }
+
+  .component-blog-hero-content {
+    padding: 0 var(--space-y-3) var(--space-x-5);
+  }
+}
+
+/* --- components/article.css --- */
+/*
+ * DrevOps — Article Component
+ *
+ * Prose styling for blog posts and long-form content.
+ * Includes code blocks (highlight.js compatible), tables,
+ * blockquotes, lists, and inline elements.
+ */
+
+.component-article {
+  background: var(--page-bg);
+  padding: var(--space-y-10) 0 calc(var(--space-y-10) * 1.75);
+}
+
+.component-article-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-x-8);
+}
+
+/* ── Lead paragraph ── */
+.component-article-lead {
+  font-size: var(--heading-h4-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--line-height-lg);
+  color: var(--text-subtle-color);
+  margin-bottom: var(--space-y-5);
+  padding-bottom: var(--space-y-5);
+  border-bottom: 1px solid var(--border-subtle-color);
+}
+
+/* ── Body text ── */
+.component-article p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: var(--space-y-3);
+}
+
+.component-article p strong {
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+}
+
+/* ── Headings ── */
+.component-article h2 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h2-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  letter-spacing: -0.01em;
+  margin-top: var(--space-y-8);
+  margin-bottom: var(--space-y-3);
+}
+
+.component-article h3 {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  margin-top: var(--space-y-5);
+  margin-bottom: var(--space-y-2);
+}
+
+/* ── Links ── */
+.component-article a {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.component-article a:hover {
+  color: var(--link-hover-color);
+}
+
+/* ── Lists ── */
+.component-article ul,
+.component-article ol {
+  margin: 0 0 var(--space-y-3);
+  padding-left: var(--space-x-3);
+}
+
+.component-article li {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: var(--space-y-1);
+}
+
+.component-article li::marker {
+  color: var(--color-secondary-6);
+}
+
+/* ── Inline code ── */
+.component-article code {
+  font-family: var(--font-family-mono);
+  font-size: 0.875em;
+  background: var(--code-inline-bg);
+  color: var(--code-inline-color);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Block code (highlight.js) ── */
+.component-article pre {
+  margin: var(--space-y-3) 0 var(--space-x-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--code-border);
+  overflow: hidden;
+}
+
+.component-article pre code {
+  display: block;
+  padding: var(--space-y-3);
+  font-size: var(--caption-font-size);
+  line-height: var(--line-height-md);
+  background: var(--code-bg);
+  color: var(--code-color);
+  overflow-x: auto;
+  border-radius: 0;
+  border: none;
+}
+
+.component-article pre code.hljs {
+  background: var(--code-bg);
+}
+
+/* ── Tables ── */
+.component-article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-y-3) 0 var(--space-x-4);
+  font-size: var(--font-size-sm);
+}
+
+.component-article thead th {
+  background: var(--table-header-bg);
+  color: var(--table-header-color);
+  font-family: var(--font-family-primary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: var(--space-y-2) var(--space-x-2);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.component-article td {
+  padding: var(--space-y-1) var(--space-x-2);
+  border-bottom: 1px solid var(--border-subtle-color);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+}
+
+.component-article tbody tr:nth-child(even) td {
+  background: var(--table-stripe-bg);
+}
+
+.component-article td strong {
+  color: var(--text-color);
+  font-weight: var(--font-weight-normal);
+}
+
+/* ── Blockquotes ── */
+.component-article blockquote {
+  margin: var(--space-y-4) 0;
+  padding: var(--space-y-3) var(--space-x-3);
+  border-left: 3px solid var(--color-secondary-6);
+  background: var(--surface-subtle-color);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.component-article blockquote p {
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-lg);
+  margin-bottom: 0;
+}
+
+.component-article blockquote p + p {
+  margin-top: var(--space-y-2);
+}
+
+.component-article blockquote strong {
+  color: var(--color-secondary-6);
+  font-weight: var(--font-weight-normal);
+}
+
+/* ── Article CTA ── */
+.component-article-cta {
+  margin-top: var(--space-y-8);
+  padding-top: var(--space-y-6);
+  border-top: 1px solid var(--border-subtle-color);
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-article {
+    padding: var(--space-y-6) 0 var(--space-x-10);
+  }
+
+  .component-article-inner {
+    padding: 0 var(--space-y-3);
+  }
+
+  .component-article pre code {
+    font-size: var(--caption-font-size);
+    padding: var(--space-y-2);
+  }
+
+  .component-article table {
+    font-size: var(--caption-font-size);
+  }
+
+  .component-article thead th,
+  .component-article td {
+    padding: var(--space-y-1) var(--space-x-1);
+  }
+}
+
+/* --- components/contact.css --- */
+/*
+ * DrevOps — Contact Info Component
+ *
+ * Contact information blocks, steps list, and dividers.
+ * Used on the contact page info column.
+ */
+
+.component-contact-col {
+  padding-top: var(--space-y-1);
+}
+
+.component-contact-block {
+  margin-bottom: var(--space-y-5);
+}
+
+.component-contact-value {
+  font-family: var(--font-family-primary);
+  font-size: var(--heading-h3-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-color);
+  text-decoration: none;
+  display: block;
+  margin-bottom: var(--space-y-1);
+}
+
+a.component-contact-value {
+  transition: color 0.3s ease;
+}
+
+a.component-contact-value:hover {
+  color: var(--color-secondary-6);
+  background: none;
+  text-decoration: none;
+}
+
+.component-contact-email-link {
+  position: relative;
+  display: inline-block;
+}
+
+.component-contact-email-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-secondary-6);
+  transition: width 0.4s ease;
+}
+
+.component-contact-email-link:hover::after {
+  width: 100%;
+}
+
+.component-contact-note {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-muted-color);
+  line-height: var(--line-height-md);
+}
+
+.component-contact-divider {
+  height: 1px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-secondary-6) 30%, transparent) 0%, transparent 100%);
+  margin: var(--space-y-6) 0;
+}
+
+/* ── Contact content section ── */
+.component-contact-content {
+  background: var(--page-bg);
+  padding: calc(var(--space-y-10) * 1.25) 0 calc(var(--space-y-10) * 1.75);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-contact-content {
+    padding: var(--space-x-8) 0 var(--space-y-10);
+  }
+}
+
+/* --- components/step.css --- */
+/*
+ * DrevOps — Step Component
+ */
+
+.component-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-y-3);
+  margin-top: var(--space-y-2);
+}
+
+.component-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-y-2);
+}
+
+.component-step-number {
+  font-family: var(--font-family-primary);
+  font-size: 28px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-6);
+  opacity: 0.3;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.component-step p {
+  font-size: var(--font-size-sm);
+  font-weight: var(--body-font-weight);
+  color: var(--text-subtle-color);
+  line-height: var(--line-height-md);
+  padding-top: 4px;
+}
+
+/* --- components/form.css --- */
+/*
+ * DrevOps — Form Layout Component
+ *
+ * Form layout patterns. Base input/select/textarea styling
+ * lives in framework.css; this file handles composition.
+ */
+
+.component-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-y-3);
+}
+
+.component-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-y-1);
+}
+
+.component-form .btn {
+  align-self: flex-start;
+  margin-top: var(--space-y-1);
+}
+
+/* --- components/nav.css --- */
+/*
+ * DrevOps — Nav Component
+ *
+ * Fixed top navigation bar with glassmorphism backdrop,
+ * logo, and underline-on-hover links.
+ */
+
+.component-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  padding: var(--space-y-3) var(--space-x-8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: color-mix(in srgb, var(--page-bg) 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-secondary-6) 8%, transparent);
+}
+
+.component-nav-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.component-nav-links {
+  display: flex;
+  gap: var(--space-y-6);
+  list-style: none;
+}
+
+.component-nav-links a {
+  font-family: var(--font-family-secondary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-muted-color);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.component-nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-secondary-6);
+  transition: width 0.3s ease;
+}
+
+.component-nav-links a:hover {
+  color: var(--link-hover-color);
+  background: none;
+  text-decoration: none;
+}
+
+.component-nav-links a:hover::after {
+  width: 100%;
+}
+
+.component-nav-active {
+  color: var(--color-secondary-6) !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-nav {
+    padding: var(--space-y-2) var(--space-x-3);
+  }
+
+  .component-nav-links {
+    display: none;
+  }
+}
+
+/* --- components/footer.css --- */
+/*
+ * DrevOps — Footer Component
+ *
+ * Site footer bar with copyright and contact link.
+ */
+
+.component-footer {
+  background: var(--color-primary-8);
+  padding: var(--space-y-4) var(--space-x-8);
+  border-top: 1px solid color-mix(in srgb, var(--color-secondary-6) 20%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.component-footer-copy {
+  font-size: var(--caption-font-size);
+  font-weight: var(--body-font-weight);
+  color: var(--text-muted-color);
+  letter-spacing: 0.08em;
+}
+
+.component-footer-link {
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-secondary-6);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  position: relative;
+}
+
+.component-footer-link:hover {
+  background: none;
+  text-decoration: none;
+}
+
+.component-footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--link-hover-color);
+  transition: width 0.3s ease;
+}
+
+.component-footer-link:hover::after {
+  width: 100%;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-footer {
+    flex-direction: column;
+    gap: var(--space-y-2);
+    text-align: center;
+    padding: var(--space-y-3);
+  }
+}
+
+/* --- components/section.css --- */
+/*
+ * DrevOps — Section Component
+ *
+ * Max-width container with gutter padding for page sections.
+ */
+
+.component-section {
+  position: relative;
+}
+
+.component-section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-x-8);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .component-section-inner {
+    padding: 0 var(--space-y-3);
+  }
+}
+
+/* --- components/reveal.css --- */
+/*
+ * DrevOps — Reveal Component
+ *
+ * Scroll-triggered fade-up animation with staggered delay utilities.
+ * Requires JavaScript to add .visible class on scroll.
+ */
+
+.component-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.component-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.component-reveal-d1 { transition-delay: 0.1s; }
+.component-reveal-d2 { transition-delay: 0.2s; }
+.component-reveal-d3 { transition-delay: 0.3s; }
+.component-reveal-d4 { transition-delay: 0.4s; }
+.component-reveal-d5 { transition-delay: 0.5s; }
+.component-reveal-d6 { transition-delay: 0.6s; }
+
+/* --- components/animations.css --- */
+/*
+ * DrevOps — Animations
+ *
+ * Shared keyframe definitions for hero glow, scroll indicator,
+ * and entrance transitions.
+ */
+
+@keyframes heroGlow {
+  0%, 100% { opacity: 0.7; transform: translate(-50%, -55%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -55%) scale(1.08); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 0.9; transform: scaleY(1.15); }
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}

@@ -17,7 +17,6 @@ module:
   cloudflare: 0
   cloudflarepurger: 0
   coffee: 0
-  components: 0
   config: 0
   config_split: 0
   config_update: 0
