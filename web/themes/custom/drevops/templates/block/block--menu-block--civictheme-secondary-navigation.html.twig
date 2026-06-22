@@ -11,14 +11,14 @@
   {# The base theme's `only` include omits it, so the navigation falls back to #}
   {# its light default and ignores the header theme. #}
   {% include 'civictheme:navigation' with {
-    theme,
-    items,
+    theme: theme,
+    items: items,
     type: dropdown == 'none' ? 'inline' : dropdown,
-    dropdown_columns,
-    dropdown_columns_fill,
-    is_animated,
+    dropdown_columns: dropdown_columns,
+    dropdown_columns_fill: dropdown_columns_fill,
+    is_animated: is_animated,
     menu_id: menu_id|default(''),
-    variant,
+    variant: variant,
     modifier_class: 'ct-secondary-navigation ' ~ modifier_class|default(''),
   } only %}
 {% endblock %}
