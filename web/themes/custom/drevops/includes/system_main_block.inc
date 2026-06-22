@@ -15,9 +15,6 @@ function _drevops_preprocess_block__system_main_block(array &$variables): void {
     return;
   }
 
-  $route_match = \Drupal::routeMatch();
-  $route_name = $route_match->getRouteName();
-
   $routes = [
     'user.cancel_confirm',
     'user.login',
@@ -30,7 +27,11 @@ function _drevops_preprocess_block__system_main_block(array &$variables): void {
     'user.reset.login',
   ];
 
-  if (in_array($route_name, $routes, TRUE)) {
-    $variables['attributes']['class'][] = 'ct-vertical-spacing--both';
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  if (!in_array($route_name, $routes, TRUE)) {
+    return;
   }
+
+  _drevops_block_add_class($variables, 'ct-vertical-spacing--both');
 }
