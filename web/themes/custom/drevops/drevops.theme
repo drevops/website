@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Template\Attribute;
+
 require_once __DIR__ . '/includes/system_main_block.inc';
 require_once __DIR__ . '/includes/banner.inc';
 require_once __DIR__ . '/includes/paragraphs.inc';
@@ -17,6 +19,23 @@ require_once __DIR__ . '/includes/node.inc';
 require_once __DIR__ . '/includes/cards.inc';
 require_once __DIR__ . '/includes/sidebar_navigation.inc';
 require_once __DIR__ . '/includes/content_moderation.inc';
+
+/**
+ * Adds a CSS class to a block wrapper.
+ *
+ * CivicTheme copies "attributes" into a separate "drupal_attributes" object
+ * that its block template renders, so classes added during subtheme preprocess
+ * must target that object to reach the markup.
+ */
+function _drevops_block_add_class(array &$variables, string $class): void {
+  if (isset($variables['drupal_attributes']) && $variables['drupal_attributes'] instanceof Attribute) {
+    $variables['drupal_attributes']->addClass($class);
+
+    return;
+  }
+
+  $variables['attributes']['class'][] = $class;
+}
 
 /**
  * Implements hook_preprocess_HOOK() for container templates.

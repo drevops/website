@@ -7,8 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Template\Attribute;
-
 /**
  * Preprocess for system_main_block block.
  */
@@ -35,14 +33,5 @@ function _drevops_preprocess_block__system_main_block(array &$variables): void {
     return;
   }
 
-  // CivicTheme's block template renders the wrapper from a separate
-  // "drupal_attributes" object, so the spacing class must be added there to
-  // reach the markup.
-  if (isset($variables['drupal_attributes']) && $variables['drupal_attributes'] instanceof Attribute) {
-    $variables['drupal_attributes']->addClass('ct-vertical-spacing--both');
-
-    return;
-  }
-
-  $variables['attributes']['class'][] = 'ct-vertical-spacing--both';
+  _drevops_block_add_class($variables, 'ct-vertical-spacing--both');
 }

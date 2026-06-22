@@ -17,5 +17,5 @@ function _drevops_preprocess_block__content_moderation_control(array &$variables
     return;
   }
 
-  $variables['attributes']['class'][] = 'container';
+  _drevops_block_add_class($variables, 'container');
 }
