@@ -7,10 +7,10 @@ props:
   type: object
   properties:
     symbol:
-      type: string
+      type: [string, 'null']
       title: Symbol
     size:
-      type: string
+      type: [string, 'null']
       title: Size
     attributes:
       type: Drupal\Core\Template\Attribute
@@ -19,5 +19,5 @@ props:
       type: string
       title: Modifier classes
     assets_dir:
-      type: string
+      type: [string, 'null']
       title: Assets directory

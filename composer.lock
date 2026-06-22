@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e8d6e13c0cfe47aee9158ee8788b601",
+    "content-hash": "257d6027a7f6de8c50efe89bda82ed90",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1990,21 +1990,21 @@
         },
         {
             "name": "drupal/civictheme",
-            "version": "1.12.2",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/civictheme.git",
-                "reference": "1.12.2"
+                "reference": "1.13.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/civictheme-1.12.2.zip",
-                "reference": "1.12.2",
-                "shasum": "d6066cdd5d27142e742b2b1f6d30e08d815cdeca"
+                "url": "https://ftp.drupal.org/files/projects/civictheme-1.13.0.zip",
+                "reference": "1.13.0",
+                "shasum": "a00d53d681543ea287cd56275b58ebf87924e305"
             },
             "require": {
-                "drupal/components": "^3.1",
                 "drupal/core": "^10.2 || ^11",
+                "drupal/entity_reference_revisions": "*",
                 "drupal/field_group": "^4.0",
                 "drupal/focal_point": "^2.0",
                 "drupal/layout_builder_restrictions": "^3",
@@ -2024,8 +2024,8 @@
             "type": "drupal-theme",
             "extra": {
                 "drupal": {
-                    "version": "1.12.2",
-                    "datestamp": "1764801694",
+                    "version": "1.13.0",
+                    "datestamp": "1778028514",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2063,10 +2063,10 @@
                 }
             ],
             "description": "CivicTheme is a Drupal 10 component-based theme.",
-            "homepage": "https://github.com/civictheme/civictheme",
+            "homepage": "https://civictheme.io",
             "support": {
                 "source": "https://github.com/civictheme/monorepo-drupal",
-                "issues": "https://github.com/civictheme/monorepo-drupal/issues"
+                "issues": "https://www.drupal.org/project/issues/civictheme?categories=All"
             }
         },
         {
