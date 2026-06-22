@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e6b85bd0a07f310acb21db935e30522",
+    "content-hash": "0264b67a263c74a862f96757ce0a4940",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -13040,16 +13040,16 @@
         },
         {
             "name": "drupal/drupal-driver",
-            "version": "v3.0.0",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "9b83f4a89d1c6e86443d29cda913719f8f053a7e"
+                "reference": "2af9e7b002ead89f9fd7013a70968e41fb105731"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/9b83f4a89d1c6e86443d29cda913719f8f053a7e",
-                "reference": "9b83f4a89d1c6e86443d29cda913719f8f053a7e",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/2af9e7b002ead89f9fd7013a70968e41fb105731",
+                "reference": "2af9e7b002ead89f9fd7013a70968e41fb105731",
                 "shasum": ""
             },
             "require": {
@@ -13064,6 +13064,7 @@
                 "drevops/phpcs-standard": "^0.7.0",
                 "drupal/address": "^2.0.4",
                 "drupal/coder": "~8.3.0",
+                "drupal/color_field": "^3.0",
                 "drupal/commerce": "^3.0",
                 "drupal/core-composer-scaffold": "^11.2",
                 "drupal/core-recommended": "^11.2",
@@ -13135,7 +13136,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/DrupalDriver/issues",
-                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v3.0.0"
+                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v3.2.0"
             },
             "funding": [
                 {
@@ -13143,20 +13144,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-29T01:19:40+00:00"
+            "time": "2026-06-22T02:30:46+00:00"
         },
         {
             "name": "drupal/drupal-extension",
-            "version": "v6.0.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/drupalextension.git",
-                "reference": "261f8e1fefe498f295bcf5df7356463e7c6f00bf"
+                "reference": "773601d6488b77527fe91d2a29d676a2f6d220ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/261f8e1fefe498f295bcf5df7356463e7c6f00bf",
-                "reference": "261f8e1fefe498f295bcf5df7356463e7c6f00bf",
+                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/773601d6488b77527fe91d2a29d676a2f6d220ae",
+                "reference": "773601d6488b77527fe91d2a29d676a2f6d220ae",
                 "shasum": ""
             },
             "require": {
@@ -13164,7 +13165,7 @@
                 "behat/gherkin": "^4.13",
                 "behat/mink": "^1.12",
                 "behat/mink-browserkit-driver": "^2.1.0",
-                "drupal/drupal-driver": "^3.0",
+                "drupal/drupal-driver": "^3.2",
                 "friends-of-behat/mink-extension": "^2.7.1",
                 "lullabot/mink-selenium2-driver": "^1.7.4",
                 "php": ">=8.2",
@@ -13184,6 +13185,7 @@
                 "drevops/behat-screenshot": "^2.2",
                 "drevops/phpcs-standard": "^0.7.0",
                 "drupal/coder": "^8.3.27",
+                "drupal/color_field": "^3.0",
                 "drupal/core": "^11",
                 "drupal/core-composer-scaffold": "^11",
                 "drush/drush": "^12.5.2 || ^13.7",
@@ -13217,6 +13219,7 @@
                 "symfony/yaml": "^6.4.3 || ^7",
                 "webmozart/assert": "^2"
             },
+            "default-branch": true,
             "type": "behat-extension",
             "extra": {
                 "branch-alias": {
@@ -13285,24 +13288,17 @@
             "authors": [
                 {
                     "name": "Jonathan Hedstrom",
-                    "email": "jhedstrom@gmail.com"
+                    "email": "jhedstrom@gmail.com",
+                    "role": "author"
                 },
                 {
                     "name": "Melissa Anderson",
-                    "homepage": "https://github.com/eliza411"
-                },
-                {
-                    "name": "Pieter Frenssen",
-                    "homepage": "https://github.com/pfrenssen"
+                    "homepage": "https://github.com/eliza411",
+                    "role": "author"
                 },
                 {
                     "name": "Alex Skrypnyk",
                     "email": "alex@drevops.com",
-                    "role": "maintainer"
-                },
-                {
-                    "name": "Ricardo Sanz",
-                    "homepage": "https://github.com/rsanzante",
                     "role": "maintainer"
                 }
             ],
@@ -13315,7 +13311,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/drupalextension/issues",
-                "source": "https://github.com/jhedstrom/drupalextension/tree/v6.0.0"
+                "source": "https://github.com/jhedstrom/drupalextension/tree/main"
             },
             "funding": [
                 {
@@ -13323,7 +13319,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-29T01:55:51+00:00"
+            "time": "2026-06-22T05:17:21+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -17621,14 +17617,21 @@
             "time": "2026-06-15T15:31:57+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "drupal/drupal-extension",
+            "version": "dev-main",
+            "alias": "6.1",
+            "alias_normalized": "6.1.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "drupal/cloudflare": 10,
         "drupal/coder": 15,
         "drupal/config_update": 15,
         "drupal/drupal-driver": 15,
-        "drupal/drupal-extension": 15,
+        "drupal/drupal-extension": 20,
         "drupal/entity_clone": 10,
         "drupal/entity_usage": 10,
         "drupal/webform": 10,
