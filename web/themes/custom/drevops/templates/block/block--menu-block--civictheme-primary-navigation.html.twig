@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * CivicTheme implementation to display a Primary Navigation menu block.
+ */
+#}
+{% extends 'block.html.twig' %}
+
+{% block content_block %}
+  {# Custom: Forward the preprocess-computed `theme` to the navigation component. #}
+  {# The base theme's `only` include omits it, so the navigation falls back to #}
+  {# its light default and ignores the header theme. #}
+  {% include 'civictheme:navigation' with {
+    theme,
+    items,
+    type: dropdown == 'none' ? 'inline' : dropdown,
+    dropdown_columns,
+    dropdown_columns_fill,
+    is_animated,
+    menu_id: menu_id|default(''),
+    variant,
+    modifier_class: 'ct-primary-navigation ' ~ modifier_class|default(''),
+  } only %}
+{% endblock %}
