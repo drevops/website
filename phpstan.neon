@@ -11,7 +11,7 @@ parameters:
 
   level: 7
 
-  phpVersion: 80420
+  phpVersion: 80421
 
   paths:
     - web/modules/custom
@@ -19,6 +19,7 @@ parameters:
     - web/sites/default/settings.php
     - web/sites/default/includes
     - tests
+    - scripts
 
   excludePaths:
     - vendor/*
