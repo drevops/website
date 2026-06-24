@@ -11,7 +11,7 @@ parameters:
 
   level: 7
 
-  phpVersion: 80420
+  phpVersion: 80421
 
   paths:
     - web/modules/custom
@@ -19,12 +19,14 @@ parameters:
     - web/sites/default/settings.php
     - web/sites/default/includes
     - tests
+    - scripts
 
   excludePaths:
     - vendor/*
     - node_modules/*
     - ../*/vendor/*
     - ../*/node_modules/*
+    - scripts/composer/ScriptHandler.php
 
   # Prefer type checking over docblocks, which can easily become outdated.
   treatPhpDocTypesAsCertain: false
