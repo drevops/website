@@ -30,11 +30,12 @@ ahoy info   # Show URLs and status
 ahoy login  # Get admin login URL
 
 # Build & Database
-ahoy download-db  # Download fresh database from remote
-ahoy build        # Complete site rebuild
-ahoy provision    # Re-provision (import DB + apply config)
-ahoy import-db    # Import database from file without applying config
-ahoy export-db    # Export current local database
+ahoy download-db          # Download database from remote (cached for the day)
+ahoy download-db --fresh  # Force a fresh database download, bypassing the cache
+ahoy build                # Complete site rebuild
+ahoy provision            # Re-provision (import DB + apply config)
+ahoy import-db            # Import database from file without applying config
+ahoy export-db            # Export current local database
 
 # Drush commands
 ahoy drush cr     # Clear cache
@@ -66,15 +67,15 @@ ahoy test-bdd -- --tags=@tagname  # Run Behat tests with specific tag
 
 ## Before Starting Any Task
 
-1. **Check cached docs first.** Before investigating any topic, check `.data/ai-artifacts/docs-[topic].md` for existing cached documentation. Do not search the codebase or fetch from the web if a cached doc already exists.
+1. **Check cached docs first.** Before investigating any topic, check `.artifacts/docs-[topic].md` for existing cached documentation. Do not search the codebase or fetch from the web if a cached doc already exists.
 2. **Check project docs.** Before making implementation decisions, check the relevant file in `docs/` for project-specific conventions.
-3. **Fetch and cache if missing.** If no cached doc exists for the topic, fetch from https://www.vortextemplate.com/docs and save to `.data/ai-artifacts/docs-[topic].md` (see [Documentation](#documentation) for format).
+3. **Fetch and cache if missing.** If no cached doc exists for the topic, fetch from https://www.vortextemplate.com/docs and save to `.artifacts/docs-[topic].md` (see [Documentation](#documentation) for format).
 
 ## Critical Rules
 
-- **Never modify** shipped scripts at `vendor/drevops/vortex-tooling/src/` - use patches via `cweagans/composer-patches`, or add your own scripts under `scripts/custom/`
-- **Never use** `ahoy drush php:eval` - use `ahoy drush php:script` instead
-- **Never pass inline code to commands** via stdin, heredocs, or `/dev/stdin` - always write code to a temporary file first, then pass the file path to the command (e.g. `ahoy drush php:script path/to/fix.php`)
+- **Never modify** shipped scripts at `vendor/drevops/vortex-tooling/src/` - use patches via `cweagans/composer-patches`, or add your own scripts under `scripts/`
+- **Never use** `ahoy drush php:eval` for ad-hoc commands - write the code to a file and run `ahoy drush php:script path/to/file.php` instead. This targets ad-hoc agent use; committed, vetted scripts may use `drush php:eval` for static, non-dynamic operations.
+- **When running ad-hoc code, never pass it inline** via stdin, heredocs, or `/dev/stdin` - write it to a temporary file first, then pass the file path to the command (e.g. `ahoy drush php:script path/to/fix.php`)
 - **Always export config** after admin UI changes: `ahoy drush cex`
 - **Never use compound Bash commands.** See the highest priority rule at the top.
 
@@ -83,7 +84,7 @@ ahoy test-bdd -- --tags=@tagname  # Run Behat tests with specific tag
 - `web/modules/custom/` - Custom modules
 - `web/themes/custom/` - Custom themes
 - `config/default/` - Drupal configuration
-- `scripts/custom/` - Project scripts
+- `scripts/` - Project scripts
 - `patches/` - Module patches
 
 ## Documentation
@@ -108,6 +109,6 @@ For **how** to perform operations, fetch from https://www.vortextemplate.com/doc
 
 Use the sitemap to discover available pages: https://www.vortextemplate.com/sitemap.xml
 
-**Caching:** Save fetched docs to `.data/ai-artifacts/docs-[topic].md` with header
+**Caching:** Save fetched docs to `.artifacts/docs-[topic].md` with header
 `<!-- Source: [URL] | Cached: [YYYY-MM-DD] -->`.
 Re-fetch if user reports docs are outdated.

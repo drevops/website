@@ -69,6 +69,7 @@
         "drupal/coder": "^9@alpha",
         "drupal/drupal-driver": "^3.2@alpha",
         "drupal/drupal-extension": "^6.1",
+        "drupal/sdc_devel": "^1.0.2",
         "ergebnis/composer-normalize": "^2.52.0",
         "lullabot/mink-selenium2-driver": "^1.7.4",
         "lullabot/php-webdriver": "^2.0.7",
@@ -132,7 +133,7 @@
         "bump-after-update": true,
         "discard-changes": true,
         "platform": {
-            "php": "8.4.20"
+            "php": "8.4.21"
         },
         "policy": {
             "advisories": {

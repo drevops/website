@@ -65,6 +65,9 @@ defaults:
 env:
   DOCKER_CONFIG: /tmp/.docker
 
+permissions:
+  contents: read # Minimal default for all jobs; jobs that need more override below.
+
 jobs:
 
   lint:
@@ -73,7 +76,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.5.0@sha256:b7fe267124a98cd4b51fac244ae9572b3a5f58de1d8d7ca9173b77fe071c8bed
+      image: drevops/ci-runner:26.6.0@sha256:190027056cac7b7ce28c29a1e5494779ebadc4ee8e95d468b75bc56e7be5aabd
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -87,7 +90,9 @@ jobs:
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
       - name: Check out code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
 
       - name: Fix Git ownership permissions
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -110,7 +115,7 @@ jobs:
 
       - name: Lint Dockerfiles with Hadolint
         run: |
-          find .docker -name 'Dockerfile' -o -name '*.dockerfile' | while read -r file; do
+          find .docker \( -name 'Dockerfile' -o -name '*.dockerfile' \) | while read -r file; do
             echo "Linting ${file}" && cat "${file}" | docker run --rm -i hadolint/hadolint
           done
         continue-on-error: ${{ vars.VORTEX_CI_HADOLINT_IGNORE_FAILURE == '1' }}
@@ -119,13 +124,17 @@ jobs:
         run: docker run --rm -v "${PWD}":/app zavoloklom/dclint:3.1.0 .
         continue-on-error: ${{ vars.VORTEX_CI_DCLINT_IGNORE_FAILURE == '1' }}
 
+      - name: Scan for committed secrets with Gitleaks
+        run: docker run --rm -v "${PWD}":/repo -w /repo ghcr.io/gitleaks/gitleaks:v8.30.1 dir . --no-banner
+        continue-on-error: ${{ vars.VORTEX_CI_GITLEAKS_IGNORE_FAILURE == '1' }}
+
       - name: Build stack
         run: docker compose up --no-deps --detach cli
 
       - name: Install development dependencies
         run: |
           docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c " \
-            if [ -n \"${PACKAGE_TOKEN:-}\" ]; then export COMPOSER_AUTH='{\"github-oauth\": {\"github.com\": \"${PACKAGE_TOKEN-}\"}}'; fi && \
+            if [ -n \"\${PACKAGE_TOKEN:-}\" ]; then composer config --global --auth github-oauth.github.com \"\${PACKAGE_TOKEN}\"; fi && \
             COMPOSER_MEMORY_LIMIT=-1 composer --ansi install --prefer-dist"
           docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c "yarn install --frozen-lockfile"
 
@@ -172,7 +181,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.5.0@sha256:b7fe267124a98cd4b51fac244ae9572b3a5f58de1d8d7ca9173b77fe071c8bed
+      image: drevops/ci-runner:26.6.0@sha256:190027056cac7b7ce28c29a1e5494779ebadc4ee8e95d468b75bc56e7be5aabd
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -196,7 +205,7 @@ jobs:
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
       - name: Check out code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           # Do not keep SSH credentials after checkout to allow adding custom SSH keys.
           persist-credentials: false
@@ -209,7 +218,7 @@ jobs:
         uses: shimataro/ssh-key-action@87a8f067114a8ce263df83e9ed5c849953548bc3 # v2.8.1
         with:
           key: ${{ secrets.VORTEX_DOWNLOAD_DB_SSH_PRIVATE_KEY }}
-          known_hosts: unnecessary
+          known_hosts: ${{ vars.VORTEX_DOWNLOAD_DB_SSH_KNOWN_HOSTS || 'unnecessary' }}
         env:
           VORTEX_DOWNLOAD_DB_SSH_PRIVATE_KEY: ${{ secrets.VORTEX_DOWNLOAD_DB_SSH_PRIVATE_KEY }}
 
@@ -233,18 +242,18 @@ jobs:
           echo "yes" | tee db_cache_fallback_yes
 
       # Restore DB cache based on the cache strategy set by the cache keys below.
-      # Change 'v1' to 'v2', 'v3' etc., commit and push to force cache reset.
+      # Bump the last segment of the version prefix below to force a cache reset.
       # Lookup cache based on the default branch and a timestamp. Allows
       # to use cache from the very first build on the day (sanitized database dump, for example).
       - name: Restore DB cache
-        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        uses: actions/cache/restore@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
         with:
           path: .data
-          key: v26.6.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v26.7.0-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-${{ hashFiles('db_cache_timestamp') }}
           # Fallback to caching by default branch name only. Allows to use
           # cache from the branch build on the previous day.
           restore-keys: |
-            v26.6.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-
+            v26.7.0-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback') }}-
 
       - name: Download DB
         run: |
@@ -260,6 +269,7 @@ jobs:
           docker compose exec cli mkdir -p .data && docker compose cp -L .data/db.sql cli:/app/.data/db.sql
           docker compose exec cli bash -c "VORTEX_PROVISION_POST_OPERATIONS_SKIP=1 ./vendor/drevops/vortex-tooling/src/provision"
           ./vendor/drevops/vortex-tooling/src/export-db db.sql
+          docker compose cp -L cli:/app/.data/db.sql .data/db.sql
         timeout-minutes: 30
 
       # Save cache per default branch and the timestamp.
@@ -267,16 +277,21 @@ jobs:
       # Note that the cache fallback flag is enabled for this case in order
       # to save cache even if the fallback is not used when restoring it.
       - name: Save DB cache
-        uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
         if: env.db_hash != hashFiles('.data')
         with:
           path: .data
-          key: v26.6.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v26.7.0-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
 
   build:
     runs-on: ubuntu-latest
     needs: database
     if: ${{ !inputs.deploy_target && github.event_name != 'schedule' && (github.event_name == 'push' || !startsWith(github.head_ref, 'project/')) }}
+
+    permissions:
+      contents: read # Check out the repository.
+      checks: write # Publish test results to the Checks tab.
+      pull-requests: write # Comment on the pull request.
 
     strategy:
       # A matrix to run multiple jobs in parallel.
@@ -286,7 +301,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.5.0@sha256:b7fe267124a98cd4b51fac244ae9572b3a5f58de1d8d7ca9173b77fe071c8bed
+      image: drevops/ci-runner:26.6.0@sha256:190027056cac7b7ce28c29a1e5494779ebadc4ee8e95d468b75bc56e7be5aabd
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -311,7 +326,9 @@ jobs:
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
       - name: Check out code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
 
       - name: Fix Git ownership permissions
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -336,21 +353,21 @@ jobs:
           date "${VORTEX_CI_DB_CACHE_TIMESTAMP}" | tee db_cache_timestamp
 
       - name: Show cache key for database caching
-        run: echo 'v26.6.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}'
+        run: echo 'v26.7.0-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}'
 
       # Restore DB cache based on the cache strategy set by the cache keys below.
-      # Change 'v1' to 'v2', 'v3' etc., commit and push to force cache reset.
+      # Bump the last segment of the version prefix below to force a cache reset.
       # Lookup cache based on the default branch and a timestamp. Allows
       # to use cache from the very first build on the day (sanitized database dump, for example).
       - name: Restore DB cache
-        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+        uses: actions/cache/restore@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6
         with:
           path: .data
           fail-on-cache-miss: true
           # Use cached database from previous builds of this branch.
-          key: v26.6.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
+          key: v26.7.0-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-${{ hashFiles('db_cache_timestamp') }}
           restore-keys: |
-            v26.6.0-db11-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-
+            v26.7.0-${{ hashFiles('db_cache_branch') }}-${{ hashFiles('db_cache_fallback_yes') }}-
 
       - name: Login to container registry
         run: ./vendor/drevops/vortex-tooling/src/login-container-registry
@@ -369,7 +386,7 @@ jobs:
       - name: Install development dependencies
         run: |
           docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c " \
-            if [ -n \"${PACKAGE_TOKEN:-}\" ]; then export COMPOSER_AUTH='{\"github-oauth\": {\"github.com\": \"${PACKAGE_TOKEN-}\"}}'; fi && \
+            if [ -n \"\${PACKAGE_TOKEN:-}\" ]; then composer config --global --auth github-oauth.github.com \"\${PACKAGE_TOKEN}\"; fi && \
             COMPOSER_MEMORY_LIMIT=-1 composer --ansi install --prefer-dist"
 
       - name: Provision site
@@ -432,7 +449,7 @@ jobs:
           hide_and_recreate: true
 
       - name: Upload coverage report to Codecov
-        uses: codecov/codecov-action@e79a6962e0d4c0c17b229090214935d2e33f8354 # v6
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7
         if: ${{ (matrix.instance == 0 || strategy.job-total == 1) && env.CODECOV_TOKEN != '' }}
         continue-on-error: true
         with:
@@ -455,12 +472,14 @@ jobs:
       - name: Test with Behat
         run: |
           # shellcheck disable=SC2170
-          if [ ${{ strategy.job-total }} -gt 1 ]; then export VORTEX_CI_BEHAT_PROFILE="${VORTEX_CI_BEHAT_PROFILE:-p${{ strategy.job-index }}}"; fi
+          if [ "${STRATEGY_JOB_TOTAL}" -gt 1 ]; then export VORTEX_CI_BEHAT_PROFILE="${VORTEX_CI_BEHAT_PROFILE:-p${STRATEGY_JOB_INDEX}}"; fi
           echo "Running with ${VORTEX_CI_BEHAT_PROFILE:-default} profile"
           docker compose exec -T cli php -d memory_limit=-1 vendor/bin/behat --colors --strict --profile="${VORTEX_CI_BEHAT_PROFILE:-default}" || \
             docker compose exec -T cli php -d memory_limit=-1 vendor/bin/behat --colors --strict --rerun --profile="${VORTEX_CI_BEHAT_PROFILE:-default}"
         env:
           VORTEX_CI_BEHAT_PROFILE: ${{ vars.VORTEX_CI_BEHAT_PROFILE }}
+          STRATEGY_JOB_TOTAL: ${{ strategy.job-total }}
+          STRATEGY_JOB_INDEX: ${{ strategy.job-index }}
         continue-on-error: ${{ vars.VORTEX_CI_BEHAT_IGNORE_FAILURE == '1' }}
         timeout-minutes: 30
 
@@ -481,6 +500,16 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
 
+      - name: Publish test results to GitHub Checks
+        if: ${{ !cancelled() && vars.VORTEX_CI_TEST_RESULTS_SKIP != '1' }}
+        uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3 # v2.24.0
+        with:
+          check_name: Test results (${{ matrix.instance }})
+          comment_mode: "off"
+          test_file_prefix: "-/app/"
+          files: |
+            .logs/test_results/**/*.xml
+
       - name: Upload exported codebase as an artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ matrix.instance == 0 && !startsWith(github.head_ref || github.ref_name, 'deps/') && contains(env.VORTEX_DEPLOY_TYPES, 'artifact') }}
@@ -494,7 +523,7 @@ jobs:
       - name: Setup tmate session
         if: ${{ !cancelled() && github.event.inputs.enable_terminal }}
         uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3
-        timeout-minutes: 120 # Cancel the action after 15 minutes, regardless of whether a connection has been established.
+        timeout-minutes: 120 # Cancel the action after 120 minutes, regardless of whether a connection has been established.
         with:
           detached: true
 
@@ -505,7 +534,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.5.0@sha256:b7fe267124a98cd4b51fac244ae9572b3a5f58de1d8d7ca9173b77fe071c8bed
+      image: drevops/ci-runner:26.6.0@sha256:190027056cac7b7ce28c29a1e5494779ebadc4ee8e95d468b75bc56e7be5aabd
       env:
         TZ: ${{ vars.TZ || 'UTC' }}
         TERM: xterm-256color
@@ -532,7 +561,7 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           # Fetch all history for git repository.
           fetch-depth: 0
@@ -566,7 +595,7 @@ jobs:
         uses: shimataro/ssh-key-action@87a8f067114a8ce263df83e9ed5c849953548bc3 # v2.8.1
         with:
           key: ${{ secrets.VORTEX_DEPLOY_SSH_PRIVATE_KEY }}
-          known_hosts: unnecessary
+          known_hosts: ${{ vars.VORTEX_DEPLOY_SSH_KNOWN_HOSTS || 'unnecessary' }}
         env:
           VORTEX_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.VORTEX_DEPLOY_SSH_PRIVATE_KEY }}
 
@@ -580,6 +609,7 @@ jobs:
           VORTEX_DEPLOY_BRANCH: ${{ env.DEPLOY_BRANCH || github.head_ref || github.ref_name }}
           VORTEX_DEPLOY_PR: ${{ env.DEPLOY_PR_NUMBER || github.event.number }}
           VORTEX_DEPLOY_PR_HEAD: ${{ env.DEPLOY_PR_HEAD_SHA || github.event.pull_request.head.sha }}
+          VORTEX_DEPLOY_PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
           VORTEX_DEPLOY_ARTIFACT_SRC: /tmp/workspace/code
           VORTEX_DEPLOY_ARTIFACT_ROOT: ${{ github.workspace }}
           VORTEX_DEPLOY_ARTIFACT_GIT_REMOTE: ${{ vars.VORTEX_DEPLOY_ARTIFACT_GIT_REMOTE }}
@@ -590,5 +620,6 @@ jobs:
           VORTEX_DEPLOY_ALLOW_SKIP: ${{ vars.VORTEX_DEPLOY_ALLOW_SKIP }}
           VORTEX_DEPLOY_SKIP_PRS: ${{ vars.VORTEX_DEPLOY_SKIP_PRS }}
           VORTEX_DEPLOY_SKIP_BRANCHES: ${{ vars.VORTEX_DEPLOY_SKIP_BRANCHES }}
+          VORTEX_DEPLOY_ALLOW_LABEL: ${{ vars.VORTEX_DEPLOY_ALLOW_LABEL }}
           VORTEX_DEPLOY_ACTION: ${{ inputs.override_db && 'deploy_override_db' || '' }}
         timeout-minutes: 30
