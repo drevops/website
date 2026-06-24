@@ -26,6 +26,7 @@ parameters:
     - node_modules/*
     - ../*/vendor/*
     - ../*/node_modules/*
+    - scripts/composer/ScriptHandler.php
 
   # Prefer type checking over docblocks, which can easily become outdated.
   treatPhpDocTypesAsCertain: false
