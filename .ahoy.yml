@@ -96,7 +96,7 @@ commands:
     usage: Run Composer commands in the CLI service container.
     cmd: |
       ahoy cli " \
-        if [ -n \"${PACKAGE_TOKEN:-}\" ]; then export COMPOSER_AUTH='{\"github-oauth\": {\"github.com\": \"${PACKAGE_TOKEN-}\"}}'; fi && \
+        if [ -n \"\${PACKAGE_TOKEN:-}\" ]; then composer config --global --auth github-oauth.github.com \"\${PACKAGE_TOKEN}\"; fi && \
         COMPOSER_MEMORY_LIMIT=-1 composer --ansi $@"
 
   drush:
@@ -214,6 +214,14 @@ commands:
     usage: Lint tests code.
     cmd: |
       ahoy cli vendor/bin/gherkinlint lint tests/behat/features
+
+  lint-sdc:
+    usage: Validate Single Directory Components (requires a provisioned site).
+    cmd: |
+      ahoy cli " \
+        output=\$(vendor/bin/drush sdc-devel:validate \${DRUPAL_THEME} 2>&1); \
+        echo \"\${output}\"; \
+        if echo \"\${output}\" | grep -qE 'Critical|Errors?|Warnings?'; then echo 'SDC validation reported problems.'; exit 1; fi"
 
   lint-fix:
     usage: Fix lint issues of back-end and front-end code.
