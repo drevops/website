@@ -149,6 +149,9 @@ settings:
           label: Small
           element: '<p class="ct-text-small">'
         -
+          label: Eyebrow
+          element: '<p class="eyebrow">'
+        -
           label: Table
           element: '<table class="ct-theme-light ct-theme-dark ct-table">'
         -

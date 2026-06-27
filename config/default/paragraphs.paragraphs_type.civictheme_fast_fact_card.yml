@@ -1,0 +1,10 @@
+uuid: 5d1f3b48-edf1-40b7-97ca-7bfade0a1f81
+langcode: en
+status: true
+dependencies: {  }
+id: civictheme_fast_fact_card
+label: 'Fast fact card'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

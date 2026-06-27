@@ -32,6 +32,11 @@ targetEntityType: node
 bundle: civictheme_event
 mode: civictheme_navigation_card
 content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
   field_c_n_body:
     type: text_default
     label: visually_hidden
