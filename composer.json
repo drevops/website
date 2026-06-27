@@ -29,6 +29,7 @@
         "drupal/entity_usage": "^2.0@beta",
         "drupal/environment_indicator": "^4.0.25",
         "drupal/field_group": "^4",
+        "drupal/gemini_provider": "^1.0",
         "drupal/generated_content": "^2.0.1",
         "drupal/gin": "^5.0.15",
         "drupal/gin_toolbar": "^3.0.3",
