@@ -9,7 +9,7 @@ _core:
 id: civictheme_event
 label: Event
 type: 'canonical_entities:node'
-pattern: 'events/[node:title]'
+pattern: '/events/[node:title]'
 selection_criteria:
   7c00cfca-667b-46d2-b889-cc27fc0467d0:
     id: 'entity_bundle:node'
