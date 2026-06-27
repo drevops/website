@@ -1,0 +1,20 @@
+//
+// Eyebrow.
+//
+// Small, uppercase kicker label intended to sit above a heading. The brand
+// palette has no orange, so this colour is a deliberate accent rather than a
+// CivicTheme token; adjust `$ct-eyebrow-color` to taste. The chosen value
+// clears WCAG AA contrast on light backgrounds.
+//
+
+$ct-eyebrow-color: #c1430a !default;
+
+.eyebrow {
+  display: block;
+  margin-block-end: 0.5rem;
+  color: $ct-eyebrow-color;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
