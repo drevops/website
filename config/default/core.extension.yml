@@ -5,7 +5,6 @@ module:
   admin_toolbar_tools: 0
   ai: 0
   ai_image_alt_text: 0
-  ai_provider_openai: 0
   automated_cron: 0
   big_pipe: 0
   block: 0
@@ -45,6 +44,7 @@ module:
   file: 0
   filter: 0
   focal_point: 0
+  gemini_provider: 0
   gin_toolbar: 0
   google_tag: 0
   help: 0

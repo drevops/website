@@ -358,6 +358,35 @@ class EnvironmentSettingsTest extends SettingsTestCase {
   }
 
   /**
+   * Test that the Gemini API key is injected from the environment variable.
+   */
+  public function testGeminiProviderApiKey(): void {
+    $this->setEnvVars([
+      'DRUPAL_ENVIRONMENT' => self::ENVIRONMENT_SUT,
+      'DRUPAL_AI_PROVIDER_GEMINI_API_KEY' => 'test_gemini_api_key',
+    ]);
+
+    $this->requireSettingsFile();
+
+    $config['key.key.gemini']['key_provider_settings']['key_value'] = 'test_gemini_api_key';
+    $this->assertConfigContains($config);
+  }
+
+  /**
+   * Test that the Gemini API key is not injected when the variable is unset.
+   */
+  public function testGeminiProviderApiKeyNotSet(): void {
+    $this->setEnvVars([
+      'DRUPAL_ENVIRONMENT' => self::ENVIRONMENT_SUT,
+    ]);
+
+    $this->requireSettingsFile();
+
+    $config['key.key.gemini']['key_provider_settings']['key_value'] = 'test_gemini_api_key';
+    $this->assertConfigNotContains($config);
+  }
+
+  /**
    * Test per-environment settings for Local environment.
    */
   public function testEnvironmentLocal(): void {
