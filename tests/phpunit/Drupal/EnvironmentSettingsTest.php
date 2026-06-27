@@ -378,6 +378,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
   public function testGeminiProviderApiKeyNotSet(): void {
     $this->setEnvVars([
       'DRUPAL_ENVIRONMENT' => self::ENVIRONMENT_SUT,
+      'DRUPAL_AI_PROVIDER_GEMINI_API_KEY' => FALSE,
     ]);
 
     $this->requireSettingsFile();
