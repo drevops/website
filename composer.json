@@ -55,7 +55,6 @@
         "drupal/views_bulk_operations": "^4.4.5",
         "drupal/webform": "^6.3@beta",
         "drush/drush": "^13.7.4",
-        "oomphinc/composer-installers-extender": "^2.0.1",
         "symfony/http-client": "^6.4.42",
         "webflo/drupal-finder": "^1.3.1"
     },
@@ -125,7 +124,6 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
             "ergebnis/composer-normalize": true,
-            "oomphinc/composer-installers-extender": true,
             "php-http/discovery": true,
             "phpstan/extension-installer": true,
             "pyrech/composer-changelogs": true,
@@ -201,9 +199,6 @@
                 "type:drupal-custom-theme"
             ]
         },
-        "installer-types": [
-            "drupal-library"
-        ],
         "patchLevel": {
             "drupal/core": "-p2"
         },
