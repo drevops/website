@@ -9,7 +9,7 @@ _core:
 id: civictheme_page
 label: Page
 type: 'canonical_entities:node'
-pattern: '[node:title]'
+pattern: '/[node:title]'
 selection_criteria:
   d0cb40e2-2a88-4a13-8c3d-4dc398a6865f:
     id: 'entity_bundle:node'

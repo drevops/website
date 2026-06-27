@@ -9,7 +9,7 @@ _core:
 id: civictheme_alert
 label: Alert
 type: 'canonical_entities:node'
-pattern: 'alerts/[node:title]'
+pattern: '/alerts/[node:title]'
 selection_criteria:
   47608ecb-ac88-4819-b6e1-9a517f094bd8:
     id: 'entity_bundle:node'

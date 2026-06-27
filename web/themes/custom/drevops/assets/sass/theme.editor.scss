@@ -8,6 +8,7 @@
 @import 'components_combined/00-base/**/mixins/*.scss';
 @import 'components_combined/00-base/**/fonts';
 @import 'components_combined/01-atoms/**/button/*.scss';
+@import 'assets/sass/eyebrow';
 
 .ck-editor__editable {
   @include ct-content();
