@@ -6,6 +6,8 @@ package: website
 dependencies:
   - drupal:content_moderation
   - drupal:jsonapi
+  - drupal:media
+  - drupal:node
   - drupal:paragraphs
   - key_auth:key_auth
   - subrequests:subrequests

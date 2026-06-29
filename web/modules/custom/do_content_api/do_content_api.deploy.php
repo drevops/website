@@ -10,6 +10,7 @@
 declare(strict_types=1);
 
 use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
 
 /**
  * Creates the content authoring API service account.
@@ -21,6 +22,17 @@ function do_content_api_deploy_service_account(): string {
   $existing = $storage->loadByProperties(['name' => $username]);
 
   if ($existing) {
+    $account = reset($existing);
+
+    // Reconcile the role in case the account was created without it. Status is
+    // left untouched so a deliberately blocked account stays disabled.
+    if ($account instanceof UserInterface && !$account->hasRole('do_content_api')) {
+      $account->addRole('do_content_api');
+      $account->save();
+
+      return sprintf('Service account "%s" reconciled: role added.', $username);
+    }
+
     return sprintf('Service account "%s" already exists; skipped.', $username);
   }
 
