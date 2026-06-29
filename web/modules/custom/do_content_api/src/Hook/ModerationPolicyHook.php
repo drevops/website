@@ -34,14 +34,9 @@ final class ModerationPolicyHook {
     }
 
     // Pages authored through the API never go live directly; a human reviews
-    // and publishes them, so any published state is forced back to a draft.
+    // and publishes them, so they are always forced back to a draft.
     if ($entity->getEntityTypeId() === 'node') {
-      $workflow = $this->moderationInformation->getWorkflowForEntity($entity);
-      $state = $workflow->getTypePlugin()->getState($entity->get('moderation_state')->value);
-
-      if ($state->isPublishedState()) {
-        $entity->set('moderation_state', 'draft');
-      }
+      $entity->set('moderation_state', 'draft');
 
       return;
     }

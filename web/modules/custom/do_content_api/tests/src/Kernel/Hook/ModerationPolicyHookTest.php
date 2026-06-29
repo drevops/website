@@ -99,6 +99,23 @@ class ModerationPolicyHookTest extends KernelTestBase {
   }
 
   /**
+   * Tests that any non-draft state authored through the API is forced to draft.
+   */
+  public function testApiPageNonDraftForcedToDraft(): void {
+    $this->setCurrentUser($this->createUser(['use content authoring api']));
+
+    $node = Node::create([
+      'type' => 'civictheme_page',
+      'title' => '[TEST] Review page',
+      'moderation_state' => 'needs_review',
+    ]);
+    $node->save();
+
+    $this->assertSame('draft', $node->get('moderation_state')->value);
+    $this->assertFalse($node->isPublished());
+  }
+
+  /**
    * Tests that an API actor's draft page is left as a draft.
    */
   public function testApiPageDraftUnchanged(): void {

@@ -6,7 +6,7 @@ This document is the authoring contract: it describes the endpoints, the content
 
 ## Governance model (read this first)
 
-Content created through the API is **never published automatically**. A human reviews and publishes it.
+Pages created through the API are **never published automatically**. A human reviews and publishes them.
 
 - **Pages** (`civictheme_page` nodes) are always created as **draft**. The server forces this: even if a request asks for `published`, the page is coerced to `draft`.
 - **Images** (`civictheme_image` media) are created **published** - they are assets, invisible until referenced by a published page. The server forces this too, so a client never has to set media moderation state.
@@ -133,5 +133,5 @@ The response is HTTP `207` with one entry per `requestId`. Each entry has its ow
 - **Order tokens correctly.** Use `drupal_internal__revision_id` from each paragraph's creation response. The numeric token is written quoted (`"target_revision_id":"{{...}}"`); the replacer strips the quotes.
 - **Alt text is required** on every image.
 - **Rich text needs a format**: `civictheme_rich_text`.
-- **Do not set page `moderation_state` to `published`** - it is ignored and forced to `draft`. Mark a page ready for review with `needs_review` if desired.
+- **Page moderation state is ignored** - every page is created as `draft` regardless of the `moderation_state` sent; a human publishes it.
 - **Cards (`civictheme_*_card`) are not placed directly on the page** - they live inside a `civictheme_manual_list` via `field_c_p_list_items`.
