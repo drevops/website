@@ -17,11 +17,11 @@ So the workflow is: the agent creates a draft page with published images, an edi
 
 Send the API key in the `api-key` request header on every request:
 
-```
+```text
 api-key: <key>
 ```
 
-The key belongs to a dedicated, least-privilege service account (`do_content_api_service`) that may only create pages, images, and the supported components - nothing else, and it can never publish.
+The key belongs to a dedicated, least-privilege service account (`do_content_api_service`) that may only create pages, images, and the supported components. Pages it authors are forced to draft by the moderation policy - a human publishes them.
 
 Retrieve (or regenerate) the key as an administrator at `/user/<uid>/key-auth` for the service account, or have a developer read it from the account. Always send it over HTTPS. On deployed environments the `shield` module may sit in front of the site; the API path must be allow-listed there or the client must also supply the Shield credentials.
 
@@ -30,8 +30,8 @@ Retrieve (or regenerate) the key as an administrator at `/user/<uid>/key-auth` f
 The feature ships as configuration, so it is enabled by a normal deployment:
 
 1. Importing configuration enables `jsonapi` (with writes allowed), `key_auth`, `subrequests`, and the `do_content_api` module, and creates the `do_content_api` service role.
-2. The `drush deploy` step runs a deploy hook that creates the `do_content_api_service` account (idempotent - it is skipped if the account already exists). The API key is generated automatically.
-3. Retrieve the key at `/user/<uid>/key-auth` and give it to the client.
+1. The `drush deploy` step runs a deploy hook that creates the `do_content_api_service` account (idempotent - it is skipped if the account already exists). The API key is generated automatically.
+1. Retrieve the key at `/user/<uid>/key-auth` and give it to the client.
 
 No keys are committed to the repository; each environment issues its own.
 
@@ -74,7 +74,7 @@ Fields marked `*` are required. `civictheme_accordion_panel` and the card paragr
 ### Images (`media--civictheme_image`)
 
 1. Upload the bytes: `POST /jsonapi/media/civictheme_image/field_c_m_image` with `Content-Type: application/octet-stream` and `Content-Disposition: file; filename="<name>.png"`. The response is a `file--file` resource - keep its `id` (uuid).
-2. Create the media, referencing the file and **always supplying `alt`** (alt text is required):
+1. Create the media, referencing the file and **always supplying `alt`** (alt text is required):
 
 ```json
 {
@@ -90,7 +90,7 @@ Fields marked `*` are required. `civictheme_accordion_panel` and the card paragr
 }
 ```
 
-3. Reference the media's `id` from a component's image field (e.g. `field_c_p_image`).
+1. Reference the media's `id` from a component's image field (e.g. `field_c_p_image`).
 
 ## Recommended flow: one blueprint per page
 

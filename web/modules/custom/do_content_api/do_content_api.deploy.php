@@ -24,13 +24,17 @@ function do_content_api_deploy_service_account(): string {
   if ($existing) {
     $account = reset($existing);
 
-    // Reconcile the role in case the account was created without it. Status is
+    // Reconcile to exactly the least-privilege role set, dropping any extra
+    // roles that would widen the externally authenticated account. Status is
     // left untouched so a deliberately blocked account stays disabled.
-    if ($account instanceof UserInterface && !$account->hasRole('do_content_api')) {
+    if ($account instanceof UserInterface && $account->getRoles(TRUE) !== ['do_content_api']) {
+      foreach ($account->getRoles(TRUE) as $role) {
+        $account->removeRole($role);
+      }
       $account->addRole('do_content_api');
       $account->save();
 
-      return sprintf('Service account "%s" reconciled: role added.', $username);
+      return sprintf('Service account "%s" reconciled to least-privilege role set.', $username);
     }
 
     return sprintf('Service account "%s" already exists; skipped.', $username);
