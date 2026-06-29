@@ -25,7 +25,7 @@ class EntityCreateAccessHookTest extends UnitTestCase {
   public function testEntityCreateAccess(array $context, bool $has_permission, ?string $bundle, string $expected_state): void {
     // Prepare.
     $account = $this->createMock(AccountInterface::class);
-    $account->method('hasPermission')->willReturn($has_permission);
+    $account->method('hasPermission')->with('use content authoring api')->willReturn($has_permission);
     $hook = new EntityCreateAccessHook();
 
     // Act.

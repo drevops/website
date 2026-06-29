@@ -34,20 +34,20 @@ class JsonApiWriteGateSubscriberTest extends UnitTestCase {
     $event->method('getRequest')->willReturn($request);
 
     $account = $this->createMock(AccountInterface::class);
-    $account->method('hasPermission')->willReturn($has_permission);
+    $account->method('hasPermission')->with('use content authoring api')->willReturn($has_permission);
 
     $subscriber = new JsonApiWriteGateSubscriber($account);
 
-    // Assert.
+    // Act + Assert.
     if ($expect_denied) {
       $this->expectException(AccessDeniedHttpException::class);
-    }
-    else {
-      $this->expectNotToPerformAssertions();
+      $subscriber->onRequest($event);
+      return;
     }
 
-    // Act.
     $subscriber->onRequest($event);
+    // Reaching this point means the request was allowed through unmodified.
+    $this->addToAssertionCount(1);
   }
 
   /**

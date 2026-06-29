@@ -24,10 +24,18 @@ function do_content_api_deploy_service_account(): string {
   if ($existing) {
     $account = reset($existing);
 
+    // Fail closed on a username collision: only an account this hook created
+    // (matching the deterministic service email) is reconciled, so a
+    // pre-existing human account that happens to share the name is never
+    // granted API access.
+    if (!$account instanceof UserInterface || $account->getEmail() !== $username . '@example.com') {
+      return sprintf('Account "%s" exists but is not the service account; left unchanged.', $username);
+    }
+
     // Reconcile to exactly the least-privilege role set, dropping any extra
     // roles that would widen the externally authenticated account. Status is
     // left untouched so a deliberately blocked account stays disabled.
-    if ($account instanceof UserInterface && $account->getRoles(TRUE) !== ['do_content_api']) {
+    if ($account->getRoles(TRUE) !== ['do_content_api']) {
       foreach ($account->getRoles(TRUE) as $role) {
         $account->removeRole($role);
       }
