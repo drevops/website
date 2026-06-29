@@ -1,0 +1,14 @@
+uuid: 612b486b-eed2-4dc1-ad1e-5c68a2c22cd2
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.do_content_api
+  module:
+    - user
+id: user_remove_role_action.do_content_api
+label: 'Remove the Content API service role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: do_content_api

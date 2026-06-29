@@ -1,0 +1,15 @@
+services:
+  do_content_api.route_subscriber:
+    class: Drupal\do_content_api\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+  Drupal\do_content_api\Hook\ModerationPolicyHook:
+    arguments:
+      - '@current_user'
+      - '@content_moderation.moderation_information'
+  do_content_api.jsonapi_write_gate:
+    class: Drupal\do_content_api\EventSubscriber\JsonApiWriteGateSubscriber
+    arguments:
+      - '@current_user'
+    tags:
+      - { name: event_subscriber }
