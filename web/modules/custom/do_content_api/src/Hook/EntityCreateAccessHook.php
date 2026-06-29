@@ -17,7 +17,7 @@ final class EntityCreateAccessHook {
   /**
    * Paragraph bundles that may be created through the authoring API.
    */
-  public const ALLOWED_PARAGRAPH_BUNDLES = [
+  public const array ALLOWED_PARAGRAPH_BUNDLES = [
     'civictheme_content',
     'civictheme_callout',
     'civictheme_promo',

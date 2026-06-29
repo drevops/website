@@ -40,16 +40,14 @@ class EntityCreateAccessHookTest extends UnitTestCase {
   /**
    * Data provider for testEntityCreateAccess().
    */
-  public static function dataProviderEntityCreateAccess(): array {
-    return [
-      'non-paragraph entity type is ignored' => [['entity_type_id' => 'node'], TRUE, 'civictheme_content', 'neutral'],
-      'missing entity type id is ignored' => [[], TRUE, 'civictheme_content', 'neutral'],
-      'permitted user, allowed bundle' => [['entity_type_id' => 'paragraph'], TRUE, 'civictheme_content', 'allowed'],
-      'permitted user, nested allowed bundle' => [['entity_type_id' => 'paragraph'], TRUE, 'civictheme_accordion_panel', 'allowed'],
-      'permitted user, disallowed bundle' => [['entity_type_id' => 'paragraph'], TRUE, 'civictheme_event_card_ref', 'forbidden'],
-      'unpermitted user, allowed bundle' => [['entity_type_id' => 'paragraph'], FALSE, 'civictheme_content', 'neutral'],
-      'permitted user, null bundle' => [['entity_type_id' => 'paragraph'], TRUE, NULL, 'neutral'],
-    ];
+  public static function dataProviderEntityCreateAccess(): \Iterator {
+    yield 'non-paragraph entity type is ignored' => [['entity_type_id' => 'node'], TRUE, 'civictheme_content', 'neutral'];
+    yield 'missing entity type id is ignored' => [[], TRUE, 'civictheme_content', 'neutral'];
+    yield 'permitted user, allowed bundle' => [['entity_type_id' => 'paragraph'], TRUE, 'civictheme_content', 'allowed'];
+    yield 'permitted user, nested allowed bundle' => [['entity_type_id' => 'paragraph'], TRUE, 'civictheme_accordion_panel', 'allowed'];
+    yield 'permitted user, disallowed bundle' => [['entity_type_id' => 'paragraph'], TRUE, 'civictheme_event_card_ref', 'forbidden'];
+    yield 'unpermitted user, allowed bundle' => [['entity_type_id' => 'paragraph'], FALSE, 'civictheme_content', 'neutral'];
+    yield 'permitted user, null bundle' => [['entity_type_id' => 'paragraph'], TRUE, NULL, 'neutral'];
   }
 
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\do_content_api\Routing;
 
+use Symfony\Component\Routing\Route;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -18,7 +19,7 @@ final class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection): void {
     $route = $collection->get('subrequests.front-controller');
 
-    if ($route === NULL) {
+    if (!$route instanceof Route) {
       // @codeCoverageIgnoreStart
       return;
       // @codeCoverageIgnoreEnd

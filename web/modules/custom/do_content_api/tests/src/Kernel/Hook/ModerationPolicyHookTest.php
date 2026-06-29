@@ -83,7 +83,9 @@ class ModerationPolicyHookTest extends KernelTestBase {
    */
   public function testApiPageForcedToDraft(): void {
     // Prepare.
-    $this->setCurrentUser($this->createUser(['use content authoring api']));
+    $api_user = $this->createUser(['use content authoring api']);
+    $this->assertNotFalse($api_user);
+    $this->setCurrentUser($api_user);
 
     // Act.
     $node = Node::create([
@@ -102,7 +104,9 @@ class ModerationPolicyHookTest extends KernelTestBase {
    * Tests that any non-draft state authored through the API is forced to draft.
    */
   public function testApiPageNonDraftForcedToDraft(): void {
-    $this->setCurrentUser($this->createUser(['use content authoring api']));
+    $api_user = $this->createUser(['use content authoring api']);
+    $this->assertNotFalse($api_user);
+    $this->setCurrentUser($api_user);
 
     $node = Node::create([
       'type' => 'civictheme_page',
@@ -119,7 +123,9 @@ class ModerationPolicyHookTest extends KernelTestBase {
    * Tests that an API actor's draft page is left as a draft.
    */
   public function testApiPageDraftUnchanged(): void {
-    $this->setCurrentUser($this->createUser(['use content authoring api']));
+    $api_user = $this->createUser(['use content authoring api']);
+    $this->assertNotFalse($api_user);
+    $this->setCurrentUser($api_user);
 
     $node = Node::create([
       'type' => 'civictheme_page',
@@ -135,7 +141,9 @@ class ModerationPolicyHookTest extends KernelTestBase {
    * Tests that an API actor's image is forced to published.
    */
   public function testApiMediaForcedToPublished(): void {
-    $this->setCurrentUser($this->createUser(['use content authoring api']));
+    $api_user = $this->createUser(['use content authoring api']);
+    $this->assertNotFalse($api_user);
+    $this->setCurrentUser($api_user);
 
     $media = Media::create([
       'bundle' => 'civictheme_image',
@@ -152,7 +160,9 @@ class ModerationPolicyHookTest extends KernelTestBase {
    * Tests that a non-API actor's page is left untouched.
    */
   public function testNonApiPageUnaffected(): void {
-    $this->setCurrentUser($this->createUser(['administer nodes']));
+    $editor_user = $this->createUser(['administer nodes']);
+    $this->assertNotFalse($editor_user);
+    $this->setCurrentUser($editor_user);
 
     $node = Node::create([
       'type' => 'civictheme_page',

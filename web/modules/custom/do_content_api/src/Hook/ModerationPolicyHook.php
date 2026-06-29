@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\do_content_api\Hook;
 
 use Drupal\content_moderation\ModerationInformationInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Hook\Order\OrderBefore;
@@ -16,7 +17,7 @@ use Drupal\Core\Session\AccountInterface;
 final class ModerationPolicyHook {
 
   public function __construct(
-    protected AccountInterface $currentUser,
+    protected AccountInterface $account,
     protected ModerationInformationInterface $moderationInformation,
   ) {}
 
@@ -25,7 +26,11 @@ final class ModerationPolicyHook {
    */
   #[Hook('entity_presave', order: new OrderBefore(['content_moderation']))]
   public function entityPresave(EntityInterface $entity): void {
-    if (!$this->currentUser->hasPermission('use content authoring api')) {
+    if (!$this->account->hasPermission('use content authoring api')) {
+      return;
+    }
+
+    if (!$entity instanceof ContentEntityInterface) {
       return;
     }
 
