@@ -1,0 +1,4 @@
+use content authoring api:
+  title: 'Use the content authoring API'
+  description: 'Create pages, paragraphs and media through the headless content authoring API.'
+  restrict access: true

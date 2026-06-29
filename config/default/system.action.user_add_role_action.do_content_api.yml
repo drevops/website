@@ -1,0 +1,14 @@
+uuid: 420006f5-0dbf-4bd9-926c-2d328ab43b79
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.do_content_api
+  module:
+    - user
+id: user_add_role_action.do_content_api
+label: 'Add the Content API service role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: do_content_api

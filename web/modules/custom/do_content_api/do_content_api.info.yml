@@ -1,0 +1,13 @@
+name: DrevOps Website Content API
+type: module
+description: 'Headless content authoring API for external agents over JSON:API with key authentication.'
+core_version_requirement: ^11
+package: website
+dependencies:
+  - drupal:content_moderation
+  - drupal:jsonapi
+  - drupal:media
+  - drupal:node
+  - drupal:paragraphs
+  - key_auth:key_auth
+  - subrequests:subrequests
