@@ -45,13 +45,22 @@ final class EntityCreateAccessHook {
       return AccessResult::neutral();
     }
 
-    // The paragraphs access handler returns neutral for every non-HTML request
-    // format, so create access has to be restored for the authoring permission.
-    $allowed = $account->hasPermission('use content authoring api')
-      && $entity_bundle !== NULL
-      && in_array($entity_bundle, self::ALLOWED_PARAGRAPH_BUNDLES, TRUE);
+    // Editorial users keep the stock paragraphs access behaviour.
+    if (!$account->hasPermission('use content authoring api')) {
+      return AccessResult::neutral()->cachePerPermissions();
+    }
 
-    return AccessResult::allowedIf($allowed)->cachePerPermissions();
+    // A bundle-less capability check gets no opinion.
+    if ($entity_bundle === NULL) {
+      return AccessResult::neutral()->cachePerPermissions();
+    }
+
+    // The paragraphs access handler returns neutral for every non-HTML request
+    // format. Restore create access for the allow-listed bundles and explicitly
+    // deny the rest so no other handler can widen the authoring surface.
+    return in_array($entity_bundle, self::ALLOWED_PARAGRAPH_BUNDLES, TRUE)
+      ? AccessResult::allowed()->cachePerPermissions()
+      : AccessResult::forbidden()->cachePerPermissions();
   }
 
 }
