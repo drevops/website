@@ -1,0 +1,37 @@
+uuid: 67c1ca0c-a23a-4f94-a2d3-3e816a74a866
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.civictheme_rich_text
+    - media.type.civictheme_image
+    - node.type.civictheme_page
+    - workflows.workflow.civictheme_editorial
+  module:
+    - content_moderation
+    - do_content_api
+    - filter
+    - key_auth
+    - media
+    - node
+    - subrequests
+    - system
+id: do_content_api
+label: 'Content API service'
+weight: 4
+is_admin: false
+permissions:
+  - 'access content'
+  - 'create civictheme_image media'
+  - 'create civictheme_page content'
+  - 'create media'
+  - 'edit own civictheme_page content'
+  - 'issue subrequests'
+  - 'use civictheme_editorial transition create_new_draft'
+  - 'use civictheme_editorial transition needs_review'
+  - 'use civictheme_editorial transition publish'
+  - 'use content authoring api'
+  - 'use key authentication'
+  - 'use text format civictheme_rich_text'
+  - 'view own unpublished content'
+  - 'view own unpublished media'
