@@ -89,6 +89,7 @@ class FeatureContext extends DrupalContext {
    */
   #[Given('the :content_type content :title has the path alias :alias')]
   public function contentSetPathAlias(string $content_type, string $title, string $alias): void {
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
     $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
       'type' => $content_type,
       'title' => $title,
