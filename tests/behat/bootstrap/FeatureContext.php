@@ -94,10 +94,15 @@ class FeatureContext extends DrupalContext {
       'type' => $content_type,
       'title' => $title,
     ]);
+
+    if (count($nodes) !== 1) {
+      throw new \RuntimeException(sprintf('Expected exactly one "%s" content item with the title "%s", but found %d.', $content_type, $title, count($nodes)));
+    }
+
     $node = reset($nodes);
 
     if (!$node instanceof NodeInterface) {
-      throw new \RuntimeException(sprintf('Unable to find "%s" content with the title "%s".', $content_type, $title));
+      throw new \RuntimeException(sprintf('The "%s" content with the title "%s" is not a node.', $content_type, $title));
     }
 
     $node->set('path', ['alias' => $alias, 'pathauto' => PathautoState::SKIP]);
