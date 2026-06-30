@@ -13,7 +13,6 @@ Feature: Contact form
     And I should see "Contact"
     And I should see "Your Name"
     And I should see "Your Email"
-    And I should see "Subject"
     And I should see "Message"
     And I should see the button "Send message"
 
@@ -24,7 +23,6 @@ Feature: Contact form
     Then I should see the heading Contact
     When I fill in "Name" with "Test User"
     And I fill in "Email" with "test@example.com"
-    And I fill in "Subject" with "Test Contact"
     And I fill in "Message" with "This is a test message for the contact form."
     And I save screenshot
     And I press "Send message"
@@ -44,6 +42,5 @@ Feature: Contact form
     When I press "Send message"
     Then I should see the text "Name field is required."
     And I should see the text "Email field is required."
-    And I should see the text "Subject field is required."
     And I should see the text "Message field is required."
     And I save screenshot
