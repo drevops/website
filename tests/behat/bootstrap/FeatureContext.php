@@ -37,6 +37,7 @@ use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\WaitTrait;
 use Behat\Step\Given;
+use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\DrupalContext;
 use Drupal\node\NodeInterface;
 use Drupal\pathauto\PathautoState;
@@ -107,6 +108,47 @@ class FeatureContext extends DrupalContext {
 
     $node->set('path', ['alias' => $alias, 'pathauto' => PathautoState::SKIP]);
     $node->save();
+  }
+
+  /**
+   * Assert that a content item is published.
+   *
+   * Checks both the published flag and the moderation state. The content is
+   * reloaded from storage because the UI action that published it ran in a
+   * separate web request, leaving this process's entity cache stale.
+   *
+   * @code
+   * Then the "civictheme_page" content "[TEST] Article" should be published
+   * @endcode
+   */
+  #[Then('the :content_type content :title should be published')]
+  public function contentShouldBePublished(string $content_type, string $title): void {
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    $nids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', $content_type)
+      ->condition('title', $title)
+      ->execute();
+
+    if (count($nids) !== 1) {
+      throw new \RuntimeException(sprintf('Expected exactly one "%s" content item with the title "%s", but found %d.', $content_type, $title, count($nids)));
+    }
+
+    $nid = (int) reset($nids);
+    $storage->resetCache([$nid]);
+    $node = $storage->load($nid);
+
+    if (!$node instanceof NodeInterface) {
+      throw new \RuntimeException(sprintf('Unable to load "%s" content with the title "%s".', $content_type, $title));
+    }
+
+    $state = $node->get('moderation_state')->value;
+
+    if ($state !== 'published' || !$node->isPublished()) {
+      throw new \RuntimeException(sprintf('Expected "%s" to be published, but its moderation state is "%s" and its published flag is %s.', $title, $state, $node->isPublished() ? 'true' : 'false'));
+    }
   }
 
 }

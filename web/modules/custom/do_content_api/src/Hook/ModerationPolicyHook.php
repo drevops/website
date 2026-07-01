@@ -46,8 +46,16 @@ final class ModerationPolicyHook {
       return;
     }
 
+    // The policy governs authoring, which is entity creation. A later
+    // moderation change - a reviewer publishing the draft - is an update and
+    // must be left untouched, otherwise authored content could never be
+    // published.
+    if (!$entity->isNew()) {
+      return;
+    }
+
     // Pages authored through the API never go live directly; a human reviews
-    // and publishes them, so they are always forced back to a draft.
+    // and publishes them, so they are forced to draft on creation.
     if ($entity->getEntityTypeId() === 'node') {
       $entity->set('moderation_state', 'draft');
 

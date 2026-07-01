@@ -64,6 +64,7 @@ class ModerationPolicyHookTest extends KernelTestBase {
     $this->installEntitySchema('file');
     $this->installEntitySchema('content_moderation_state');
     $this->installSchema('file', ['file_usage']);
+    $this->installSchema('node', ['node_access']);
     $this->installConfig(['filter']);
 
     NodeType::create(['type' => 'civictheme_page', 'name' => 'Page'])->save();
@@ -174,6 +175,55 @@ class ModerationPolicyHookTest extends KernelTestBase {
 
     $this->assertSame('published', $node->get('moderation_state')->value);
     $this->assertTrue($node->isPublished());
+  }
+
+  /**
+   * Tests that an API actor can publish a page it previously authored.
+   */
+  public function testApiPagePublishAfterAuthoringIsHonoured(): void {
+    $api_user = $this->createUser(['use content authoring api']);
+    $this->assertNotFalse($api_user);
+    $this->setCurrentUser($api_user);
+
+    // Authoring (create) is forced to draft by the policy.
+    $node = Node::create([
+      'type' => 'civictheme_page',
+      'title' => '[TEST] Authored then published',
+      'moderation_state' => 'draft',
+    ]);
+    $node->save();
+    $this->assertSame('draft', $node->get('moderation_state')->value);
+
+    // A later publish is an update, not authoring, so it must be honoured.
+    $node->set('moderation_state', 'published');
+    $node->save();
+
+    $this->assertSame('published', $node->get('moderation_state')->value);
+    $this->assertTrue($node->isPublished());
+  }
+
+  /**
+   * Tests that a later moderation change to an API-authored media is honoured.
+   */
+  public function testApiMediaUpdateAfterAuthoringIsHonoured(): void {
+    $api_user = $this->createUser(['use content authoring api']);
+    $this->assertNotFalse($api_user);
+    $this->setCurrentUser($api_user);
+
+    // Authoring (create) forces media to published.
+    $media = Media::create([
+      'bundle' => 'civictheme_image',
+      'name' => '[TEST] Authored then updated',
+      'moderation_state' => 'draft',
+    ]);
+    $media->save();
+    $this->assertSame('published', $media->get('moderation_state')->value);
+
+    // A later state change is an update, not authoring, so it is honoured.
+    $media->set('moderation_state', 'draft');
+    $media->save();
+
+    $this->assertSame('draft', $media->get('moderation_state')->value);
   }
 
   /**
