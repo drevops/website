@@ -36,7 +36,10 @@ use DrevOps\BehatSteps\LinkTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\WaitTrait;
+use Behat\Step\Given;
 use Drupal\DrupalExtension\Context\DrupalContext;
+use Drupal\node\NodeInterface;
+use Drupal\pathauto\PathautoState;
 
 /**
  * Defines application features from the specific context.
@@ -72,5 +75,38 @@ class FeatureContext extends DrupalContext {
   use UserTrait;
   use WaitTrait;
   use WatchdogTrait;
+
+  /**
+   * Set an explicit path alias for a node, bypassing pathauto.
+   *
+   * Pathauto regenerates the alias from the configured pattern on save, so a
+   * nested alias cannot be created through the standard content steps. Skipping
+   * pathauto for this node preserves the explicit alias.
+   *
+   * @code
+   * Given the "civictheme_page" content "[TEST] Article" has the path alias "/section/article"
+   * @endcode
+   */
+  #[Given('the :content_type content :title has the path alias :alias')]
+  public function contentSetPathAlias(string $content_type, string $title, string $alias): void {
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
+    $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
+      'type' => $content_type,
+      'title' => $title,
+    ]);
+
+    if (count($nodes) !== 1) {
+      throw new \RuntimeException(sprintf('Expected exactly one "%s" content item with the title "%s", but found %d.', $content_type, $title, count($nodes)));
+    }
+
+    $node = reset($nodes);
+
+    if (!$node instanceof NodeInterface) {
+      throw new \RuntimeException(sprintf('The "%s" content with the title "%s" is not a node.', $content_type, $title));
+    }
+
+    $node->set('path', ['alias' => $alias, 'pathauto' => PathautoState::SKIP]);
+    $node->save();
+  }
 
 }
