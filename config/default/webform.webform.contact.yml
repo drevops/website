@@ -17,7 +17,7 @@ id: contact
 title: Contact
 description: 'Basic email contact webform.'
 categories: {  }
-elements: |
+elements: |-
   name:
     '#title': 'Your Name'
     '#type': textfield

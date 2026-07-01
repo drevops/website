@@ -14,6 +14,8 @@ dependencies:
     - key_auth
     - media
     - node
+    - path
+    - redirect
     - subrequests
     - system
 id: do_content_api
@@ -22,9 +24,11 @@ weight: 4
 is_admin: false
 permissions:
   - 'access content'
+  - 'administer redirects'
   - 'create civictheme_image media'
   - 'create civictheme_page content'
   - 'create media'
+  - 'create url aliases'
   - 'edit own civictheme_page content'
   - 'issue subrequests'
   - 'use civictheme_editorial transition create_new_draft'
