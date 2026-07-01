@@ -203,6 +203,30 @@ class ModerationPolicyHookTest extends KernelTestBase {
   }
 
   /**
+   * Tests that a later moderation change to an API-authored media is honoured.
+   */
+  public function testApiMediaUpdateAfterAuthoringIsHonoured(): void {
+    $api_user = $this->createUser(['use content authoring api']);
+    $this->assertNotFalse($api_user);
+    $this->setCurrentUser($api_user);
+
+    // Authoring (create) forces media to published.
+    $media = Media::create([
+      'bundle' => 'civictheme_image',
+      'name' => '[TEST] Authored then updated',
+      'moderation_state' => 'draft',
+    ]);
+    $media->save();
+    $this->assertSame('published', $media->get('moderation_state')->value);
+
+    // A later state change is an update, not authoring, so it is honoured.
+    $media->set('moderation_state', 'draft');
+    $media->save();
+
+    $this->assertSame('draft', $media->get('moderation_state')->value);
+  }
+
+  /**
    * Tests that the superuser is treated as an ordinary administrator.
    */
   public function testSuperuserPageUnaffected(): void {
