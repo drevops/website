@@ -64,6 +64,7 @@ class ModerationPolicyHookTest extends KernelTestBase {
     $this->installEntitySchema('file');
     $this->installEntitySchema('content_moderation_state');
     $this->installSchema('file', ['file_usage']);
+    $this->installSchema('node', ['node_access']);
     $this->installConfig(['filter']);
 
     NodeType::create(['type' => 'civictheme_page', 'name' => 'Page'])->save();
@@ -170,6 +171,31 @@ class ModerationPolicyHookTest extends KernelTestBase {
       'title' => '[TEST] Editor page',
       'moderation_state' => 'published',
     ]);
+    $node->save();
+
+    $this->assertSame('published', $node->get('moderation_state')->value);
+    $this->assertTrue($node->isPublished());
+  }
+
+  /**
+   * Tests that an API actor can publish a page it previously authored.
+   */
+  public function testApiPagePublishAfterAuthoringIsHonoured(): void {
+    $api_user = $this->createUser(['use content authoring api']);
+    $this->assertNotFalse($api_user);
+    $this->setCurrentUser($api_user);
+
+    // Authoring (create) is forced to draft by the policy.
+    $node = Node::create([
+      'type' => 'civictheme_page',
+      'title' => '[TEST] Authored then published',
+      'moderation_state' => 'draft',
+    ]);
+    $node->save();
+    $this->assertSame('draft', $node->get('moderation_state')->value);
+
+    // A later publish is an update, not authoring, so it must be honoured.
+    $node->set('moderation_state', 'published');
     $node->save();
 
     $this->assertSame('published', $node->get('moderation_state')->value);
