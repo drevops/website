@@ -8,6 +8,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
+use Drupal\user\Entity\User;
 use Drupal\Tests\content_moderation\Traits\ContentModerationTestTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use Drupal\Tests\user\Traits\UserCreationTrait;
@@ -167,6 +168,28 @@ class ModerationPolicyHookTest extends KernelTestBase {
     $node = Node::create([
       'type' => 'civictheme_page',
       'title' => '[TEST] Editor page',
+      'moderation_state' => 'published',
+    ]);
+    $node->save();
+
+    $this->assertSame('published', $node->get('moderation_state')->value);
+    $this->assertTrue($node->isPublished());
+  }
+
+  /**
+   * Tests that the superuser is treated as an ordinary administrator.
+   */
+  public function testSuperuserPageUnaffected(): void {
+    // User 1 holds no authoring permission but bypasses every permission
+    // check, so without an explicit guard the policy would force its content
+    // to draft and silently block an administrator from publishing.
+    $superuser = User::load(1);
+    $this->assertInstanceOf(User::class, $superuser);
+    $this->setCurrentUser($superuser);
+
+    $node = Node::create([
+      'type' => 'civictheme_page',
+      'title' => '[TEST] Superuser page',
       'moderation_state' => 'published',
     ]);
     $node->save();

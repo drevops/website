@@ -26,6 +26,14 @@ final class ModerationPolicyHook {
    */
   #[Hook('entity_presave', order: new OrderBefore(['content_moderation']))]
   public function entityPresave(EntityInterface $entity): void {
+    // User 1 bypasses every permission check, so the authoring-permission gate
+    // below would also match the superuser and force its content into the API
+    // moderation policy. The policy targets the dedicated API service account
+    // only, so the superuser is excluded explicitly.
+    if ((int) $this->account->id() === 1) {
+      return;
+    }
+
     if (!$this->account->hasPermission('use content authoring api')) {
       return;
     }
