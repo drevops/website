@@ -123,6 +123,7 @@ class FeatureContext extends DrupalContext {
    */
   #[Then('the :content_type content :title should be published')]
   public function contentShouldBePublished(string $content_type, string $title): void {
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
     $storage = \Drupal::entityTypeManager()->getStorage('node');
 
     $nids = $storage->getQuery()
