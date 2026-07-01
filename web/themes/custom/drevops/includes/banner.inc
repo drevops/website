@@ -66,10 +66,6 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
  * @see _civictheme_preprocess_block__civictheme_banner__node()
  */
 function _drevops_preprocess_block__civictheme_banner__featured_image(array &$variables): void {
-  if (empty($variables['featured_image'])) {
-    return;
-  }
-
   $block = $variables['elements']['content']['#block_content'] ?? NULL;
 
   $route_match = \Drupal::routeMatch();
