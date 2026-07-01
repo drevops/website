@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\civictheme\CivicthemeConstants;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\media\MediaInterface;
 
 /**
  * Pre-process for Banner block.
@@ -26,6 +27,8 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
   if ($block->bundle() !== 'civictheme_banner' || ($block->hasField('field_c_b_type') && $block->field_c_b_type->isEmpty())) {
     return;
   }
+
+  _drevops_preprocess_block__civictheme_banner__featured_image($variables);
 
   // Finds a banner type.
   $type = civictheme_get_field_value($block, 'field_c_b_banner_type', TRUE, CivicthemeConstants::BANNER_TYPE_DEFAULT);
@@ -48,6 +51,44 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
   // @phpstan-ignore-next-line instanceof.alwaysFalse
   if (!empty($variables['title']) && is_string($variables['title']) && !($variables['title'] instanceof MarkupInterface)) {
     $variables['title'] = Markup::create($variables['title']);
+  }
+}
+
+/**
+ * Apply a focal-point image style to the banner featured image.
+ *
+ * The base theme serves the original featured image file, leaving the browser
+ * to crop it with object-fit, which ignores the editor-defined focal point.
+ * Re-resolving the same media through a focal-point image style moves the crop
+ * server-side so the focal point is honoured.
+ *
+ * @see _civictheme_preprocess_block__civictheme_banner()
+ * @see _civictheme_preprocess_block__civictheme_banner__node()
+ */
+function _drevops_preprocess_block__civictheme_banner__featured_image(array &$variables): void {
+  if (empty($variables['featured_image'])) {
+    return;
+  }
+
+  $block = $variables['elements']['content']['#block_content'] ?? NULL;
+
+  $route_match = \Drupal::routeMatch();
+  $node = $route_match->getParameter('node_revision') ?: $route_match->getParameter('node');
+
+  // A per-node featured image overrides the block-level one, mirroring the base
+  // theme's resolution order.
+  $media = !empty($node) ? civictheme_get_field_value($node, 'field_c_n_banner_featured_image', TRUE) : NULL;
+  if (empty($media) && !empty($block)) {
+    $media = civictheme_get_field_value($block, 'field_c_b_featured_image', TRUE);
+  }
+
+  if (!$media instanceof MediaInterface) {
+    return;
+  }
+
+  $featured_image = civictheme_media_image_get_variables($media, 'civictheme_banner_featured');
+  if (!empty($featured_image)) {
+    $variables['featured_image'] = $featured_image;
   }
 }
 

@@ -1,0 +1,23 @@
+uuid: 1ca889fe-b7a4-4fb9-922e-76e9463b280f
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: civictheme_banner_featured
+label: 'Banner Featured Image'
+effects:
+  00a742ba-c206-45ad-a0aa-3ec6424ab498:
+    uuid: 00a742ba-c206-45ad-a0aa-3ec6424ab498
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 800
+      height: 800
+      crop_type: focal_point
+  de1c7da0-031e-4b2e-9dec-384198b5d6e3:
+    uuid: de1c7da0-031e-4b2e-9dec-384198b5d6e3
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp
