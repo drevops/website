@@ -73,7 +73,7 @@ function _drevops_preprocess_block__civictheme_banner__featured_image(array &$va
 
   // A per-node featured image overrides the block-level one, mirroring the base
   // theme's resolution order.
-  $media = !empty($node) ? civictheme_get_field_value($node, 'field_c_n_banner_featured_image', TRUE, build: $variables) : NULL;
+  $media = empty($node) ? NULL : civictheme_get_field_value($node, 'field_c_n_banner_featured_image', TRUE, build: $variables);
   if (empty($media) && !empty($block)) {
     $media = civictheme_get_field_value($block, 'field_c_b_featured_image', TRUE, build: $variables);
   }
