@@ -20,8 +20,8 @@
 set -eu
 [ "${VORTEX_DEBUG-}" = "1" ] && set -x
 
-# Already installed - nothing to do.
-if [ -d ./vendor/drevops/vortex-tooling ]; then
+# Already installed and binaries are in place - nothing to do.
+if [ -d ./vendor/drevops/vortex-tooling ] && ls ./vendor/bin/vortex-* >/dev/null 2>&1; then
   exit 0
 fi
 
