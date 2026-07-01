@@ -16,5 +16,5 @@ else {
 }
 
 if ($settings['environment'] === ENVIRONMENT_LOCAL || $settings['environment'] === ENVIRONMENT_CI) {
-  $config['cloudflare.settings']['bypass_host'] = getenv('VORTEX_LOCALDEV_URL') ?: 'localhost';
+  $config['cloudflare.settings']['bypass_host'] = getenv('LOCALDEV_URL') ?: 'localhost';
 }
