@@ -53,7 +53,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     // Container.
     yield [
       [
-        'VORTEX_LOCALDEV_URL' => 'https://example-site.docker.amazee.io',
+        'LOCALDEV_URL' => 'https://example-site.docker.amazee.io',
       ],
       self::ENVIRONMENT_LOCAL,
     ];
@@ -245,7 +245,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentNoOverrides(): void {
     $this->setEnvVars([
-      'DRUPAL_ENVIRONMENT' => self::ENVIRONMENT_SUT,
+      'ENVIRONMENT_TYPE' => self::ENVIRONMENT_SUT,
     ]);
 
     $this->requireSettingsFile();
@@ -287,7 +287,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentOverrides(): void {
     $this->setEnvVars([
-      'DRUPAL_ENVIRONMENT' => self::ENVIRONMENT_SUT,
+      'ENVIRONMENT_TYPE' => self::ENVIRONMENT_SUT,
       // Database configuration.
       'DATABASE_NAME' => 'custom_db',
       'DATABASE_USERNAME' => 'custom_user',
@@ -362,7 +362,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testGeminiProviderApiKey(): void {
     $this->setEnvVars([
-      'DRUPAL_ENVIRONMENT' => self::ENVIRONMENT_SUT,
+      'ENVIRONMENT_TYPE' => self::ENVIRONMENT_SUT,
       'DRUPAL_AI_PROVIDER_GEMINI_API_KEY' => 'test_gemini_api_key',
     ]);
 
@@ -377,7 +377,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testGeminiProviderApiKeyNotSet(): void {
     $this->setEnvVars([
-      'DRUPAL_ENVIRONMENT' => self::ENVIRONMENT_SUT,
+      'ENVIRONMENT_TYPE' => self::ENVIRONMENT_SUT,
       'DRUPAL_AI_PROVIDER_GEMINI_API_KEY' => FALSE,
     ]);
 
@@ -392,7 +392,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentLocal(): void {
     $this->setEnvVars([
-      'DRUPAL_ENVIRONMENT' => self::ENVIRONMENT_LOCAL,
+      'ENVIRONMENT_TYPE' => self::ENVIRONMENT_LOCAL,
     ]);
 
     $this->requireSettingsFile();
@@ -445,7 +445,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentLocalContainer(): void {
     $this->setEnvVars([
-      'VORTEX_LOCALDEV_URL' => 'https://example-site.docker.amazee.io',
+      'LOCALDEV_URL' => 'https://example-site.docker.amazee.io',
     ]);
 
     $this->requireSettingsFile();
