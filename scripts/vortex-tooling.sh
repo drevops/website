@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 ##
-# Install 'drevops/vortex-tooling' into 'vendor/drevops/'.
+# Install 'drevops/vortex-tooling' into 'vendor/drevops/' and link its binaries.
 #
-# Host-side recipes (ahoy download-db, ahoy deploy, ahoy doctor, etc.) need
+# Host-side recipes (ahoy fetch-db, ahoy deploy, ahoy doctor, etc.) need
 # the shipped Vortex shell scripts before the project's full 'composer install'
 # has run. This script installs only that single package via a throwaway
 # Composer project in 'vendor-temp/', so the project's main vendor/ and
 # composer.lock are not touched.
 #
-# Idempotent: exits early if 'vendor/drevops/vortex-tooling/' already exists.
+# Idempotent: exits early only once the package and its 'vendor/bin/vortex-*'
+# proxies are both present.
 #
 # Patches declared for 'drevops/vortex-tooling' in the project composer.json
 # under 'extra.patches' (and the optional 'extra.patches-file') are copied
@@ -20,8 +21,8 @@
 set -eu
 [ "${VORTEX_DEBUG-}" = "1" ] && set -x
 
-# Already installed - nothing to do.
-if [ -d ./vendor/drevops/vortex-tooling ]; then
+# Already installed and its binaries linked - nothing to do.
+if [ -d ./vendor/drevops/vortex-tooling ] && ls ./vendor/bin/vortex-* >/dev/null 2>&1; then
   exit 0
 fi
 
@@ -75,3 +76,15 @@ fi
 composer --working-dir=vendor-temp install --no-dev --no-interaction
 
 mv vendor-temp/vendor/drevops/vortex-tooling vendor/drevops/
+
+# Expose the surfaced tooling binaries under 'vendor/bin/' too, so host-side
+# recipes can invoke 'vendor/bin/vortex-*' before the project's full
+# 'composer install' has generated them. The throwaway install created the bin
+# proxies in 'vendor-temp/vendor/bin/'; their relative targets resolve once the
+# proxies sit alongside the package under 'vendor/'.
+if [ -d vendor-temp/vendor/bin ]; then
+  mkdir -p vendor/bin
+  for bin in vendor-temp/vendor/bin/vortex-*; do
+    [ -e "${bin}" ] && mv "${bin}" vendor/bin/
+  done
+fi

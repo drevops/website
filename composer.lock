@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39d153685157cef636ea2de3d6672121",
+    "content-hash": "8413382f94d05821224193babdb91958",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1497,21 +1497,38 @@
         },
         {
             "name": "drevops/vortex-tooling",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/vortex-tooling.git",
-                "reference": "1e6f987912d99a2f2bbcd0008ea6b1587a25151c"
+                "reference": "9fe0ca3b7a93cf223b179a49b5837900304cf522"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/1e6f987912d99a2f2bbcd0008ea6b1587a25151c",
-                "reference": "1e6f987912d99a2f2bbcd0008ea6b1587a25151c",
+                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/9fe0ca3b7a93cf223b179a49b5837900304cf522",
+                "reference": "9fe0ca3b7a93cf223b179a49b5837900304cf522",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2"
             },
+            "bin": [
+                "src/vortex-deploy",
+                "src/vortex-doctor",
+                "src/vortex-export-db",
+                "src/vortex-fetch-db",
+                "src/vortex-import-db",
+                "src/vortex-info",
+                "src/vortex-login",
+                "src/vortex-login-container-registry",
+                "src/vortex-logout",
+                "src/vortex-notify",
+                "src/vortex-provision",
+                "src/vortex-push-db-image",
+                "src/vortex-reset",
+                "src/vortex-task",
+                "src/vortex-update"
+            ],
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1525,13 +1542,13 @@
                     "role": "Maintainer"
                 }
             ],
-            "description": "Shell scripts for Vortex-based Drupal projects (deploy, notify, provision, download/export DB, etc.).",
+            "description": "Shell scripts for Vortex-based Drupal projects (deploy, notify, provision, fetch/export DB, etc.).",
             "homepage": "https://github.com/drevops/vortex",
             "support": {
                 "issues": "https://github.com/drevops/vortex/issues",
                 "source": "https://github.com/drevops/vortex"
             },
-            "time": "2026-06-16T07:00:17+00:00"
+            "time": "2026-06-29T05:25:08+00:00"
         },
         {
             "name": "drupal/admin_toolbar",
