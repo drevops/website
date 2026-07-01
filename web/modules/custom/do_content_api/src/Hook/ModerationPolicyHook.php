@@ -46,9 +46,10 @@ final class ModerationPolicyHook {
       return;
     }
 
-    // The policy governs authoring, which is entity creation. A later moderation
-    // change - a reviewer publishing the draft - is an update and must be left
-    // untouched, otherwise authored content could never be published.
+    // The policy governs authoring, which is entity creation. A later
+    // moderation change - a reviewer publishing the draft - is an update and
+    // must be left untouched, otherwise authored content could never be
+    // published.
     if (!$entity->isNew()) {
       return;
     }
