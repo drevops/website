@@ -6,7 +6,10 @@ html {
   // stylelint-disable property-no-vendor-prefix
   -webkit-text-size-adjust: 100%;
 
-  scroll-padding-top: ct-spacing(12);
+  // Plain value: this file compiles without the CivicTheme sass functions,
+  // so a ct-spacing() call would pass through unevaluated and be dropped by
+  // the browser as invalid CSS. 6rem clears the sticky header (89px tall).
+  scroll-padding-top: 6rem;
   scroll-behavior: smooth;
 
   @media (prefers-reduced-motion: reduce) {
