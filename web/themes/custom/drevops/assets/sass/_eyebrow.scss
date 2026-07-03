@@ -9,6 +9,10 @@
 
 $ct-eyebrow-color: #c1430a !default;
 
+// The orange reads too dark against dark bands, so those flip to the
+// palette's light-blue interaction accent, which clears WCAG AA there.
+$ct-eyebrow-color-dark: #90cfeb !default;
+
 .eyebrow {
   display: block;
   margin-block-end: 0.5rem;
@@ -17,4 +21,8 @@ $ct-eyebrow-color: #c1430a !default;
   line-height: 1.2;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.ct-theme-dark .eyebrow {
+  color: $ct-eyebrow-color-dark;
 }
