@@ -120,3 +120,19 @@ $ct-divider-dark-border-color: transparent;
 //
 
 $ct-header-sticky-zindex: 500;
+
+//
+// Steps.
+//
+$ct-steps-light-background-color: ct-color-light('background') !default;
+$ct-steps-dark-background-color: ct-color-dark('background') !default;
+$ct-steps-light-rail-color: rgba(ct-color-light('highlight'), 0.35) !default;
+$ct-steps-dark-rail-color: rgba(ct-color-dark('highlight'), 0.35) !default;
+$ct-steps-light-number-background-color: ct-color-light('interaction-background') !default;
+$ct-steps-dark-number-background-color: ct-color-dark('interaction-background') !default;
+$ct-steps-light-number-color: ct-color-light('interaction-text') !default;
+$ct-steps-dark-number-color: ct-color-dark('interaction-text') !default;
+$ct-steps-light-receive-background-color: ct-color-light('background') !default;
+$ct-steps-dark-receive-background-color: ct-color-dark('background-light') !default;
+$ct-steps-light-receive-border-color: ct-color-light('highlight') !default;
+$ct-steps-dark-receive-border-color: ct-color-dark('highlight') !default;

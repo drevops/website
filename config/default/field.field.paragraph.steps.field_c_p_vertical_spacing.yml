@@ -1,0 +1,23 @@
+uuid: 58c254ea-2437-4304-8b67-0a41bcfd86fa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.steps
+  module:
+    - options
+id: paragraph.steps.field_c_p_vertical_spacing
+field_name: field_c_p_vertical_spacing
+entity_type: paragraph
+bundle: steps
+label: 'Vertical spacing'
+description: 'Adds additional vertical spacing to a component'
+required: true
+translatable: false
+default_value:
+  -
+    value: both
+default_value_callback: ''
+settings: {  }
+field_type: list_string

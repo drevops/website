@@ -1,0 +1,105 @@
+//
+// Steps component.
+//
+
+.ct-steps {
+  $root: &;
+
+  #{$root}__header {
+    text-align: center;
+    margin-bottom: ct-spacing(6);
+  }
+
+  #{$root}__items {
+    list-style: none;
+    position: relative;
+    max-width: ct-particle(110);
+    margin: 0 auto;
+    padding: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: ct-spacing(1);
+      bottom: ct-spacing(1);
+      left: ct-particle(3);
+      transform: translateX(-50%);
+      width: ct-particle(0.25);
+    }
+
+    @include ct-breakpoint(m) {
+      &::before {
+        left: ct-particle(3.5);
+      }
+    }
+  }
+
+  #{$root}__item {
+    position: relative;
+    padding: 0 0 ct-spacing(5) ct-particle(8.5);
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    @include ct-breakpoint(m) {
+      padding-left: ct-particle(10.5);
+    }
+  }
+
+  #{$root}__item-number {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: ct-particle(6);
+    height: ct-particle(6);
+    border-radius: 50%;
+    font-size: 1.15rem;
+    font-weight: 700;
+
+    @include ct-breakpoint(m) {
+      width: ct-particle(7);
+      height: ct-particle(7);
+      font-size: 1.35rem;
+    }
+  }
+
+  #{$root}__item-title {
+    margin: 0 0 ct-spacing(1);
+  }
+
+  #{$root}__item-body {
+    margin: 0 0 ct-spacing(2);
+  }
+
+  #{$root}__item-receive {
+    margin: 0;
+    padding: ct-spacing(2);
+    border-left-style: solid;
+    border-left-width: ct-particle(0.375);
+    border-radius: ct-particle(0.375);
+  }
+
+  @include ct-component-theme($root) using($root, $theme) {
+    &#{$root}--with-background {
+      background-color: if($theme == 'light', $ct-steps-light-background-color, $ct-steps-dark-background-color);
+    }
+
+    #{$root}__items::before {
+      background-color: if($theme == 'light', $ct-steps-light-rail-color, $ct-steps-dark-rail-color);
+    }
+
+    #{$root}__item-number {
+      background-color: if($theme == 'light', $ct-steps-light-number-background-color, $ct-steps-dark-number-background-color);
+      color: if($theme == 'light', $ct-steps-light-number-color, $ct-steps-dark-number-color);
+    }
+
+    #{$root}__item-receive {
+      background-color: if($theme == 'light', $ct-steps-light-receive-background-color, $ct-steps-dark-receive-background-color);
+      border-left-color: if($theme == 'light', $ct-steps-light-receive-border-color, $ct-steps-dark-receive-border-color);
+    }
+  }
+}
