@@ -63,6 +63,7 @@ Feature: Steps render
     And I should see an "article .ct-steps.ct-theme-dark" element
     And I should not see an "article .ct-steps.ct-theme-light" element
     And I should see an "article .ct-steps.ct-steps--with-background" element
+    And I should see an "article .ct-steps.ct-vertical-spacing-inset--both" element
     And I should see 1 ".ct-steps__item" elements
     And I should see the text "[TEST] Dark step title"
     And I should see the text "[TEST] Dark step outcome."
