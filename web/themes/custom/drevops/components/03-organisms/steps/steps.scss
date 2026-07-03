@@ -60,6 +60,10 @@
     width: ct-particle(6);
     height: ct-particle(6);
     border-radius: 50%;
+
+    // A bare span inherits no typography, so the numeral takes the same
+    // runtime face as the step titles beside it.
+    font-family: var(--ct-typography-heading-3-font-name, sans-serif);
     font-size: 1.15rem;
     font-weight: 700;
 
