@@ -10,6 +10,7 @@
 declare(strict_types=1);
 
 use Drupal\media\MediaInterface;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Creates the How We Work page from the static prototype.
@@ -31,14 +32,17 @@ function do_base_deploy_populate_how_we_work_page(): string {
 
   $component = function (string $type, array $fields) use ($paragraph_storage): array {
     $paragraph = $paragraph_storage->create(['type' => $type] + $fields);
+
+    if (!$paragraph instanceof ParagraphInterface) {
+      throw new \RuntimeException(sprintf('Failed to create a "%s" paragraph.', $type));
+    }
+
     $paragraph->save();
 
     return ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()];
   };
 
-  $rich_text = function (string $html): array {
-    return ['value' => $html, 'format' => 'civictheme_rich_text'];
-  };
+  $rich_text = (fn(string $html): array => ['value' => $html, 'format' => 'civictheme_rich_text']);
 
   // A failed save mid-way must not leave orphaned paragraphs behind, so the
   // whole assembly commits or rolls back as one unit.
@@ -290,7 +294,7 @@ function do_base_deploy_populate_how_we_work_page(): string {
       'status' => 1,
       'moderation_state' => 'published',
       'field_c_n_summary' => 'See exactly what working with DrevOps looks like, from the first conversation to go-live: what happens at each step, what you receive,'
-      . ' and how we build a price with nothing hidden.',
+        . ' and how we build a price with nothing hidden.',
       'field_c_n_banner_theme' => 'dark',
       'field_c_n_banner_type' => 'large',
       'field_c_n_banner_title' => 'Know exactly what working with us looks like.',
