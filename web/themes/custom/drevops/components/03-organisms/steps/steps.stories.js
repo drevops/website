@@ -20,7 +20,7 @@ const meta = {
     },
     vertical_spacing: {
       control: { type: 'radio' },
-      options: ['none', 'top', 'bottom', 'both'],
+      options: ['top', 'bottom', 'both'],
     },
     with_background: {
       control: { type: 'boolean' },
