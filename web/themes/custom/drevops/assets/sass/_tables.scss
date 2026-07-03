@@ -1,0 +1,29 @@
+//
+// Tables.
+//
+// Rich-text table captions use the same label voice as the eyebrow kicker.
+// Relies on `$ct-eyebrow-color` from `_eyebrow.scss`, imported before this
+// file in `theme.scss`.
+//
+
+.ct-table {
+  // CivicTheme colours captions through this variable with a more specific
+  // selector than a plain descendant rule, so the override targets the
+  // variable rather than fighting the specificity.
+  --ct-table-light-caption-color: #{$ct-eyebrow-color};
+}
+
+.ct-theme-dark .ct-table {
+  --ct-table-dark-caption-color: #{$ct-eyebrow-color-dark};
+}
+
+.ct-table caption {
+  caption-side: top;
+  margin-block-end: 0.875rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+}

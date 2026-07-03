@@ -1,0 +1,19 @@
+uuid: 8ad6f768-9766-422f-9dd3-ae43fe7a97fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_receive
+    - paragraphs.paragraphs_type.steps_item
+id: paragraph.steps_item.field_p_receive
+field_name: field_p_receive
+entity_type: paragraph
+bundle: steps_item
+label: 'You receive'
+description: 'Outcome shown as a highlighted "You receive:" note for the step.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,19 @@
+uuid: bd816465-ef87-416a-87f9-da23dacd0c70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.steps_item.field_c_p_summary
+    - field.field.paragraph.steps_item.field_c_p_title
+    - field.field.paragraph.steps_item.field_p_receive
+    - paragraphs.paragraphs_type.steps_item
+id: paragraph.steps_item.default
+targetEntityType: paragraph
+bundle: steps_item
+mode: default
+content: {  }
+hidden:
+  field_c_p_summary: true
+  field_c_p_title: true
+  field_p_receive: true
+  search_api_excerpt: true

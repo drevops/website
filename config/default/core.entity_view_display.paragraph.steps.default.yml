@@ -1,0 +1,33 @@
+uuid: 17340d30-d03c-4cf3-939a-0e6ac5ee3635
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.steps.field_c_p_background
+    - field.field.paragraph.steps.field_c_p_content
+    - field.field.paragraph.steps.field_c_p_list_items
+    - field.field.paragraph.steps.field_c_p_theme
+    - field.field.paragraph.steps.field_c_p_title
+    - field.field.paragraph.steps.field_c_p_vertical_spacing
+    - paragraphs.paragraphs_type.steps
+  module:
+    - text
+id: paragraph.steps.default
+targetEntityType: paragraph
+bundle: steps
+mode: default
+content:
+  field_c_p_content:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_c_p_background: true
+  field_c_p_list_items: true
+  field_c_p_theme: true
+  field_c_p_title: true
+  field_c_p_vertical_spacing: true
+  search_api_excerpt: true

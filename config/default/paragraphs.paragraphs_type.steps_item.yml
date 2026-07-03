@@ -1,0 +1,10 @@
+uuid: 8967f05d-b35e-434b-9387-e6aa85f7127b
+langcode: en
+status: true
+dependencies: {  }
+id: steps_item
+label: Step
+icon_uuid: null
+icon_default: null
+description: 'A single step within the Steps component.'
+behavior_plugins: {  }
