@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\do_base\Hook;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 
 /**
@@ -18,7 +19,7 @@ final class FormAlterHook {
    * to prevent submission before the token is populated.
    */
   #[Hook('form_alter')]
-  public function alter(array &$form): void {
+  public function alter(array &$form, FormStateInterface $form_state): void {
     if (!isset($form['captcha'])) {
       return;
     }
