@@ -11,6 +11,7 @@ use Drupal\civictheme\CivicthemeConstants;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\text\TextSummary;
 
 /**
  * Implements template_preprocess_paragraph().
@@ -32,7 +33,8 @@ function _drevops_preprocess_paragraph__paragraph_field__summary(array &$variabl
       $length = civictheme_get_theme_config_manager()->loadForComponent($component_name, 'summary_length', CivicthemeConstants::COMPONENT_SUMMARY_DEFAULT_LENGTH);
     }
 
-    $summary_trimmed = text_summary($summary);
+    $default_summary_length = \Drupal::config('text.settings')->get('default_summary_length');
+    $summary_trimmed = (string) \Drupal::service(TextSummary::class)->generate($summary, NULL, (int) $default_summary_length);
 
     if (!_civictheme_feature_is_optedout('process', CivicthemeConstants::OPTOUT_SUMMARY_HIDE_ELLIPSIS)) {
       $summary_trimmed = Unicode::truncate($summary_trimmed, $length, TRUE, TRUE);
