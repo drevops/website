@@ -35,6 +35,7 @@ web/sites/default/*
 !web/.gitattributes
 !web/.htaccess
 !web/autoload.php
+!web/autoload_runtime.php
 !web/index.php
 !web/update.php
 
