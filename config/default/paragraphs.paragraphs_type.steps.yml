@@ -1,0 +1,10 @@
+uuid: c6517c4b-7171-423d-b862-2b91724e9df9
+langcode: en
+status: true
+dependencies: {  }
+id: steps
+label: Steps
+icon_uuid: null
+icon_default: null
+description: 'Numbered steps rendered as a vertical journey with an outcome for each step.'
+behavior_plugins: {  }

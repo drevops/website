@@ -28,6 +28,7 @@ use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPublicMethodParameterRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
@@ -68,6 +69,7 @@ return RectorConfig::configure()
     PrivatizeFinalClassPropertyRector::class,
     PrivatizeLocalGetterToPropertyRector::class,
     RemoveAlwaysTrueIfConditionRector::class,
+    RemoveUnusedPublicMethodParameterRector::class,
     RenameParamToMatchTypeRector::class,
     RenameVariableToMatchMethodCallReturnTypeRector::class,
     RenameVariableToMatchNewTypeRector::class,

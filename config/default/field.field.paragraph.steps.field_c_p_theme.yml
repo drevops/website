@@ -1,0 +1,23 @@
+uuid: aaac2c8f-a68f-48de-8482-297e935181a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_theme
+    - paragraphs.paragraphs_type.steps
+  module:
+    - options
+id: paragraph.steps.field_c_p_theme
+field_name: field_c_p_theme
+entity_type: paragraph
+bundle: steps
+label: Theme
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: light
+default_value_callback: ''
+settings: {  }
+field_type: list_string

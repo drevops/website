@@ -1,0 +1,61 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/modules/sdc/src/metadata.schema.json
+name: Steps
+status: stable
+description: Numbered steps rendered as a vertical journey with an outcome for each step.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: light
+    items:
+      type: array
+      title: Steps
+      description: Step items rendered in order.
+      items:
+        type: object
+        properties:
+          title:
+            type: string
+            title: Title
+            description: Step title.
+          body:
+            type: string
+            title: Body
+            description: Step description.
+          receive:
+            type: string
+            title: You receive
+            description: Outcome shown as a "You receive:" note.
+    vertical_spacing:
+      type: string
+      title: Vertical spacing
+      description: Controls vertical spacing (top, bottom, or both).
+      enum:
+        - top
+        - bottom
+        - both
+    with_background:
+      type: boolean
+      title: With background
+      description: Whether to display with a themed background.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Additional HTML attributes
+      description: Additional HTML attributes to add to the component.
+    modifier_class:
+      type: string
+      title: Additional CSS classes
+      description: Additional CSS classes to add to the component.
+slots:
+  title:
+    title: Title
+    description: Optional heading shown above the steps.
+  content:
+    title: Content
+    description: Optional intro content shown above the steps.
