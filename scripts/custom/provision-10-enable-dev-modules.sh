@@ -21,4 +21,10 @@ if echo "${environment}" | grep -q -e dev -e stage -e local; then
   drush pm:enable devel
 fi
 
+# Component validation runs in CI as well as on developer machines, so this
+# module is enabled everywhere except production.
+if echo "${environment}" | grep -q -e dev -e stage -e local -e ci; then
+  drush pm:enable sdc_devel
+fi
+
 info "Finished enabling development modules."
