@@ -17,14 +17,18 @@ environment="$(drush php:eval "print \Drupal\core\Site\Settings::get('environmen
 note "Environment: ${environment}"
 
 # Perform operations based on the current environment.
-if echo "${environment}" | grep -q -e dev -e stage -e local; then
-  drush pm:enable devel
-fi
+case "${environment}" in
+  dev | stage | local)
+    drush pm:enable devel
+    ;;
+esac
 
 # Component validation runs in CI as well as on developer machines, so this
 # module is enabled everywhere except production.
-if echo "${environment}" | grep -q -e dev -e stage -e local -e ci; then
-  drush pm:enable sdc_devel
-fi
+case "${environment}" in
+  dev | stage | local | ci)
+    drush pm:enable sdc_devel
+    ;;
+esac
 
 info "Finished enabling development modules."
