@@ -2,9 +2,9 @@ _core:
   default_config_hash: ijfbzDTN4CbE7Sr-6ubWzy_t1vH4OtU1doNCLssVz-4
 langcode: en
 uuid: 0701b409-7ef4-47d3-8cec-91bd3ac752cd
-name: 'DrevOps Website'
+name: DrevOps
 mail: webmaster@drevops.com
-slogan: 'A design system by Salsa Digital'
+slogan: 'Melbourne-based digital agency'
 page:
   403: ''
   404: ''

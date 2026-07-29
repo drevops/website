@@ -41,27 +41,27 @@
  */
 #}
 
-{% set with_image = image.url is not empty %}
+{% set with_image = image.url %}
 {% set with_image_class = with_image ? 'ct-navigation-card--with-image' : '' %}
-{% set with_link = link is not empty and link.url is defined and link.url is not empty %}
+{% set with_link = link and link.url is defined and link.url %}
 {% set with_link_class = with_link ? 'ct-navigation-card--with-link' : '' %}
-{% set is_card_clickable = with_link and is_title_click is empty %}
+{% set is_card_clickable = with_link and not is_title_click %}
 {% set card_clickable_class = is_card_clickable ? 'ct-navigation-card--card-clickable' : '' %}
 {% set image_as_icon_class = image_as_icon ? 'ct-navigation-card--image-as-icon' : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s %s %s'|format(theme_class, with_image_class, with_link_class, image_as_icon_class, card_clickable_class, modifier_class|default('')) %}
 
-{% if title is not empty %}
+{% if title %}
   <div class="ct-navigation-card {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     {% block image_block %}
       {% if not image_as_icon %}
-        {% if image.url is not empty %}
+        {% if image.url %}
           <div class="ct-navigation-card__image">
-            {% include 'civictheme:image' with {
+            {{ include('civictheme:image', {
               theme: theme,
               url: image.url,
               alt: image.alt,
-            } only %}
+            }, with_context: false) }}
 
             {% block image_over_block %}
               {% if image_over %}
@@ -77,7 +77,7 @@
 
     <div class="ct-navigation-card__content">
       {% block content_top_block %}
-        {% if content_top is not empty %}
+        {% if content_top %}
           <div class="ct-navigation-card__content-top">
             {{- content_top -}}
           </div>
@@ -85,21 +85,21 @@
       {% endblock %}
 
       {% block icon_block %}
-        {% if icon is not empty or (with_image and image_as_icon) %}
+        {% if icon or (with_image and image_as_icon) %}
           <div class="ct-navigation-card__icon">
-            {% if icon is not empty %}
-              {% include 'civictheme:icon' with {
+            {% if icon %}
+              {{ include('civictheme:icon', {
                 symbol: icon,
                 size: 'extra-large',
-              } only %}
+              }, with_context: false) }}
             {% endif %}
             {% if image_as_icon and with_image %}
               <div class="ct-icon ct-icon--size-extra-large ct-navigation-card__icon__image">
-                {% include 'civictheme:image' with {
+                {{ include('civictheme:image', {
                   theme: theme,
                   url: image.url,
                   alt: image.alt,
-                } only %}
+                }, with_context: false) }}
               </div>
             {% endif %}
           </div>
@@ -107,7 +107,7 @@
       {% endblock %}
 
       {% block title_block %}
-        {% if title is not empty %}
+        {% if title %}
           {% set title_content %}
             {% if with_link %}
               <a
@@ -124,7 +124,7 @@
       {% endblock %}
 
       {% block content_middle_block %}
-        {% if content_middle is not empty %}
+        {% if content_middle %}
           <div class="ct-navigation-card__content-middle">
             {{- content_middle -}}
           </div>
@@ -132,18 +132,18 @@
       {% endblock %}
 
       {% block summary_block %}
-        {% if summary is not empty %}
-          {% include 'civictheme:paragraph' with {
+        {% if summary %}
+          {{ include('civictheme:paragraph', {
             theme: theme,
             content: summary,
             no_margin: true,
             modifier_class: 'ct-navigation-card__summary',
-          } only %}
+          }, with_context: false) }}
         {% endif %}
       {% endblock %}
 
       {% block content_bottom_block %}
-        {% if content_bottom is not empty %}
+        {% if content_bottom %}
           <div class="ct-navigation-card__content-bottom">
             {{- content_bottom -}}
           </div>
@@ -153,10 +153,10 @@
       {% if is_card_clickable %}
         <div class="ct-navigation-card__tags">
           <div class="ct-navigation-card__link-graphic">
-            {% include 'civictheme:icon' with {
+            {{ include('civictheme:icon', {
               symbol: 'right-arrow-2',
               size: 'large',
-            } only %}
+            }, with_context: false) }}
           </div>
         </div>
       {% endif %}

@@ -38,7 +38,7 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s'|format(theme_class, dropdown_class, variant_class, modifier_class|default('')) %}
 
-{% if items is not empty %}
+{% if items %}
   {% set menu_level_classes = {} %}
   {% if type in ['dropdown', 'drawer'] %}
     {% for key in items|keys %}
@@ -82,25 +82,25 @@
   <div class="ct-navigation {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     {% if title %}
       {% block title_block %}
-        {% include 'civictheme:heading' with {
+        {{ include('civictheme:heading', {
           theme: theme,
           level: 2,
           content: title,
           modifier_class: 'ct-navigation__title',
-        } only %}
+        }, with_context: false) }}
       {% endblock %}
     {% endif %}
 
     <nav
       class="ct-navigation__items"
-      {% if name is not empty %}aria-label="{{ name }}"{% endif %}
+      {% if name %}aria-label="{{ name }}"{% endif %}
     >
-    {% include 'civictheme:menu' with {
+    {{ include('civictheme:menu', {
         theme: theme,
         items: items,
         modifier_class: 'ct-navigation__menu',
         menu_level_modifier_class: menu_level_classes,
-      } only %}
+      }, with_context: false) }}
     </nav>
   </div>
 {% endif %}

@@ -23,22 +23,22 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s'|format(theme_class, with_background_class, vertical_spacing_class, modifier_class|default('')) %}
 
-{% if items is not empty %}
+{% if items %}
   <div class="ct-steps {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     <div class="container">
-      {% if title is not empty or content is not empty %}
+      {% if title or content %}
         <div class="row">
           <div class="col-xxs-12">
             <div class="ct-steps__header">
-              {% if title is not empty %}
-                {% include 'civictheme:heading' with {
+              {% if title %}
+                {{ include('civictheme:heading', {
                   content: title,
                   level: 2,
                   theme: theme,
                   modifier_class: 'ct-steps__title',
-                } only %}
+                }, with_context: false) }}
               {% endif %}
-              {% if content is not empty %}
+              {% if content %}
                 <div class="ct-steps__content">{{ content }}</div>
               {% endif %}
             </div>
@@ -52,13 +52,13 @@
             {% for item in items %}
               <li class="ct-steps__item">
                 <span class="ct-steps__item-number" aria-hidden="true">{{ loop.index }}</span>
-                {% if item.title is not empty %}
+                {% if item.title %}
                   <h3 class="ct-steps__item-title">{{ item.title }}</h3>
                 {% endif %}
-                {% if item.body is not empty %}
+                {% if item.body %}
                   <p class="ct-steps__item-body">{{ item.body }}</p>
                 {% endif %}
-                {% if item.receive is not empty %}
+                {% if item.receive %}
                   <p class="ct-steps__item-receive"><strong>{{ 'You receive:'|t }}</strong> {{ item.receive }}</p>
                 {% endif %}
               </li>

@@ -10,7 +10,6 @@
  * - column_class: [string] Optional column class override. Defaults to 'col' if
  *   column auto-generation is not required (template_column_count is 0),
  *   otherwise it is appended to the auto-generated column class list.
- * - column_attributes: [Drupal\Core\Template\Attribute] Additional column attributes.
  * - use_container: [boolean] Whether to use container or not.
  * - is_fluid: [boolean] Whether the grid is fluid or not. Defaults to false.
  *   Applies only if `use_container` is true.
@@ -23,14 +22,15 @@
  */
 #}
 
-{% set use_container = use_container|default(true) %}
-{% set is_fluid = is_fluid|default(false) %}
+{# `default` substitutes on empty, which swallows an explicit false, so booleans test for null instead. #}
+{% set use_container = use_container is not null ? use_container : true %}
+{% set is_fluid = is_fluid is not null ? is_fluid : false %}
 {% set row_element = row_element|default('div') %}
 {% set column_element = column_element|default('div') %}
 {% set column_class = column_class|default('') %}
 {% set modifier_class = modifier_class|default('') %}
 {% set template_column_count = template_column_count|default(1) %}
-{% set fill_width = template_column_count > 1 and fill_width|default(false) %}
+{% set fill_width = template_column_count > 1 and (fill_width is not null ? fill_width : false) %}
 
 {% set row_classes = ['ct-spotlight', 'grid-xxs-%s-%s'|format(1, 5), 'grid-l-%s-%s'|format(template_column_count, 5), 'g-gap-xxs'] %}
 {% if use_container %}
@@ -78,7 +78,7 @@
   {% endif %}
 {% endif %}
 
-{% if main_items is not empty %}
+{% if main_items %}
   <{{ row_element }} class="{{ row_class_string }}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %} data-grid data-grid-cols="{{ template_column_count }}" data-responsive="=m" aria-live="polite">
 
   {% for cell in main_items %}
@@ -87,7 +87,7 @@
     </{{ column_element }}>
   {% endfor %}
 
-  {% if hanging_items is not empty %}
+  {% if hanging_items %}
     {% set hanging_count = hanging_items|length %}
     <{{ row_element }} class="{{ hanging_items_class }} {{ column_class }}">
     {% for cell in hanging_items %}
@@ -95,7 +95,7 @@
       {{ cell }}
       </{{ column_element }}>
     {% endfor %}
-    </{{ column_element }}>
+    </{{ row_element }}>
   {% endif %}
 
   </{{ row_element }}>
