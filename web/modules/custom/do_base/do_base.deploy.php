@@ -10,9 +10,13 @@
 declare(strict_types=1);
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Sql\DefaultTableMapping;
+use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\drupal_helpers\Helper;
 use Drupal\media\MediaInterface;
+use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\search_api\Entity\Index;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -416,7 +420,7 @@ function do_base_deploy_migrate_blog_posts(): string {
 
   try {
     if ($nids !== []) {
-      $items = $database->select('node_field_data', 'n')->fields('n', ['nid', 'langcode'])->condition('n.nid', $nids, 'IN')->execute()->fetchAll();
+      $langcodes = $database->select('node_field_data', 'n')->fields('n', ['nid', 'langcode'])->condition('n.nid', $nids, 'IN')->execute()->fetchAllKeyed();
 
       $database->update('node')->fields(['type' => 'blog'])->condition('nid', $nids, 'IN')->execute();
       $database->update('node_field_data')->fields(['type' => 'blog'])->condition('nid', $nids, 'IN')->execute();
@@ -431,7 +435,7 @@ function do_base_deploy_migrate_blog_posts(): string {
         $database->update('xmlsitemap')->fields(['subtype' => 'blog'])->condition('type', 'node')->condition('id', $nids, 'IN')->execute();
       }
 
-      do_base_blog_reindex($items);
+      do_base_blog_reindex($langcodes);
 
       $node_storage->resetCache($nids);
 
@@ -448,18 +452,24 @@ function do_base_deploy_migrate_blog_posts(): string {
     }
 
     if ($pids !== []) {
-      foreach ($paragraph_storage->loadMultiple($pids) as $paragraph) {
-        if (!$paragraph instanceof ParagraphInterface) {
+      $tags = [];
+
+      foreach ($paragraph_storage->loadMultiple($pids) as $entity) {
+        if (!$entity instanceof ParagraphInterface) {
           continue;
         }
 
-        $paragraph->set('field_c_p_list_content_type', 'blog');
+        $tags[] = 'paragraph:' . $entity->id();
+        $parent = $entity->getParentEntity();
 
-        // The host node references one specific paragraph revision, so a new
-        // revision here would leave the host still rendering the old value.
-        $paragraph->setNewRevision(FALSE);
-        $paragraph->save();
+        if ($parent instanceof NodeInterface) {
+          $tags[] = 'node:' . $parent->id();
+        }
       }
+
+      do_base_blog_repoint_lists($pids);
+      $paragraph_storage->resetCache($pids);
+      Cache::invalidateTags($tags);
 
       Helper::reporter()->updated(sprintf('Repointed %d automated list(s) at the "blog" content type.', count($pids)), count($pids));
     }
@@ -494,7 +504,18 @@ function do_base_blog_topic_term(): ?TermInterface {
  * Lists the node field tables that record the bundle for the given bundles.
  */
 function do_base_blog_bundle_tables(string ...$bundles): array {
-  $table_mapping = \Drupal::entityTypeManager()->getStorage('node')->getTableMapping();
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  if (!$storage instanceof SqlContentEntityStorage) {
+    throw new \RuntimeException('Node storage is not SQL-backed, so field tables cannot be resolved.');
+  }
+
+  $table_mapping = $storage->getTableMapping();
+
+  if (!$table_mapping instanceof DefaultTableMapping) {
+    throw new \RuntimeException('Node storage does not use the default table mapping.');
+  }
+
   $field_manager = \Drupal::service('entity_field.manager');
   $schema = \Drupal::database()->schema();
   $tables = [];
@@ -514,9 +535,9 @@ function do_base_blog_bundle_tables(string ...$bundles): array {
         $table_mapping->getDedicatedRevisionTableName($storage_definition),
       ];
 
-      foreach ($candidates as $table) {
-        if ($schema->tableExists($table)) {
-          $tables[$table] = $table;
+      foreach ($candidates as $candidate) {
+        if ($schema->tableExists($candidate)) {
+          $tables[$candidate] = $candidate;
         }
       }
     }
@@ -526,20 +547,69 @@ function do_base_blog_bundle_tables(string ...$bundles): array {
 }
 
 /**
- * Queues the given node rows for reindexing on every search index.
+ * Points the given automated lists at the blog bundle, in every revision.
  */
-function do_base_blog_reindex(array $items): void {
+function do_base_blog_repoint_lists(array $pids): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+
+  if (!$storage instanceof SqlContentEntityStorage) {
+    throw new \RuntimeException('Paragraph storage is not SQL-backed, so field tables cannot be resolved.');
+  }
+
+  $table_mapping = $storage->getTableMapping();
+
+  if (!$table_mapping instanceof DefaultTableMapping) {
+    throw new \RuntimeException('Paragraph storage does not use the default table mapping.');
+  }
+
+  $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('paragraph', 'civictheme_automated_list');
+  $storage_definition = $definitions['field_c_p_list_content_type']->getFieldStorageDefinition();
+  $column = $table_mapping->getFieldColumnName($storage_definition, 'value');
+
+  // Saving the paragraph would only rewrite its current revision, while the
+  // host node references one specific revision that is not necessarily that
+  // one - so the value is set across every revision instead. Older revisions
+  // want the new bundle too: left on the old one they would render an empty
+  // list, because no page carries the Blog topic once the migration has run.
+  $candidates = [
+    $table_mapping->getDedicatedDataTableName($storage_definition),
+    $table_mapping->getDedicatedRevisionTableName($storage_definition),
+  ];
+
+  $database = \Drupal::database();
+
+  foreach ($candidates as $candidate) {
+    if (!$database->schema()->tableExists($candidate)) {
+      continue;
+    }
+
+    $database->update($candidate)->fields([$column => 'blog'])->condition('entity_id', $pids, 'IN')->condition($column, 'civictheme_page')->execute();
+  }
+}
+
+/**
+ * Queues nodes for reindexing, keyed by node ID with the langcode as value.
+ */
+function do_base_blog_reindex(array $langcodes): void {
   if (!\Drupal::moduleHandler()->moduleExists('search_api')) {
     return;
   }
 
   // Changing the bundle in storage fires no entity hooks, so the indexed
   // documents would otherwise keep describing the articles as Pages.
-  $item_ids = array_map(static fn (object $item): string => $item->nid . ':' . $item->langcode, $items);
+  $item_ids = [];
 
-  foreach (\Drupal::entityTypeManager()->getStorage('search_api_index')->loadMultiple() as $index) {
-    if ($index->isValidDatasource('entity:node')) {
-      $index->trackItemsUpdated('entity:node', $item_ids);
+  foreach ($langcodes as $nid => $langcode) {
+    $item_ids[] = $nid . ':' . $langcode;
+  }
+
+  foreach (\Drupal::entityTypeManager()->getStorage('search_api_index')->loadMultiple() as $entity) {
+    if (!$entity instanceof Index) {
+      continue;
+    }
+
+    if ($entity->isValidDatasource('entity:node')) {
+      $entity->trackItemsUpdated('entity:node', $item_ids);
     }
   }
 }
