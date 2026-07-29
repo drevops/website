@@ -15,7 +15,7 @@ use Drupal\drupal_helpers\Helper;
 function do_base_update_11001(): string {
   // Update hooks run ahead of config import, so drupal_helpers is not yet
   // enabled from exported configuration on the deployment that first needs it.
-  // This is the one place the core installer is preferred over
+  // This is the one case where the core installer is preferred over
   // Helper::module(), because that API is what is being made available.
   \Drupal::service('module_installer')->install(['drupal_helpers']);
 
@@ -27,4 +27,35 @@ function do_base_update_11001(): string {
   // replacing the shared reporter with an empty one, so the helper's own
   // return value is what reports the outcome.
   return Helper::module()->uninstall('simple_sitemap');
+}
+
+/**
+ * Uninstalls the classic Toolbar stack.
+ */
+function do_base_update_11002(): string {
+  // Update hooks run ahead of config import, so drupal_helpers is not yet
+  // enabled from exported configuration on the deployment that first needs it.
+  // This is the one case where the core installer is preferred over
+  // Helper::module(), because that API is what is being made available.
+  \Drupal::service('module_installer')->install(['drupal_helpers']);
+
+  // The core Navigation module supersedes the classic Toolbar, and core
+  // disables Toolbar's functionality when both are installed. Leaving the two
+  // together also breaks admin contextual links, because the toolbar module
+  // keeps loading contextual.toolbar.js. Removing the stack ahead of config
+  // import - which is what installs Navigation - means the site never runs
+  // both at once. Dependents are removed first so the toolbar uninstall has
+  // nothing left to cascade to. Each uninstall rebuilds the container and
+  // replaces the shared reporter with an empty one, so the helper's own return
+  // values are what report the outcome. An uninstall needs the module's own
+  // code to drop its tables and remove its config, so the drupal/admin_toolbar
+  // and drupal/gin_toolbar packages stay in composer.json until this has run
+  // in every environment.
+  $messages = [];
+
+  foreach (['admin_toolbar_tools', 'admin_toolbar', 'gin_toolbar', 'toolbar'] as $module) {
+    $messages[] = Helper::module()->uninstall($module);
+  }
+
+  return implode(' ', $messages);
 }

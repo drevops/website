@@ -13,10 +13,10 @@ dependencies:
     - filter
     - linkit
     - media
+    - navigation
     - node
     - scheduled_transitions
     - system
-    - toolbar
 _core:
   default_config_hash: z5yWuJJkqJroQmQ21H22z3l-pGKs85Issiy6lqU2-Y8
 id: civictheme_content_approver
@@ -28,7 +28,7 @@ permissions:
   - 'access contextual links'
   - 'access files overview'
   - 'access media overview'
-  - 'access toolbar'
+  - 'access navigation'
   - 'administer linkit profiles'
   - 'administer scheduled transitions'
   - 'generate ai alt tags'

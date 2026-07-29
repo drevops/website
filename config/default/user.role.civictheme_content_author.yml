@@ -24,12 +24,12 @@ dependencies:
     - filter
     - linkit
     - media
+    - navigation
     - node
     - path
     - scheduled_transitions
     - system
     - taxonomy
-    - toolbar
 _core:
   default_config_hash: jKyTaFQv0l2H-eg26nEdCGVYAz9gh29KxOkSF2iBPeQ
 id: civictheme_content_author
@@ -41,7 +41,7 @@ permissions:
   - 'access contextual links'
   - 'access files overview'
   - 'access media overview'
-  - 'access toolbar'
+  - 'access navigation'
   - 'administer linkit profiles'
   - 'administer scheduled transitions'
   - 'administer url aliases'

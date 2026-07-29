@@ -20,6 +20,7 @@ require_once __DIR__ . '/includes/node.inc';
 require_once __DIR__ . '/includes/cards.inc';
 require_once __DIR__ . '/includes/sidebar_navigation.inc';
 require_once __DIR__ . '/includes/content_moderation.inc';
+require_once __DIR__ . '/includes/admin_navigation.inc';
 
 /**
  * Adds a CSS class to a block wrapper.
