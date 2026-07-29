@@ -26,10 +26,6 @@ props:
       type: string
       title: Column Class
       description: Optional column class override. Defaults to 'col' if column auto-generation is not required.
-    column_attributes:
-      type: Drupal\Core\Template\Attribute
-      title: Column Attributes
-      description: Additional HTML attributes for columns.
     use_container:
       type: boolean
       title: Use Container

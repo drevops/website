@@ -68,6 +68,14 @@ props:
           type: string
           title: Alt text
           description: Image alt text.
+    type:
+      type: string
+      title: Type
+      description: 'Banner type: default, large or intro. Any other value, including the ''inherit'' sentinel supplied by the banner type field, falls back to ''default''.'
+    with_offset:
+      type: boolean
+      title: With offset
+      description: Whether to add top offset.
 slots:
   content_top1:
     title: Content Top 1
