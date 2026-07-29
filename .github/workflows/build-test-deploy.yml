@@ -260,9 +260,6 @@ jobs:
           VORTEX_FETCH_DB_SEMAPHORE=/tmp/fetch-db-fresh ./vendor/bin/vortex-fetch-db
           echo "db_hash=${{ hashFiles('.data') }}" >> "$GITHUB_ENV"
         timeout-minutes: 30
-        env:
-          VORTEX_ACQUIA_KEY: ${{ secrets.VORTEX_ACQUIA_KEY }}
-          VORTEX_ACQUIA_SECRET: ${{ secrets.VORTEX_ACQUIA_SECRET }}
 
       - name: Export DB
         run: |
@@ -434,7 +431,7 @@ jobs:
 
       - name: Post coverage summary as PR comment
         if: ${{ github.event_name == 'pull_request' && (matrix.instance == 0 || strategy.job-total == 1) && vars.VORTEX_CI_CODE_COVERAGE_PR_COMMENT_SKIP != '1' }}
-        uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
         with:
           header: coverage-gha
           message: |
@@ -471,6 +468,18 @@ jobs:
           fi
         env:
           VORTEX_CI_CODE_COVERAGE_THRESHOLD: ${{ vars.VORTEX_CI_CODE_COVERAGE_THRESHOLD || '90' }}
+
+      - name: Validate Single Directory Components
+        if: ${{ matrix.instance == 0 || strategy.job-total == 1 }}
+        run: |
+          [ "${VORTEX_FRONTEND_BUILD_SKIP:-0}" -eq 1 ] && exit 0
+          output=$(docker compose exec -T cli vendor/bin/drush sdc-devel:validate "${DRUPAL_THEME}" 2>&1)
+          echo "${output}"
+          if echo "${output}" | grep -qE 'Critical|Errors?|Warnings?'; then
+            echo "SDC validation reported problems."
+            exit 1
+          fi
+        continue-on-error: ${{ vars.VORTEX_CI_SDC_DEVEL_IGNORE_FAILURE == '1' }}
 
       - name: Test with Behat
         run: |
