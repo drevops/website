@@ -9,6 +9,7 @@
 
 declare(strict_types=1);
 
+use Drupal\drupal_helpers\Helper;
 use Drupal\media\MediaInterface;
 use Drupal\paragraphs\ParagraphInterface;
 
@@ -345,18 +346,24 @@ function do_base_deploy_rebuild_xmlsitemap(): string {
   // installed xmlsitemap has an empty link table, so without this the site
   // would serve an empty /sitemap.xml until the next cron run.
   if (!\Drupal::moduleHandler()->moduleExists('xmlsitemap')) {
-    return 'The "xmlsitemap" module is not installed.';
+    Helper::reporter()->skipped('The "xmlsitemap" module is not installed.');
+
+    return Helper::report();
   }
 
   $rebuild_types = xmlsitemap_get_rebuildable_link_types();
 
   if ($rebuild_types === []) {
-    return 'No XML sitemap link types are rebuildable.';
+    Helper::reporter()->skipped('No XML sitemap link types are rebuildable.');
+
+    return Helper::report();
   }
 
   // Deploy hooks are themselves executed inside a batch, so these operations
   // are appended to the running batch rather than started as one of their own.
   batch_set(xmlsitemap_rebuild_batch($rebuild_types, TRUE));
 
-  return 'Queued the XML sitemap rebuild.';
+  Helper::reporter()->updated('Queued the XML sitemap rebuild.');
+
+  return Helper::report();
 }
