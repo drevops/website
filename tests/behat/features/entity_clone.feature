@@ -27,9 +27,9 @@ Feature: Entity Clone permissions for Content Author role
     Then I should see the link "Test CivicTheme Clone Page"
 
     When I click "Test CivicTheme Clone Page"
-    Then I should see the link "Clone" in the "primary_tabs" region
+    Then I should see the link "Clone" in the "page_actions" region
 
-    When I click "Clone" in the "primary_tabs" region
+    When I click "Clone" in the "page_actions" region
     Then I should see "Clone Content"
 
     When I press "Clone"

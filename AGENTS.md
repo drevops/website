@@ -77,6 +77,9 @@ ahoy test-bdd -- --tags=@tagname  # Run Behat tests with specific tag
 - **Never use** `ahoy drush php:eval` for ad-hoc commands - write the code to a file and run `ahoy drush php:script path/to/file.php` instead. This targets ad-hoc agent use; committed, vetted scripts may use `drush php:eval` for static, non-dynamic operations.
 - **When running ad-hoc code, never pass it inline** via stdin, heredocs, or `/dev/stdin` - write it to a temporary file first, then pass the file path to the command (e.g. `ahoy drush php:script path/to/fix.php`)
 - **Always export config** after admin UI changes: `ahoy drush cex`
+- **Always use `drupal_helpers` in update and deploy hooks** - `Drupal\drupal_helpers\Helper` is a static facade wrapping the operations these hooks perform. **`web/modules/contrib/drupal_helpers/README.md` is the authoritative list of helpers and their methods - read it before writing a hook**, rather than assuming what exists. Never hand-roll an operation a helper already covers, such as calling `\Drupal::service('module_installer')` directly instead of `Helper::module()->uninstall()`. Pass the hook's `$sandbox` (e.g. `Helper::entity($sandbox)`) for anything iterating a large dataset, and the helper batches it for you. The helpers are idempotent, handle edge cases the raw APIs do not (an already-uninstalled module, a module whose code is gone but is still recorded in the database), and are sandbox-aware for batched work. Record anything a helper does not cover with `Helper::reporter()` and end the hook with `return Helper::report();` so the deploy output reports what actually happened. The one exception is installing or uninstalling a module: that rebuilds the container and replaces the shared reporter with an empty one, so return the message `Helper::module()` itself returns rather than `Helper::report()`.
+- **`drupal_helpers` must be installed before an update hook can use it.** `drush deploy` runs `updatedb` before `cim`, so a module enabled only through exported configuration is not yet available to `hook_update_N`. An update hook that needs the helpers must install the module first with `\Drupal::service('module_installer')->install(['drupal_helpers'])` - the sole place the core installer is preferred over `Helper::module()`. Deploy hooks (`hook_deploy_NAME`) run after `cim` and need no such bootstrap.
+- **Never commit environment-specific values to exported config.** Some modules seed config from the environment at install time - for example `xmlsitemap` labels its sitemap entity with the base URL of whichever machine installed it. Before committing, review `ahoy drush cex` output for local hostnames, absolute paths, ports, and credentials, and replace them with a stable, environment-neutral value.
 - **Never use compound Bash commands.** See the highest priority rule at the top.
 
 ## Key Directories
@@ -99,6 +102,7 @@ The `docs/` directory contains **what** applies to this project:
 - `docs/ci.md` - CI provider and configuration
 - `docs/deployment.md` - Hosting provider and deployment rules
 - `docs/releasing.md` - Version scheme and release process
+- `docs/sitemap.md` - XML sitemap module, coverage and generation
 - `docs/faqs.md` - Project-specific FAQs
 
 **Always check these files first** to understand project-specific decisions.

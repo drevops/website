@@ -33,6 +33,7 @@ dependencies:
     - filter
     - linkit
     - media
+    - navigation
     - node
     - paragraphs_library
     - path
@@ -41,7 +42,6 @@ dependencies:
     - scheduled_transitions
     - system
     - taxonomy
-    - toolbar
     - webform
 _core:
   default_config_hash: 3RGvhVh7oqJvosWqYYZ0Fr0Ka_WUl_o2fZkK6xsjhzk
@@ -59,11 +59,11 @@ permissions:
   - 'access environment indicator'
   - 'access files overview'
   - 'access media overview'
+  - 'access navigation'
   - 'access own webform configuration'
   - 'access site in maintenance mode'
   - 'access site reports'
   - 'access taxonomy overview'
-  - 'access toolbar'
   - 'access user profiles'
   - 'access webform help'
   - 'access webform overview'
