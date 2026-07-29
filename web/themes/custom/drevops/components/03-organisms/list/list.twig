@@ -195,7 +195,7 @@
       {% endblock %}
 
       {% block empty_block %}
-        {% if empty is defined and not rows -%}
+        {% if empty is defined and empty and not rows -%}
           <div class="container ct-list__empty-results">
             <div class="row">
               <div class="col-xxs-12">
