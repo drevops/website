@@ -253,7 +253,7 @@ jobs:
           result_json="$(/tmp/diffy.phar diff:get-result "${diff_id}" --format=json)"
 
           shared_url="$(printf '%s' "${result_json}" | jq -r '.diffSharedUrl // empty')"
-          pages_changed="$(printf '%s' "${result_json}" | jq -r '[.diffs | to_entries[] | select(.value | to_entries | map(.value.percentageChanges // 0) | add > 0)] | length')"
+          pages_changed="$(printf '%s' "${result_json}" | jq -r '[.diffs[] | select([.[].percentageChanges | tonumber? // 0] | add > 0)] | length')"
           pages_total="$(printf '%s' "${result_json}" | jq -r '.diffs | length')"
 
           {
