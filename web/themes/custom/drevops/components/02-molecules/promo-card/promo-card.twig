@@ -51,28 +51,28 @@
  */
 #}
 
-{% set with_image = image.url is not empty %}
+{% set with_image = image.url %}
 {% set with_image_class = with_image ? 'ct-promo-card--with-image' : '' %}
-{% set with_link = link is not empty and link.url is defined and link.url is not empty %}
-{% set is_card_clickable = with_link and is_title_click is empty %}
+{% set with_link = link and link.url is defined and link.url %}
+{% set is_card_clickable = with_link and not is_title_click %}
 {% set card_clickable_class = is_card_clickable ? 'ct-promo-card--card-clickable' : '' %}
 {% set image_over_class = image_over ? 'ct-promo-card--image-over' : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s %s'|format(theme_class, with_image_class, image_over_class, card_clickable_class, modifier_class|default('')) %}
 
-{% if title is not empty %}
+{% if title %}
   <div class="ct-promo-card {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     {% block image_block %}
-      {% if image.url is not empty or image_over is not empty %}
+      {% if image.url or image_over %}
         <div class="ct-promo-card__image">
-          {% include 'civictheme:image' with {
+          {{ include('civictheme:image', {
             theme: theme,
             url: image.url,
             alt: image.alt,
-          } only %}
+          }, with_context = false) }}
 
           {% block image_over_block %}
-            {% if image_over is not empty %}
+            {% if image_over %}
               <div class="ct-promo-card__image__over">
                 {{ image_over }}
               </div>
@@ -85,7 +85,7 @@
     {% block content_block %}
       <div class="ct-promo-card__content">
         {% block content_top_block %}
-          {% if content_top is not empty %}
+          {% if content_top %}
             <div class="ct-promo-card__content-top">
               {{- content_top -}}
             </div>
@@ -93,42 +93,42 @@
         {% endblock %}
 
         {% block subtitle_block %}
-          {% if subtitle is not empty %}
+          {% if subtitle %}
             <div class="ct-promo-card__subtitle">
-              {% include 'civictheme:tag' with {
+              {{ include('civictheme:tag', {
                 theme: theme,
                 type: 'tertiary',
                 content: subtitle,
-              } only %}
+              }, with_context = false) }}
             </div>
           {% endif %}
         {% endblock %}
 
         {% block date_block %}
-          {% if date is not empty %}
+          {% if date %}
             {% set date_content %}
-              {% include 'civictheme:datetime' with {
+              {{ include('civictheme:datetime', {
                 start: date,
                 start_iso: date_iso|default(null),
                 end: date_end|default(null),
                 end_iso: date_end_iso|default(null),
-              } only %}
+              }, with_context = false) }}
             {% endset %}
 
             <div class="ct-promo-card__date">
-              {% include 'civictheme:tag' with {
+              {{ include('civictheme:tag', {
                 theme: theme,
                 type: date_end ? 'secondary' : 'tertiary',
                 content: date_content,
                 icon: date_end ? 'calendar-2' : null,
                 icon_placement: 'before',
-              } only %}
+              }, with_context = false) }}
             </div>
           {% endif %}
         {% endblock %}
 
         {% block title_block %}
-          {% if title is not empty %}
+          {% if title %}
             {% set title_content %}
               {% if with_link %}
                 <a
@@ -145,7 +145,7 @@
         {% endblock %}
 
         {% block content_middle_block %}
-          {% if content_middle is not empty %}
+          {% if content_middle %}
             <div class="ct-promo-card__content-middle">
               {{- content_middle -}}
             </div>
@@ -153,13 +153,13 @@
         {% endblock %}
 
         {% block summary_block %}
-          {% if summary is not empty %}
-            {% include 'civictheme:paragraph' with {
+          {% if summary %}
+            {{ include('civictheme:paragraph', {
               theme: theme,
               content: summary,
               no_margin: true,
               modifier_class: 'ct-promo-card__summary',
-            } only %}
+            }, with_context = false) }}
           {% endif %}
         {% endblock %}
 
@@ -167,18 +167,18 @@
           {% if tags or with_link %}
             <div class="ct-promo-card__tags">
               {% if tags %}
-                {% include 'civictheme:tag-list' with {
+                {{ include('civictheme:tag-list', {
                   theme: theme,
                   tags: tags,
-                } only %}
+                }, with_context = false) }}
               {% endif %}
 
               {% if is_card_clickable %}
                 <div class="ct-promo-card__link-graphic">
-                  {% include 'civictheme:icon' with {
+                  {{ include('civictheme:icon', {
                     symbol: 'right-arrow-2',
                     size: 'large',
-                  } only %}
+                  }, with_context = false) }}
                 </div>
               {% endif %}
             </div>
@@ -186,7 +186,7 @@
         {% endblock %}
 
         {% block content_bottom_block %}
-          {% if content_bottom is not empty %}
+          {% if content_bottom %}
             <div class="ct-promo-card__content-bottom">
               {{- content_bottom -}}
             </div>

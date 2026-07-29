@@ -16,13 +16,13 @@
  * - assets_dir: [string] Primary assets directory (defaults to Twig global).
  */
 #}
-{%- if symbol is not empty -%}
-  {%- set resolved_dir = assets_dir is defined and assets_dir is not empty ? assets_dir : '@civictheme/../assets' -%}
+{%- if symbol -%}
+  {%- set resolved_dir = assets_dir is defined and assets_dir ? assets_dir : '@civictheme/../assets' -%}
   {%- set source = source(resolved_dir ~ '/icons/' ~ symbol ~ '.svg', true) -%}
-  {%- if source is empty -%}
+  {%- if not source -%}
     {%- set source = source('@civictheme/../assets/icons/' ~ symbol ~ '.svg', true) -%}
   {%- endif -%}
-  {%- if source is not empty -%}
+  {%- if source -%}
     {%- set attr = attributes is defined and attributes is not null ? attributes : create_attribute({}) -%}
     {%- do attr.addClass('ct-icon') -%}
     {%- if size -%}{%- do attr.addClass('ct-icon--size-' ~ size) -%}{%- endif -%}

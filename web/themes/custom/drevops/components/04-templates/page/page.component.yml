@@ -28,6 +28,10 @@ props:
       enum:
         - light
         - dark
+    header_is_sticky:
+      type: boolean
+      title: Header is sticky
+      description: Whether header is sticky.
     hide_sidebar_left:
       type: boolean
       title: Hide left sidebar

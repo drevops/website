@@ -64,19 +64,19 @@
 <div class="ct-list {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
   <div class="ct-list__inner">
     {% block header_block %}
-      {% if title is not empty or link_above is not empty %}
+      {% if title or link_above %}
         <div class="ct-list__header">
           <div class="container">
             <div class="row">
               <div class="col-xxs-12 col-m-9">
                 {% block title_block %}
                   {% if title -%}
-                    {% include 'civictheme:heading' with {
+                    {{ include('civictheme:heading', {
                       content: title,
                       level: 2,
                       theme: theme,
                       modifier_class: 'ct-list__title',
-                    } only %}
+                    }, with_context = false) }}
                   {% endif %}
                 {% endblock %}
               </div>
@@ -84,7 +84,7 @@
                 {% block link_above_block %}
                   {% if link_above %}
                     <div class="ct-list__link-above ct-flex-justify-content-center">
-                      {% include 'civictheme:button' with {
+                      {{ include('civictheme:button', {
                         theme: theme,
                         type: 'secondary',
                         kind: 'link',
@@ -95,7 +95,7 @@
                         is_external: link_above.is_external,
                         icon: link_above.is_external ? '' : 'right-arrow-2',
                         modifier_class: 'ct-list__link-above__link',
-                      } only %}
+                      }, with_context = false) }}
                     </div>
                   {% endif %}
                 {% endblock %}
@@ -112,11 +112,11 @@
           <div class="container">
             <div class="row">
               <div class="col-xxs-12">
-                {% include 'civictheme:paragraph' with {
+                {{ include('civictheme:paragraph', {
                   content: content,
                   theme: theme,
                   modifier_class: 'ct-list__content__inner',
-                } only %}
+                }, with_context = false) }}
               </div>
             </div>
           </div>
@@ -147,7 +147,7 @@
               <div class="container ct-list__rows-above">
                 <div class="row">
                   <div class="col-xxs-12">
-                    {% if rows_above is not iterable %}
+                    {% if rows_above is not sequence %}
                       {% set rows_above = [rows_above] %}
                     {% endif %}
                     {% for rows_above_row in rows_above %}
@@ -180,7 +180,7 @@
               <div class="container ct-list__rows-below">
                 <div class="row">
                   <div class="col-xxs-12">
-                    {% if rows_below is not iterable %}
+                    {% if rows_below is not sequence %}
                       {% set rows_below = [rows_below] %}
                     {% endif %}
                     {% for rows_below_row in rows_below %}
@@ -195,15 +195,15 @@
       {% endblock %}
 
       {% block empty_block %}
-        {% if empty is defined and (rows is not defined or rows is empty) -%}
+        {% if empty is defined and not rows -%}
           <div class="container ct-list__empty-results">
             <div class="row">
               <div class="col-xxs-12">
-                {% include 'civictheme:paragraph' with {
+                {{ include('civictheme:paragraph', {
                   content: empty,
                   theme: theme,
                   modifier_class: 'ct-list__empty-results__inner',
-                } only %}
+                }, with_context = false) }}
               </div>
             </div>
           </div>
@@ -214,7 +214,7 @@
     {% block list_below_block %}
       {% if link_below %}
         <div class="ct-list__link-below ct-flex-justify-content-center">
-          {% include 'civictheme:button' with {
+          {{ include('civictheme:button', {
             theme: theme,
             type: 'secondary',
             kind: 'link',
@@ -225,11 +225,11 @@
             is_external: link_below.is_external,
             icon: link_below.is_external ? '' : 'right-arrow-2',
             modifier_class: 'ct-list__link-below__link',
-          } only %}
+          }, with_context = false) }}
         </div>
       {% endif %}
 
-      {% if pagination is defined and pagination is not empty %}
+      {% if pagination is defined and pagination %}
         <div class="ct-list__results-below">
           {% block pagination_block %}
             <div class="container">
@@ -247,7 +247,7 @@
     {% endblock %}
 
     {% block footer_block %}
-      {% if footer is not empty -%}
+      {% if footer -%}
         <footer class="ct-list__footer">
           <div class="container">
             <div class="row">

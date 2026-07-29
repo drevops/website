@@ -27,19 +27,10 @@ const meta = {
     row_element: {
       control: { type: 'text' },
     },
-    row_class: {
-      control: { type: 'text' },
-    },
-    row_attributes: {
-      control: { type: 'text' },
-    },
     column_element: {
       control: { type: 'text' },
     },
     column_class: {
-      control: { type: 'text' },
-    },
-    column_attributes: {
       control: { type: 'text' },
     },
     use_container: {
@@ -65,11 +56,8 @@ export const Spotlight = {
     template_column_count: 3,
     fill_width: false,
     row_element: 'div',
-    row_class: '',
-    row_attributes: '',
     column_element: 'div',
     column_class: '',
-    column_attributes: '',
     use_container: true,
     is_fluid: false,
     attributes: '',
