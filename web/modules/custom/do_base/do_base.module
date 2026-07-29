@@ -43,3 +43,17 @@ function do_base_page_attachments(array &$attachments): void {
     $attachments['#attached']['library'][] = 'csp/nonce';
   }
 }
+
+/**
+ * Implements hook_xmlsitemap_link_alter().
+ */
+function do_base_xmlsitemap_link_alter(array &$link): void {
+  $front = \Drupal::config('system.site')->get('page.front');
+
+  // The front page already has its own "/" entry. Without this, the node
+  // behind it is listed a second time under its internal path, and the two
+  // entries serve identical content to search engines.
+  if ($link['type'] !== 'frontpage' && $link['loc'] === $front) {
+    $link['status'] = 0;
+  }
+}

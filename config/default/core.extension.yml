@@ -32,6 +32,7 @@ module:
   do_base: 0
   do_content_api: 0
   do_feed: 0
+  drupal_helpers: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
   editor: 0
@@ -99,7 +100,6 @@ module:
   seckit: 0
   serialization: 0
   shield: 0
-  simple_sitemap: 0
   stage_file_proxy: 0
   subrequests: 0
   system: 0
@@ -113,6 +113,7 @@ module:
   webform: 0
   workflows: 0
   pathauto: 1
+  xmlsitemap: 1
   views: 10
   paragraphs: 11
   standard: 1000
