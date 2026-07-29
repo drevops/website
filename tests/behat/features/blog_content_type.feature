@@ -101,6 +101,52 @@ Feature: Blog post content type
     And I should see the text "[TEST] Component body text."
 
   @api
+  Scenario: A published blog post renders its topic tags
+    Given the following "civictheme_topics" terms:
+      | name           |
+      | [TEST] Topic 1 |
+      | [TEST] Topic 2 |
+    And the following "blog" content:
+      | title              | moderation_state | field_c_n_topics                | field_c_n_hide_tags | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] Tagged Post | published        | [TEST] Topic 1, [TEST] Topic 2  | 0                   | large                 | inherit                | normal                      | both                       |
+    And I am an anonymous user
+    When I visit the "blog" content page with the title "[TEST] Tagged Post"
+    Then should see a ".ct-tag-list" element
+    And I should see the text "[TEST] Topic 1"
+    And I should see the text "[TEST] Topic 2"
+
+  @api
+  Scenario: A blog post with hidden tags renders no topic tags
+    Given the following "civictheme_topics" terms:
+      | name           |
+      | [TEST] Topic 3 |
+    And the following "blog" content:
+      | title                | moderation_state | field_c_n_topics | field_c_n_hide_tags | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] Untagged Post | published        | [TEST] Topic 3   | 1                   | large                 | inherit                | normal                      | both                       |
+    And I am an anonymous user
+    When I visit the "blog" content page with the title "[TEST] Untagged Post"
+    Then should not see a ".ct-tag-list" element
+    And I should not see the text "[TEST] Topic 3"
+
+  @api
+  Scenario: A blog post with the table of contents enabled renders it
+    Given the following "blog" content:
+      | title           | moderation_state | field_c_n_show_toc | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] Toc Post | published        | 1                  | large                 | inherit                | normal                      | both                       |
+    And I am an anonymous user
+    When I visit the "blog" content page with the title "[TEST] Toc Post"
+    Then should see a "[data-table-of-contents-anchor-selector]" element
+
+  @api
+  Scenario: A blog post without the table of contents does not render it
+    Given the following "blog" content:
+      | title              | moderation_state | field_c_n_show_toc | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] No Toc Post | published        | 0                  | large                 | inherit                | normal                      | both                       |
+    And I am an anonymous user
+    When I visit the "blog" content page with the title "[TEST] No Toc Post"
+    Then should not see a "[data-table-of-contents-anchor-selector]" element
+
+  @api
   Scenario: Blog post is selectable in an automated list
     Given I am logged in as a user with the "Content Author" role
     When I visit "node/add/civictheme_page"
