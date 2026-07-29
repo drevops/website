@@ -5,16 +5,14 @@ Feature: XML sitemap
   I want published pages to be listed in the XML sitemap
   So that search engines can discover and index the site
 
-  Background:
+  @api
+  Scenario: Sitemap lists the front page and published pages only
     Given the following "civictheme_page" content:
       | title                        | moderation_state |
       | [TEST] Sitemap Indexed Page  | published        |
       | [TEST] Sitemap Excluded Page | draft            |
     And I run drush "xmlsitemap:rebuild" "--yes"
-
-  @api
-  Scenario: Sitemap lists the front page and published pages only
-    Given I am an anonymous user
+    And I am an anonymous user
     When I go to "sitemap.xml"
     Then the response status code should be 200
     And the response header "content-type" should contain the value "xml"
