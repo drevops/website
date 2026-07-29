@@ -47,7 +47,10 @@ function do_base_update_11002(): string {
   // both at once. Dependents are removed first so the toolbar uninstall has
   // nothing left to cascade to. Each uninstall rebuilds the container and
   // replaces the shared reporter with an empty one, so the helper's own return
-  // values are what report the outcome.
+  // values are what report the outcome. An uninstall needs the module's own
+  // code to drop its tables and remove its config, so the drupal/admin_toolbar
+  // and drupal/gin_toolbar packages stay in composer.json until this has run
+  // in every environment.
   $messages = [];
 
   foreach (['admin_toolbar_tools', 'admin_toolbar', 'gin_toolbar', 'toolbar'] as $module) {
