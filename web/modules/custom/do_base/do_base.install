@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the do_base module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Uninstalls the simple_sitemap module.
+ */
+function do_base_update_11001(): string {
+  // Runs in the updatedb phase, ahead of config import, so that xmlsitemap is
+  // never installed while simple_sitemap still holds the /sitemap.xml route.
+  // The drupal/simple_sitemap package has to stay in composer.json until this
+  // has run everywhere, because the uninstall needs the module's own code to
+  // drop its tables and remove its config.
+  if (!\Drupal::moduleHandler()->moduleExists('simple_sitemap')) {
+    return 'The "simple_sitemap" module is already uninstalled.';
+  }
+
+  \Drupal::service('module_installer')->uninstall(['simple_sitemap']);
+
+  return 'Uninstalled the "simple_sitemap" module.';
+}

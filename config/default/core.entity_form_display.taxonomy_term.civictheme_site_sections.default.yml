@@ -29,5 +29,4 @@ content:
 hidden:
   description: true
   path: true
-  simple_sitemap: true
   status: true

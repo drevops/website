@@ -99,7 +99,6 @@ module:
   seckit: 0
   serialization: 0
   shield: 0
-  simple_sitemap: 0
   stage_file_proxy: 0
   subrequests: 0
   system: 0
@@ -113,6 +112,7 @@ module:
   webform: 0
   workflows: 0
   pathauto: 1
+  xmlsitemap: 1
   views: 10
   paragraphs: 11
   standard: 1000

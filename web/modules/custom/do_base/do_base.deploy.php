@@ -336,3 +336,27 @@ function do_base_deploy_populate_how_we_work_page(): string {
 
   return sprintf('Created the How We Work page (node %s).', $node->id());
 }
+
+/**
+ * Rebuilds the XML sitemap.
+ */
+function do_base_deploy_rebuild_xmlsitemap(): string {
+  // Runs after config import, which is what installs xmlsitemap. A freshly
+  // installed xmlsitemap has an empty link table, so without this the site
+  // would serve an empty /sitemap.xml until the next cron run.
+  if (!\Drupal::moduleHandler()->moduleExists('xmlsitemap')) {
+    return 'The "xmlsitemap" module is not installed.';
+  }
+
+  $rebuild_types = xmlsitemap_get_rebuildable_link_types();
+
+  if ($rebuild_types === []) {
+    return 'No XML sitemap link types are rebuildable.';
+  }
+
+  // Deploy hooks are themselves executed inside a batch, so these operations
+  // are appended to the running batch rather than started as one of their own.
+  batch_set(xmlsitemap_rebuild_batch($rebuild_types, TRUE));
+
+  return 'Queued the XML sitemap rebuild.';
+}

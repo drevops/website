@@ -8,4 +8,5 @@ applies to this project. For **how** to perform operations, see
 - [CI](ci.md) - Continuous integration configuration
 - [Deployment](deployment.md) - Deployment configuration
 - [Releasing](releasing.md) - Release process and versioning
+- [Sitemap](sitemap.md) - XML sitemap module, coverage and generation
 - [FAQs](faqs.md) - Project-specific FAQs

@@ -37,8 +37,6 @@ cloneable_entities:
   - solr_field_type
   - solr_request_dispatcher
   - solr_request_handler
-  - simple_sitemap_type
-  - simple_sitemap
   - action
   - menu
   - taxonomy_vocabulary
@@ -65,3 +63,4 @@ cloneable_entities:
   - key_config_override
   - ai_prompt_type
   - ai_prompt
+  - xmlsitemap
