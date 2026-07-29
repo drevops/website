@@ -21,9 +21,10 @@ if echo "${environment}" | grep -q -e dev -e stage -e local; then
   drush pm:enable devel
 fi
 
-# Component validation runs in CI as well as on developer machines, so this
-# module is enabled everywhere except production.
-if echo "${environment}" | grep -q -e dev -e stage -e local -e ci; then
+# Component validation only runs where development dependencies are installed.
+# Hosting environments build with "--no-dev", so the module code is absent
+# there and enabling it would fail.
+if echo "${environment}" | grep -q -e local -e ci; then
   drush pm:enable sdc_devel
 fi
 
