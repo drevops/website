@@ -9,9 +9,11 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Cache\Cache;
 use Drupal\drupal_helpers\Helper;
 use Drupal\media\MediaInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Creates the How We Work page from the static prototype.
@@ -366,4 +368,178 @@ function do_base_deploy_rebuild_xmlsitemap(): string {
   Helper::reporter()->updated('Queued the XML sitemap rebuild.');
 
   return Helper::report();
+}
+
+/**
+ * Moves blog articles onto the Blog post content type.
+ */
+function do_base_deploy_migrate_blog_posts(): string {
+  $term = do_base_blog_topic_term();
+
+  if (!$term instanceof TermInterface) {
+    Helper::reporter()->skipped('The "Blog" topic term does not exist, so there is nothing to migrate.');
+
+    return Helper::report();
+  }
+
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $node_storage = $entity_type_manager->getStorage('node');
+  $paragraph_storage = $entity_type_manager->getStorage('paragraph');
+
+  $nids = array_values($node_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'civictheme_page')
+    ->condition('field_c_n_topics', $term->id())
+    ->execute());
+
+  // Scoping the lists by the Blog topic rather than by their target bundle
+  // leaves lists that legitimately point at Pages, such as case studies,
+  // untouched.
+  $pids = array_values($paragraph_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'civictheme_automated_list')
+    ->condition('field_c_p_list_content_type', 'civictheme_page')
+    ->condition('field_c_p_list_topics', $term->id())
+    ->execute());
+
+  if ($nids === [] && $pids === []) {
+    Helper::reporter()->skipped('There is nothing to migrate and nothing to repoint.');
+
+    return Helper::report();
+  }
+
+  $database = \Drupal::database();
+
+  // A half-migrated article would be unreachable through both bundles, so the
+  // bundle change and the list repointing commit or roll back as one unit.
+  $transaction = $database->startTransaction();
+
+  try {
+    if ($nids !== []) {
+      $items = $database->select('node_field_data', 'n')->fields('n', ['nid', 'langcode'])->condition('n.nid', $nids, 'IN')->execute()->fetchAll();
+
+      $database->update('node')->fields(['type' => 'blog'])->condition('nid', $nids, 'IN')->execute();
+      $database->update('node_field_data')->fields(['type' => 'blog'])->condition('nid', $nids, 'IN')->execute();
+
+      foreach (do_base_blog_bundle_tables('civictheme_page', 'blog') as $table) {
+        $database->update($table)->fields(['bundle' => 'blog'])->condition('entity_id', $nids, 'IN')->condition('bundle', 'civictheme_page')->execute();
+      }
+
+      // The sitemap records each link's bundle alongside it, and the rebuild
+      // that would normally correct it runs only once per environment.
+      if ($database->schema()->tableExists('xmlsitemap')) {
+        $database->update('xmlsitemap')->fields(['subtype' => 'blog'])->condition('type', 'node')->condition('id', $nids, 'IN')->execute();
+      }
+
+      do_base_blog_reindex($items);
+
+      $node_storage->resetCache($nids);
+
+      $tags = array_map(static fn (string|int $nid): string => 'node:' . $nid, $nids);
+      $tags[] = 'node_list';
+      $tags[] = 'node_list:blog';
+      $tags[] = 'node_list:civictheme_page';
+      Cache::invalidateTags($tags);
+
+      Helper::reporter()->updated(sprintf('Migrated %d article(s) to the "blog" content type.', count($nids)), count($nids));
+    }
+    else {
+      Helper::reporter()->skipped('No articles carry the "Blog" topic, so there is nothing to migrate.');
+    }
+
+    if ($pids !== []) {
+      foreach ($paragraph_storage->loadMultiple($pids) as $paragraph) {
+        if (!$paragraph instanceof ParagraphInterface) {
+          continue;
+        }
+
+        $paragraph->set('field_c_p_list_content_type', 'blog');
+
+        // The host node references one specific paragraph revision, so a new
+        // revision here would leave the host still rendering the old value.
+        $paragraph->setNewRevision(FALSE);
+        $paragraph->save();
+      }
+
+      Helper::reporter()->updated(sprintf('Repointed %d automated list(s) at the "blog" content type.', count($pids)), count($pids));
+    }
+    else {
+      Helper::reporter()->skipped('No automated list targets Pages carrying the "Blog" topic, so there is nothing to repoint.');
+    }
+  }
+  catch (\Throwable $throwable) {
+    $transaction->rollBack();
+
+    throw $throwable;
+  }
+
+  return Helper::report();
+}
+
+/**
+ * Loads the taxonomy term that defines which articles are blog articles.
+ */
+function do_base_blog_topic_term(): ?TermInterface {
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+    'vid' => 'civictheme_topics',
+    'name' => 'Blog',
+  ]);
+
+  $term = reset($terms);
+
+  return $term instanceof TermInterface ? $term : NULL;
+}
+
+/**
+ * Lists the node field tables that record the bundle for the given bundles.
+ */
+function do_base_blog_bundle_tables(string ...$bundles): array {
+  $table_mapping = \Drupal::entityTypeManager()->getStorage('node')->getTableMapping();
+  $field_manager = \Drupal::service('entity_field.manager');
+  $schema = \Drupal::database()->schema();
+  $tables = [];
+
+  // Deriving the list from the storage definitions rather than naming the
+  // tables keeps a field added to either bundle later from being missed.
+  foreach ($bundles as $bundle) {
+    foreach ($field_manager->getFieldDefinitions('node', $bundle) as $definition) {
+      $storage_definition = $definition->getFieldStorageDefinition();
+
+      if (!$table_mapping->requiresDedicatedTableStorage($storage_definition)) {
+        continue;
+      }
+
+      $candidates = [
+        $table_mapping->getDedicatedDataTableName($storage_definition),
+        $table_mapping->getDedicatedRevisionTableName($storage_definition),
+      ];
+
+      foreach ($candidates as $table) {
+        if ($schema->tableExists($table)) {
+          $tables[$table] = $table;
+        }
+      }
+    }
+  }
+
+  return $tables;
+}
+
+/**
+ * Queues the given node rows for reindexing on every search index.
+ */
+function do_base_blog_reindex(array $items): void {
+  if (!\Drupal::moduleHandler()->moduleExists('search_api')) {
+    return;
+  }
+
+  // Changing the bundle in storage fires no entity hooks, so the indexed
+  // documents would otherwise keep describing the articles as Pages.
+  $item_ids = array_map(static fn (object $item): string => $item->nid . ':' . $item->langcode, $items);
+
+  foreach (\Drupal::entityTypeManager()->getStorage('search_api_index')->loadMultiple() as $index) {
+    if ($index->isValidDatasource('entity:node')) {
+      $index->trackItemsUpdated('entity:node', $item_ids);
+    }
+  }
 }
