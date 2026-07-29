@@ -17,8 +17,9 @@ Feature: XML sitemap
     Then the response status code should be 200
     And the response header "content-type" should contain the value "xml"
     And the response should contain "<urlset"
-    # Only the front page carries an explicit priority: every other link uses
-    # the 0.5 default, which the sitemap format omits.
-    And the response should contain "<priority>1.0</priority>"
+    # The front page is the only entry carrying an explicit priority, because
+    # every other link uses the 0.5 default that the sitemap format omits. The
+    # closing "loc" anchors it to a real URL entry rather than a stray value.
+    And the response should contain "</loc><changefreq>daily</changefreq><priority>1.0</priority>"
     And the response should contain "sitemap-indexed-page"
     And the response should not contain "sitemap-excluded-page"
