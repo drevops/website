@@ -10,3 +10,9 @@ Feature: Administration navigation for site administrator
     When I visit "/"
     Then I should see an "#admin-toolbar" element
     And I should not see a "#toolbar-administration" element
+
+  @api @javascript
+  Scenario: Site administrator sees the administration top bar above the sticky site header
+    Given I am logged in as a user with the "civictheme_site_administrator" role
+    When I visit "/"
+    Then the element ".top-bar" should stack above the element ".ct-header--sticky"
