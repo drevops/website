@@ -215,6 +215,9 @@
             "drupal/cloudflare": {
                 "Skip the Cloudflare API call in the zone-name update hook and use a static zone name": "patches/cloudflare-static-zone-name-update-hook.patch"
             },
+            "drupal/environment_indicator": {
+                "Add a Navigation integration submodule - https://www.drupal.org/project/environment_indicator/issues/3457688": "patches/environment-indicator-navigation.patch"
+            },
             "drupal/seckit": {
                 "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252": "https://www.drupal.org/files/issues/2025-05-07/3219252-9.patch"
             },

@@ -1,0 +1,192 @@
+Add an 'environment_indicator_navigation' submodule that shows the active
+environment as a coloured stripe along the inline-start edge of the core
+Navigation sidebar, the way the module already colours Gin's vertical toolbar.
+
+Under core Navigation the module's full-width 'page_top' strip renders beneath
+the fixed sidebar and top bar, where nothing can see it, while still occupying
+its height in the document flow. The submodule reduces that strip to its
+attachments, which keeps the favicon colouring working.
+
+Navigation support is tracked upstream at
+https://www.drupal.org/project/environment_indicator/issues/3457688 but is not
+in any release: 'modules/' on both the 4.x and 5.0.x branches contains only
+'environment_indicator_toolbar' and 'environment_indicator_ui'. Because this
+patch only adds files, it will fail to apply the moment a release ships its own
+submodule of this name - which is the signal to drop the patch. Note that the
+upstream design renders a named button rather than a stripe, so the two are not
+visually equivalent.
+
+diff --git b/modules/environment_indicator_navigation/README.md b/modules/environment_indicator_navigation/README.md
+new file mode 100644
+index 0000000..80aa022
+--- /dev/null
++++ b/modules/environment_indicator_navigation/README.md
+@@ -0,0 +1,37 @@
++# Environment Indicator - Navigation Integration
++
++Shows the active environment as a coloured stripe along the inline-start edge
++of the core Navigation sidebar, the way the parent module colours Gin's
++vertical toolbar.
++
++Enabling this module also removes the parent module's full-width `page_top`
++strip. Under core Navigation that strip renders beneath the fixed sidebar and
++top bar, where it cannot be seen, while still occupying its height in the
++document flow. The favicon colouring the strip carries is preserved.
++
++## Appearance
++
++The stripe takes the active environment's `bg_color`, so it reads the same way
++the rest of the module does - one colour per environment. Two custom
++properties control it:
++
++| Property | Default | Set by |
++|----------|---------|--------|
++| `--environment-indicator-navigation-color` | `transparent` | The module, from `environment_indicator.indicator` `bg_color` |
++| `--environment-indicator-navigation-width` | `8px` | Override in a theme to change the thickness |
++
++## Visibility
++
++The stripe is drawn only for users holding both `access environment indicator`
++and `access navigation`, and only when an environment name is configured. A
++user who can see the indicator but not the navigation keeps the parent
++module's strip, which nothing covers for them.
++
++## Upstream
++
++Navigation support for Environment Indicator is tracked at
++https://www.drupal.org/project/environment_indicator/issues/3457688. Once a
++release ships its own `environment_indicator_navigation` submodule, drop the
++patch that provides this one and use the released module instead. Note that
++the upstream design renders a named button in the sidebar rather than a
++stripe, so the two are not visually equivalent.
+diff --git b/modules/environment_indicator_navigation/css/navigation.css b/modules/environment_indicator_navigation/css/navigation.css
+new file mode 100644
+index 0000000..197da1a
+--- /dev/null
++++ b/modules/environment_indicator_navigation/css/navigation.css
+@@ -0,0 +1,16 @@
++/**
++ * @file
++ * Environment colour on the Navigation sidebar.
++ *
++ * The sidebar is 'box-sizing: border-box', so the border is drawn inside its
++ * fixed width and the displacement offsets applied to the page stay correct.
++ * Core claims 'border-inline-end' on this element but never the inline start.
++ *
++ * The width carries its own property name rather than reusing the parent
++ * module's '--environment-indicator-border-width': that one is defined at
++ * ':root' by CSS the parent still attaches, and would override this value.
++ */
++
++.admin-toolbar {
++  border-inline-start: var(--environment-indicator-navigation-width, 8px) solid var(--environment-indicator-navigation-color, transparent);
++}
+diff --git b/modules/environment_indicator_navigation/environment_indicator_navigation.info.yml b/modules/environment_indicator_navigation/environment_indicator_navigation.info.yml
+new file mode 100644
+index 0000000..fcdc613
+--- /dev/null
++++ b/modules/environment_indicator_navigation/environment_indicator_navigation.info.yml
+@@ -0,0 +1,8 @@
++name: 'Environment Indicator - Navigation Integration'
++type: module
++description: 'Shows the active environment as a coloured stripe along the edge of the Navigation sidebar.'
++package: Development
++core_version_requirement: ^10.3 || ^11
++dependencies:
++  - environment_indicator:environment_indicator
++  - drupal:navigation
+diff --git b/modules/environment_indicator_navigation/environment_indicator_navigation.libraries.yml b/modules/environment_indicator_navigation/environment_indicator_navigation.libraries.yml
+new file mode 100644
+index 0000000..e21b3d3
+--- /dev/null
++++ b/modules/environment_indicator_navigation/environment_indicator_navigation.libraries.yml
+@@ -0,0 +1,5 @@
++navigation:
++  version: VERSION
++  css:
++    theme:
++      css/navigation.css: {}
+diff --git b/modules/environment_indicator_navigation/environment_indicator_navigation.module b/modules/environment_indicator_navigation/environment_indicator_navigation.module
+new file mode 100644
+index 0000000..4521199
+--- /dev/null
++++ b/modules/environment_indicator_navigation/environment_indicator_navigation.module
+@@ -0,0 +1,78 @@
++<?php
++
++/**
++ * @file
++ * Shows the active environment on the core Navigation sidebar.
++ */
++
++declare(strict_types=1);
++
++/**
++ * Implements hook_page_attachments().
++ */
++function environment_indicator_navigation_page_attachments(array &$attachments): void {
++  // The stripe is drawn for some users and not others, and its colour comes
++  // from configuration, so the page cannot be cached without both. The
++  // settings object carries the flag behind the favicon attachments that
++  // environment_indicator_navigation_preprocess_html() keeps alive.
++  $attachments['#cache']['contexts'][] = 'user.permissions';
++  $attachments['#cache']['tags'][] = 'config:environment_indicator.indicator';
++  $attachments['#cache']['tags'][] = 'config:environment_indicator.settings';
++
++  if (!_environment_indicator_navigation_applies()) {
++    return;
++  }
++
++  $attachments['#attached']['library'][] = 'environment_indicator_navigation/navigation';
++}
++
++/**
++ * Implements hook_preprocess_HOOK() for html templates.
++ */
++function environment_indicator_navigation_preprocess_html(array &$variables): void {
++  if (!_environment_indicator_navigation_applies()) {
++    return;
++  }
++
++  $style = $variables['attributes']['style'] ?? [];
++  $style = is_array($style) ? $style : [$style];
++  $style[] = '--environment-indicator-navigation-color: ' . \Drupal::config('environment_indicator.indicator')->get('bg_color') . ';';
++  $variables['attributes']['style'] = $style;
++
++  if (!isset($variables['page_top']['indicator'])) {
++    return;
++  }
++
++  // The parent module's full-width strip paints underneath the fixed
++  // Navigation chrome, so nothing can see it, yet it still occupies its
++  // height in the document flow. Keeping only the attachments drops the strip
++  // while preserving the library and settings that recolour the browser
++  // favicon. The cache metadata travels with them, so whatever invalidated
++  // the strip still invalidates the attachments left behind.
++  $variables['page_top']['indicator'] = array_intersect_key($variables['page_top']['indicator'], [
++    '#attached' => TRUE,
++    '#cache' => TRUE,
++  ]);
++}
++
++/**
++ * Whether the environment stripe applies to the current user.
++ *
++ * @return bool
++ *   TRUE when the stripe should be drawn, FALSE otherwise.
++ */
++function _environment_indicator_navigation_applies(): bool {
++  $account = \Drupal::currentUser();
++
++  if (!$account->hasPermission('access environment indicator')) {
++    return FALSE;
++  }
++
++  // Without the sidebar there is nothing to draw the stripe on, and the
++  // parent module's strip is left alone because nothing covers it.
++  if (!$account->hasPermission('access navigation')) {
++    return FALSE;
++  }
++
++  return !empty(\Drupal::config('environment_indicator.indicator')->get('name'));
++}

@@ -8,7 +8,7 @@ Feature: Environment indicator access for site administrator
   Scenario: Site administrator sees the environment colour on the Navigation sidebar
     Given I am logged in as a user with the "civictheme_site_administrator" role
     When I visit "/"
-    Then the element "body" with the attribute "style" and the value containing "--do-environment-indicator-color" should exist
+    Then the element "body" with the attribute "style" and the value containing "--environment-indicator-navigation-color" should exist
     And the element ".admin-toolbar" should have the computed style "border-inline-start-width" of "8px"
 
   @api @javascript
