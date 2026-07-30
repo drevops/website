@@ -20,7 +20,7 @@ final class EnvironmentIndicatorHook {
 
   public function __construct(
     protected ConfigFactoryInterface $configFactory,
-    protected AccountInterface $currentUser,
+    protected AccountInterface $account,
     protected ModuleHandlerInterface $moduleHandler,
   ) {
   }
@@ -87,13 +87,13 @@ final class EnvironmentIndicatorHook {
       return FALSE;
     }
 
-    if (!$this->currentUser->hasPermission('access environment indicator')) {
+    if (!$this->account->hasPermission('access environment indicator')) {
       return FALSE;
     }
 
     // Without the sidebar there is nothing to draw the stripe on, and the
     // module's own strip is left alone because nothing covers it.
-    if (!$this->currentUser->hasPermission('access navigation')) {
+    if (!$this->account->hasPermission('access navigation')) {
       return FALSE;
     }
 

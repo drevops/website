@@ -21,7 +21,7 @@ class EnvironmentIndicatorHookTest extends DoBaseUnitTestBase {
   /**
    * Test that the stylesheet is attached only when the stripe applies.
    */
-  #[DataProvider('dataProviderHasSidebarIndicator')]
+  #[DataProvider('dataProviderPageAttachmentsLibrary')]
   public function testPageAttachmentsLibrary(array $modules, array $permissions, ?string $name, bool $expected): void {
     // Prepare.
     $hook = $this->createHook($modules, $permissions, $name);
@@ -36,21 +36,10 @@ class EnvironmentIndicatorHookTest extends DoBaseUnitTestBase {
   }
 
   /**
-   * Data provider for the stripe applicability matrix.
+   * Data provider for testPageAttachmentsLibrary.
    */
-  public static function dataProviderHasSidebarIndicator(): array {
-    $both = ['environment_indicator', 'navigation'];
-    $all = ['access environment indicator', 'access navigation'];
-
-    return [
-      'applies' => [$both, $all, 'local', TRUE],
-      'environment_indicator not installed' => [['navigation'], $all, 'local', FALSE],
-      'navigation not installed' => [['environment_indicator'], $all, 'local', FALSE],
-      'no indicator permission' => [$both, ['access navigation'], 'local', FALSE],
-      'no navigation permission' => [$both, ['access environment indicator'], 'local', FALSE],
-      'no environment name' => [$both, $all, NULL, FALSE],
-      'empty environment name' => [$both, $all, '', FALSE],
-    ];
+  public static function dataProviderPageAttachmentsLibrary(): array {
+    return self::applicabilityMatrix();
   }
 
   /**
@@ -60,7 +49,7 @@ class EnvironmentIndicatorHookTest extends DoBaseUnitTestBase {
    * cached for a user without the permission would otherwise be reused for
    * one who has it.
    */
-  #[DataProvider('dataProviderCacheability')]
+  #[DataProvider('dataProviderPageAttachmentsCacheability')]
   public function testPageAttachmentsCacheability(array $modules, array $permissions, ?string $name, bool $expected): void {
     // Prepare.
     $hook = $this->createHook($modules, $permissions, $name);
@@ -78,23 +67,20 @@ class EnvironmentIndicatorHookTest extends DoBaseUnitTestBase {
   /**
    * Data provider for testPageAttachmentsCacheability.
    */
-  public static function dataProviderCacheability(): array {
+  public static function dataProviderPageAttachmentsCacheability(): \Iterator {
     $both = ['environment_indicator', 'navigation'];
     $all = ['access environment indicator', 'access navigation'];
-
-    return [
-      'declared when the stripe applies' => [$both, $all, 'local', TRUE],
-      'declared when only the permission is missing' => [$both, ['access navigation'], 'local', TRUE],
-      'declared when only the name is missing' => [$both, $all, NULL, TRUE],
-      'omitted when environment_indicator is absent' => [['navigation'], $all, 'local', FALSE],
-      'omitted when navigation is absent' => [['environment_indicator'], $all, 'local', FALSE],
-    ];
+    yield 'declared when the stripe applies' => [$both, $all, 'local', TRUE];
+    yield 'declared when only the permission is missing' => [$both, ['access navigation'], 'local', TRUE];
+    yield 'declared when only the name is missing' => [$both, $all, NULL, TRUE];
+    yield 'omitted when environment_indicator is absent' => [['navigation'], $all, 'local', FALSE];
+    yield 'omitted when navigation is absent' => [['environment_indicator'], $all, 'local', FALSE];
   }
 
   /**
    * Test that the environment colour is exposed on the body element.
    */
-  #[DataProvider('dataProviderHasSidebarIndicator')]
+  #[DataProvider('dataProviderPreprocessHtmlColor')]
   public function testPreprocessHtmlColor(array $modules, array $permissions, ?string $name, bool $expected): void {
     // Prepare.
     $hook = $this->createHook($modules, $permissions, $name);
@@ -106,6 +92,13 @@ class EnvironmentIndicatorHookTest extends DoBaseUnitTestBase {
     // Assert.
     $style = implode(' ', $variables['attributes']['style'] ?? []);
     $this->assertSame($expected, str_contains($style, '--do-environment-indicator-color: #006600;'));
+  }
+
+  /**
+   * Data provider for testPreprocessHtmlColor.
+   */
+  public static function dataProviderPreprocessHtmlColor(): array {
+    return self::applicabilityMatrix();
   }
 
   /**
@@ -208,15 +201,30 @@ class EnvironmentIndicatorHookTest extends DoBaseUnitTestBase {
   }
 
   /**
+   * The conditions under which the stripe applies, shared by the providers.
+   */
+  protected static function applicabilityMatrix(): array {
+    $both = ['environment_indicator', 'navigation'];
+    $all = ['access environment indicator', 'access navigation'];
+
+    return [
+      'applies' => [$both, $all, 'local', TRUE],
+      'environment_indicator not installed' => [['navigation'], $all, 'local', FALSE],
+      'navigation not installed' => [['environment_indicator'], $all, 'local', FALSE],
+      'no indicator permission' => [$both, ['access navigation'], 'local', FALSE],
+      'no navigation permission' => [$both, ['access environment indicator'], 'local', FALSE],
+      'no environment name' => [$both, $all, NULL, FALSE],
+      'empty environment name' => [$both, $all, '', FALSE],
+    ];
+  }
+
+  /**
    * Build the hook with mocked dependencies.
    */
   protected function createHook(array $modules = ['environment_indicator', 'navigation'], array $permissions = ['access environment indicator', 'access navigation'], ?string $name = 'local'): EnvironmentIndicatorHook {
+    $values = ['name' => $name, 'bg_color' => '#006600'];
     $config = $this->createMock(ImmutableConfig::class);
-    $config->method('get')->willReturnCallback(static fn(string $key): ?string => match ($key) {
-      'name' => $name,
-      'bg_color' => '#006600',
-      default => NULL,
-    });
+    $config->method('get')->willReturnCallback(static fn(string $key): ?string => $values[$key] ?? NULL);
 
     $config_factory = $this->createMock(ConfigFactoryInterface::class);
     $config_factory->method('get')->willReturn($config);
