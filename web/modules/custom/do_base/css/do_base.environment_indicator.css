@@ -1,0 +1,15 @@
+/**
+ * @file
+ * Environment colour on the Navigation sidebar.
+ *
+ * The sidebar is 'box-sizing: border-box', so the border is drawn inside its
+ * fixed width and the displacement offsets applied to the page stay correct.
+ *
+ * The width is namespaced rather than reusing the module's own
+ * '--environment-indicator-border-width': that property is defined at ':root'
+ * by CSS the module still attaches, and would override this value.
+ */
+
+.admin-toolbar {
+  border-inline-start: var(--do-environment-indicator-width, 8px) solid var(--do-environment-indicator-color, transparent);
+}

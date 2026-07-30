@@ -178,6 +178,30 @@ class FeatureContext extends DrupalContext {
   }
 
   /**
+   * Assert that an element resolves to a computed style value.
+   *
+   * Asserting on markup alone cannot tell whether a rule reached the element:
+   * a class can be present while the declaration it carries never applies.
+   *
+   * @code
+   * Then the element ".admin-toolbar" should have the computed style "border-inline-start-width" of "8px"
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the element :selector should have the computed style :property of :value')]
+  public function elementAssertComputedStyle(string $selector, string $property, string $value): void {
+    $script = <<<JS
+      return window.getComputedStyle({{ELEMENT}}).getPropertyValue("{$property}");
+JS;
+    $actual = trim((string) $this->elementExecuteJs($selector, $script));
+
+    if ($actual !== $value) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to have a computed "%s" of "%s", but it is "%s".', $selector, $property, $value, $actual));
+    }
+  }
+
+  /**
    * Get the computed z-index of an element.
    *
    * @param string $selector

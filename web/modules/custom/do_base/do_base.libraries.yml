@@ -1,3 +1,8 @@
+environment_indicator:
+  css:
+    theme:
+      css/do_base.environment_indicator.css: {}
+
 recaptcha_v3_guard:
   js:
     js/do_base.recaptcha_v3_guard.js: {}
