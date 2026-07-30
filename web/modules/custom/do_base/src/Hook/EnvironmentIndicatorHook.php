@@ -38,6 +38,9 @@ final class EnvironmentIndicatorHook {
     // from configuration, so the page cannot be cached without both.
     $attachments['#cache']['contexts'][] = 'user.permissions';
     $attachments['#cache']['tags'][] = 'config:environment_indicator.indicator';
+    // The favicon attachments kept by preprocessHtml() are built from the
+    // module's own settings, which carry the flag that enables them.
+    $attachments['#cache']['tags'][] = 'config:environment_indicator.settings';
 
     if (!$this->hasSidebarIndicator()) {
       return;
@@ -67,8 +70,13 @@ final class EnvironmentIndicatorHook {
     // The full-width strip paints underneath the fixed Navigation chrome, so
     // nothing can see it, yet it still occupies its height in the document
     // flow. Keeping only the attachments drops the strip while preserving the
-    // library and settings that recolour the browser favicon.
-    $variables['page_top']['indicator'] = array_intersect_key($variables['page_top']['indicator'], ['#attached' => TRUE]);
+    // library and settings that recolour the browser favicon. The cache
+    // metadata travels with them, so whatever invalidated the strip still
+    // invalidates the attachments left behind.
+    $variables['page_top']['indicator'] = array_intersect_key($variables['page_top']['indicator'], [
+      '#attached' => TRUE,
+      '#cache' => TRUE,
+    ]);
   }
 
   /**

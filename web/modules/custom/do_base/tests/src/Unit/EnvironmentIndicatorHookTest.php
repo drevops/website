@@ -72,6 +72,7 @@ class EnvironmentIndicatorHookTest extends DoBaseUnitTestBase {
     // Assert.
     $this->assertSame($expected, in_array('user.permissions', $attachments['#cache']['contexts'] ?? [], TRUE));
     $this->assertSame($expected, in_array('config:environment_indicator.indicator', $attachments['#cache']['tags'] ?? [], TRUE));
+    $this->assertSame($expected, in_array('config:environment_indicator.settings', $attachments['#cache']['tags'] ?? [], TRUE));
   }
 
   /**
@@ -144,6 +145,34 @@ class EnvironmentIndicatorHookTest extends DoBaseUnitTestBase {
 
     // Assert.
     $this->assertSame(['#attached' => $attached], $variables['page_top']['indicator']);
+  }
+
+  /**
+   * Test that cache metadata on the strip is carried over.
+   *
+   * The module only sets it when environment switcher entities exist, and
+   * without it nothing would invalidate the attachments left behind.
+   */
+  public function testPreprocessHtmlKeepsIndicatorCacheMetadata(): void {
+    // Prepare.
+    $hook = $this->createHook();
+    $attached = ['library' => ['environment_indicator/favicon']];
+    $cache = ['tags' => ['config:environment_indicator.settings', 'config:environment_indicator_list']];
+    $variables = [
+      'page_top' => [
+        'indicator' => [
+          '#type' => 'environment_indicator',
+          '#attached' => $attached,
+          '#cache' => $cache,
+        ],
+      ],
+    ];
+
+    // Act.
+    $hook->preprocessHtml($variables);
+
+    // Assert.
+    $this->assertSame(['#attached' => $attached, '#cache' => $cache], $variables['page_top']['indicator']);
   }
 
   /**
