@@ -22,6 +22,9 @@ settings:
     -
       value: civictheme_event
       label: Event
+    -
+      value: blog
+      label: 'Blog post'
   allowed_values_function: ''
 module: options
 locked: false

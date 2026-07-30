@@ -1,0 +1,23 @@
+uuid: bb1aaf1b-c0e8-4d0f-8fce-c0fb23d05c69
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_banner_theme
+    - node.type.blog
+  module:
+    - options
+id: node.blog.field_c_n_banner_theme
+field_name: field_c_n_banner_theme
+entity_type: node
+bundle: blog
+label: 'Banner theme'
+description: 'Use <code>Inherit</code> type to inherit this value from the site-wide banner block.'
+required: true
+translatable: false
+default_value:
+  -
+    value: inherit
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -10,6 +10,7 @@ dependencies:
     - media.type.civictheme_image
     - media.type.civictheme_remote_video
     - media.type.civictheme_video
+    - node.type.blog
     - node.type.civictheme_alert
     - node.type.civictheme_event
     - node.type.civictheme_page
@@ -48,6 +49,7 @@ permissions:
   - 'clone node entity'
   - 'clone paragraph entity'
   - 'clone taxonomy_term entity'
+  - 'create blog content'
   - 'create civictheme_alert content'
   - 'create civictheme_audio media'
   - 'create civictheme_document media'
@@ -61,6 +63,7 @@ permissions:
   - 'create terms in civictheme_media_tags'
   - 'create url aliases'
   - 'delete all revisions'
+  - 'delete any blog content'
   - 'delete any civictheme_alert content'
   - 'delete any civictheme_audio media'
   - 'delete any civictheme_document media'
@@ -71,10 +74,12 @@ permissions:
   - 'delete any civictheme_remote_video media'
   - 'delete any civictheme_video media'
   - 'delete any media'
+  - 'delete blog revisions'
   - 'delete civictheme_alert revisions'
   - 'delete civictheme_event revisions'
   - 'delete civictheme_page revisions'
   - 'delete media'
+  - 'delete own blog content'
   - 'delete own civictheme_alert content'
   - 'delete own civictheme_audio media'
   - 'delete own civictheme_document media'
@@ -85,6 +90,7 @@ permissions:
   - 'delete own civictheme_remote_video media'
   - 'delete own civictheme_video media'
   - 'delete terms in civictheme_media_tags'
+  - 'edit any blog content'
   - 'edit any civictheme_alert content'
   - 'edit any civictheme_audio media'
   - 'edit any civictheme_document media'
@@ -94,6 +100,7 @@ permissions:
   - 'edit any civictheme_page content'
   - 'edit any civictheme_remote_video media'
   - 'edit any civictheme_video media'
+  - 'edit own blog content'
   - 'edit own civictheme_alert content'
   - 'edit own civictheme_audio media'
   - 'edit own civictheme_document media'
@@ -106,6 +113,7 @@ permissions:
   - 'edit terms in civictheme_media_tags'
   - 'generate ai alt tags'
   - 'revert all revisions'
+  - 'revert blog revisions'
   - 'revert civictheme_alert revisions'
   - 'revert civictheme_event revisions'
   - 'revert civictheme_page revisions'
@@ -119,6 +127,7 @@ permissions:
   - 'view all revisions'
   - 'view all scheduled transitions'
   - 'view any unpublished content'
+  - 'view blog revisions'
   - 'view civictheme_alert revisions'
   - 'view civictheme_event revisions'
   - 'view civictheme_page revisions'

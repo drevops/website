@@ -1,0 +1,23 @@
+uuid: 5e6f6a5a-f2be-48e1-84b8-f5e9090e7d1d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_banner_blend_mode
+    - node.type.blog
+  module:
+    - options
+id: node.blog.field_c_n_banner_blend_mode
+field_name: field_c_n_banner_blend_mode
+entity_type: node
+bundle: blog
+label: 'Banner background blend  mode'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: normal
+default_value_callback: ''
+settings: {  }
+field_type: list_string

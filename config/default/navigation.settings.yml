@@ -1,7 +1,7 @@
 _core:
   default_config_hash: FeJ38-AShWZUh_NwJprQueefcE06zSnUa3cw1lOdjTY
 logo:
-  provider: default
+  provider: hide
   path: ''
   max:
     filesize: 1048576

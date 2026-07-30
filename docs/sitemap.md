@@ -10,6 +10,7 @@ The sitemap is served at `/sitemap.xml`.
 |---|---|
 | Front page | Priority `1.0`, change frequency `daily` |
 | `civictheme_page` nodes | Priority `0.5` (omitted from the output, as `0.5` is the format's assumed default) |
+| `blog` nodes | Priority `0.5` (omitted from the output, as `0.5` is the format's assumed default) |
 | `civictheme_event` nodes | Not listed |
 | `civictheme_alert` nodes | Not listed |
 | Taxonomy terms, menu links, users | Not listed |

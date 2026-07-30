@@ -1,0 +1,23 @@
+uuid: e7910fc9-e723-4211-95f2-d2c5521eaac2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_hide_tags
+    - node.type.blog
+id: node.blog.field_c_n_hide_tags
+field_name: field_c_n_hide_tags
+entity_type: node
+bundle: blog
+label: 'Hide tags'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

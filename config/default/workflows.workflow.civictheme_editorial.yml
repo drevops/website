@@ -14,6 +14,7 @@ dependencies:
     - media.type.civictheme_image
     - media.type.civictheme_remote_video
     - media.type.civictheme_video
+    - node.type.blog
     - node.type.civictheme_alert
     - node.type.civictheme_event
     - node.type.civictheme_page
@@ -113,6 +114,7 @@ type_settings:
       - civictheme_remote_video
       - civictheme_video
     node:
+      - blog
       - civictheme_alert
       - civictheme_event
       - civictheme_page

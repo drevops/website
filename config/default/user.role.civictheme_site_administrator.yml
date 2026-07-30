@@ -15,6 +15,7 @@ dependencies:
     - media.type.civictheme_image
     - media.type.civictheme_remote_video
     - media.type.civictheme_video
+    - node.type.blog
     - node.type.civictheme_alert
     - node.type.civictheme_event
     - node.type.civictheme_page
@@ -89,6 +90,7 @@ permissions:
   - 'administer webform overview'
   - 'administer webform submission'
   - 'bypass node access'
+  - 'create blog content'
   - 'create civictheme_alert content'
   - 'create civictheme_audio media'
   - 'create civictheme_banner block content'
@@ -110,6 +112,7 @@ permissions:
   - 'create url aliases'
   - 'create webform'
   - 'delete all revisions'
+  - 'delete any blog content'
   - 'delete any civictheme_alert content'
   - 'delete any civictheme_audio media'
   - 'delete any civictheme_banner block content'
@@ -132,10 +135,12 @@ permissions:
   - 'delete any media'
   - 'delete any webform'
   - 'delete any webform submission'
+  - 'delete blog revisions'
   - 'delete civictheme_alert revisions'
   - 'delete civictheme_event revisions'
   - 'delete civictheme_page revisions'
   - 'delete media'
+  - 'delete own blog content'
   - 'delete own civictheme_alert content'
   - 'delete own civictheme_audio media'
   - 'delete own civictheme_document media'
@@ -149,6 +154,7 @@ permissions:
   - 'delete own webform submission'
   - 'delete terms in civictheme_media_tags'
   - 'delete terms in civictheme_topics'
+  - 'edit any blog content'
   - 'edit any civictheme_alert content'
   - 'edit any civictheme_audio media'
   - 'edit any civictheme_banner block content'
@@ -165,6 +171,7 @@ permissions:
   - 'edit any civictheme_video media'
   - 'edit any webform'
   - 'edit any webform submission'
+  - 'edit own blog content'
   - 'edit own civictheme_alert content'
   - 'edit own civictheme_audio media'
   - 'edit own civictheme_document media'
@@ -193,6 +200,7 @@ permissions:
   - 'revert any civictheme_mobile_navigation block content revisions'
   - 'revert any civictheme_search block content revisions'
   - 'revert any civictheme_social_links block content revisions'
+  - 'revert blog revisions'
   - 'revert civictheme_alert revisions'
   - 'revert civictheme_event revisions'
   - 'revert civictheme_page revisions'
@@ -218,6 +226,7 @@ permissions:
   - 'view any civictheme_social_links block content history'
   - 'view any unpublished content'
   - 'view any webform submission'
+  - 'view blog revisions'
   - 'view civictheme_alert revisions'
   - 'view civictheme_event revisions'
   - 'view civictheme_page revisions'
