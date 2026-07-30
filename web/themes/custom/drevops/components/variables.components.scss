@@ -119,7 +119,11 @@ $ct-divider-dark-border-color: transparent;
 // Header.
 //
 
-$ct-header-sticky-zindex: 500;
+// Drupal reserves z-index 490 and above for administration chrome: the
+// navigation top bar, contextual links, the toolbar and off-canvas dialogs.
+// Keeping the sticky header below that band lets those layers, and the popups
+// they open, paint over the header instead of being covered by it.
+$ct-header-sticky-zindex: 400;
 
 //
 // Steps.
