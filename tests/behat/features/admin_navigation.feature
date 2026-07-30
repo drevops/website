@@ -16,3 +16,12 @@ Feature: Administration navigation for site administrator
     Given I am logged in as a user with the "civictheme_site_administrator" role
     When I visit "/"
     Then the element ".top-bar" should stack above the element ".ct-header--sticky"
+
+  @api @javascript
+  Scenario: Site administrator sees the open mobile navigation above the administration top bar
+    Given I am logged in as a user with the "civictheme_site_administrator" role
+    When I visit "/"
+    And I set the viewport to 390 by 844
+    And I trigger the JS event "click" on the element ".ct-mobile-navigation-trigger"
+    And I wait for 1 second
+    Then the element ".ct-header--sticky" should stack above the element ".top-bar"
