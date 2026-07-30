@@ -98,6 +98,7 @@ This project uses two documentation sources:
 
 The `docs/` directory contains **what** applies to this project:
 
+- `docs/content-types.md` - Adding custom node bundles and the theme layer they need
 - `docs/testing.md` - Testing conventions and agreements
 - `docs/ci.md` - CI provider and configuration
 - `docs/deployment.md` - Hosting provider and deployment rules
