@@ -7,27 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\node\NodeInterface;
-
-/**
- * Implements template_preprocess_node().
- */
-function _drevops_preprocess_node__full(array &$variables): void {
-  $node = $variables['node'] ?? NULL;
-
-  if (!$node instanceof NodeInterface) {
-    return;
-  }
-
-  // CivicTheme dispatches its full-view preprocessing by bundle name, so a
-  // bundle it does not ship renders without a table of contents and without
-  // topic tags. Blog posts are meant to be interchangeable with pages, so they
-  // reuse the page preprocessor rather than restating its behaviour here.
-  if ($node->bundle() === 'blog') {
-    _civictheme_preprocess_node__civictheme_page__full($variables);
-  }
-}
-
 /**
  * Implements template_preprocess_node().
  */
