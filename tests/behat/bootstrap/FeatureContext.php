@@ -169,8 +169,8 @@ class FeatureContext extends DrupalContext {
    */
   #[Then('the element :selector should stack above the element :other_selector')]
   public function elementAssertStacksAbove(string $selector, string $other_selector): void {
-    $above = $this->elementZIndex($selector);
-    $below = $this->elementZIndex($other_selector);
+    $above = $this->elementZindex($selector);
+    $below = $this->elementZindex($other_selector);
 
     if ($above <= $below) {
       throw new \RuntimeException(sprintf('Expected element "%s" to stack above element "%s", but their z-index values are %d and %d.', $selector, $other_selector, $above, $below));
@@ -186,7 +186,7 @@ class FeatureContext extends DrupalContext {
    * @return int
    *   The computed z-index.
    */
-  protected function elementZIndex(string $selector): int {
+  protected function elementZindex(string $selector): int {
     $script = <<<JS
       return window.getComputedStyle({{ELEMENT}}).zIndex;
 JS;
