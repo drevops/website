@@ -35,6 +35,7 @@ use DrevOps\BehatSteps\KeyboardTrait;
 use DrevOps\BehatSteps\LinkTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
+use DrevOps\BehatSteps\ResponsiveTrait;
 use DrevOps\BehatSteps\WaitTrait;
 use Behat\Step\Given;
 use Behat\Step\Then;
@@ -70,6 +71,7 @@ class FeatureContext extends DrupalContext {
   use ParagraphsTrait;
   use PathTrait;
   use ResponseTrait;
+  use ResponsiveTrait;
   use SearchApiTrait;
   use TaxonomyTrait;
   use TestmodeTrait;
@@ -149,6 +151,55 @@ class FeatureContext extends DrupalContext {
     if ($state !== 'published' || !$node->isPublished()) {
       throw new \RuntimeException(sprintf('Expected "%s" to be published, but its moderation state is "%s" and its published flag is %s.', $title, $state, $node->isPublished() ? 'true' : 'false'));
     }
+  }
+
+  /**
+   * Assert that an element paints on top of another element.
+   *
+   * Compares the computed z-index of two elements that both establish a
+   * root-level stacking context. A descendant cannot escape its ancestor's
+   * stacking context, so this also settles the order of any popup opened
+   * inside either element.
+   *
+   * @code
+   * Then the element ".top-bar" should stack above the element ".ct-header"
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the element :selector should stack above the element :other_selector')]
+  public function elementAssertStacksAbove(string $selector, string $other_selector): void {
+    $above = $this->elementZindex($selector);
+    $below = $this->elementZindex($other_selector);
+
+    if ($above <= $below) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to stack above element "%s", but their z-index values are %d and %d.', $selector, $other_selector, $above, $below));
+    }
+  }
+
+  /**
+   * Get the computed z-index of an element.
+   *
+   * @param string $selector
+   *   The CSS selector.
+   *
+   * @return int
+   *   The computed z-index.
+   */
+  protected function elementZindex(string $selector): int {
+    $script = <<<JS
+      return window.getComputedStyle({{ELEMENT}}).zIndex;
+JS;
+    $z_index = (string) $this->elementExecuteJs($selector, $script);
+
+    // An element without a stacking order of its own cannot be compared, and
+    // silently treating it as zero would assert something that was never
+    // styled.
+    if (!is_numeric($z_index)) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to have a numeric z-index, but it is "%s".', $selector, $z_index));
+    }
+
+    return (int) $z_index;
   }
 
 }
