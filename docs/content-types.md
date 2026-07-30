@@ -102,6 +102,8 @@ Nothing else is required. The `civictheme_automated_list` view already takes the
 
 ## Migrating existing nodes onto a new bundle
 
+This is deploy-hook work, so [Development](development.md) governs how it is written: hooks public and helpers private, `drupal_helpers` for the batching, one batched operation per hook, and per-item atomicity. What follows is only what is specific to changing a node's bundle.
+
 Drupal treats a loaded entity's bundle as immutable, so there is no entity-API route. Deleting and recreating each node would discard node IDs, revisions and paragraph references, which breaks aliases and revision history. The bundle has to be changed in storage.
 
 The bundle is stored in three places:
@@ -141,7 +143,9 @@ Scope the paragraph query narrowly. Matching every list that targets the old bun
 
 ### Idempotency
 
-Let the queries be the guard. A query for nodes still on the old bundle carrying the marker that defines the migration set matches nothing after a successful run, so a repeat deployment is a no-op with no extra bookkeeping. Report the outcome through `Helper::reporter()` so the deployment log records what happened on each environment.
+Let the queries be the guard. A query for nodes still on the old bundle carrying the marker that defines the migration set matches nothing after a successful run, so a repeat deployment is a no-op with no extra bookkeeping.
+
+Because the node migration and the paragraph repointing are batched, they are separate hooks and cannot share a transaction. If the second fails, the lists are left pointing at the old bundle and render empty until `drush deploy:hook` is run again, which completes them. Both are idempotent, so re-running is always safe.
 
 ## Testing
 
