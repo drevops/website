@@ -25,6 +25,9 @@ settings:
     -
       value: blog
       label: 'Blog post'
+    -
+      value: project
+      label: Project
   allowed_values_function: ''
 module: options
 locked: false

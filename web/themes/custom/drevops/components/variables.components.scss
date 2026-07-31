@@ -140,3 +140,13 @@ $ct-steps-light-receive-background-color: ct-color-light('background') !default;
 $ct-steps-dark-receive-background-color: ct-color-dark('background-light') !default;
 $ct-steps-light-receive-border-color: ct-color-light('highlight') !default;
 $ct-steps-dark-receive-border-color: ct-color-dark('highlight') !default;
+
+//
+// At a glance.
+//
+$ct-at-a-glance-light-background-color: ct-color-light('background-light') !default;
+$ct-at-a-glance-dark-background-color: ct-color-dark('background-light') !default;
+$ct-at-a-glance-light-border-color: rgba(ct-color-light('highlight'), 0.35) !default;
+$ct-at-a-glance-dark-border-color: rgba(ct-color-dark('highlight'), 0.35) !default;
+$ct-at-a-glance-light-label-color: ct-color-light('heading') !default;
+$ct-at-a-glance-dark-label-color: ct-color-dark('heading') !default;

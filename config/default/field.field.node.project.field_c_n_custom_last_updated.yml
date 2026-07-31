@@ -1,0 +1,21 @@
+uuid: fc1574b9-b81d-4a38-8b28-0a9822083be4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_custom_last_updated
+    - node.type.project
+  module:
+    - datetime
+id: node.project.field_c_n_custom_last_updated
+field_name: field_c_n_custom_last_updated
+entity_type: node
+bundle: project
+label: 'Custom Last updated date'
+description: "Override <em>Last updated</em> system date with a custom value. Leave empty to use system last updated date.<br/>\r\nApplies only if <em>Show Last updated date</em> is enabled above."
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,9 @@
+uuid: 961a7357-f5a6-4828-9da5-17f859cbc9ca
+langcode: en
+status: true
+dependencies: {  }
+name: Sector
+vid: do_sector
+description: 'The sector or industry a project was delivered for.'
+weight: 0
+new_revision: false

@@ -1,0 +1,59 @@
+{#
+/**
+ * @file
+ * Link list component.
+ *
+ * Variables:
+ * - theme: [string] Theme: light, dark.
+ * - title: [string] Heading shown above the list.
+ * - links: [array] Links:
+ *   - text: [string] Link text.
+ *   - url: [string] Link address.
+ *   - is_external: [boolean] Whether the link points off this site.
+ * - vertical_spacing: [string] With top, bottom or both vertical spaces.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ */
+#}
+
+{% set vertical_spacing_class = vertical_spacing is defined and vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
+{% set modifier_class = '%s %s %s'|format(theme_class, vertical_spacing_class, modifier_class|default('')) %}
+
+{% if links is defined and links is not empty %}
+  <div class="ct-link-list {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="container">
+      <div class="row">
+        <div class="col-xxs-12">
+          {% if title is defined and title %}
+            {{ include('civictheme:heading', {
+              content: title,
+              level: 2,
+              theme: theme,
+              modifier_class: 'ct-link-list__title',
+            }, with_context: false) }}
+          {% endif %}
+
+          {% set items = [] %}
+          {% for link in links %}
+            {% set item %}
+              {{ include('civictheme:link', {
+                text: link.text,
+                url: link.url,
+                theme: theme,
+                is_external: link.is_external|default(false),
+              }, with_context: false) }}
+            {% endset %}
+            {% set items = items|merge([item]) %}
+          {% endfor %}
+
+          {{ include('civictheme:item-list', {
+            direction: 'vertical',
+            items: items,
+            modifier_class: 'ct-link-list__items',
+          }, with_context: false) }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

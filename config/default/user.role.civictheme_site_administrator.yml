@@ -19,6 +19,7 @@ dependencies:
     - node.type.civictheme_alert
     - node.type.civictheme_event
     - node.type.civictheme_page
+    - node.type.project
     - taxonomy.vocabulary.civictheme_media_tags
     - taxonomy.vocabulary.civictheme_topics
     - workflows.workflow.civictheme_editorial
@@ -107,6 +108,7 @@ permissions:
   - 'create civictheme_video media'
   - 'create media'
   - 'create paragraph library item'
+  - 'create project content'
   - 'create terms in civictheme_media_tags'
   - 'create terms in civictheme_topics'
   - 'create url aliases'
@@ -133,6 +135,7 @@ permissions:
   - 'delete any civictheme_social_links block content revisions'
   - 'delete any civictheme_video media'
   - 'delete any media'
+  - 'delete any project content'
   - 'delete any webform'
   - 'delete any webform submission'
   - 'delete blog revisions'
@@ -150,8 +153,10 @@ permissions:
   - 'delete own civictheme_page content'
   - 'delete own civictheme_remote_video media'
   - 'delete own civictheme_video media'
+  - 'delete own project content'
   - 'delete own webform'
   - 'delete own webform submission'
+  - 'delete project revisions'
   - 'delete terms in civictheme_media_tags'
   - 'delete terms in civictheme_topics'
   - 'edit any blog content'
@@ -169,6 +174,7 @@ permissions:
   - 'edit any civictheme_search block content'
   - 'edit any civictheme_social_links block content'
   - 'edit any civictheme_video media'
+  - 'edit any project content'
   - 'edit any webform'
   - 'edit any webform submission'
   - 'edit own blog content'
@@ -181,6 +187,7 @@ permissions:
   - 'edit own civictheme_page content'
   - 'edit own civictheme_remote_video media'
   - 'edit own civictheme_video media'
+  - 'edit own project content'
   - 'edit own webform'
   - 'edit own webform submission'
   - 'edit paragraph library item'
@@ -204,6 +211,7 @@ permissions:
   - 'revert civictheme_alert revisions'
   - 'revert civictheme_event revisions'
   - 'revert civictheme_page revisions'
+  - 'revert project revisions'
   - 'select account cancellation method'
   - 'update any media'
   - 'update media'
@@ -234,5 +242,6 @@ permissions:
   - 'view own unpublished content'
   - 'view own unpublished media'
   - 'view own webform submission'
+  - 'view project revisions'
   - 'view the administration theme'
   - 'view user email addresses'

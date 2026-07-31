@@ -27,29 +27,6 @@ function _civictheme_preprocess_node__blog__full(array &$variables): void {
   // in place would repeat it on revision pages.
   unset($variables['label']);
 
-  if (civictheme_get_field_value($node, 'field_c_n_show_toc')) {
-    array_unshift($variables['content'], [
-      '#theme' => 'civictheme_table_of_contents',
-      '#position' => 'prepend',
-      '#anchor_selector' => 'h2',
-      '#title' => t('On this page'),
-      '#scope_selector' => '.ct-layout__main',
-    ]);
-  }
-
-  if (civictheme_get_field_value($node, 'field_c_n_hide_tags')) {
-    return;
-  }
-
-  $topics = civictheme_get_referenced_entity_labels($node, 'field_c_n_topics', $variables);
-
-  if (empty($topics)) {
-    return;
-  }
-
-  $variables['content'][] = [
-    '#theme' => 'civictheme_tag_list',
-    '#tags' => array_map(static fn($label): array => ['content' => (string) $label], $topics),
-    '#vertical_spacing' => 'both',
-  ];
+  _drevops_node_add_table_of_contents($node, $variables);
+  _drevops_node_add_topic_tags($node, $variables);
 }

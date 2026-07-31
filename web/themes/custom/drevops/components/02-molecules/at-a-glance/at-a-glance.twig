@@ -1,0 +1,74 @@
+{#
+/**
+ * @file
+ * At a glance component.
+ *
+ * Variables:
+ * - theme: [string] Theme: light, dark.
+ * - title: [string] Heading shown above the facts.
+ * - rows: [array] Fact rows:
+ *   - label: [string] Name of the fact.
+ *   - values: [array] Values for this fact:
+ *     - text: [string] Value shown to the reader.
+ *     - url: [string] Address the value links to, when it links anywhere.
+ *     - is_external: [boolean] Whether the value links off this site.
+ * - vertical_spacing: [string] With top, bottom or both vertical spaces.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ */
+#}
+
+{% set vertical_spacing_class = vertical_spacing is defined and vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
+{% set modifier_class = '%s %s %s'|format(theme_class, vertical_spacing_class, modifier_class|default('')) %}
+
+{% if rows is defined and rows is not empty %}
+  <div class="ct-at-a-glance {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="container">
+      <div class="row">
+        <div class="col-xxs-12">
+          {% if title is defined and title %}
+            {{ include('civictheme:heading', {
+              content: title,
+              level: 2,
+              theme: theme,
+              modifier_class: 'ct-at-a-glance__title',
+            }, with_context: false) }}
+          {% endif %}
+
+          <dl class="ct-at-a-glance__rows">
+            {% for row in rows %}
+              <div class="ct-at-a-glance__row">
+                <dt class="ct-at-a-glance__label">{{ row.label }}</dt>
+                <dd class="ct-at-a-glance__value">
+                  {% set values = [] %}
+                  {% for value in row.values %}
+                    {% set rendered %}
+                      {% if value.url is defined and value.url %}
+                        {{ include('civictheme:link', {
+                          text: value.text,
+                          url: value.url,
+                          theme: theme,
+                          is_external: value.is_external|default(false),
+                        }, with_context: false) }}
+                      {% else %}
+                        {{ value.text }}
+                      {% endif %}
+                    {% endset %}
+                    {% set values = values|merge([rendered]) %}
+                  {% endfor %}
+
+                  {{ include('civictheme:item-list', {
+                    direction: 'horizontal',
+                    items: values,
+                    modifier_class: 'ct-at-a-glance__values',
+                  }, with_context: false) }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

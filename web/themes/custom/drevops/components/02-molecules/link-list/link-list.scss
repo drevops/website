@@ -1,0 +1,15 @@
+//
+// Link list component.
+//
+
+.ct-link-list {
+  $root: &;
+
+  #{$root}__title {
+    margin: 0 0 ct-spacing(2);
+  }
+
+  #{$root}__items {
+    margin: 0;
+  }
+}

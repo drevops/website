@@ -1,0 +1,9 @@
+uuid: 148ea75f-bb76-40bf-a222-fb0821e720ac
+langcode: en
+status: true
+dependencies: {  }
+name: Technology
+vid: do_technology
+description: 'The platforms and tools a project was delivered on.'
+weight: 0
+new_revision: false
