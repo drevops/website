@@ -1,0 +1,20 @@
+uuid: cec28580-ce82-4037-85fe-b0378559d159
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_do_n_sector
+field_name: field_do_n_sector
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

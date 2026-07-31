@@ -1,0 +1,19 @@
+uuid: e68d9a2b-13bb-4187-9e58-8f44a43aa2f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_do_n_client
+    - node.type.project
+id: node.project.field_do_n_client
+field_name: field_do_n_client
+entity_type: node
+bundle: project
+label: Client
+description: 'The organisation the work was delivered for. Leave empty when the client cannot be named.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

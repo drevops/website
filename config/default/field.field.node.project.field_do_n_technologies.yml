@@ -1,0 +1,29 @@
+uuid: c8032685-8f06-43ae-9d6d-031a43342b05
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_do_n_technologies
+    - node.type.project
+    - taxonomy.vocabulary.do_technology
+id: node.project.field_do_n_technologies
+field_name: field_do_n_technologies
+entity_type: node
+bundle: project
+label: Technologies
+description: 'The platforms and tools the work was delivered on.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      do_technology: do_technology
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: do_technology
+field_type: entity_reference

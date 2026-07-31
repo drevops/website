@@ -1,0 +1,19 @@
+uuid: 111c8456-d254-4351-8bc6-2c86aa5f3d65
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.field_do_n_oss_contributions
+field_name: field_do_n_oss_contributions
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

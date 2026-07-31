@@ -1,0 +1,23 @@
+uuid: 57765fd6-648e-4521-bcb5-12c1b73384c3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_do_n_year
+    - node.type.project
+id: node.project.field_do_n_year
+field_name: field_do_n_year
+entity_type: node
+bundle: project
+label: Year
+description: 'The year the work was delivered. Used for sorting.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

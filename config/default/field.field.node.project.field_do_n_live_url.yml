@@ -1,0 +1,23 @@
+uuid: 19d74955-2161-40c3-8e47-5a2c6b6d1d9a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_do_n_live_url
+    - node.type.project
+  module:
+    - link
+id: node.project.field_do_n_live_url
+field_name: field_do_n_live_url
+entity_type: node
+bundle: project
+label: 'Live site URL'
+description: 'The address of the live site. Leave empty when the work is no longer reachable.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

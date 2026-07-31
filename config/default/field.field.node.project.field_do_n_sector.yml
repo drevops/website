@@ -1,0 +1,29 @@
+uuid: 3c6ef9b4-06e7-4fba-9254-57861b40962c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_do_n_sector
+    - node.type.project
+    - taxonomy.vocabulary.do_sector
+id: node.project.field_do_n_sector
+field_name: field_do_n_sector
+entity_type: node
+bundle: project
+label: Sector
+description: 'The sector the client operates in.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      do_sector: do_sector
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

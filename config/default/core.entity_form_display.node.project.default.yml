@@ -23,6 +23,16 @@ dependencies:
     - field.field.node.project.field_c_n_thumbnail
     - field.field.node.project.field_c_n_topics
     - field.field.node.project.field_c_n_vertical_spacing
+    - field.field.node.project.field_do_n_client
+    - field.field.node.project.field_do_n_delivered_at
+    - field.field.node.project.field_do_n_live_url
+    - field.field.node.project.field_do_n_oss_contributions
+    - field.field.node.project.field_do_n_role
+    - field.field.node.project.field_do_n_sector
+    - field.field.node.project.field_do_n_services
+    - field.field.node.project.field_do_n_status
+    - field.field.node.project.field_do_n_technologies
+    - field.field.node.project.field_do_n_year
     - field.field.node.project.field_n_metatags
     - node.type.project
     - workflows.workflow.civictheme_editorial
@@ -30,6 +40,7 @@ dependencies:
     - content_moderation
     - datetime
     - field_group
+    - link
     - media_library
     - metatag
     - paragraphs
@@ -74,8 +85,9 @@ third_party_settings:
       children:
         - title
         - field_c_n_summary
-        - field_c_n_components
+        - group_project_details
         - group_metadata
+        - field_c_n_components
         - group_appearance
       label: Content
       region: content
@@ -148,7 +160,7 @@ third_party_settings:
       label: Appearance
       region: content
       parent_name: group_civictheme_content
-      weight: 15
+      weight: 16
       format_type: details
       format_settings:
         classes: ''
@@ -160,10 +172,35 @@ third_party_settings:
     group_metadata:
       children:
         - field_c_n_topics
+        - field_do_n_sector
+        - field_do_n_services
+        - field_do_n_technologies
       label: Categorisation
       region: content
       parent_name: group_civictheme_content
       weight: 14
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+    group_project_details:
+      children:
+        - field_do_n_client
+        - field_do_n_role
+        - field_do_n_delivered_at
+        - field_do_n_year
+        - field_do_n_status
+        - field_do_n_live_url
+        - field_do_n_oss_contributions
+      label: 'Project details'
+      region: content
+      parent_name: group_civictheme_content
+      weight: 13
       format_type: details
       format_settings:
         classes: ''
@@ -271,7 +308,7 @@ content:
     third_party_settings: {  }
   field_c_n_components:
     type: paragraphs
-    weight: 13
+    weight: 15
     region: content
     settings:
       title: Paragraph
@@ -352,6 +389,81 @@ content:
     weight: 17
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_do_n_client:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_do_n_delivered_at:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_do_n_live_url:
+    type: link_default
+    weight: 6
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_do_n_oss_contributions:
+    type: link_default
+    weight: 7
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_do_n_role:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_do_n_sector:
+    type: options_select
+    weight: 16
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_do_n_services:
+    type: options_buttons
+    weight: 17
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_do_n_status:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_do_n_technologies:
+    type: entity_reference_autocomplete_tags
+    weight: 18
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_do_n_year:
+    type: number
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
     third_party_settings: {  }
   field_n_metatags:
     type: metatag_firehose
