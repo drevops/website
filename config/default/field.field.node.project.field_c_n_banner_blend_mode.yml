@@ -1,0 +1,23 @@
+uuid: c73885bd-b650-4f5d-afe1-689497a967e6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_banner_blend_mode
+    - node.type.project
+  module:
+    - options
+id: node.project.field_c_n_banner_blend_mode
+field_name: field_c_n_banner_blend_mode
+entity_type: node
+bundle: project
+label: 'Banner background blend  mode'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: normal
+default_value_callback: ''
+settings: {  }
+field_type: list_string

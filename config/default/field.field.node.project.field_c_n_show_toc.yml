@@ -1,0 +1,23 @@
+uuid: 276b00e5-7283-4d30-9823-9247c1493f5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_show_toc
+    - node.type.project
+id: node.project.field_c_n_show_toc
+field_name: field_c_n_show_toc
+entity_type: node
+bundle: project
+label: 'Show Table of Contents'
+description: 'Scan the content of the page for <code>h2</code> HTML tags and automatically create a Table of Contents.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
