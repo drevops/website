@@ -14,6 +14,7 @@ dependencies:
     - node.type.civictheme_alert
     - node.type.civictheme_event
     - node.type.civictheme_page
+    - node.type.project
     - taxonomy.vocabulary.civictheme_media_tags
     - workflows.workflow.civictheme_editorial
   module:
@@ -60,6 +61,7 @@ permissions:
   - 'create civictheme_remote_video media'
   - 'create civictheme_video media'
   - 'create media'
+  - 'create project content'
   - 'create terms in civictheme_media_tags'
   - 'create url aliases'
   - 'delete all revisions'
@@ -74,6 +76,7 @@ permissions:
   - 'delete any civictheme_remote_video media'
   - 'delete any civictheme_video media'
   - 'delete any media'
+  - 'delete any project content'
   - 'delete blog revisions'
   - 'delete civictheme_alert revisions'
   - 'delete civictheme_event revisions'
@@ -89,6 +92,8 @@ permissions:
   - 'delete own civictheme_page content'
   - 'delete own civictheme_remote_video media'
   - 'delete own civictheme_video media'
+  - 'delete own project content'
+  - 'delete project revisions'
   - 'delete terms in civictheme_media_tags'
   - 'edit any blog content'
   - 'edit any civictheme_alert content'
@@ -100,6 +105,7 @@ permissions:
   - 'edit any civictheme_page content'
   - 'edit any civictheme_remote_video media'
   - 'edit any civictheme_video media'
+  - 'edit any project content'
   - 'edit own blog content'
   - 'edit own civictheme_alert content'
   - 'edit own civictheme_audio media'
@@ -110,6 +116,7 @@ permissions:
   - 'edit own civictheme_page content'
   - 'edit own civictheme_remote_video media'
   - 'edit own civictheme_video media'
+  - 'edit own project content'
   - 'edit terms in civictheme_media_tags'
   - 'generate ai alt tags'
   - 'revert all revisions'
@@ -117,6 +124,7 @@ permissions:
   - 'revert civictheme_alert revisions'
   - 'revert civictheme_event revisions'
   - 'revert civictheme_page revisions'
+  - 'revert project revisions'
   - 'update any media'
   - 'update media'
   - 'use civictheme_editorial transition create_new_draft'
@@ -134,4 +142,5 @@ permissions:
   - 'view latest version'
   - 'view own unpublished content'
   - 'view own unpublished media'
+  - 'view project revisions'
   - 'view the administration theme'

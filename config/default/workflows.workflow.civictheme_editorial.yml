@@ -18,6 +18,7 @@ dependencies:
     - node.type.civictheme_alert
     - node.type.civictheme_event
     - node.type.civictheme_page
+    - node.type.project
   module:
     - content_moderation
 _core:
@@ -118,4 +119,5 @@ type_settings:
       - civictheme_alert
       - civictheme_event
       - civictheme_page
+      - project
   default_moderation_state: published
