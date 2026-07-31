@@ -10,6 +10,7 @@ This page describes how custom node bundles are added to this site, and the part
 | `civictheme_event` | Event | CivicTheme |
 | `civictheme_alert` | Alert | CivicTheme |
 | `blog` | Blog post | This project |
+| `project` | Project | This project |
 
 `civictheme_page` is the reference implementation. A new content type that is meant to look and behave like a page is built by cloning it, so the two bundles stay interchangeable and no field data can be orphaned if content is ever moved between them.
 
@@ -59,6 +60,14 @@ Verify the result by diffing the two displays with the bundle token normalised. 
 | `core.base_field_override.node.<bundle>.promote` | No | The CivicTheme types each carry one setting `promote` to `0`, but core already defaults the base field to `FALSE`, so omitting it changes nothing. |
 | `captcha.captcha_point.node_<bundle>_form` | No | `captcha.settings` has `enable_globally: 0`, so a form with no point gets no challenge. The Page form's point exists but is disabled, so omitting it matches Page behaviour. |
 
+## Fields the bundle does not share with Page
+
+A bundle that carries its own fields, as `project` does, renders them from its preprocessor into a component rather than through the view display. The view display is Layout Builder-driven and its default section is copied from Page, so a field that is not a block in that section never renders, whatever its formatter says. Building the markup in the preprocessor is also what makes it possible to leave a row out when its field is empty and to link a taxonomy value to its term page, neither of which a formatter does.
+
+Add those fields to the view display's `hidden` list anyway, through the configuration factory rather than the entity API. It changes no output, but it records the intent, so the next person does not place them in the layout expecting the panel to move.
+
+Read entity reference values with `civictheme_get_field_referenced_entities($node, $field_name, $variables)` rather than by hand. It drops terms the reader cannot view and registers each one as a cacheable dependency of the page; without that, renaming a term leaves every node still rendering the old label until it is re-saved.
+
 ## The theme layer
 
 **This is the part configuration parity does not cover, and the easiest thing to miss.**
@@ -81,6 +90,8 @@ That indirection is deliberate: each content type owns its own full-view theming
 A new content type must therefore supply its own `_civictheme_preprocess_node__<bundle>__full()`. Put it in a dedicated include under `web/themes/custom/drevops/includes/` and require it from `drevops.theme`; `blog.inc` is the worked example. The theme file is loaded before any preprocessing runs, so CivicTheme's `function_exists()` check finds it.
 
 Keep each type's implementation self-contained rather than delegating to another type's preprocessor. Delegating couples the two bundles, so one cannot be changed without changing the other, and it silently inherits any upstream change to the borrowed function.
+
+Shared *building blocks* are a different thing and belong in `node.inc`. `_drevops_node_add_table_of_contents()` and `_drevops_node_add_topic_tags()` live there and are called by each bundle that wants them, so the render arrays exist once while each bundle still decides for itself what its pages show. Reach for this only once a second bundle needs the same block; a helper with one caller is just indirection.
 
 Do **not** put this logic in the theme's own `_drevops_preprocess_node__<view_mode>()` hook. That hook is for work that applies across bundles, and taking it over for one content type forces every later cross-bundle change to thread around a bundle-specific branch.
 
