@@ -15,6 +15,10 @@
     border-radius: ct-particle(0.5);
     border-width: ct-particle(0.125);
     border-style: solid;
+
+    // Definition lists inherit no typography, so without this the facts render
+    // in the browser's default serif beside the theme's sans-serif prose.
+    font-family: var(--ct-typography-text-regular-font-name, sans-serif);
   }
 
   #{$root}__row {

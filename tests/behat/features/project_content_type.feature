@@ -32,6 +32,9 @@ Feature: Project content type
     And the field "field_do_n_oss_contributions[0][title]" should exist
     And the field "field_do_n_sector" should exist
     And the field "field_do_n_technologies[target_id]" should exist
+    # Services is a checkboxes widget, so it has no single named control to
+    # assert against; its wrapper is the stable handle.
+    And should see a "[data-drupal-selector='edit-field-do-n-services']" element
 
     And the field "field_c_n_banner_title[0][value]" should exist
     And the field "field_c_n_banner_type" should exist
