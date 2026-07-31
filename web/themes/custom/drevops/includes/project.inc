@@ -29,8 +29,8 @@ function _civictheme_preprocess_node__project__full(array &$variables): void {
   // in place would repeat it on revision pages.
   unset($variables['label']);
 
-  // Each of these places itself relative to the narrative components, so the
-  // call order is the reverse of the order the sections appear in.
+  // Each of these carries its own render weight, so the call order here does
+  // not decide where the section ends up on the page.
   _drevops_project_add_contributions($node, $variables);
   _drevops_node_add_topic_tags($node, $variables);
   _drevops_project_add_at_a_glance($node, $variables);
@@ -55,6 +55,7 @@ function _drevops_project_add_at_a_glance(NodeInterface $node, array &$variables
       'rows' => $rows,
       'vertical_spacing' => 'both',
     ],
+    '#weight' => -90,
   ]);
 }
 
@@ -76,6 +77,7 @@ function _drevops_project_add_contributions(NodeInterface $node, array &$variabl
       'links' => $links,
       'vertical_spacing' => 'both',
     ],
+    '#weight' => 90,
   ];
 }
 

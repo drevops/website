@@ -17,7 +17,7 @@ const meta = {
     },
     vertical_spacing: {
       control: { type: 'radio' },
-      options: ['none', 'top', 'bottom', 'both'],
+      options: ['top', 'bottom', 'both'],
     },
     modifier_class: {
       control: { type: 'text' },

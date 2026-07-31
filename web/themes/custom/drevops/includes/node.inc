@@ -23,6 +23,9 @@ function _drevops_node_add_table_of_contents(NodeInterface $node, array &$variab
     '#anchor_selector' => 'h2',
     '#title' => t('On this page'),
     '#scope_selector' => '.ct-layout__main',
+    // The renderer orders children by weight, so position in the array alone
+    // does not survive alongside the display's own weighted fields.
+    '#weight' => -100,
   ]);
 }
 
@@ -44,6 +47,7 @@ function _drevops_node_add_topic_tags(NodeInterface $node, array &$variables): v
     '#theme' => 'civictheme_tag_list',
     '#tags' => array_map(static fn($label): array => ['content' => (string) $label], $topics),
     '#vertical_spacing' => 'both',
+    '#weight' => 100,
   ];
 }
 

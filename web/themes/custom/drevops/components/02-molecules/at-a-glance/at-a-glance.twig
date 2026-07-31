@@ -18,16 +18,16 @@
  */
 #}
 
-{% set vertical_spacing_class = vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
+{% set vertical_spacing_class = vertical_spacing is defined and vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s'|format(theme_class, vertical_spacing_class, modifier_class|default('')) %}
 
-{% if rows is not empty %}
+{% if rows is defined and rows is not empty %}
   <div class="ct-at-a-glance {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     <div class="container">
       <div class="row">
         <div class="col-xxs-12">
-          {% if title %}
+          {% if title is defined and title %}
             {{ include('civictheme:heading', {
               content: title,
               level: 2,
@@ -44,7 +44,7 @@
                   {% set values = [] %}
                   {% for value in row.values %}
                     {% set rendered %}
-                      {% if value.url %}
+                      {% if value.url is defined and value.url %}
                         {{ include('civictheme:link', {
                           text: value.text,
                           url: value.url,
