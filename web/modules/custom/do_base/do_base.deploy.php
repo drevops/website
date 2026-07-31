@@ -437,6 +437,57 @@ function do_base_deploy_repoint_blog_lists(?array &$sandbox = NULL): ?string {
 }
 
 /**
+ * Seeds the Sector, Service and Technology vocabularies.
+ */
+function do_base_deploy_seed_project_vocabularies(): string {
+  $trees = [
+    'do_sector' => [
+      'Federal government',
+      'State government',
+      'Local government',
+      'Higher education',
+      'Health',
+      'Not-for-profit',
+      'Commercial',
+    ],
+    'do_service' => [
+      'Discovery and strategy',
+      'Architecture',
+      'Development',
+      'DevOps and hosting',
+      'Migration',
+      'UX and design',
+      'Accessibility',
+      'Support and maintenance',
+      'Training',
+    ],
+    'do_technology' => [
+      'Drupal',
+      'PHP',
+      'JavaScript',
+      'Docker',
+      'Kubernetes',
+      'AWS',
+      'Lagoon',
+      'Acquia Cloud',
+      'GitHub Actions',
+      'CircleCI',
+      'Terraform',
+      'Behat',
+      'PHPUnit',
+    ],
+  ];
+
+  foreach ($trees as $vocabulary => $tree) {
+    // These are a starting point rather than a closed set, so the default safe
+    // mode is used: terms an author adds later survive the next deployment.
+    Helper::term()->createTree($vocabulary, $tree);
+  }
+
+  return Helper::report();
+}
+
+/**
  * Loads the taxonomy term that defines which articles are blog articles.
  */
 function _do_base_blog_topic_term(): ?TermInterface {
