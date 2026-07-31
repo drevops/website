@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 
@@ -127,8 +128,10 @@ function _drevops_project_at_a_glance_rows(NodeInterface $node, array &$variable
 function _drevops_project_scalar_values(NodeInterface $node, string $field_name): array {
   $values = [];
 
-  foreach ($node->get($field_name) as $item) {
-    $text = trim((string) $item->value);
+  // Reading the raw values keeps one resolver serving both the string fields
+  // and the integer year, which share no field-item type.
+  foreach ($node->get($field_name)->getValue() as $item) {
+    $text = trim((string) ($item['value'] ?? ''));
 
     if ($text === '') {
       continue;
@@ -148,8 +151,8 @@ function _drevops_project_list_values(NodeInterface $node, string $field_name): 
   $allowed = options_allowed_values($field->getFieldDefinition()->getFieldStorageDefinition(), $node);
   $values = [];
 
-  foreach ($field as $item) {
-    $key = (string) $item->value;
+  foreach ($field->getValue() as $item) {
+    $key = (string) ($item['value'] ?? '');
 
     if ($key === '') {
       continue;
@@ -167,14 +170,16 @@ function _drevops_project_list_values(NodeInterface $node, string $field_name): 
 function _drevops_project_link_values(NodeInterface $node, string $field_name): array {
   $values = [];
 
-  foreach ($node->get($field_name) as $item) {
-    if (trim((string) $item->uri) === '') {
+  foreach ($node->get($field_name)->getValue() as $item) {
+    $uri = trim((string) ($item['uri'] ?? ''));
+
+    if ($uri === '') {
       continue;
     }
 
-    $url = $item->getUrl();
+    $url = Url::fromUri($uri);
     $address = $url->toString();
-    $text = trim((string) $item->title);
+    $text = trim((string) ($item['title'] ?? ''));
 
     $values[] = [
       'text' => $text !== '' ? $text : $address,
