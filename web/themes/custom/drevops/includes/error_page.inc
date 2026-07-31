@@ -35,15 +35,15 @@ function _drevops_preprocess_page__error(array &$variables): void {
     return;
   }
 
-  // Every band of this site is dark, and the light page background is only
-  // ever hidden by the components painted over it. An error page carries no
-  // such component, so it has to ask for the dark background itself.
-  $variables['theme'] = 'dark';
-
   // A reader who cannot reach the page they asked for is not served by a menu
   // of the pages they can.
   $variables['hide_sidebar_left'] = TRUE;
   $variables['hide_sidebar_right'] = TRUE;
+
+  // Releasing the region from the layout's container lets the message band
+  // carry its own, so its background reaches the edge of the viewport the way
+  // the bands above and below it do.
+  $variables['content_contained'] = FALSE;
 }
 
 /**
@@ -65,9 +65,7 @@ function _drevops_preprocess_block__system_main_block__error(array &$variables):
     '#component' => 'civictheme:basic-content',
     '#props' => [
       'theme' => 'dark',
-      // The layout region is already inside a container, so containing the
-      // message again would indent it past the rest of the page.
-      'is_contained' => FALSE,
+      'with_background' => TRUE,
       'vertical_spacing' => 'both',
     ],
     '#slots' => [

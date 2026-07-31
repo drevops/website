@@ -7,15 +7,23 @@ Feature: Built-in error pages
 
   # Drupal answers these routes with a bare sentence and no wrapper of its own,
   # which lands on the light page background in the browser's default font. The
-  # theme dresses that sentence in the site's dark palette and content styles.
+  # theme wraps that sentence in a dark, full-width content band, the same way
+  # every other band on the site is painted over the light page.
 
   @api
   Scenario: Access denied renders in the site design
     Given I am an anonymous user
     When I visit "/admin"
     Then the response status code should be 403
-    And I should see a ".ct-page.ct-theme-dark" element
-    And I should see "You are not authorized to access this page." in the ".ct-layout__main .ct-basic-content.ct-theme-dark" element
+    And I should see a ".ct-page.ct-theme-light" element
+    And I should see "You are not authorized to access this page." in the ".ct-layout__main .ct-basic-content.ct-theme-dark.ct-basic-content--with-background" element
+
+  @api
+  Scenario: The Access denied message band spans the full width of the page
+    Given I am an anonymous user
+    When I visit "/admin"
+    Then I should see a ".ct-layout__inner.container-fluid" element
+    And I should not see a ".ct-layout__inner.container" element
 
   @api
   Scenario: Access denied offers a way back to the site
@@ -35,15 +43,19 @@ Feature: Built-in error pages
     Given I am an anonymous user
     When I visit "/test-page-that-does-not-exist"
     Then the response status code should be 404
-    And I should see a ".ct-page.ct-theme-dark" element
-    And I should see "The requested page could not be found." in the ".ct-layout__main .ct-basic-content.ct-theme-dark" element
+    And I should see a ".ct-page.ct-theme-light" element
+    And I should see "The requested page could not be found." in the ".ct-layout__main .ct-basic-content.ct-theme-dark.ct-basic-content--with-background" element
     And I should see "Return to homepage" in the ".ct-layout__main .ct-button--primary" element
     And I should not see a ".ct-layout__sidebar_top_left" element
 
+  # The error page treatment hides the sidebars and releases the layout from
+  # its container. Both are page-level changes, so a page that is not an error
+  # page is the place to catch them leaking.
   @api
-  Scenario: Pages that are not error pages keep the light page background
+  Scenario: Pages that are not error pages keep their sidebar and contained layout
     Given I am an anonymous user
-    When I go to the homepage
+    When I go to "/about-us"
     Then the response status code should be 200
-    And I should see a ".ct-page.ct-theme-light" element
-    And I should not see a ".ct-page.ct-theme-dark" element
+    And I should see a ".ct-layout__sidebar_top_left" element
+    And I should see a ".ct-layout__inner.container" element
+    And I should not see a ".ct-layout__main .ct-basic-content--with-background" element
