@@ -38,6 +38,7 @@ Feature: Built-in error pages
     And I should see a ".ct-page.ct-theme-dark" element
     And I should see "The requested page could not be found." in the ".ct-layout__main .ct-basic-content.ct-theme-dark" element
     And I should see "Return to homepage" in the ".ct-layout__main .ct-button--primary" element
+    And I should not see a ".ct-layout__sidebar_top_left" element
 
   @api
   Scenario: Pages that are not error pages keep the light page background
