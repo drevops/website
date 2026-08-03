@@ -58,7 +58,11 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
     $entities = [];
 
     for ($index = 0; $index < static::COUNT; $index++) {
-      $values = ['type' => $this->getBundle(), 'title' => $this->title($index), 'moderation_state' => $this->moderationState($index)] + $this->bundleValues($index);
+      $values = [
+        'type' => $this->getBundle(),
+        'title' => $this->title($index),
+        'moderation_state' => $this->moderationState($index),
+      ] + $this->bundleValues($index);
 
       $node = Node::create($values);
       $node->save();

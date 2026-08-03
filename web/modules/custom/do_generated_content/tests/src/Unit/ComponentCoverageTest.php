@@ -25,7 +25,7 @@ class ComponentCoverageTest extends UnitTestCase {
   /**
    * Tests that every bundle a component field accepts can be generated.
    */
-  #[DataProvider('dataProviderComponentField')]
+  #[DataProvider('dataProviderComponentFieldBundlesAreSupported')]
   public function testComponentFieldBundlesAreSupported(string $config_name): void {
     $target_bundles = array_keys($this->fieldSetting($config_name, 'target_bundles'));
 
@@ -39,7 +39,7 @@ class ComponentCoverageTest extends UnitTestCase {
   /**
    * Data provider for testComponentFieldBundlesAreSupported().
    */
-  public static function dataProviderComponentField(): \Iterator {
+  public static function dataProviderComponentFieldBundlesAreSupported(): \Iterator {
     yield 'page components' => ['field.field.node.civictheme_page.field_c_n_components'];
     yield 'blog components' => ['field.field.node.blog.field_c_n_components'];
     yield 'project components' => ['field.field.node.project.field_c_n_components'];
@@ -92,7 +92,7 @@ class ComponentCoverageTest extends UnitTestCase {
   /**
    * Tests that the generators cover every content type the workflow moderates.
    */
-  public function testEveryModeratedContentTypeHasAGenerator(): void {
+  public function testEveryModeratedContentTypeIsGenerated(): void {
     $workflow = $this->config('workflows.workflow.civictheme_editorial');
 
     $bundles = $workflow['type_settings']['entity_types']['node'] ?? [];
@@ -104,9 +104,10 @@ class ComponentCoverageTest extends UnitTestCase {
     $generated = [];
 
     foreach (glob($plugin_dir . '/Node*.php') ?: [] as $file) {
+      /** @var class-string $class */
       $class = 'Drupal\\do_generated_content\\Plugin\\GeneratedContent\\' . basename($file, '.php');
 
-      foreach ((new \ReflectionClass($class))->getAttributes(GeneratedContent::class) as $attribute) {
+      foreach (new \ReflectionClass($class)->getAttributes(GeneratedContent::class) as $attribute) {
         $generated[] = $attribute->newInstance()->bundle;
       }
     }

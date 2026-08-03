@@ -20,7 +20,7 @@ class RelativeDateTest extends UnitTestCase {
    */
   #[DataProvider('dataProviderFormat')]
   public function testFormat(string $modifier): void {
-    $expected = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->modify($modifier);
+    $expected = new \DateTimeImmutable('now', new \DateTimeZone('UTC'))->modify($modifier);
 
     $this->assertSame($expected->format('Y-m-d'), RelativeDate::format($modifier));
   }

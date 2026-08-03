@@ -25,12 +25,12 @@ final class ComponentGenerator {
   /**
    * Rich text format used by every CivicTheme content field.
    */
-  protected const TEXT_FORMAT = 'civictheme_rich_text';
+  private const string TEXT_FORMAT = 'civictheme_rich_text';
 
   /**
    * Storage format of a datetime field.
    */
-  protected const DATETIME_FORMAT = 'Y-m-d\TH:i:s';
+  private const string DATETIME_FORMAT = 'Y-m-d\TH:i:s';
 
   /**
    * Library item reused by every generated 'from_library' component.
@@ -55,8 +55,8 @@ final class ComponentGenerator {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected GeneratedContentHelper $helper,
-    protected GeneratedContentRepository $repository,
+    protected GeneratedContentHelper $generatedContentHelper,
+    protected GeneratedContentRepository $generatedContentRepository,
   ) {}
 
   /**
@@ -231,7 +231,7 @@ final class ComponentGenerator {
    */
   protected function richText(int $paragraphs = 2): array {
     return [
-      'value' => $this->helper::staticRichText($paragraphs),
+      'value' => $this->generatedContentHelper::staticRichText($paragraphs),
       'format' => self::TEXT_FORMAT,
     ];
   }
@@ -250,7 +250,7 @@ final class ComponentGenerator {
    * Get a generated image, when any exist.
    */
   protected function image(): ?MediaInterface {
-    $media = $this->helper::randomMediaItem('civictheme_image');
+    $media = $this->generatedContentHelper::randomMediaItem('civictheme_image');
 
     return $media instanceof MediaInterface ? $media : NULL;
   }
@@ -271,7 +271,7 @@ final class ComponentGenerator {
    */
   protected function accordionPanel(int $position): array {
     return [
-      'field_c_p_title' => sprintf('Panel %s - %s', $position + 1, $this->helper::staticSentence(3)),
+      'field_c_p_title' => sprintf('Panel %s - %s', $position + 1, $this->generatedContentHelper::staticSentence(3)),
       'field_c_p_content' => $this->richText(),
       // The first panel of a set opens so the component is not rendered fully
       // collapsed on every page.
@@ -283,10 +283,10 @@ final class ComponentGenerator {
    * Build an attachment listing document media.
    */
   protected function attachment(int $index): array {
-    $documents = $this->helper::randomMediaItems('civictheme_document', 2);
+    $documents = $this->generatedContentHelper::randomMediaItems('civictheme_document', 2);
 
     return $this->chrome('civictheme_attachment', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(3),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(3),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_background' => CaseMatrix::bit($index, 2),
       'field_c_p_attachments' => array_map(static fn(MediaInterface $media): array => ['target_id' => $media->id()], $documents),
@@ -298,7 +298,7 @@ final class ComponentGenerator {
    */
   protected function automatedList(int $index): array {
     return $this->chrome('civictheme_automated_list', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(4),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_background' => CaseMatrix::bit($index, 0),
       'field_c_p_list_content_type' => $this->option('civictheme_automated_list', 'field_c_p_list_content_type', $index),
@@ -320,7 +320,7 @@ final class ComponentGenerator {
    */
   protected function callout(int $index): array {
     return $this->chrome('civictheme_callout', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(3),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(3),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_links' => [$this->link('Get started'), $this->link('Contact us')],
     ];
@@ -333,7 +333,7 @@ final class ComponentGenerator {
     $image = $this->image();
 
     $values = $this->chrome('civictheme_campaign', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(4),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_date' => RelativeDate::format('-7 days'),
       'field_c_p_image_position' => $this->option('civictheme_campaign', 'field_c_p_image_position', $index),
@@ -366,8 +366,8 @@ final class ComponentGenerator {
 
     $values = [
       'field_c_p_theme' => $this->option('civictheme_event_card', 'field_c_p_theme', $index),
-      'field_c_p_title' => $this->helper::staticSentence(4),
-      'field_c_p_summary' => $this->helper::staticPlainParagraph(),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
+      'field_c_p_summary' => $this->generatedContentHelper::staticPlainParagraph(),
       'field_c_p_location' => 'Melbourne, Victoria',
       'field_c_p_link' => $this->link('View event'),
       'field_c_p_topics' => $this->topics($index),
@@ -388,12 +388,12 @@ final class ComponentGenerator {
    * Build a fast fact card.
    */
   protected function fastFactCard(int $index): array {
-    $icon = $this->helper::randomMediaItem('civictheme_icon');
+    $icon = $this->generatedContentHelper::randomMediaItem('civictheme_icon');
 
     $values = [
       'field_c_p_theme' => $this->option('civictheme_fast_fact_card', 'field_c_p_theme', $index),
       'field_c_p_title' => sprintf('%s%%', ($index + 1) * 5),
-      'field_c_p_summary' => $this->helper::staticSentence(6),
+      'field_c_p_summary' => $this->generatedContentHelper::staticSentence(6),
       'field_c_p_link' => $this->link('Read the detail'),
     ];
 
@@ -441,7 +441,7 @@ final class ComponentGenerator {
     $this->manualListCount++;
 
     return $this->chrome('civictheme_manual_list', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(4),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_background' => CaseMatrix::bit($index, 2),
       'field_c_p_list_items' => $items,
@@ -470,7 +470,7 @@ final class ComponentGenerator {
    */
   protected function message(int $index): array {
     return $this->chrome('civictheme_message', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(3),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(3),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_background' => CaseMatrix::bit($index, 1),
       'field_c_p_message_type' => $this->option('civictheme_message', 'field_c_p_message_type', $index),
@@ -485,8 +485,8 @@ final class ComponentGenerator {
 
     $values = [
       'field_c_p_theme' => $this->option('civictheme_navigation_card', 'field_c_p_theme', $index),
-      'field_c_p_title' => $this->helper::staticSentence(4),
-      'field_c_p_summary' => $this->helper::staticPlainParagraph(),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
+      'field_c_p_summary' => $this->generatedContentHelper::staticPlainParagraph(),
       'field_c_p_link' => $this->link('Go to section'),
       'field_c_p_show_image_as_icon' => CaseMatrix::bit($index, 0),
     ];
@@ -503,7 +503,7 @@ final class ComponentGenerator {
    */
   protected function nextStep(int $index): array {
     return $this->chrome('civictheme_next_step', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(4),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_link' => $this->link('Take the next step'),
     ];
@@ -514,7 +514,7 @@ final class ComponentGenerator {
    */
   protected function promo(int $index): array {
     return $this->chrome('civictheme_promo', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(4),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_background' => CaseMatrix::bit($index, 2),
       'field_c_p_link' => $this->link('Learn more'),
@@ -529,9 +529,9 @@ final class ComponentGenerator {
 
     $values = [
       'field_c_p_theme' => $this->option('civictheme_promo_card', 'field_c_p_theme', $index),
-      'field_c_p_title' => $this->helper::staticSentence(4),
-      'field_c_p_subtitle' => $this->helper::staticSentence(3),
-      'field_c_p_summary' => $this->helper::staticPlainParagraph(),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
+      'field_c_p_subtitle' => $this->generatedContentHelper::staticSentence(3),
+      'field_c_p_summary' => $this->generatedContentHelper::staticPlainParagraph(),
       'field_c_p_link' => $this->link('Read more'),
       'field_c_p_topics' => $this->topics($index),
     ];
@@ -547,13 +547,13 @@ final class ComponentGenerator {
    * Build a publication card.
    */
   protected function publicationCard(int $index): array {
-    $document = $this->helper::randomMediaItem('civictheme_document');
+    $document = $this->generatedContentHelper::randomMediaItem('civictheme_document');
     $image = $this->image();
 
     $values = [
       'field_c_p_theme' => $this->option('civictheme_publication_card', 'field_c_p_theme', $index),
-      'field_c_p_title' => $this->helper::staticSentence(5),
-      'field_c_p_summary' => $this->helper::staticPlainParagraph(),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(5),
+      'field_c_p_summary' => $this->generatedContentHelper::staticPlainParagraph(),
     ];
 
     if ($document instanceof MediaInterface) {
@@ -573,7 +573,7 @@ final class ComponentGenerator {
   protected function serviceCard(int $index): array {
     return [
       'field_c_p_theme' => $this->option('civictheme_service_card', 'field_c_p_theme', $index),
-      'field_c_p_title' => $this->helper::staticSentence(3),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(3),
       'field_c_p_links' => [$this->link('Apply online'), $this->link('Check eligibility')],
     ];
   }
@@ -590,7 +590,7 @@ final class ComponentGenerator {
     }
 
     return $this->chrome('civictheme_slider', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(4),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_background' => CaseMatrix::bit($index, 3),
       'field_c_p_slides' => $slides,
     ];
@@ -604,7 +604,7 @@ final class ComponentGenerator {
 
     $values = [
       'field_c_p_theme' => $this->option('civictheme_slider_slide', 'field_c_p_theme', $index),
-      'field_c_p_title' => $this->helper::staticSentence(4),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_date' => RelativeDate::format('-14 days'),
       'field_c_p_image_position' => $this->option('civictheme_slider_slide', 'field_c_p_image_position', $index),
@@ -641,8 +641,8 @@ final class ComponentGenerator {
   protected function snippet(int $index): array {
     return [
       'field_c_p_theme' => $this->option('civictheme_snippet', 'field_c_p_theme', $index),
-      'field_c_p_title' => $this->helper::staticSentence(4),
-      'field_c_p_summary' => $this->helper::staticPlainParagraph(),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
+      'field_c_p_summary' => $this->generatedContentHelper::staticPlainParagraph(),
       'field_c_p_link' => $this->link('Read the snippet'),
       'field_c_p_topics' => $this->topics($index),
     ];
@@ -656,7 +656,7 @@ final class ComponentGenerator {
 
     $values = [
       'field_c_p_theme' => $this->option('civictheme_subject_card', 'field_c_p_theme', $index),
-      'field_c_p_title' => $this->helper::staticSentence(3),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(3),
       'field_c_p_link' => $this->link('Browse subject'),
     ];
 
@@ -707,7 +707,7 @@ final class ComponentGenerator {
    */
   protected function steps(int $index): array {
     return $this->chrome('steps', $index) + [
-      'field_c_p_title' => $this->helper::staticSentence(4),
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_background' => CaseMatrix::bit($index, 1),
       'field_c_p_list_items' => $this->createMany('steps_item', $index, 3),
@@ -719,9 +719,9 @@ final class ComponentGenerator {
    */
   protected function stepsItem(int $position): array {
     return [
-      'field_c_p_title' => sprintf('Step %s - %s', $position + 1, $this->helper::staticSentence(3)),
-      'field_c_p_summary' => $this->helper::staticPlainParagraph(),
-      'field_p_receive' => $this->helper::staticSentence(8),
+      'field_c_p_title' => sprintf('Step %s - %s', $position + 1, $this->generatedContentHelper::staticSentence(3)),
+      'field_c_p_summary' => $this->generatedContentHelper::staticPlainParagraph(),
+      'field_p_receive' => $this->generatedContentHelper::staticSentence(8),
     ];
   }
 
@@ -752,7 +752,7 @@ final class ComponentGenerator {
    * on a site with no pre-existing content of the bundle it finds nothing.
    */
   protected function referencedNode(string $node_bundle): ?NodeInterface {
-    $node = $this->helper::randomNode($node_bundle) ?? $this->helper::randomRealNode($node_bundle);
+    $node = $this->generatedContentHelper::randomNode($node_bundle) ?? $this->generatedContentHelper::randomRealNode($node_bundle);
 
     return $node instanceof NodeInterface ? $node : NULL;
   }
@@ -801,7 +801,7 @@ final class ComponentGenerator {
     // A library item outlives the node that referenced it, and deleting it
     // leaves its paragraph behind, so both are tracked to be removed with the
     // rest of the generated content.
-    $this->repository->addEntities([$library_item, $paragraph]);
+    $this->generatedContentRepository->addEntities([$library_item, $paragraph]);
 
     $this->libraryItem = $library_item;
 
@@ -824,7 +824,7 @@ final class ComponentGenerator {
 
     $handler_settings = $field->getSetting('handler_settings') ?? [];
 
-    return array_keys($handler_settings['target_bundles'] ?? []);
+    return array_map(strval(...), array_keys($handler_settings['target_bundles'] ?? []));
   }
 
 }

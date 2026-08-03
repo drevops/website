@@ -24,7 +24,7 @@ final class RelativeDate {
    *   The formatted date.
    */
   public static function format(string $modifier, string $format = 'Y-m-d'): string {
-    return (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->modify($modifier)->format($format);
+    return new \DateTimeImmutable('now', new \DateTimeZone('UTC'))->modify($modifier)->format($format);
   }
 
 }

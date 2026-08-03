@@ -180,7 +180,7 @@ class CaseMatrixTest extends UnitTestCase {
    * node's index: only a few node indexes carry a manual list, so a walk on
    * that index revisits the same few card bundles and never reaches the rest.
    */
-  #[DataProvider('dataProviderDenseWalk')]
+  #[DataProvider('dataProviderDenseWalkCoversEveryValue')]
   public function testDenseWalkCoversEveryValue(int $value_count, int $stride, int $iterations): void {
     $values = range(1, $value_count);
 
@@ -198,7 +198,7 @@ class CaseMatrixTest extends UnitTestCase {
   /**
    * Data provider for testDenseWalkCoversEveryValue().
    */
-  public static function dataProviderDenseWalk(): \Iterator {
+  public static function dataProviderDenseWalkCoversEveryValue(): \Iterator {
     yield 'manual list cards' => [13, 3, 5];
     yield 'slider slides' => [3, 3, 1];
     yield 'stride larger than the list' => [2, 5, 1];
