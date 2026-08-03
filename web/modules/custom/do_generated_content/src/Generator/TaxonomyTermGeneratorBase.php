@@ -27,6 +27,16 @@ abstract class TaxonomyTermGeneratorBase extends GeneratedContentPluginBase {
     $entities = [];
 
     foreach (static::NAMES as $name) {
+      if ($this->exists($name)) {
+        // A restored production database already carries most of these names,
+        // and a second term under the same name is indistinguishable to an
+        // editor. The existing term is deliberately left untracked: returning
+        // it here would hand real site taxonomy to the removal routine.
+        $this->helper::log('Reused existing %s term: %s', $this->getBundle(), $name);
+
+        continue;
+      }
+
       $term = Term::create(['vid' => $this->getBundle(), 'name' => $name]);
       $term->save();
 
@@ -36,6 +46,18 @@ abstract class TaxonomyTermGeneratorBase extends GeneratedContentPluginBase {
     }
 
     return $entities;
+  }
+
+  /**
+   * Check whether the vocabulary already holds a term of this name.
+   */
+  protected function exists(string $name): bool {
+    $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
+      'vid' => $this->getBundle(),
+      'name' => $name,
+    ]);
+
+    return $terms !== [];
   }
 
 }

@@ -20,6 +20,7 @@ use Drupal\taxonomy\TermInterface;
 final class ComponentGenerator {
 
   use FieldAllowedValuesTrait;
+  use VocabularyTermsTrait;
 
   /**
    * Rich text format used by every CivicTheme content field.
@@ -763,9 +764,16 @@ final class ComponentGenerator {
    *   Field values.
    */
   protected function topics(int $index): array {
-    $terms = $this->helper::randomTerms('civictheme_topics', CaseMatrix::cycle([1, 2], $index));
+    $terms = $this->vocabularyTerms('civictheme_topics');
 
-    return array_map(static fn(TermInterface $term): array => ['target_id' => $term->id()], $terms);
+    if ($terms === []) {
+      return [];
+    }
+
+    return array_map(
+      static fn(TermInterface $term): array => ['target_id' => $term->id()],
+      CaseMatrix::subset($terms, $index, [1, 2])
+    );
   }
 
   /**

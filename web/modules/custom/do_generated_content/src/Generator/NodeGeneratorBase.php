@@ -19,6 +19,7 @@ use Drupal\taxonomy\TermInterface;
 abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
 
   use FieldAllowedValuesTrait;
+  use VocabularyTermsTrait;
 
   /**
    * Number of nodes each bundle generates.
@@ -44,6 +45,11 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
    * The component generator.
    */
   protected ?ComponentGenerator $componentGenerator = NULL;
+
+  /**
+   * How many topics have been assigned so far.
+   */
+  protected int $topicsAssigned = 0;
 
   /**
    * {@inheritdoc}
@@ -129,13 +135,13 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
       $values['field_c_n_thumbnail'] = ['target_id' => $thumbnail->id()];
     }
 
-    $site_section = $this->helper::randomTerm('civictheme_site_sections');
+    $sections = $this->vocabularyTerms('civictheme_site_sections');
 
-    if (CaseMatrix::bit($index, 0) && $site_section instanceof TermInterface) {
-      $values['field_c_n_site_section'] = ['target_id' => $site_section->id()];
+    if (CaseMatrix::bit($index, 0) && $sections !== []) {
+      $values['field_c_n_site_section'] = ['target_id' => CaseMatrix::cycle($sections, $index)->id()];
     }
 
-    $topics = $this->helper::randomTerms('civictheme_topics', CaseMatrix::cycle([0, 1, 3], $index));
+    $topics = $this->topics(CaseMatrix::cycle([0, 1, 3], $index));
 
     if ($topics !== []) {
       $values['field_c_n_topics'] = array_map(static fn(TermInterface $term): array => ['target_id' => $term->id()], $topics);
@@ -237,6 +243,30 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
     }
 
     return $components;
+  }
+
+  /**
+   * Pick the next topics from the vocabulary.
+   *
+   * Walks a counter rather than the run index so a run keeps the whole
+   * vocabulary in play instead of revisiting its first few terms.
+   *
+   * @param int $count
+   *   How many topics to pick.
+   *
+   * @return \Drupal\taxonomy\TermInterface[]
+   *   The picked terms.
+   */
+  protected function topics(int $count): array {
+    $terms = $this->vocabularyTerms('civictheme_topics');
+
+    $picked = [];
+
+    for ($i = 0; $terms !== [] && $i < $count; $i++) {
+      $picked[] = CaseMatrix::cycle($terms, $this->topicsAssigned++);
+    }
+
+    return $picked;
   }
 
   /**
