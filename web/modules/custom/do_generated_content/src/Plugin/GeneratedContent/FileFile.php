@@ -24,17 +24,21 @@ use Drupal\generated_content\Plugin\GeneratedContent\GeneratedContentPluginBase;
 class FileFile extends GeneratedContentPluginBase {
 
   /**
-   * How many files to create of each asset type.
+   * How many files to create of each asset type, and how to generate them.
    *
    * Every media bundle draws its files by extension, so a type missing here
    * leaves that bundle with nothing to reference.
+   *
+   * Only raster images have a random generator; asking for a random SVG, PDF
+   * or DOCX silently yields a text stub under that extension, which no viewer
+   * can open. Those types take the static generator and its real fixtures.
    */
-  protected const COUNTS = [
-    GeneratedContentAssetGenerator::ASSET_TYPE_JPG => 12,
-    GeneratedContentAssetGenerator::ASSET_TYPE_PNG => 12,
-    GeneratedContentAssetGenerator::ASSET_TYPE_SVG => 8,
-    GeneratedContentAssetGenerator::ASSET_TYPE_PDF => 6,
-    GeneratedContentAssetGenerator::ASSET_TYPE_DOCX => 4,
+  protected const ASSETS = [
+    [GeneratedContentAssetGenerator::ASSET_TYPE_JPG, 12, GeneratedContentAssetGenerator::GENERATE_TYPE_RANDOM],
+    [GeneratedContentAssetGenerator::ASSET_TYPE_PNG, 12, GeneratedContentAssetGenerator::GENERATE_TYPE_RANDOM],
+    [GeneratedContentAssetGenerator::ASSET_TYPE_SVG, 8, GeneratedContentAssetGenerator::GENERATE_TYPE_STATIC],
+    [GeneratedContentAssetGenerator::ASSET_TYPE_PDF, 6, GeneratedContentAssetGenerator::GENERATE_TYPE_STATIC],
+    [GeneratedContentAssetGenerator::ASSET_TYPE_DOCX, 4, GeneratedContentAssetGenerator::GENERATE_TYPE_STATIC],
   ];
 
   /**
@@ -52,9 +56,9 @@ class FileFile extends GeneratedContentPluginBase {
   public function generate(): array {
     $entities = [];
 
-    foreach (self::COUNTS as $type => $count) {
+    foreach (self::ASSETS as [$type, $count, $generation_type]) {
       for ($index = 0; $index < $count; $index++) {
-        $file = $this->helper::createFile($type, CaseMatrix::cycle(self::DIMENSIONS, $index));
+        $file = $this->helper::createFile($type, CaseMatrix::cycle(self::DIMENSIONS, $index), $generation_type);
 
         $entities[] = $file;
 
