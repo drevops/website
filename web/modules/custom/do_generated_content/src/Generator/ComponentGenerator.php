@@ -16,6 +16,8 @@ use Drupal\taxonomy\TermInterface;
 
 /**
  * Builds one saved paragraph of any component bundle the site allows.
+ *
+ * @codeCoverageIgnore
  */
 final class ComponentGenerator {
 

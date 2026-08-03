@@ -10,6 +10,8 @@ use Drupal\media\Entity\Media;
 
 /**
  * Base class for media generators backed by a generated file.
+ *
+ * @codeCoverageIgnore
  */
 abstract class MediaGeneratorBase extends GeneratedContentPluginBase {
 

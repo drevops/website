@@ -15,6 +15,8 @@ use Drupal\taxonomy\TermInterface;
  *
  * Holds the field set that CivicTheme attaches to every page-like bundle, so
  * a bundle generator only states what makes it different.
+ *
+ * @codeCoverageIgnore
  */
 abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
 

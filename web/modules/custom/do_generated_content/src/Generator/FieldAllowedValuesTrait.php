@@ -11,6 +11,8 @@ use Drupal\field\FieldConfigInterface;
  *
  * Hardcoding the values would stop covering a field the moment CivicTheme adds
  * one, and the gap would be invisible because the site still looks populated.
+ *
+ * @codeCoverageIgnore
  */
 trait FieldAllowedValuesTrait {
 

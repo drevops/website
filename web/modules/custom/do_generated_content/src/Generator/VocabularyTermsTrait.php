@@ -12,6 +12,8 @@ namespace Drupal\do_generated_content\Generator;
  * exist, so content tagged only with generated terms appears in none of them,
  * and on a site provisioned from a production database generation creates no
  * new terms at all.
+ *
+ * @codeCoverageIgnore
  */
 trait VocabularyTermsTrait {
 

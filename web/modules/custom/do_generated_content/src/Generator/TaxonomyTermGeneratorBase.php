@@ -12,6 +12,8 @@ use Drupal\taxonomy\Entity\Term;
  *
  * Terms are named rather than generated: a project referencing 'Drupal' and
  * 'Health' reads as real content, where a lorem ipsum term does not.
+ *
+ * @codeCoverageIgnore
  */
 abstract class TaxonomyTermGeneratorBase extends GeneratedContentPluginBase {
 
