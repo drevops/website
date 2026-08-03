@@ -9,6 +9,7 @@
 
 declare(strict_types=1);
 
+use Drupal\civictheme\CivicthemeColorManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
@@ -371,6 +372,23 @@ function do_base_deploy_rebuild_xmlsitemap(): string {
   batch_set(xmlsitemap_rebuild_batch($rebuild_types, TRUE));
 
   Helper::reporter()->updated('Queued the XML sitemap rebuild.');
+
+  return Helper::report();
+}
+
+/**
+ * Rebuilds the generated theme colour stylesheet.
+ */
+function do_base_deploy_refresh_theme_colors(): string {
+  /** @var \Drupal\civictheme\CivicthemeColorManager $color_manager */
+  $color_manager = \Drupal::classResolver(CivicthemeColorManager::class);
+
+  // The stylesheet is written only while it is missing, so colours reaching
+  // the site as configuration are never painted into it. Deleting it leaves
+  // the next request to rebuild it from the values the site actually holds.
+  $color_manager->invalidateCache();
+
+  Helper::reporter()->updated('Purged the generated theme colour stylesheet.');
 
   return Helper::report();
 }
