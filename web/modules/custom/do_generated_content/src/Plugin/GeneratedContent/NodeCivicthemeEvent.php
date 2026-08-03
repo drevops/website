@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\do_generated_content\Plugin\GeneratedContent;
 
 use Drupal\do_generated_content\Generator\CaseMatrix;
+use Drupal\do_generated_content\Generator\Formats;
 use Drupal\do_generated_content\Generator\NodeGeneratorBase;
 use Drupal\do_generated_content\Generator\RelativeDate;
 use Drupal\generated_content\Attribute\GeneratedContent;
@@ -49,11 +50,11 @@ class NodeCivicthemeEvent extends NodeGeneratorBase {
     return $this->commonValues($index) + [
       'field_c_n_body' => [
         'value' => $this->helper::staticRichText(3),
-        'format' => 'civictheme_rich_text',
+        'format' => Formats::TEXT,
       ],
       'field_c_n_date_range' => [
-        'value' => RelativeDate::format($schedule[0], 'Y-m-d\TH:i:s'),
-        'end_value' => RelativeDate::format($schedule[1], 'Y-m-d\TH:i:s'),
+        'value' => RelativeDate::format($schedule[0], Formats::DATETIME),
+        'end_value' => RelativeDate::format($schedule[1], Formats::DATETIME),
       ],
       'field_c_n_location' => $this->components($index, 'field_c_n_location', 1),
       'field_c_n_attachments' => $this->components($index, 'field_c_n_attachments', CaseMatrix::cycle([0, 1, 2], $index)),

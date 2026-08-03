@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\do_generated_content\Plugin\GeneratedContent;
 
 use Drupal\do_generated_content\Generator\CaseMatrix;
+use Drupal\do_generated_content\Generator\Formats;
 use Drupal\do_generated_content\Generator\NodeGeneratorBase;
 use Drupal\do_generated_content\Generator\RelativeDate;
 use Drupal\generated_content\Attribute\GeneratedContent;
@@ -55,11 +56,11 @@ class NodeCivicthemeAlert extends NodeGeneratorBase {
       'field_c_n_alert_type' => $this->nodeOption('field_c_n_alert_type', $index),
       'field_c_n_body' => [
         'value' => $this->helper::staticHtmlParagraph(),
-        'format' => 'civictheme_rich_text',
+        'format' => Formats::TEXT,
       ],
       'field_c_n_date_range' => [
-        'value' => RelativeDate::format($schedule[0], 'Y-m-d\TH:i:s'),
-        'end_value' => RelativeDate::format($schedule[1], 'Y-m-d\TH:i:s'),
+        'value' => RelativeDate::format($schedule[0], Formats::DATETIME),
+        'end_value' => RelativeDate::format($schedule[1], Formats::DATETIME),
       ],
     ];
 

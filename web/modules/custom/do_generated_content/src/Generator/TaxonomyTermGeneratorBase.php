@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\do_generated_content\Generator;
 
+use Drupal\taxonomy\TermInterface;
 use Drupal\generated_content\Plugin\GeneratedContent\GeneratedContentPluginBase;
 use Drupal\taxonomy\Entity\Term;
 
@@ -16,6 +17,8 @@ use Drupal\taxonomy\Entity\Term;
  * @codeCoverageIgnore
  */
 abstract class TaxonomyTermGeneratorBase extends GeneratedContentPluginBase {
+
+  use VocabularyTermsTrait;
 
   /**
    * Term names to create, in order.
@@ -54,12 +57,7 @@ abstract class TaxonomyTermGeneratorBase extends GeneratedContentPluginBase {
    * Check whether the vocabulary already holds a term of this name.
    */
   protected function exists(string $name): bool {
-    $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
-      'vid' => $this->getBundle(),
-      'name' => $name,
-    ]);
-
-    return $terms !== [];
+    return array_any($this->vocabularyTerms($this->getBundle()), fn(TermInterface $term): bool => $term->getName() === $name);
   }
 
 }

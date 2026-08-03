@@ -38,19 +38,36 @@ class ComponentCoverageTest extends UnitTestCase {
 
   /**
    * Data provider for testComponentFieldBundlesAreSupported().
+   *
+   * Derived from the exported configuration rather than listed by hand, so a
+   * paragraph-reference field added later is covered without editing the test.
+   * Scoped to node and paragraph fields: those are what generation populates,
+   * and a paragraph field on any other entity type is outside its remit.
    */
   public static function dataProviderComponentFieldBundlesAreSupported(): \Iterator {
-    yield 'page components' => ['field.field.node.civictheme_page.field_c_n_components'];
-    yield 'blog components' => ['field.field.node.blog.field_c_n_components'];
-    yield 'project components' => ['field.field.node.project.field_c_n_components'];
-    yield 'page banner components' => ['field.field.node.civictheme_page.field_c_n_banner_components'];
-    yield 'page bottom banner components' => ['field.field.node.civictheme_page.field_c_n_banner_components_bott'];
-    yield 'event location' => ['field.field.node.civictheme_event.field_c_n_location'];
-    yield 'event attachments' => ['field.field.node.civictheme_event.field_c_n_attachments'];
-    yield 'manual list items' => ['field.field.paragraph.civictheme_manual_list.field_c_p_list_items'];
-    yield 'accordion panels' => ['field.field.paragraph.civictheme_accordion.field_c_p_panels'];
-    yield 'slider slides' => ['field.field.paragraph.civictheme_slider.field_c_p_slides'];
-    yield 'steps items' => ['field.field.paragraph.steps.field_c_p_list_items'];
+    $directory = dirname(__DIR__, 7) . '/config/default';
+
+    $paragraph_types = [];
+
+    foreach (glob($directory . '/paragraphs.paragraphs_type.*.yml') ?: [] as $file) {
+      $paragraph_types[] = substr(basename($file, '.yml'), strlen('paragraphs.paragraphs_type.'));
+    }
+
+    foreach (['node', 'paragraph'] as $entity_type) {
+      foreach (glob($directory . '/field.field.' . $entity_type . '.*.yml') ?: [] as $file) {
+        $config = (array) Yaml::parseFile($file);
+
+        $target_bundles = array_keys($config['settings']['handler_settings']['target_bundles'] ?? []);
+
+        if (array_intersect($target_bundles, $paragraph_types) === []) {
+          continue;
+        }
+
+        $name = basename($file, '.yml');
+
+        yield $name => [$name];
+      }
+    }
   }
 
   /**

@@ -25,16 +25,6 @@ final class ComponentGenerator {
   use VocabularyTermsTrait;
 
   /**
-   * Rich text format used by every CivicTheme content field.
-   */
-  private const string TEXT_FORMAT = 'civictheme_rich_text';
-
-  /**
-   * Storage format of a datetime field.
-   */
-  private const string DATETIME_FORMAT = 'Y-m-d\TH:i:s';
-
-  /**
    * Library item reused by every generated 'from_library' component.
    */
   protected ?LibraryItem $libraryItem = NULL;
@@ -234,7 +224,7 @@ final class ComponentGenerator {
   protected function richText(int $paragraphs = 2): array {
     return [
       'value' => $this->generatedContentHelper::staticRichText($paragraphs),
-      'format' => self::TEXT_FORMAT,
+      'format' => Formats::TEXT,
     ];
   }
 
@@ -374,8 +364,8 @@ final class ComponentGenerator {
       'field_c_p_link' => $this->link('View event'),
       'field_c_p_topics' => $this->topics($index),
       'field_c_p_date_range' => [
-        'value' => RelativeDate::format('+7 days', self::DATETIME_FORMAT),
-        'end_value' => RelativeDate::format('+7 days +2 hours', self::DATETIME_FORMAT),
+        'value' => RelativeDate::format('+7 days', Formats::DATETIME),
+        'end_value' => RelativeDate::format('+7 days +2 hours', Formats::DATETIME),
       ],
     ];
 

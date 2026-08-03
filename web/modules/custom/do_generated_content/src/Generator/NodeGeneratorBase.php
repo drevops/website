@@ -245,6 +245,14 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
   protected function components(int $index, string $field_name, int $count): array {
     $bundles = $this->generator()->allowedTargetBundles('node', $this->getBundle(), $field_name);
 
+    if ($bundles === []) {
+      // A field that restricts no bundle declares no target_bundles at all,
+      // and there is nothing to walk.
+      $this->helper::log('Skipped %s components: the field declares no target bundles.', $field_name);
+
+      return [];
+    }
+
     $components = [];
 
     for ($i = 0; $i < $count; $i++) {
