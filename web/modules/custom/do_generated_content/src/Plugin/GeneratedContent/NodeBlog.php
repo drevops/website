@@ -8,23 +8,23 @@ use Drupal\do_generated_content\Generator\NodeGeneratorBase;
 use Drupal\generated_content\Attribute\GeneratedContent;
 
 /**
- * Generated page nodes.
+ * Generated blog post nodes.
  *
  * @codeCoverageIgnore
  */
 #[GeneratedContent(
-  id: 'do_generated_content_node_civictheme_page',
+  id: 'do_generated_content_node_blog',
   entity_type: 'node',
-  bundle: 'civictheme_page',
-  weight: 31,
+  bundle: 'blog',
+  weight: 32,
   tracking: TRUE,
 )]
-class NodeCivicthemePage extends NodeGeneratorBase {
+class NodeBlog extends NodeGeneratorBase {
 
   /**
    * {@inheritdoc}
    */
-  protected const LABEL = 'page';
+  protected const LABEL = 'blog post';
 
   /**
    * {@inheritdoc}

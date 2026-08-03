@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\do_generated_content\Plugin\GeneratedContent;
 
+use Drupal\do_generated_content\Generator\MediaGeneratorBase;
 use Drupal\file\FileInterface;
 use Drupal\generated_content\Attribute\GeneratedContent;
-use Drupal\generated_content\Plugin\GeneratedContent\GeneratedContentPluginBase;
-use Drupal\media\Entity\Media;
 
 /**
  * Generated image media entities.
@@ -21,43 +20,33 @@ use Drupal\media\Entity\Media;
   weight: 1,
   tracking: TRUE,
 )]
-class MediaCivicthemeImage extends GeneratedContentPluginBase {
+class MediaCivicthemeImage extends MediaGeneratorBase {
 
   /**
    * {@inheritdoc}
    */
-  public function generate(): array {
-    $entities = [];
+  protected const FIELD_NAME = 'field_c_m_image';
 
-    for ($i = 0; $i < 10; $i++) {
-      $file = $this->helper::randomFile('jpg');
+  /**
+   * {@inheritdoc}
+   */
+  protected const EXTENSIONS = ['jpg', 'png'];
 
-      if (!$file instanceof FileInterface) {
-        $file = $this->helper::randomFile('png');
-      }
+  /**
+   * {@inheritdoc}
+   */
+  protected const LABEL = 'image';
 
-      if (!$file instanceof FileInterface) {
-        continue;
-      }
-
-      $name = sprintf('Generated image %s', $i + 1);
-
-      $media = Media::create([
-        'bundle' => 'civictheme_image',
-        'name' => $name,
-        'field_c_m_image' => [
-          'target_id' => $file->id(),
-          'alt' => $this->helper::staticSentence(3),
-        ],
-      ]);
-
-      $media->save();
-      $entities[] = $media;
-
-      $this->helper::log('Created media: %s', $name);
-    }
-
-    return $entities;
+  /**
+   * {@inheritdoc}
+   */
+  protected function fileValues(FileInterface $file): array {
+    return [
+      static::FIELD_NAME => [
+        'target_id' => $file->id(),
+        'alt' => $this->helper::staticSentence(3),
+      ],
+    ];
   }
 
 }
