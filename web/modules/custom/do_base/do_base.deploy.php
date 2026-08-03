@@ -22,6 +22,7 @@ use Drupal\media\MediaInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\pathauto\PathautoState;
 use Drupal\search_api\Entity\Index;
 use Drupal\taxonomy\TermInterface;
 
@@ -637,6 +638,10 @@ function _do_base_our_work_build_page(string $node_uuid): NodeInterface {
       'field_c_n_show_last_updated' => FALSE,
       'field_c_n_vertical_spacing' => 'none',
       'field_c_n_components' => [$intro, $projects],
+      // The alias is shorter than the title, so pathauto is switched off for
+      // this node rather than left to derive one; without the skip it would
+      // take the alias back the first time an author saves the page.
+      'path' => ['alias' => '/work', 'pathauto' => PathautoState::SKIP],
     ];
 
     // A missing image leaves the banner a flat dark band, which is a far

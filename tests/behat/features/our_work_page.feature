@@ -8,13 +8,13 @@ Feature: Our work page
   @api
   Scenario: The page opens the primary navigation and introduces the work
     Given I am an anonymous user
-    When I go to "/our-work"
+    When I go to "/work"
     Then the response status code should be 200
     And I should see the text "Work you can go and look at."
     And I should see the text "The work, not the pitch."
     And I should see the text "Newest work first."
     # The link leads the menu, so the first item is the one that must point here.
-    And the element ".ct-navigation__menu .ct-menu__item--level-0:first-child .ct-menu__item__link" with the attribute "href" and the value "/our-work" should exist
+    And the element ".ct-navigation__menu .ct-menu__item--level-0:first-child .ct-menu__item__link" with the attribute "href" and the value "/work" should exist
 
   @api
   Scenario: Published projects are listed as promo cards, twelve to a page
@@ -35,7 +35,7 @@ Feature: Our work page
       | [TEST] Our work project 13 | published        | 2025            | completed         | large                 | inherit                | normal                      | both                       |
       | [TEST] Our work draft      | draft            | 2025            | ongoing           | large                 | inherit                | normal                      | both                       |
     And I am an anonymous user
-    When I go to "/our-work"
+    When I go to "/work"
     Then the response status code should be 200
     # Asserting the page fills rather than the total, so projects already on the
     # site cannot change the outcome.
