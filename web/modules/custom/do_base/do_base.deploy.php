@@ -13,9 +13,13 @@ use Drupal\civictheme\CivicthemeColorManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
+use Drupal\Core\File\FileExists;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\drupal_helpers\Helper;
 use Drupal\drupal_helpers\Report\Reporter;
+use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
+use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Entity\Index;
@@ -347,6 +351,45 @@ function do_base_deploy_populate_how_we_work_page(): string {
 }
 
 /**
+ * Creates the Our Work page and puts it first in the primary navigation.
+ */
+function do_base_deploy_populate_our_work_page(): string {
+  $node_uuid = '1287abe9-edc6-4cc9-a078-f7261a6c6e1d';
+  $menu_name = 'civictheme-primary-navigation';
+  $link_title = 'Our work';
+
+  $existing = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['uuid' => $node_uuid]);
+  $node = reset($existing);
+
+  if ($node instanceof NodeInterface) {
+    Helper::reporter()->skipped('The Our Work page already exists.');
+  }
+  else {
+    $node = _do_base_our_work_build_page($node_uuid);
+    Helper::reporter()->created(sprintf('Created the Our Work page (node %s).', $node->id()));
+  }
+
+  $link = Helper::menu()->findItem($menu_name, ['title' => $link_title]);
+
+  if ($link instanceof MenuLinkContentInterface) {
+    Helper::reporter()->skipped(sprintf('The "%s" link already exists in the primary navigation.', $link_title));
+
+    return Helper::report();
+  }
+
+  // createTree() numbers links from their position in the tree it is handed,
+  // which describes this link alone and so says nothing about where it belongs
+  // among the links already in the menu. Reading the weight first keeps the
+  // link being created out of its own calculation.
+  $weight = _do_base_menu_leading_weight($menu_name);
+
+  Helper::menu()->createTree($menu_name, [$link_title => 'entity:node/' . $node->id()]);
+  Helper::menu()->updateItem($menu_name, ['title' => $link_title], ['weight' => $weight]);
+
+  return Helper::report();
+}
+
+/**
  * Rebuilds the XML sitemap.
  */
 function do_base_deploy_rebuild_xmlsitemap(): string {
@@ -503,6 +546,183 @@ function do_base_deploy_seed_project_vocabularies(): string {
   }
 
   return Helper::report();
+}
+
+/**
+ * Assembles the Our Work page.
+ */
+function _do_base_our_work_build_page(string $node_uuid): NodeInterface {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $paragraph_storage = $entity_type_manager->getStorage('paragraph');
+
+  $component = function (string $type, array $fields) use ($paragraph_storage): array {
+    $paragraph = $paragraph_storage->create(['type' => $type] + $fields);
+
+    if (!$paragraph instanceof ParagraphInterface) {
+      throw new \RuntimeException(sprintf('Failed to create a "%s" paragraph.', $type));
+    }
+
+    $paragraph->save();
+
+    return ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()];
+  };
+
+  $rich_text = (fn(string $html): array => ['value' => $html, 'format' => 'civictheme_rich_text']);
+
+  // A failed save mid-way must not leave orphaned paragraphs behind, so the
+  // whole assembly commits or rolls back as one unit.
+  $transaction = \Drupal::database()->startTransaction();
+
+  try {
+    $banner_content = $component('civictheme_content', [
+      'field_c_p_content' => $rich_text(
+        '<p class="ct-text-large">Every project here is a platform we designed, built, upgraded or rescued. Each one names the client where we are free to, the'
+        . ' year, the sector and the technologies, along with the part we actually played. No case study gloss, no invented metrics.</p>'
+        . '<p><a class="ct-button ct-theme-light ct-theme-dark ct-button--primary ct-button--regular" href="/contact"><strong>Talk to us about your'
+        . ' platform</strong></a></p>'
+      ),
+      'field_c_p_theme' => 'dark',
+      'field_c_p_background' => FALSE,
+      'field_c_p_vertical_spacing' => 'bottom',
+    ]);
+
+    $intro = $component('civictheme_content', [
+      'field_c_p_content' => $rich_text(
+        '<p class="text-align-center eyebrow">What you are looking at</p>'
+        . '<h2 class="text-align-center"><strong>The work, not the pitch.</strong></h2>'
+        . '<p class="text-align-center ct-text-large">Most portfolios are written to impress. This one is written so you can check it. Every entry names the client,'
+        . ' the year, the sector and the technologies involved, along with the part we actually played, which is sometimes the whole platform and sometimes one'
+        . ' difficult piece of it.</p>'
+        . '<p class="text-align-center ct-text-large">Where a project produced something open source, the contributions are linked from its page, so you can read the'
+        . ' code instead of taking our word for it. Where a site is public, the link goes straight to it.</p>'
+      ),
+      'field_c_p_theme' => 'light',
+      'field_c_p_background' => TRUE,
+      'field_c_p_vertical_spacing' => 'both',
+    ]);
+
+    $projects = $component('civictheme_automated_list', [
+      'field_c_p_content' => $rich_text(
+        '<p class="text-align-center eyebrow">Every project</p>'
+        . '<h2 class="text-align-center"><strong>Newest work first.</strong></h2>'
+      ),
+      'field_c_p_list_type' => 'civictheme_automated_list__block1',
+      'field_c_p_list_content_type' => 'project',
+      'field_c_p_list_limit_type' => 'unlimited',
+      'field_c_p_list_limit' => 12,
+      'field_c_p_list_item_view_as' => 'civictheme_promo_card',
+      'field_c_p_list_item_theme' => 'light',
+      'field_c_p_list_column_count' => 3,
+      'field_c_p_list_fill_width' => FALSE,
+      'field_c_p_theme' => 'light',
+      'field_c_p_background' => FALSE,
+      'field_c_p_vertical_spacing' => 'both',
+    ]);
+
+    $values = [
+      'type' => 'civictheme_page',
+      'uuid' => $node_uuid,
+      'title' => 'Our work',
+      'status' => 1,
+      'moderation_state' => 'published',
+      'field_c_n_summary' => 'Platforms we have designed, built, upgraded and kept running. Each project names the client, the year, the sector and the technologies,'
+        . ' along with the part we actually played.',
+      'field_c_n_banner_theme' => 'dark',
+      'field_c_n_banner_type' => 'large',
+      'field_c_n_banner_title' => 'Work you can go and look at.',
+      'field_c_n_banner_blend_mode' => 'soft-light',
+      'field_c_n_banner_hide_breadcrumb' => FALSE,
+      'field_c_n_banner_components' => [$banner_content],
+      'field_c_n_hide_sidebar' => TRUE,
+      'field_c_n_show_last_updated' => FALSE,
+      'field_c_n_vertical_spacing' => 'none',
+      'field_c_n_components' => [$intro, $projects],
+    ];
+
+    // A missing image leaves the banner a flat dark band, which is a far
+    // smaller loss than a deployment that stops.
+    $banner_media = _do_base_our_work_banner_media();
+
+    if ($banner_media instanceof MediaInterface) {
+      $values['field_c_n_banner_background'] = ['target_id' => $banner_media->id()];
+    }
+
+    $node = $entity_type_manager->getStorage('node')->create($values);
+    $node->save();
+  }
+  catch (\Throwable $throwable) {
+    $transaction->rollBack();
+
+    throw $throwable;
+  }
+
+  return $node;
+}
+
+/**
+ * Loads or creates the media entity holding the Our Work banner image.
+ */
+function _do_base_our_work_banner_media(): ?MediaInterface {
+  $media_uuid = 'a93f1457-90ca-4ce0-8685-38f32322317f';
+  $media_storage = \Drupal::entityTypeManager()->getStorage('media');
+
+  $existing = $media_storage->loadByProperties(['uuid' => $media_uuid]);
+  $media = reset($existing);
+
+  if ($media instanceof MediaInterface) {
+    return $media;
+  }
+
+  $source = DRUPAL_ROOT . '/' . \Drupal::service('extension.list.module')->getPath('do_base') . '/assets/our-work-banner.jpg';
+
+  if (!is_file($source)) {
+    return NULL;
+  }
+
+  $directory = 'public://images';
+
+  if (!\Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
+    return NULL;
+  }
+
+  $file = \Drupal::service('file.repository')->writeData((string) file_get_contents($source), $directory . '/our-work-banner.jpg', FileExists::Replace);
+
+  if (!$file instanceof FileInterface) {
+    return NULL;
+  }
+
+  // CivicTheme image media carry the alt text as their library name, so an
+  // author browsing the library sees what the image shows.
+  $description = 'Layered slabs of teal glass and brushed metal bars against a soft grey-blue background.';
+
+  $media = $media_storage->create([
+    'bundle' => 'civictheme_image',
+    'uuid' => $media_uuid,
+    'name' => $description,
+    'status' => 1,
+    'field_c_m_image' => ['target_id' => $file->id(), 'alt' => $description],
+  ]);
+  $media->save();
+
+  return $media;
+}
+
+/**
+ * Returns a weight that sorts ahead of every top-level link in a menu.
+ */
+function _do_base_menu_leading_weight(string $menu_name): int {
+  $links = \Drupal::entityTypeManager()->getStorage('menu_link_content')->loadByProperties(['menu_name' => $menu_name]);
+
+  // Seeded so that a menu with no top-level links still yields a weight.
+  $weights = [0];
+
+  foreach ($links as $link) {
+    if ($link instanceof MenuLinkContentInterface && $link->getParentId() === '') {
+      $weights[] = $link->getWeight();
+    }
+  }
+
+  return min($weights) - 1;
 }
 
 /**

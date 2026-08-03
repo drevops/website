@@ -68,6 +68,14 @@ The one exception is installing or uninstalling a module: that rebuilds the cont
 
 Deploy hooks (`hook_deploy_NAME()`) run after `cim` and need no such bootstrap. They also see configuration the same deployment just imported, so a deploy hook never needs to import configuration itself.
 
+## Images a deploy hook needs
+
+A hook that builds a page cannot pull an image out of the media library when nothing has put one there yet. Ship the file with the module that creates the page, under `web/modules/custom/<module>/assets/`, and let the hook copy it into the public files directory and wrap it in a media entity.
+
+Give that media entity a fixed UUID in the hook. It is the UUID, not a filename check, that makes a second run a no-op, and it keeps one identity for the image across every environment.
+
+Treat a missing file as a reason to skip the image rather than to fail: a banner without its background is a far smaller loss than a deployment that stops. Export at the size the page actually uses, and prefer JPEG for photographic renders - a 2K PNG out of an image generator is several megabytes and stays in the repository for good.
+
 ## Running ad-hoc code
 
 Never pass code inline through `drush php:eval`, stdin, or a heredoc. Write it to a file under `.artifacts/` and run `ahoy drush php:script <path>`. Committed, vetted scripts may use `php:eval` for static, non-dynamic operations.
