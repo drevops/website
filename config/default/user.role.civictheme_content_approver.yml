@@ -13,6 +13,7 @@ dependencies:
     - filter
     - linkit
     - media
+    - moderated_content_bulk_publish
     - navigation
     - node
     - scheduled_transitions
@@ -32,6 +33,9 @@ permissions:
   - 'administer linkit profiles'
   - 'administer scheduled transitions'
   - 'generate ai alt tags'
+  - 'moderated content bulk archive'
+  - 'moderated content bulk publish'
+  - 'moderated content bulk unpublish'
   - 'use civictheme_editorial transition archive'
   - 'use civictheme_editorial transition create_new_draft'
   - 'use civictheme_editorial transition needs_review'
