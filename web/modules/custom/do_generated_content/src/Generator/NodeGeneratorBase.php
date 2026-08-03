@@ -23,7 +23,7 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
   /**
    * Number of nodes each bundle generates.
    */
-  protected const COUNT = 20;
+  public const COUNT = 20;
 
   /**
    * Number of components each page-like node carries.
@@ -102,6 +102,9 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
   /**
    * Build the fields every bundle with a summary and topics shares.
    *
+   * @param int $index
+   *   Zero-based run index.
+   *
    * @return array
    *   Field values.
    */
@@ -144,6 +147,9 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
   /**
    * Build the banner fields CivicTheme attaches to page-like bundles.
    *
+   * @param int $index
+   *   Zero-based run index.
+   *
    * @return array
    *   Field values.
    */
@@ -185,6 +191,9 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
   /**
    * Build the sidebar, tag and component fields of a page-like bundle.
    *
+   * @param int $index
+   *   Zero-based run index.
+   *
    * @return array
    *   Field values.
    */
@@ -198,6 +207,13 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
 
   /**
    * Build components for a node, walking the bundles the field accepts.
+   *
+   * @param int $index
+   *   Zero-based run index.
+   * @param string $field_name
+   *   Name of the component field to fill.
+   * @param int $count
+   *   How many components to build.
    *
    * @return \Drupal\paragraphs\Entity\Paragraph[]
    *   Saved paragraphs.
@@ -225,6 +241,16 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
 
   /**
    * Walk a node field's allowed values.
+   *
+   * @param string $field_name
+   *   Name of the list field to read allowed values from.
+   * @param int $index
+   *   Zero-based run index.
+   * @param int $offset
+   *   Shifts where the walk starts.
+   *
+   * @return string
+   *   The allowed value for this index.
    */
   protected function nodeOption(string $field_name, int $index, int $offset = 0): string {
     return (string) CaseMatrix::cycle($this->allowedValues('node', $this->getBundle(), $field_name), $index, $offset);

@@ -33,8 +33,11 @@ final class CaseMatrix {
     }
 
     $values = array_values($values);
+    $count = count($values);
 
-    return $values[($index + $offset) % count($values)];
+    // PHP's modulo keeps the sign of its left operand, so a negative index or
+    // offset would land outside the list.
+    return $values[(($index + $offset) % $count + $count) % $count];
   }
 
   /**

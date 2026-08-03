@@ -6,6 +6,7 @@ namespace Drupal\Tests\do_generated_content\Unit;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\do_generated_content\Generator\CaseMatrix;
+use Drupal\do_generated_content\Generator\NodeGeneratorBase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -17,8 +18,11 @@ class CaseMatrixTest extends UnitTestCase {
 
   /**
    * Number of entities each node generator creates.
+   *
+   * Taken from the generator itself, so the coverage these tests prove is the
+   * coverage a real run produces.
    */
-  protected const RUN_LENGTH = 20;
+  protected const RUN_LENGTH = NodeGeneratorBase::COUNT;
 
   /**
    * Tests that a run index maps onto the expected value.
@@ -41,6 +45,8 @@ class CaseMatrixTest extends UnitTestCase {
     yield 'single value' => [['only'], 5, 3, 'only'];
     yield 'non-sequential keys are ignored' => [[3 => 'a', 9 => 'b'], 1, 0, 'b'];
     yield 'integer values' => [[10, 20], 1, 0, 20];
+    yield 'negative offset stays in range' => [['a', 'b', 'c'], 0, -1, 'c'];
+    yield 'negative index stays in range' => [['a', 'b', 'c'], -4, 0, 'c'];
   }
 
   /**
@@ -194,9 +200,10 @@ class CaseMatrixTest extends UnitTestCase {
    */
   public static function dataProviderDenseWalk(): \Iterator {
     yield 'manual list cards' => [13, 3, 5];
-    yield 'slider slides' => [2, 3, 1];
-    yield 'stride larger than the list' => [2, 3, 1];
+    yield 'slider slides' => [3, 3, 1];
+    yield 'stride larger than the list' => [2, 5, 1];
     yield 'exactly one pass' => [9, 3, 3];
+    yield 'single slot per iteration' => [4, 1, 4];
   }
 
   /**

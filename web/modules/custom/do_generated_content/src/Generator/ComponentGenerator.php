@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\do_generated_content\Generator;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\field\FieldConfigInterface;
 use Drupal\generated_content\GeneratedContentRepository;
 use Drupal\generated_content\Helpers\GeneratedContentHelper;
 use Drupal\media\MediaInterface;
@@ -420,13 +421,15 @@ final class ComponentGenerator {
    * Build a manual list, walking every card bundle it accepts.
    */
   protected function manualList(int $index): array {
-    $bundles = $this->allowedTargetBundles('paragraph', 'civictheme_manual_list', 'field_c_p_list_items');
+    // Drop the host bundle: a field configured to accept it would otherwise
+    // recurse into this builder until the stack runs out.
+    $bundles = array_values(array_diff($this->allowedTargetBundles('paragraph', 'civictheme_manual_list', 'field_c_p_list_items'), ['civictheme_manual_list']));
 
     $items = [];
 
     // Walk three consecutive card bundles so a run of lists covers all of
     // them rather than repeating the same card everywhere.
-    for ($i = 0; $i < 3; $i++) {
+    for ($i = 0; $bundles !== [] && $i < 3; $i++) {
       $item = $this->create((string) CaseMatrix::cycle($bundles, $this->manualListCount * 3 + $i), $index + $i);
 
       if ($item instanceof Paragraph) {
@@ -787,9 +790,10 @@ final class ComponentGenerator {
     ]);
     $library_item->save();
 
-    // A library item outlives the node that referenced it, so it has to be
-    // tracked to be removed with the rest of the generated content.
-    $this->repository->addEntities([$library_item]);
+    // A library item outlives the node that referenced it, and deleting it
+    // leaves its paragraph behind, so both are tracked to be removed with the
+    // rest of the generated content.
+    $this->repository->addEntities([$library_item, $paragraph]);
 
     $this->libraryItem = $library_item;
 
@@ -806,14 +810,13 @@ final class ComponentGenerator {
     $id = $entity_type . '.' . $bundle . '.' . $field_name;
     $field = $this->entityTypeManager->getStorage('field_config')->load($id);
 
-    if ($field === NULL) {
+    if (!$field instanceof FieldConfigInterface) {
       throw new \RuntimeException(sprintf('Field %s does not exist.', $id));
     }
 
-    // @phpstan-ignore-next-line
-    $target_bundles = $field->getSetting('handler_settings')['target_bundles'] ?? [];
+    $handler_settings = $field->getSetting('handler_settings') ?? [];
 
-    return array_keys($target_bundles);
+    return array_keys($handler_settings['target_bundles'] ?? []);
   }
 
 }

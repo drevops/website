@@ -7,6 +7,7 @@ namespace Drupal\Tests\do_generated_content\Unit;
 use Drupal\Tests\UnitTestCase;
 use Drupal\do_generated_content\Generator\ComponentGenerator;
 use Drupal\do_generated_content\Generator\NodeGeneratorBase;
+use Drupal\generated_content\Attribute\GeneratedContent;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Yaml\Yaml;
@@ -103,10 +104,10 @@ class ComponentCoverageTest extends UnitTestCase {
     $generated = [];
 
     foreach (glob($plugin_dir . '/Node*.php') ?: [] as $file) {
-      $source = file_get_contents($file);
+      $class = 'Drupal\\do_generated_content\\Plugin\\GeneratedContent\\' . basename($file, '.php');
 
-      if ($source !== FALSE && preg_match("/bundle: '([^']+)'/", $source, $matches) === 1) {
-        $generated[] = $matches[1];
+      foreach ((new \ReflectionClass($class))->getAttributes(GeneratedContent::class) as $attribute) {
+        $generated[] = $attribute->newInstance()->bundle;
       }
     }
 
