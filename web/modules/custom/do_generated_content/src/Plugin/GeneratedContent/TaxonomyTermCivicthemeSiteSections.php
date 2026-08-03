@@ -8,33 +8,27 @@ use Drupal\do_generated_content\Generator\TaxonomyTermGeneratorBase;
 use Drupal\generated_content\Attribute\GeneratedContent;
 
 /**
- * Generated topic taxonomy terms.
+ * Generated site section taxonomy terms.
  *
  * @codeCoverageIgnore
  */
 #[GeneratedContent(
-  id: 'do_generated_content_taxonomy_term_civictheme_topics',
+  id: 'do_generated_content_taxonomy_term_civictheme_site_sections',
   entity_type: 'taxonomy_term',
-  bundle: 'civictheme_topics',
-  weight: 11,
+  bundle: 'civictheme_site_sections',
+  weight: 12,
   tracking: TRUE,
 )]
-class TaxonomyTermCivicthemeTopics extends TaxonomyTermGeneratorBase {
+class TaxonomyTermCivicthemeSiteSections extends TaxonomyTermGeneratorBase {
 
   /**
    * {@inheritdoc}
    */
   protected const NAMES = [
-    'Drupal',
-    'DevOps',
-    'CI/CD',
-    'Testing',
-    'Automation',
-    'Open Source',
-    'Web Development',
-    'Performance',
-    'Security',
-    'Accessibility',
+    'About',
+    'Services',
+    'Work',
+    'Insights',
   ];
 
 }
