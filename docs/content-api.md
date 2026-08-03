@@ -6,9 +6,9 @@ This document is the authoring contract: it describes the endpoints, the content
 
 ## Governance model (read this first)
 
-Pages created through the API are **never published automatically**. A human reviews and publishes them.
+Content created through the API is **never published automatically**. A human reviews and publishes it.
 
-- **Pages** (`civictheme_page` nodes) are always created as **draft**. The server forces this: even if a request asks for `published`, the page is coerced to `draft`.
+- **Nodes** of every content type are always created as **draft**. The server forces this: even if a request asks for `published`, the node is coerced to `draft`.
 - **Images** (`civictheme_image` media) are created **published** - they are assets, invisible until referenced by a published page. The server forces this too, so a client never has to set media moderation state.
 
 So the workflow is: the agent creates a draft page with published images, an editor reviews the draft, and when they publish the page it renders immediately because the images are already live.
@@ -21,7 +21,7 @@ Send the API key in the `api-key` request header on every request:
 api-key: <key>
 ```
 
-The key belongs to a dedicated, least-privilege service account (`do_content_api_service`) that may only create pages, images, and the supported components. Pages it authors are forced to draft by the moderation policy - a human publishes them.
+The key belongs to a dedicated, least-privilege service account (`do_content_api_service`) that may create and edit its own nodes of any content type, plus images and the supported components. It cannot delete anything, and cannot edit content authored by anyone else. Nodes it authors are forced to draft by the moderation policy - a human publishes them.
 
 Retrieve (or regenerate) the key as an administrator at `/user/<uid>/key-auth` for the service account, or have a developer read it from the account. Always send it over HTTPS. On deployed environments the `shield` module may sit in front of the site; the API path must be allow-listed there or the client must also supply the Shield credentials.
 
@@ -53,6 +53,10 @@ A page is a `civictheme_page` node whose `field_c_n_components` is an **ordered 
 | `moderation_state` | attribute | Always ends up `draft` (server-enforced). |
 | `field_c_n_components` | relationship (paragraphs) | Ordered list of component paragraphs. |
 | `field_c_n_summary` | attribute (string) | Optional teaser/summary. |
+
+### Other content types
+
+`blog`, `project`, `civictheme_event` and `civictheme_alert` are creatable at `/jsonapi/node/<bundle>` with the same authentication, draft policy and component model. Each carries its own fields on top of the shared ones above, and a bundle's required fields are enforced by entity validation: a request missing one comes back `422` naming the field, which is the quickest way to discover them. `project`, for example, requires `field_do_n_status` and `field_do_n_year`.
 
 ### Supported components (v1)
 
