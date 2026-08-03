@@ -35,6 +35,7 @@ dependencies:
     - filter
     - linkit
     - media
+    - moderated_content_bulk_publish
     - navigation
     - node
     - paragraphs_library
@@ -199,6 +200,9 @@ permissions:
   - 'edit webform variants'
   - 'generate ai alt tags'
   - 'link to any page'
+  - 'moderated content bulk archive'
+  - 'moderated content bulk publish'
+  - 'moderated content bulk unpublish'
   - 'notify of path changes'
   - 'rebuild node access permissions'
   - 'revert all revisions'
