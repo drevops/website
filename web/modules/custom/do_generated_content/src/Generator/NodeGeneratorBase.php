@@ -138,7 +138,12 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
 
     $thumbnail = $this->helper::randomMediaItem('civictheme_image');
 
-    if (CaseMatrix::bit($index, 4) && $thumbnail instanceof MediaInterface) {
+    // Shares bit 0 rather than taking a high bit of its own: a high bit only
+    // turns on over the last few indices of the run, which are the ones
+    // moderationState() withholds from publication, so a card image would
+    // hardly ever reach an anonymous visitor. Not bit 2 - a card carrying an
+    // image but no summary is a combination worth covering.
+    if (CaseMatrix::bit($index, 0) && $thumbnail instanceof MediaInterface) {
       $values['field_c_n_thumbnail'] = ['target_id' => $thumbnail->id()];
     }
 
