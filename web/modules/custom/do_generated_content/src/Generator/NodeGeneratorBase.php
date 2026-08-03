@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\do_generated_content\Generator;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\generated_content\Plugin\GeneratedContent\GeneratedContentPluginBase;
 use Drupal\media\MediaInterface;
 use Drupal\node\Entity\Node;
@@ -210,11 +211,22 @@ abstract class NodeGeneratorBase extends GeneratedContentPluginBase {
    *   Field values.
    */
   protected function pageValues(int $index): array {
-    return [
+    $values = [
       'field_c_n_hide_sidebar' => CaseMatrix::bit($index, 3),
       'field_c_n_hide_tags' => CaseMatrix::bit($index, 4),
       'field_c_n_components' => $this->components($index, 'field_c_n_components', static::COMPONENTS_PER_NODE),
     ];
+
+    if (CaseMatrix::bit($index, 1)) {
+      // Metatag strips anything matching the site defaults on save, so the
+      // values have to differ from them to be stored at all.
+      $values['field_n_metatags'] = Json::encode([
+        'title' => sprintf('Generated %s %s meta title', static::LABEL, $index + 1),
+        'description' => $this->helper::staticSentence(12),
+      ]);
+    }
+
+    return $values;
   }
 
   /**

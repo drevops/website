@@ -71,10 +71,10 @@ class NodeProject extends NodeGeneratorBase {
       $values['field_do_n_oss_contributions'][] = ['uri' => 'internal:/', 'title' => sprintf('Contribution %s', $i + 1)];
     }
 
-    $sector = $this->helper::randomTerm('do_sector');
+    $sectors = $this->vocabularyTerms('do_sector');
 
-    if ($sector instanceof TermInterface) {
-      $values['field_do_n_sector'] = ['target_id' => $sector->id()];
+    if ($sectors !== []) {
+      $values['field_do_n_sector'] = ['target_id' => CaseMatrix::cycle($sectors, $index)->id()];
     }
 
     $values['field_do_n_services'] = $this->termTargets('do_service', $index, [1, 2, 3]);
@@ -86,11 +86,18 @@ class NodeProject extends NodeGeneratorBase {
   /**
    * Build entity reference values for a walked number of terms.
    *
+   * @param string $vocabulary
+   *   Vocabulary id to draw terms from.
+   * @param int $index
+   *   Zero-based run index.
+   * @param array $sizes
+   *   Numbers of terms to walk.
+   *
    * @return array<int, array<string, int|string|null>>
    *   Field values.
    */
   protected function termTargets(string $vocabulary, int $index, array $sizes): array {
-    $terms = $this->helper::randomTerms($vocabulary, CaseMatrix::cycle($sizes, $index));
+    $terms = CaseMatrix::subset($this->vocabularyTerms($vocabulary), $index, $sizes);
 
     return array_map(static fn(TermInterface $term): array => ['target_id' => $term->id()], $terms);
   }
