@@ -29,6 +29,7 @@ dependencies:
     - navigation
     - node
     - path
+    - preview_link
     - scheduled_transitions
     - system
     - taxonomy
@@ -119,6 +120,7 @@ permissions:
   - 'edit own project content'
   - 'edit terms in civictheme_media_tags'
   - 'generate ai alt tags'
+  - 'generate preview links'
   - 'revert all revisions'
   - 'revert blog revisions'
   - 'revert civictheme_alert revisions'

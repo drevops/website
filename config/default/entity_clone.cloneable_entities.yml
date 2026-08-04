@@ -64,3 +64,4 @@ cloneable_entities:
   - ai_prompt_type
   - ai_prompt
   - xmlsitemap
+  - preview_link

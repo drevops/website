@@ -1,0 +1,7 @@
+_core:
+  default_config_hash: zsRG48Wp1H1fGnUoDCdsnWJMnrrwtZPwGLvGYuvKCNU
+display_message: subsequent
+enabled_entity_types:
+  node: {  }
+multiple_entities: true
+expiry_seconds: 604800

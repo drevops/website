@@ -41,6 +41,7 @@ dependencies:
     - paragraphs_library
     - path
     - pathauto
+    - preview_link
     - redirect
     - scheduled_transitions
     - system
@@ -81,6 +82,7 @@ permissions:
   - 'administer menu'
   - 'administer nodes'
   - 'administer paragraphs library'
+  - 'administer preview link settings'
   - 'administer redirects'
   - 'administer scheduled transitions'
   - 'administer taxonomy'
@@ -199,6 +201,7 @@ permissions:
   - 'edit webform twig'
   - 'edit webform variants'
   - 'generate ai alt tags'
+  - 'generate preview links'
   - 'link to any page'
   - 'moderated content bulk archive'
   - 'moderated content bulk publish'
