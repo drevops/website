@@ -29,10 +29,10 @@ Opening the link binds its token to the visitor's session, so from that point th
 
 ## Keeping previews contained
 
-`_do_base_protect_preview_link_page()` acts on any route flagged `_preview_link_route` and does two things the module does not:
+Both act on any route flagged `_preview_link_route`, and both cover gaps the module leaves open:
 
-- Emits `noindex, nofollow`, because a preview URL is meant to be pasted into mail and chat clients that follow links.
-- Triggers the page cache kill switch. Rendering the page issues a session cookie and the response would otherwise be `max-age=900, public`, letting a shared cache serve the content after the link expired or was regenerated.
+- `_do_base_attach_preview_link_robots()` emits `noindex, nofollow`, because a preview URL is meant to be pasted into mail and chat clients that follow links.
+- `PreviewLinkCacheSubscriber` sends `Cache-Control: no-store` and trips the page cache kill switch. Left alone the response is `max-age=900, public`, and merely starting a session would only downgrade it to `private` - enough to bar shared caches, but the recipient's own browser could still surface the content from history once the link had expired or been regenerated.
 
 ## Expiry
 

@@ -26,14 +26,14 @@ function do_base_mail_alter(array &$message): void {
  * Implements hook_page_attachments().
  */
 function do_base_page_attachments(array &$attachments): void {
-  _do_base_protect_preview_link_page($attachments);
+  _do_base_attach_preview_link_robots($attachments);
   _do_base_attach_csp_nonce($attachments);
 }
 
 /**
- * Confines a preview link page to the person holding the token.
+ * Keeps preview link pages out of search indexes.
  */
-function _do_base_protect_preview_link_page(array &$attachments): void {
+function _do_base_attach_preview_link_robots(array &$attachments): void {
   $route = \Drupal::routeMatch()->getRouteObject();
 
   if ($route === NULL || $route->getOption('_preview_link_route') !== TRUE) {
@@ -53,12 +53,6 @@ function _do_base_protect_preview_link_page(array &$attachments): void {
     ],
     'do_base_preview_link_robots',
   ];
-
-  // Rendering the page issues a session cookie and the response would
-  // otherwise be publicly cacheable, so a shared cache could keep serving the
-  // content after the link expires or is regenerated. Previews are rare
-  // enough that rendering each one costs nothing worth keeping.
-  \Drupal::service('page_cache_kill_switch')->trigger();
 }
 
 /**

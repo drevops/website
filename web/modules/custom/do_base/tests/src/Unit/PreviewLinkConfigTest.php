@@ -104,59 +104,45 @@ class PreviewLinkConfigTest extends UnitTestCase {
   }
 
   /**
-   * Tests that site administrators can change the preview link bounds.
-   */
-  public function testSiteAdministratorCanAdminister(): void {
-    // Act.
-    $permissions = $this->loadConfig('user.role.civictheme_site_administrator.yml')['permissions'];
-
-    // Assert.
-    $this->assertContains('administer preview link settings', $permissions);
-  }
-
-  /**
-   * Tests that no other role can change the preview link bounds.
-   */
-  #[DataProvider('dataProviderRoleCannotAdminister')]
-  public function testRoleCannotAdminister(string $role_id): void {
-    // Act.
-    $permissions = $this->loadConfig('user.role.' . $role_id . '.yml')['permissions'];
-
-    // Assert.
-    $this->assertNotContains('administer preview link settings', $permissions);
-  }
-
-  /**
-   * Data provider for testRoleCannotAdminister.
-   */
-  public static function dataProviderRoleCannotAdminister(): \Iterator {
-    yield 'content author' => ['civictheme_content_author'];
-    yield 'content approver' => ['civictheme_content_approver'];
-    yield 'anonymous' => ['anonymous'];
-    yield 'authenticated' => ['authenticated'];
-  }
-
-  /**
-   * Tests that a preview link needs no permission to open.
+   * Tests that no role beyond the editorial three can mint a preview link.
    *
-   * The token is the only credential a recipient has, so granting either
-   * permission to a site-wide role would hand it to every visitor instead.
+   * Naming the roles that must not hold the permission would leave a role
+   * added later untested, so every exported role is weighed against the
+   * allowlist instead. A recipient needs no permission at all, so a site-wide
+   * role holding this one would hand link creation to every visitor.
    */
-  #[DataProvider('dataProviderUnprivilegedRoleCannotGenerate')]
-  public function testUnprivilegedRoleCannotGenerate(string $role_id): void {
+  #[DataProvider('dataProviderPermissionIsConfinedToItsRoles')]
+  public function testPermissionIsConfinedToItsRoles(string $permission, array $expected): void {
     // Act.
-    $permissions = $this->loadConfig('user.role.' . $role_id . '.yml')['permissions'];
+    $granted = [];
+
+    foreach ($this->loadBundleNames('user.role') as $role_id) {
+      if (in_array($permission, $this->loadConfig('user.role.' . $role_id . '.yml')['permissions'] ?? [], TRUE)) {
+        $granted[] = $role_id;
+      }
+    }
+
+    sort($granted);
 
     // Assert.
-    $this->assertNotContains('generate preview links', $permissions);
+    $this->assertSame($expected, $granted);
   }
 
   /**
-   * Data provider for testUnprivilegedRoleCannotGenerate.
+   * Data provider for testPermissionIsConfinedToItsRoles.
+   *
+   * The administrator role carries 'is_admin', so it holds every permission
+   * without listing any, and is absent from these lists by design.
    */
-  public static function dataProviderUnprivilegedRoleCannotGenerate(): \Iterator {
-    yield 'anonymous' => ['anonymous'];
-    yield 'authenticated' => ['authenticated'];
+  public static function dataProviderPermissionIsConfinedToItsRoles(): \Iterator {
+    yield 'generating links' => [
+      'generate preview links',
+      ['civictheme_content_approver', 'civictheme_content_author', 'civictheme_site_administrator'],
+    ];
+    yield 'changing the bounds' => [
+      'administer preview link settings',
+      ['civictheme_site_administrator'],
+    ];
   }
 
 }

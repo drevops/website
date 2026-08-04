@@ -17,10 +17,14 @@ Feature: Preview links for unpublished content
     And I click "Preview Link"
     Then the response status code should be 200
     And I should see "Preview link"
-    And I should see the button "Save and regenerate preview link"
+
+    When I press "Save and regenerate preview link"
+    Then the response status code should be 200
+    And I should see "Expiry:"
+    And the response should contain "/preview-link/node/"
 
   @api
-  Scenario: Site Administrator generates a preview link for a draft page
+  Scenario: Site Administrator can reach the preview link form for a draft page
     Given I am logged in as a user with the "Site Administrator" role
     When I visit the "civictheme_page" content page with the title "[TEST] Preview Draft Page"
     And I click "Preview Link"

@@ -176,12 +176,13 @@ class PreviewLinkTest extends DoBaseFunctionalTestBase {
   }
 
   /**
-   * Tests that a preview page is never held by a shared cache.
+   * Tests that a preview page is never stored by any cache.
    *
-   * A cached copy would outlive the link, so an expired or regenerated token
-   * would keep serving the content until the cache entry lapsed.
+   * A stored copy outlives the link, so an expired or regenerated token would
+   * keep serving the content until the entry lapsed. Only 'no-store' covers
+   * the recipient's own browser as well as shared caches.
    */
-  public function testPreviewPageIsNotStoredBySharedCaches(): void {
+  public function testPreviewPageIsNotStoredByAnyCache(): void {
     // Prepare.
     $node = $this->createModeratedNode('[TEST] Uncached Draft', 'draft');
     $preview_link = $this->createPreviewLink($node);
@@ -197,9 +198,26 @@ class PreviewLinkTest extends DoBaseFunctionalTestBase {
     $this->drupalGet($preview_link->getUrl($node));
 
     // Assert.
+    $this->assertPreviewIsNotStorable();
+
+    // Act.
+    $this->drupalGet($node->toUrl());
+
+    // Assert.
+    $this->assertPreviewIsNotStorable('The canonical route reroutes to the preview while the token is held, so it must not be stored either.');
+  }
+
+  /**
+   * Asserts the current response may not be stored by any cache.
+   *
+   * The directives are matched individually because their order and any
+   * companions Symfony merges in are incidental to the guarantee.
+   */
+  protected function assertPreviewIsNotStorable(string $message = ''): void {
     $cache_control = (string) $this->getSession()->getResponseHeader('Cache-Control');
-    $this->assertStringContainsString('private', $cache_control);
-    $this->assertStringNotContainsString('public', $cache_control);
+
+    $this->assertStringContainsString('no-store', $cache_control, $message);
+    $this->assertStringNotContainsString('public', $cache_control, $message);
   }
 
   /**
