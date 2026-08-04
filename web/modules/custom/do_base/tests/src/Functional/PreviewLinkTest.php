@@ -206,13 +206,11 @@ class PreviewLinkTest extends DoBaseFunctionalTestBase {
    * Creates a node in the given moderation state.
    */
   protected function createModeratedNode(string $title, string $moderation_state): NodeInterface {
-    $node = $this->drupalCreateNode([
+    return $this->drupalCreateNode([
       'type' => 'page',
       'title' => $title,
       'moderation_state' => $moderation_state,
     ]);
-
-    return $node;
   }
 
   /**
@@ -220,6 +218,11 @@ class PreviewLinkTest extends DoBaseFunctionalTestBase {
    */
   protected function createPreviewLink(NodeInterface $node): PreviewLinkInterface {
     $preview_link = $this->container->get('entity_type.manager')->getStorage('preview_link')->create(['entities' => [$node]]);
+
+    if (!$preview_link instanceof PreviewLinkInterface) {
+      throw new \UnexpectedValueException('Preview link storage returned an unexpected entity type.');
+    }
+
     $preview_link->save();
 
     return $preview_link;

@@ -29,7 +29,7 @@ trait ExportedConfigTrait {
    * Lists the bundle names of an entity type from its exported config files.
    */
   protected function loadBundleNames(string $config_prefix): array {
-    $files = glob(dirname($this->root) . '/config/default/' . $config_prefix . '.*.yml');
+    $files = glob(dirname($this->root) . '/config/default/' . $config_prefix . '.*.yml') ?: [];
     $this->assertNotEmpty($files, sprintf('No exported bundles found for "%s".', $config_prefix));
 
     return array_map(static fn(string $file): string => substr(basename($file, '.yml'), strlen($config_prefix) + 1), $files);

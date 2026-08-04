@@ -142,7 +142,7 @@ class PreviewLinkConfigTest extends UnitTestCase {
    * The token is the only credential a recipient has, so granting either
    * permission to a site-wide role would hand it to every visitor instead.
    */
-  #[DataProvider('dataProviderUnprivilegedRole')]
+  #[DataProvider('dataProviderUnprivilegedRoleCannotGenerate')]
   public function testUnprivilegedRoleCannotGenerate(string $role_id): void {
     // Act.
     $permissions = $this->loadConfig('user.role.' . $role_id . '.yml')['permissions'];
@@ -154,7 +154,7 @@ class PreviewLinkConfigTest extends UnitTestCase {
   /**
    * Data provider for testUnprivilegedRoleCannotGenerate.
    */
-  public static function dataProviderUnprivilegedRole(): \Iterator {
+  public static function dataProviderUnprivilegedRoleCannotGenerate(): \Iterator {
     yield 'anonymous' => ['anonymous'];
     yield 'authenticated' => ['authenticated'];
   }
