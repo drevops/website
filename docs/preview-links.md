@@ -14,7 +14,7 @@ The obvious alternative, [`drupal/access_unpublished`](https://www.drupal.org/pr
 2. Copy the generated URL and send it on.
 3. **Save and regenerate preview link** mints a new token and immediately kills the old URL. **Reset lifetime** restarts the clock without changing the URL.
 
-Opening the link binds its token to the visitor's session, so from that point they can also follow ordinary links into the content.
+Opening the link binds its token to the visitor's session, so from that point they can follow ordinary links into the content: a URL they could not otherwise see redirects them to its preview, carrying a notice that explains why and offers to drop the token.
 
 ## What is configured
 
@@ -23,7 +23,7 @@ Opening the link binds its token to the visitor's session, so from that point th
 | `enabled_entity_types` | `node`, no bundle list | An empty bundle list means every content type, so a type added later gets preview links without a config change. |
 | `expiry_seconds` | `604800` (7 days) | Long enough for a review round, short enough to bound how long unpublished content stays reachable. |
 | `multiple_entities` | `true` | A page is assembled from paragraphs and media, which have to travel with the node for the preview to render like the published page will. |
-| `display_message` | `subsequent` | Tells the editor a link already exists rather than silently reusing it. |
+| `display_message` | `subsequent` | Shows the recipient why they can see the page, and offers to drop the token, but only when they arrive by being redirected from a normal URL. Landing on the preview link itself says nothing, which keeps the first thing they see the content rather than a notice. |
 
 `generate preview links` is granted to Content Author, Content Approver and Site Administrator. `administer preview link settings` is granted to Site Administrator only. Recipients need no permission at all - the token is the entire credential, which is why neither permission belongs on the anonymous or authenticated role.
 
