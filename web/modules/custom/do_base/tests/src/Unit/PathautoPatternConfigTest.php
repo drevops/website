@@ -36,18 +36,16 @@ class PathautoPatternConfigTest extends UnitTestCase {
   /**
    * Data provider for testAliasPattern.
    */
-  public static function dataProviderAliasPattern(): array {
-    return [
-      'blog post' => ['blog', '/blog/[node:title]'],
-      'event' => ['civictheme_event', '/events/[node:title]'],
-      'project' => ['project', '/work/[node:title]'],
-    ];
+  public static function dataProviderAliasPattern(): \Iterator {
+    yield 'blog post' => ['blog', '/blog/[node:title]'];
+    yield 'event' => ['civictheme_event', '/events/[node:title]'];
+    yield 'project' => ['project', '/work/[node:title]'];
   }
 
   /**
    * Tests that each pattern is scoped to the bundle it is named for.
    */
-  #[DataProvider('dataProviderAliasPattern')]
+  #[DataProvider('dataProviderPatternIsScopedToItsBundle')]
   public function testPatternIsScopedToItsBundle(string $pattern_id): void {
     // Prepare.
     $criteria = $this->loadConfig('pathauto.pattern.' . $pattern_id . '.yml')['selection_criteria'];
@@ -59,6 +57,15 @@ class PathautoPatternConfigTest extends UnitTestCase {
 
     // Assert.
     $this->assertSame([$pattern_id], $bundles);
+  }
+
+  /**
+   * Data provider for testPatternIsScopedToItsBundle.
+   */
+  public static function dataProviderPatternIsScopedToItsBundle(): \Iterator {
+    yield 'blog post' => ['blog'];
+    yield 'event' => ['civictheme_event'];
+    yield 'project' => ['project'];
   }
 
   /**

@@ -6,9 +6,11 @@ This document is the authoring contract: it describes the endpoints, the content
 
 ## Governance model (read this first)
 
-Content created through the API is **never published automatically**. A human reviews and publishes it.
+A page the API creates is **never published in the request that creates it**. It lands as a draft for a human to review.
 
-- **Nodes** of every content type are always created as **draft**. The server forces this: even if a request asks for `published`, the node is coerced to `draft`. The rule governs creation only - a subsequent update may set any moderation state the workflow allows, so a client that edits an existing node can publish it.
+That guarantee covers creation, not the whole lifecycle. The service account holds every transition of the editorial workflow, so a client updating a node it created earlier - or one an editor authored - may move it to any state the workflow allows, including published. Treat the draft-first rule as a safeguard against an agent publishing in one shot, not as a guarantee that only humans ever publish.
+
+- **Nodes** of every content type are always created as **draft**. The server forces this: even if a request asks for `published`, the node is coerced to `draft`.
 - **Images** (`civictheme_image` media) are created **published** - they are assets, invisible until referenced by a published page. The server forces this too, so a client never has to set media moderation state.
 
 So the workflow is: the agent creates a draft page with published images, an editor reviews the draft, and when they publish the page it renders immediately because the images are already live.
@@ -23,7 +25,7 @@ api-key: <key>
 
 The key belongs to a dedicated service account (`do_content_api_service`) that fully manages content. It may create, edit and delete `blog`, `civictheme_alert`, `civictheme_event`, `civictheme_page` and `project` nodes regardless of who authored them, move them through every state of the editorial workflow, and read unpublished content and pending revisions. Any other content type is outside its reach until the role grants that bundle explicitly.
 
-Its media access stays narrower: it can create images and the supported components and read its own unpublished media, but cannot edit or delete media authored by anyone else.
+Its media access is narrower than its node access: it can create images and the supported components, and read unpublished media, but cannot edit or delete media authored by anyone else.
 
 Treat the key as an administrative credential. It carries enough access to remove published pages, so store it in a secret manager, issue a separate key per environment, and revoke it at `/user/<uid>/key-auth` the moment a client no longer needs it.
 
@@ -34,7 +36,7 @@ Retrieve (or regenerate) the key as an administrator at `/user/<uid>/key-auth` f
 The feature ships as configuration, so it is enabled by a normal deployment:
 
 1. Importing configuration enables `jsonapi` (with writes allowed), `key_auth`, `subrequests`, and the `do_content_api` module, and creates the `do_content_api` service role.
-1. The `drush deploy` step runs a deploy hook that creates the `do_content_api_service` account (idempotent - it is skipped if the account already exists). The API key is generated automatically.
+1. The `drush deploy` step runs a deploy hook that creates the `do_content_api_service` account, and the API key is generated automatically. Later runs reconcile an existing service account back to exactly the `do_content_api` role, leave a deliberately blocked account blocked, and refuse to touch an unrelated account that happens to share the username.
 1. Retrieve the key at `/user/<uid>/key-auth` and give it to the client.
 
 No keys are committed to the repository; each environment issues its own.

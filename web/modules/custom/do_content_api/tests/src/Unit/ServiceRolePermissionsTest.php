@@ -22,6 +22,68 @@ use Symfony\Component\Yaml\Yaml;
 class ServiceRolePermissionsTest extends UnitTestCase {
 
   /**
+   * Every permission the service role is meant to hold, in exported order.
+   */
+  protected const array EXPECTED_PERMISSIONS = [
+    'access content',
+    'access content overview',
+    'administer nodes',
+    'administer redirects',
+    'create blog content',
+    'create civictheme_alert content',
+    'create civictheme_event content',
+    'create civictheme_image media',
+    'create civictheme_page content',
+    'create media',
+    'create project content',
+    'create url aliases',
+    'delete any blog content',
+    'delete any civictheme_alert content',
+    'delete any civictheme_event content',
+    'delete any civictheme_page content',
+    'delete any project content',
+    'edit any blog content',
+    'edit any civictheme_alert content',
+    'edit any civictheme_event content',
+    'edit any civictheme_page content',
+    'edit any project content',
+    'edit own blog content',
+    'edit own civictheme_alert content',
+    'edit own civictheme_event content',
+    'edit own civictheme_page content',
+    'edit own project content',
+    'issue subrequests',
+    'use civictheme_editorial transition archive',
+    'use civictheme_editorial transition create_new_draft',
+    'use civictheme_editorial transition needs_review',
+    'use civictheme_editorial transition publish',
+    'use civictheme_editorial transition restore',
+    'use civictheme_editorial transition restore_to_draft',
+    'use civictheme_editorial transition restore_to_needs_review',
+    'use civictheme_editorial transition send_back_to_draft',
+    'use content authoring api',
+    'use key authentication',
+    'use text format civictheme_rich_text',
+    'view any unpublished content',
+    'view latest version',
+    'view own unpublished content',
+    'view own unpublished media',
+  ];
+
+  /**
+   * Tests that the exported permissions match the intended set exactly.
+   *
+   * The assertions below each pin one property of the role and explain why it
+   * holds. This one pins the whole set, so a permission granted through the
+   * admin UI and exported without review fails the build instead of reaching
+   * an environment as a silent widening of an API-key account.
+   */
+  public function testPermissionsMatchTheIntendedSet(): void {
+    // Assert.
+    $this->assertSame(self::EXPECTED_PERMISSIONS, $this->loadRole()['permissions']);
+  }
+
+  /**
    * Tests that the role carries a content management permission.
    */
   #[DataProvider('dataProviderManagementPermission')]
@@ -33,15 +95,13 @@ class ServiceRolePermissionsTest extends UnitTestCase {
   /**
    * Data provider for testManagementPermission.
    */
-  public static function dataProviderManagementPermission(): array {
-    return [
-      'administer content' => ['administer nodes'],
-      'content overview' => ['access content overview'],
-      'read unpublished content' => ['view any unpublished content'],
-      'read pending revisions' => ['view latest version'],
-      'authoring api gate' => ['use content authoring api'],
-      'key authentication' => ['use key authentication'],
-    ];
+  public static function dataProviderManagementPermission(): \Iterator {
+    yield 'administer content' => ['administer nodes'];
+    yield 'content overview' => ['access content overview'];
+    yield 'read unpublished content' => ['view any unpublished content'];
+    yield 'read pending revisions' => ['view latest version'];
+    yield 'authoring api gate' => ['use content authoring api'];
+    yield 'key authentication' => ['use key authentication'];
   }
 
   /**
@@ -57,7 +117,7 @@ class ServiceRolePermissionsTest extends UnitTestCase {
     $bundles = [];
 
     foreach ($permissions as $permission) {
-      if (preg_match('/^create (\w+) content$/', $permission, $matches)) {
+      if (preg_match('/^create (\w+) content$/', (string) $permission, $matches)) {
         $bundles[] = $matches[1];
       }
     }
@@ -121,36 +181,12 @@ class ServiceRolePermissionsTest extends UnitTestCase {
   /**
    * Data provider for testMediaPermission.
    */
-  public static function dataProviderMediaPermission(): array {
-    return [
-      'create images' => ['create civictheme_image media', TRUE],
-      'create media' => ['create media', TRUE],
-      'read own unpublished media' => ['view own unpublished media', TRUE],
-      'update any media' => ['update any media', FALSE],
-      'delete any media' => ['delete any media', FALSE],
-    ];
-  }
-
-  /**
-   * Tests that the role holds no permission beyond content management.
-   */
-  #[DataProvider('dataProviderWithheldPermission')]
-  public function testWithheldPermission(string $permission): void {
-    // Assert.
-    $this->assertNotContains($permission, $this->loadRole()['permissions']);
-  }
-
-  /**
-   * Data provider for testWithheldPermission.
-   */
-  public static function dataProviderWithheldPermission(): array {
-    return [
-      'node access bypass' => ['bypass node access'],
-      'user administration' => ['administer users'],
-      'permission administration' => ['administer permissions'],
-      'site configuration' => ['administer site configuration'],
-      'module administration' => ['administer modules'],
-    ];
+  public static function dataProviderMediaPermission(): \Iterator {
+    yield 'create images' => ['create civictheme_image media', TRUE];
+    yield 'create media' => ['create media', TRUE];
+    yield 'read own unpublished media' => ['view own unpublished media', TRUE];
+    yield 'update any media' => ['update any media', FALSE];
+    yield 'delete any media' => ['delete any media', FALSE];
   }
 
   /**

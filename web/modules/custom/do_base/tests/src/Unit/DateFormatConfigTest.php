@@ -49,15 +49,13 @@ class DateFormatConfigTest extends UnitTestCase {
   /**
    * Data provider for testDateFormatPattern.
    */
-  public static function dataProviderDateFormatPattern(): array {
-    return [
-      'short' => ['short', '04/08/2026 - 14:30'],
-      'medium' => ['medium', 'Tue, 04/08/2026 - 14:30'],
-      'long' => ['long', 'Tuesday, 4 August 2026 - 14:30'],
-      'fallback' => ['fallback', 'Tue, 04/08/2026 - 14:30'],
-      'civictheme short date' => ['civictheme_short_date', '4 Aug 2026'],
-      'civictheme short date and time' => ['civictheme_short_date_and_time', '4 Aug 2026 - 14:30'],
-    ];
+  public static function dataProviderDateFormatPattern(): \Iterator {
+    yield 'short' => ['short', '04/08/2026 - 14:30'];
+    yield 'medium' => ['medium', 'Tue, 04/08/2026 - 14:30'];
+    yield 'long' => ['long', 'Tuesday, 4 August 2026 - 14:30'];
+    yield 'fallback' => ['fallback', 'Tue, 04/08/2026 - 14:30'];
+    yield 'civictheme short date' => ['civictheme_short_date', '4 Aug 2026'];
+    yield 'civictheme short date and time' => ['civictheme_short_date_and_time', '4 Aug 2026 - 14:30'];
   }
 
   /**
@@ -79,16 +77,14 @@ class DateFormatConfigTest extends UnitTestCase {
   /**
    * Data provider for testMachineReadableFormat.
    */
-  public static function dataProviderMachineReadableFormat(): array {
-    return [
-      'html date' => ['html_date', 'Y-m-d'],
-      'html datetime' => ['html_datetime', 'Y-m-d\TH:i:sO'],
-      'html month' => ['html_month', 'Y-m'],
-      'html time' => ['html_time', 'H:i:s'],
-      'html week' => ['html_week', 'Y-\WW'],
-      'html year' => ['html_year', 'Y'],
-      'html yearless date' => ['html_yearless_date', 'm-d'],
-    ];
+  public static function dataProviderMachineReadableFormat(): \Iterator {
+    yield 'html date' => ['html_date', 'Y-m-d'];
+    yield 'html datetime' => ['html_datetime', 'Y-m-d\TH:i:sO'];
+    yield 'html month' => ['html_month', 'Y-m'];
+    yield 'html time' => ['html_time', 'H:i:s'];
+    yield 'html week' => ['html_week', 'Y-\WW'];
+    yield 'html year' => ['html_year', 'Y'];
+    yield 'html yearless date' => ['html_yearless_date', 'm-d'];
   }
 
   /**
@@ -111,12 +107,10 @@ class DateFormatConfigTest extends UnitTestCase {
   /**
    * Data provider for testRegionalSetting.
    */
-  public static function dataProviderRegionalSetting(): array {
-    return [
-      'default timezone' => [['timezone', 'default'], 'Australia/Melbourne'],
-      'default country' => [['country', 'default'], 'AU'],
-      'week starts on Monday' => [['first_day'], 1],
-    ];
+  public static function dataProviderRegionalSetting(): \Iterator {
+    yield 'default timezone' => [['timezone', 'default'], 'Australia/Melbourne'];
+    yield 'default country' => [['country', 'default'], 'AU'];
+    yield 'week starts on Monday' => [['first_day'], 1];
   }
 
   /**
