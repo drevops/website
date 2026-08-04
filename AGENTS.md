@@ -104,6 +104,7 @@ The `docs/` directory contains **what** applies to this project:
 - `docs/deployment.md` - Hosting provider and deployment rules
 - `docs/releasing.md` - Version scheme and release process
 - `docs/sitemap.md` - XML sitemap module, coverage and generation
+- `docs/preview-links.md` - sharing unpublished content by link
 - `docs/faqs.md` - Project-specific FAQs
 
 **Always check these files first** to understand project-specific decisions.
