@@ -49,5 +49,5 @@ Feature: XML sitemap
     And I am an anonymous user
     When I go to "sitemap.xml"
     Then the response status code should be 200
-    And the response should contain "projects/test-sitemap-indexed-project"
+    And the response should contain "work/test-sitemap-indexed-project"
     And the response should not contain "sitemap-excluded-project"

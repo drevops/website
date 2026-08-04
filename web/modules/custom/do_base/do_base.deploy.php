@@ -22,6 +22,7 @@ use Drupal\media\MediaInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\path_alias\PathAliasInterface;
 use Drupal\pathauto\PathautoState;
 use Drupal\search_api\Entity\Index;
 use Drupal\taxonomy\TermInterface;
@@ -391,6 +392,25 @@ function do_base_deploy_populate_our_work_page(): string {
 }
 
 /**
+ * Regenerates project aliases from the pathauto pattern.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every alias is regenerated, or NULL while batching.
+ */
+function do_base_deploy_move_projects_to_work(?array &$sandbox = NULL): ?string {
+  // The query doubles as the idempotency guard: an alias regenerated onto the
+  // new prefix no longer matches, so a repeat deployment finds nothing to do.
+  $query = \Drupal::entityQuery('path_alias')->condition('alias', '/projects/%', 'LIKE');
+
+  return Helper::entity($sandbox)->batchQuery($query, static function (PathAliasInterface $alias): void {
+    _do_base_project_realias($alias);
+  }, status: Reporter::UPDATED);
+}
+
+/**
  * Rebuilds the XML sitemap.
  */
 function do_base_deploy_rebuild_xmlsitemap(): string {
@@ -728,6 +748,26 @@ function _do_base_menu_leading_weight(string $menu_name): int {
   }
 
   return min($weights) - 1;
+}
+
+/**
+ * Regenerates the alias of the project a path alias points at.
+ */
+function _do_base_project_realias(PathAliasInterface $alias): void {
+  if (!preg_match('#^/node/(\d+)$#', $alias->getPath(), $matches)) {
+    return;
+  }
+
+  $node = \Drupal::entityTypeManager()->getStorage('node')->load($matches[1]);
+
+  if (!$node instanceof NodeInterface || $node->bundle() !== 'project') {
+    return;
+  }
+
+  // Regenerating rather than rewriting the alias string keeps the result
+  // defined by the pattern alone, and lets the redirect module record the
+  // superseded path so inbound links keep resolving.
+  \Drupal::service('pathauto.generator')->updateEntityAlias($node, 'update');
 }
 
 /**
