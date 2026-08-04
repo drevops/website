@@ -8,7 +8,7 @@ This document is the authoring contract: it describes the endpoints, the content
 
 Content created through the API is **never published automatically**. A human reviews and publishes it.
 
-- **Nodes** of every content type are always created as **draft**. The server forces this: even if a request asks for `published`, the node is coerced to `draft`.
+- **Nodes** of every content type are always created as **draft**. The server forces this: even if a request asks for `published`, the node is coerced to `draft`. The rule governs creation only - a subsequent update may set any moderation state the workflow allows, so a client that edits an existing node can publish it.
 - **Images** (`civictheme_image` media) are created **published** - they are assets, invisible until referenced by a published page. The server forces this too, so a client never has to set media moderation state.
 
 So the workflow is: the agent creates a draft page with published images, an editor reviews the draft, and when they publish the page it renders immediately because the images are already live.
@@ -21,7 +21,9 @@ Send the API key in the `api-key` request header on every request:
 api-key: <key>
 ```
 
-The key belongs to a dedicated, least-privilege service account (`do_content_api_service`) that may create and edit its own nodes of any content type, plus images and the supported components. It cannot delete anything, and cannot edit content authored by anyone else. Nodes it authors are forced to draft by the moderation policy - a human publishes them.
+The key belongs to a dedicated service account (`do_content_api_service`) that fully manages content: it may create, edit and delete nodes of any content type regardless of who authored them, read unpublished content and pending revisions, and create images and the supported components. Its media access stays narrower - it can create images and read its own unpublished media, but cannot edit or delete media authored by anyone else.
+
+Treat the key as an administrative credential. It carries enough access to remove published pages, so store it in a secret manager, issue a separate key per environment, and revoke it at `/user/<uid>/key-auth` the moment a client no longer needs it.
 
 Retrieve (or regenerate) the key as an administrator at `/user/<uid>/key-auth` for the service account, or have a developer read it from the account. Always send it over HTTPS. On deployed environments the `shield` module may sit in front of the site; the API path must be allow-listed there or the client must also supply the Shield credentials.
 
@@ -137,5 +139,5 @@ The response is HTTP `207` with one entry per `requestId`. Each entry has its ow
 - **Order tokens correctly.** Use `drupal_internal__revision_id` from each paragraph's creation response. The numeric token is written quoted (`"target_revision_id":"{{...}}"`); the replacer strips the quotes.
 - **Alt text is required** on every image.
 - **Rich text needs a format**: `civictheme_rich_text`.
-- **Page moderation state is ignored** - every page is created as `draft` regardless of the `moderation_state` sent; a human publishes it.
+- **Page moderation state is ignored on create** - every page is created as `draft` regardless of the `moderation_state` sent. Updates honour the state sent.
 - **Cards (`civictheme_*_card`) are not placed directly on the page** - they live inside a `civictheme_manual_list` via `field_c_p_list_items`.

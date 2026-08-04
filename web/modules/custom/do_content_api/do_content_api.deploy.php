@@ -32,9 +32,10 @@ function do_content_api_deploy_service_account(): string {
       return sprintf('Account "%s" exists but is not the service account; left unchanged.', $username);
     }
 
-    // Reconcile to exactly the least-privilege role set, dropping any extra
-    // roles that would widen the externally authenticated account. Status is
-    // left untouched so a deliberately blocked account stays disabled.
+    // Reconcile to exactly the intended role set, dropping any extra roles that
+    // would widen the externally authenticated account beyond what the content
+    // API role grants. Status is left untouched so a deliberately blocked
+    // account stays disabled.
     if ($account->getRoles(TRUE) !== ['do_content_api']) {
       foreach ($account->getRoles(TRUE) as $role) {
         $account->removeRole($role);
@@ -42,7 +43,7 @@ function do_content_api_deploy_service_account(): string {
       $account->addRole('do_content_api');
       $account->save();
 
-      return sprintf('Service account "%s" reconciled to least-privilege role set.', $username);
+      return sprintf('Service account "%s" reconciled to the content API role.', $username);
     }
 
     return sprintf('Service account "%s" already exists; skipped.', $username);
