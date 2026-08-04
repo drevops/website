@@ -72,12 +72,12 @@ Feature: Project content type
     Then the response status code should be 200
 
   @api
-  Scenario: Project follows the editorial workflow and gets a /projects URL
+  Scenario: Project follows the editorial workflow and gets a /work URL
     Given the following "project" content:
       | title                  | moderation_state | field_do_n_year | field_do_n_status | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Example project | published        | 2025            | completed         | large                 | inherit                | normal                      | both                       |
     When I visit the "project" content page with the title "[TEST] Example project"
-    Then the path should be "/projects/test-example-project"
+    Then the path should be "/work/test-example-project"
     And I should see the text "[TEST] Example project"
     When I am logged in as a user with the "Site Administrator" role
     And I visit the "project" content edit page with the title "[TEST] Example project"
@@ -91,7 +91,7 @@ Feature: Project content type
       | title                 | moderation_state | field_do_n_year | field_do_n_status | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Draft project  | draft            | 2025            | ongoing           | large                 | inherit                | normal                      | both                       |
     And I am an anonymous user
-    When I go to "/projects/test-draft-project"
+    When I go to "/work/test-draft-project"
     Then the response status code should be 403
 
   @api
