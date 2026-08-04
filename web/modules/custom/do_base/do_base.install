@@ -7,7 +7,14 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Sql\DefaultTableMapping;
+use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\drupal_helpers\Helper;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\taxonomy\TermInterface;
+use Drupal\taxonomy\VocabularyInterface;
 
 /**
  * Uninstalls the simple_sitemap module.
@@ -58,4 +65,239 @@ function do_base_update_11002(): string {
   }
 
   return implode(' ', $messages);
+}
+
+/**
+ * Points the project Services field at service pages instead of terms.
+ */
+function do_base_update_11003(): string {
+  // Update hooks run ahead of config import, so drupal_helpers is not yet
+  // enabled from exported configuration on the deployment that first needs it.
+  // This is the one case where the core installer is preferred over
+  // Helper::module(), because that API is what is being made available.
+  \Drupal::service('module_installer')->install(['drupal_helpers']);
+
+  // This runs as an update rather than a deploy hook because config import
+  // retargets the field, and it must not do so while the stored values are
+  // still term ids: each would then resolve to whichever node carries the
+  // same number. Config import also removes the vocabulary the mapping is
+  // read from.
+  $field_storage = FieldStorageConfig::loadByName('node', 'field_do_n_services');
+
+  if (!$field_storage instanceof FieldStorageConfig) {
+    Helper::reporter()->skipped('The Services field does not exist, so there is nothing to repoint.');
+
+    return Helper::report();
+  }
+
+  if ($field_storage->getSetting('target_type') === 'node') {
+    Helper::reporter()->skipped('The Services field already references service pages.');
+
+    return Helper::report();
+  }
+
+  _do_base_service_migrate(_do_base_service_page_map());
+  _do_base_service_vocabulary_drop();
+
+  return Helper::report();
+}
+
+/**
+ * Rewrites the stored references and retargets the field as one unit.
+ *
+ * The guard that makes this update re-runnable is the field's target type, so
+ * the rewrite must not outlive a failure that leaves the target type behind:
+ * a second run would read the node ids it already wrote as term ids and drop
+ * every one of them.
+ *
+ * @param array<int, int> $map
+ *   Node ids keyed by the term id they replace.
+ */
+function _do_base_service_migrate(array $map): void {
+  $transaction = \Drupal::database()->startTransaction();
+
+  try {
+    _do_base_service_reference_remap($map);
+    _do_base_service_field_retarget();
+  }
+  catch (\Throwable $throwable) {
+    $transaction->rollBack();
+
+    throw $throwable;
+  }
+}
+
+/**
+ * Matches each service term to the service page carrying the same name.
+ *
+ * The site describes each service it offers on a page of its own, so a page is
+ * what a term maps onto. A term naming something no page describes has no
+ * counterpart and is left unmapped.
+ *
+ * @return array<int, int>
+ *   Node ids keyed by the term id they replace.
+ */
+function _do_base_service_page_map(): array {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $pages = $entity_type_manager->getStorage('node')->loadByProperties(['type' => 'civictheme_page']);
+  $titles = [];
+
+  foreach ($pages as $page) {
+    $titles[mb_strtolower(trim((string) $page->label()))][] = (int) $page->id();
+  }
+
+  $terms = $entity_type_manager->getStorage('taxonomy_term')->loadByProperties(['vid' => 'do_service']);
+  $map = [];
+
+  foreach ($terms as $term) {
+    if (!$term instanceof TermInterface) {
+      continue;
+    }
+
+    $name = mb_strtolower(trim((string) $term->label()));
+
+    if (!isset($titles[$name])) {
+      Helper::reporter()->skipped(sprintf('No service page is named "%s".', $term->label()));
+
+      continue;
+    }
+
+    // Node titles are not unique, and picking one of several pages would
+    // silently attach every project to whichever came back first. Which page
+    // is meant is an editorial question, so the deployment stops and asks.
+    if (count($titles[$name]) > 1) {
+      throw new \RuntimeException(sprintf('More than one page is named "%s", so the service term cannot be matched to one of them. Rename the duplicates and run the update again.', $term->label()));
+    }
+
+    $map[(int) $term->id()] = reset($titles[$name]);
+  }
+
+  return $map;
+}
+
+/**
+ * Rewrites stored service references from term ids to node ids.
+ *
+ * A reference whose term names no service page is removed rather than left
+ * behind, because once the field targets nodes its term id would resolve to
+ * whichever node happens to carry the same number.
+ *
+ * @param array<int, int> $map
+ *   Node ids keyed by the term id they replace.
+ */
+function _do_base_service_reference_remap(array $map): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  if (!$storage instanceof SqlContentEntityStorage) {
+    throw new \RuntimeException('Nodes are not held in SQL storage.');
+  }
+
+  $field_storage = FieldStorageConfig::loadByName('node', 'field_do_n_services');
+
+  if (!$field_storage instanceof FieldStorageConfig) {
+    throw new \RuntimeException('The Services field storage disappeared mid-migration.');
+  }
+
+  $table_mapping = $storage->getTableMapping();
+
+  if (!$table_mapping instanceof DefaultTableMapping) {
+    throw new \RuntimeException('Node storage does not use the default table mapping.');
+  }
+
+  $column = $table_mapping->getFieldColumnName($field_storage, 'target_id');
+  $database = \Drupal::database();
+  $tables = [
+    $table_mapping->getDedicatedDataTableName($field_storage),
+    $table_mapping->getDedicatedRevisionTableName($field_storage),
+  ];
+
+  $nodes = [];
+  $repointed = 0;
+  $dropped = 0;
+
+  foreach ($tables as $table) {
+    // Reading the whole set before writing any of it keeps one term's new node
+    // id from being picked up as another term's old id, which the shared
+    // integer space between the two entity types otherwise allows.
+    $rows = $database->select($table, 't')->fields('t')->execute()->fetchAll();
+
+    foreach ($rows as $row) {
+      $target = (int) $row->{$column};
+      $matched = isset($map[$target]);
+
+      $query = $matched
+        ? $database->update($table)->fields([$column => $map[$target]])
+        : $database->delete($table);
+
+      $query->condition('entity_id', $row->entity_id)
+        ->condition('revision_id', $row->revision_id)
+        ->condition('langcode', $row->langcode)
+        ->condition('delta', $row->delta)
+        ->execute();
+
+      $nodes[(int) $row->entity_id] = (int) $row->entity_id;
+
+      if ($matched) {
+        $repointed++;
+      }
+      else {
+        $dropped++;
+      }
+    }
+  }
+
+  // Nothing is re-saved, so no hook fires to clear what the rendered "At a
+  // glance" panel already holds for these projects.
+  Cache::invalidateTags(array_map(static fn(int $nid): string => 'node:' . $nid, $nodes));
+
+  Helper::reporter()->updated(sprintf('Repointed %s and dropped %s service reference(s) across %s project(s).', $repointed, $dropped, count($nodes)));
+}
+
+/**
+ * Retargets the Services field storage and instance at service pages.
+ */
+function _do_base_service_field_retarget(): void {
+  $field_storage = FieldStorageConfig::loadByName('node', 'field_do_n_services');
+  $field = FieldConfig::loadByName('node', 'project', 'field_do_n_services');
+
+  if (!$field_storage instanceof FieldStorageConfig || !$field instanceof FieldConfig) {
+    throw new \RuntimeException('The Services field disappeared mid-migration.');
+  }
+
+  // Both entity types key on an integer id, so the column the values already
+  // sit in serves the new target type without a schema change.
+  $field_storage->setSetting('target_type', 'node');
+  $field_storage->save();
+
+  $field->setSetting('handler', 'default:node');
+  $field->setSetting('handler_settings', [
+    'target_bundles' => ['civictheme_page' => 'civictheme_page'],
+    'sort' => ['field' => 'title', 'direction' => 'asc'],
+    'auto_create' => FALSE,
+    'auto_create_bundle' => '',
+  ]);
+  $field->save();
+
+  \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+  \Drupal::entityTypeManager()->getStorage('node')->resetCache();
+
+  Helper::reporter()->updated('Retargeted the Services field at Page nodes.');
+}
+
+/**
+ * Removes the Service vocabulary now that nothing references it.
+ */
+function _do_base_service_vocabulary_drop(): void {
+  $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load('do_service');
+
+  if (!$vocabulary instanceof VocabularyInterface) {
+    Helper::reporter()->skipped('The Service vocabulary is already gone.');
+
+    return;
+  }
+
+  Helper::term()->deleteAll('do_service');
+  $vocabulary->delete();
+
+  Helper::reporter()->deleted('Deleted the Service vocabulary.');
 }

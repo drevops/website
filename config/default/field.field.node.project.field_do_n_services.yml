@@ -4,25 +4,25 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_do_n_services
+    - node.type.civictheme_page
     - node.type.project
-    - taxonomy.vocabulary.do_service
 id: node.project.field_do_n_services
 field_name: field_do_n_services
 entity_type: node
 bundle: project
 label: Services
-description: 'The services provided on this project.'
+description: 'The pages describing the services provided on this project.'
 required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
-      do_service: do_service
+      civictheme_page: civictheme_page
     sort:
-      field: name
+      field: title
       direction: asc
     auto_create: false
     auto_create_bundle: ''

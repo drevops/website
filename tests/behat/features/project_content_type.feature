@@ -32,9 +32,7 @@ Feature: Project content type
     And the field "field_do_n_oss_contributions[0][title]" should exist
     And the field "field_do_n_sector" should exist
     And the field "field_do_n_technologies[target_id]" should exist
-    # Services is a checkboxes widget, so it has no single named control to
-    # assert against; its wrapper is the stable handle.
-    And should see a "[data-drupal-selector='edit-field-do-n-services']" element
+    And the field "field_do_n_services[0][target_id]" should exist
 
     And the field "field_c_n_banner_title[0][value]" should exist
     And the field "field_c_n_banner_type" should exist
@@ -58,18 +56,19 @@ Feature: Project content type
     And I should see the button "Add Steps"
 
   @api
-  Scenario: Three separate vocabularies exist for sector, service and technology
+  Scenario: Sector and technology are vocabularies while services are pages
     Given I am logged in as a user with the "Site Administrator" role
     When I visit "admin/structure/taxonomy"
     Then I should see the text "Sector"
-    And I should see the text "Service"
     And I should see the text "Technology"
     When I visit "admin/structure/taxonomy/manage/do_sector/overview"
     Then the response status code should be 200
-    When I visit "admin/structure/taxonomy/manage/do_service/overview"
-    Then the response status code should be 200
     When I visit "admin/structure/taxonomy/manage/do_technology/overview"
     Then the response status code should be 200
+    # Services are pages in their own right, so no vocabulary stands between a
+    # project and the page describing what was delivered.
+    When I visit "admin/structure/taxonomy/manage/do_service/overview"
+    Then the response status code should be 404
 
   @api
   Scenario: Project follows the editorial workflow and gets a /work URL
@@ -139,13 +138,13 @@ Feature: Project content type
     Given the following "do_sector" terms:
       | name            |
       | [TEST] Sector 1 |
-    And the following "do_service" terms:
-      | name             |
-      | [TEST] Service 1 |
-      | [TEST] Service 2 |
     And the following "do_technology" terms:
       | name                |
       | [TEST] Technology 1 |
+    And the following "civictheme_page" content:
+      | title            | moderation_state | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] Service 1 | published        | large                 | inherit                | normal                      | both                       |
+      | [TEST] Service 2 | published        | large                 | inherit                | normal                      | both                       |
     And the following "project" content:
       | title                    | moderation_state | field_do_n_client     | field_do_n_role      | field_do_n_delivered_at | field_do_n_year | field_do_n_status | field_do_n_live_url:uri  | field_do_n_sector | field_do_n_services                | field_do_n_technologies | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Complete project  | published        | [TEST] Example Client | [TEST] Technical lead | [TEST] Example Agency   | 2025            | completed         | https://www.example.com  | [TEST] Sector 1   | [TEST] Service 1, [TEST] Service 2 | [TEST] Technology 1     | large                 | inherit                | normal                      | both                       |
@@ -169,11 +168,47 @@ Feature: Project content type
 
     # Each taxonomy value links to its term page, so the reader can browse
     # sideways from any project into everything sharing that term.
-    And I should see 4 ".ct-at-a-glance__value a[href^='/taxonomy/term/']" elements
+    And I should see 2 ".ct-at-a-glance__value a[href^='/taxonomy/term/']" elements
     And I should see the text "[TEST] Sector 1"
+    And I should see the text "[TEST] Technology 1"
+
+    # A service reads through to the page describing it rather than to a term
+    # listing, so nothing stands between the project and the service itself.
     And I should see the text "[TEST] Service 1"
     And I should see the text "[TEST] Service 2"
-    And I should see the text "[TEST] Technology 1"
+    And should see a ".ct-at-a-glance__value a[href='/test-service-1']" element
+    And should see a ".ct-at-a-glance__value a[href='/test-service-2']" element
+
+  @api
+  Scenario: A service can be read through to the page describing it
+    Given the following "civictheme_page" content:
+      | title             | moderation_state | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] Migrations | published        | large                 | inherit                | normal                      | both                       |
+    And the following "project" content:
+      | title                   | moderation_state | field_do_n_services | field_do_n_year | field_do_n_status | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] Serviced project | published        | [TEST] Migrations   | 2025            | completed         | large                 | inherit                | normal                      | both                       |
+    And I am an anonymous user
+    When I visit the "project" content page with the title "[TEST] Serviced project"
+    Then should see a ".ct-at-a-glance__value a[href='/test-migrations']" element
+    When I click "[TEST] Migrations"
+    Then the path should be "/test-migrations"
+    And I should see the text "[TEST] Migrations"
+    And should not see a ".ct-at-a-glance" element
+
+  @api
+  Scenario: A service page an anonymous reader cannot see is left out
+    Given the following "civictheme_page" content:
+      | title                  | moderation_state | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] Draft service   | draft            | large                 | inherit                | normal                      | both                       |
+    And the following "project" content:
+      | title                  | moderation_state | field_do_n_services  | field_do_n_year | field_do_n_status | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
+      | [TEST] Drafted project | published        | [TEST] Draft service | 2025            | completed         | large                 | inherit                | normal                      | both                       |
+    And I am an anonymous user
+    When I visit the "project" content page with the title "[TEST] Drafted project"
+    # Only Year and Status remain: a service the reader cannot open leaves no
+    # row behind, rather than an empty label or a link into a 403.
+    Then I should see 2 ".ct-at-a-glance__row" elements
+    And I should not see the text "[TEST] Draft service"
 
   @api
   Scenario: Work that cannot be attributed omits those rows entirely

@@ -62,11 +62,21 @@ Verify the result by diffing the two displays with the bundle token normalised. 
 
 ## Fields the bundle does not share with Page
 
-A bundle that carries its own fields, as `project` does, renders them from its preprocessor into a component rather than through the view display. The view display is Layout Builder-driven and its default section is copied from Page, so a field that is not a block in that section never renders, whatever its formatter says. Building the markup in the preprocessor is also what makes it possible to leave a row out when its field is empty and to link a taxonomy value to its term page, neither of which a formatter does.
+A bundle that carries its own fields, as `project` does, renders them from its preprocessor into a component rather than through the view display. The view display is Layout Builder-driven and its default section is copied from Page, so a field that is not a block in that section never renders, whatever its formatter says. Building the markup in the preprocessor is also what makes it possible to leave a row out when its field is empty and to link a referenced value to its own page, neither of which a formatter does.
 
 Add those fields to the view display's `hidden` list anyway, through the configuration factory rather than the entity API. It changes no output, but it records the intent, so the next person does not place them in the layout expecting the panel to move.
 
-Read entity reference values with `civictheme_get_field_referenced_entities($node, $field_name, $variables)` rather than by hand. It drops terms the reader cannot view and registers each one as a cacheable dependency of the page; without that, renaming a term leaves every node still rendering the old label until it is re-saved.
+Read entity reference values with `civictheme_get_field_referenced_entities($node, $field_name, $variables)` rather than by hand. It drops entities the reader cannot view and registers each one as a cacheable dependency of the page; without that, renaming a referenced entity leaves every node still rendering the old label until it is re-saved. It is entity-type agnostic, so one resolver serves a field targeting terms and a field targeting nodes.
+
+## Reference a page, not a term that stands for one
+
+A field exists to categorise content or to point at it, and the two want different targets. Sector and technology are labels a reader filters by, so they are taxonomy: the term page listing everything sharing the label is the whole point. A service is something the site already describes on a page of its own, so the project references that page directly. Putting a vocabulary in between would mean a reader clicking a service lands on a term listing rather than on the description of the service they asked about, and the site would carry two names for one thing that drift apart.
+
+Ask which page the reader should land on. If the answer is "a listing of everything sharing this value", use a term. If it is "the page about this thing", reference that page and add no vocabulary.
+
+Nothing marks a page as a service, because nothing needs to: the field's `target_bundles` restricts it to Page, and which pages are offered is an editorial choice rather than a structural one. An author may reference any page.
+
+Generated content is the one place that has to guess, because it has no author to choose for it. `NodeProject` takes the pages aliased under `/services/`, which is where the site keeps them, and generates projects with no services on a site that has none. That heuristic belongs to content generation alone - it is not a rule the field enforces, and moving a page out from under that path changes nothing for a project already referencing it.
 
 ## The theme layer
 

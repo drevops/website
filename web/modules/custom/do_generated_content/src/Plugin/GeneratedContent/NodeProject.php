@@ -8,6 +8,7 @@ use Drupal\do_generated_content\Generator\CaseMatrix;
 use Drupal\do_generated_content\Generator\NodeGeneratorBase;
 use Drupal\do_generated_content\Generator\RelativeDate;
 use Drupal\generated_content\Attribute\GeneratedContent;
+use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -39,6 +40,13 @@ class NodeProject extends NodeGeneratorBase {
     'DevOps engineer',
     'Site reliability engineer',
   ];
+
+  /**
+   * Pages a run can offer as services, loaded once per run.
+   *
+   * @var \Drupal\node\NodeInterface[]|null
+   */
+  protected ?array $servicePagesCache = NULL;
 
   /**
    * {@inheritdoc}
@@ -77,10 +85,68 @@ class NodeProject extends NodeGeneratorBase {
       $values['field_do_n_sector'] = ['target_id' => CaseMatrix::cycle($sectors, $index)->id()];
     }
 
-    $values['field_do_n_services'] = $this->termTargets('do_service', $index, [1, 2, 3]);
+    $values['field_do_n_services'] = $this->servicePageTargets($index);
     $values['field_do_n_technologies'] = $this->termTargets('do_technology', $index, [1, 3, 5]);
 
     return $values;
+  }
+
+  /**
+   * Build entity reference values for a walked number of service pages.
+   *
+   * @param int $index
+   *   Zero-based run index.
+   *
+   * @return array<int, array<string, int|string|null>>
+   *   Field values.
+   */
+  protected function servicePageTargets(int $index): array {
+    $this->servicePagesCache ??= $this->servicePages();
+
+    if ($this->servicePagesCache === []) {
+      return [];
+    }
+
+    $pages = CaseMatrix::subset($this->servicePagesCache, $index, [1, 2, 3]);
+
+    return array_map(static fn(NodeInterface $node): array => ['target_id' => $node->id()], $pages);
+  }
+
+  /**
+   * Load the pages the site offers as services.
+   *
+   * The site groups these pages under one path rather than marking them with a
+   * field, so the alias is what separates a service from any other page. A
+   * site that has none yet generates projects with no services, which is what
+   * an author would see before writing the pages.
+   *
+   * @return \Drupal\node\NodeInterface[]
+   *   The service pages, in storage order.
+   */
+  protected function servicePages(): array {
+    $alias_storage = $this->entityTypeManager->getStorage('path_alias');
+    $ids = $alias_storage->getQuery()->accessCheck(FALSE)->condition('alias', '/services/%', 'LIKE')->execute();
+    $aliases = $alias_storage->loadMultiple($ids);
+    $nids = [];
+
+    foreach ($aliases as $alias) {
+      if (preg_match('#^/node/(\d+)$#', (string) $alias->getPath(), $matches)) {
+        $nids[] = (int) $matches[1];
+      }
+    }
+
+    if ($nids === []) {
+      return [];
+    }
+
+    // Unpublished pages are left out because the "At a glance" panel drops what
+    // the reader cannot view, and a run that picked only those would render no
+    // Services row at all.
+    return array_values($this->entityTypeManager->getStorage('node')->loadByProperties([
+      'nid' => $nids,
+      'type' => 'civictheme_page',
+      'status' => NodeInterface::PUBLISHED,
+    ]));
   }
 
   /**

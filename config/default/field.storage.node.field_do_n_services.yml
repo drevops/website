@@ -4,13 +4,12 @@ status: true
 dependencies:
   module:
     - node
-    - taxonomy
 id: node.field_do_n_services
 field_name: field_do_n_services
 entity_type: node
 type: entity_reference
 settings:
-  target_type: taxonomy_term
+  target_type: node
 module: core
 locked: false
 cardinality: -1
