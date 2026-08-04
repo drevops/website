@@ -105,7 +105,34 @@ class ServiceRolePermissionsTest extends UnitTestCase {
   }
 
   /**
-   * Tests that the role holds no permission over user accounts.
+   * Tests the media access the authoring contract documents.
+   */
+  #[DataProvider('dataProviderMediaPermission')]
+  public function testMediaPermission(string $permission, bool $granted): void {
+    // Prepare.
+    $permissions = $this->loadRole()['permissions'];
+
+    // Assert.
+    $granted
+      ? $this->assertContains($permission, $permissions)
+      : $this->assertNotContains($permission, $permissions);
+  }
+
+  /**
+   * Data provider for testMediaPermission.
+   */
+  public static function dataProviderMediaPermission(): array {
+    return [
+      'create images' => ['create civictheme_image media', TRUE],
+      'create media' => ['create media', TRUE],
+      'read own unpublished media' => ['view own unpublished media', TRUE],
+      'update any media' => ['update any media', FALSE],
+      'delete any media' => ['delete any media', FALSE],
+    ];
+  }
+
+  /**
+   * Tests that the role holds no permission beyond content management.
    */
   #[DataProvider('dataProviderWithheldPermission')]
   public function testWithheldPermission(string $permission): void {

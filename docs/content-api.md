@@ -21,7 +21,9 @@ Send the API key in the `api-key` request header on every request:
 api-key: <key>
 ```
 
-The key belongs to a dedicated service account (`do_content_api_service`) that fully manages content: it may create, edit and delete nodes of any content type regardless of who authored them, read unpublished content and pending revisions, and create images and the supported components. Its media access stays narrower - it can create images and read its own unpublished media, but cannot edit or delete media authored by anyone else.
+The key belongs to a dedicated service account (`do_content_api_service`) that fully manages content. It may create, edit and delete `blog`, `civictheme_alert`, `civictheme_event`, `civictheme_page` and `project` nodes regardless of who authored them, move them through every state of the editorial workflow, and read unpublished content and pending revisions. Any other content type is outside its reach until the role grants that bundle explicitly.
+
+Its media access stays narrower: it can create images and the supported components and read its own unpublished media, but cannot edit or delete media authored by anyone else.
 
 Treat the key as an administrative credential. It carries enough access to remove published pages, so store it in a secret manager, issue a separate key per environment, and revoke it at `/user/<uid>/key-auth` the moment a client no longer needs it.
 
@@ -52,7 +54,7 @@ A page is a `civictheme_page` node whose `field_c_n_components` is an **ordered 
 | Field | Type | Notes |
 | --- | --- | --- |
 | `title` | attribute (string) | Required. |
-| `moderation_state` | attribute | Always ends up `draft` (server-enforced). |
+| `moderation_state` | attribute | Forced to `draft` on create; honoured on update. |
 | `field_c_n_components` | relationship (paragraphs) | Ordered list of component paragraphs. |
 | `field_c_n_summary` | attribute (string) | Optional teaser/summary. |
 
