@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\drupal_helpers\Helper;
 use Drupal\field\Entity\FieldConfig;
@@ -115,28 +116,31 @@ function do_base_update_11003(): string {
  *   Node ids keyed by the term id they replace.
  */
 function _do_base_service_page_map(): array {
-  $pages = [];
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $pages = $entity_type_manager->getStorage('node')->loadByProperties(['type' => 'civictheme_page']);
+  $titles = [];
 
-  foreach (\Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['type' => 'civictheme_page']) as $page) {
-    $pages[mb_strtolower(trim((string) $page->label()))] = (int) $page->id();
+  foreach ($pages as $page) {
+    $titles[mb_strtolower(trim((string) $page->label()))] = (int) $page->id();
   }
 
+  $terms = $entity_type_manager->getStorage('taxonomy_term')->loadByProperties(['vid' => 'do_service']);
   $map = [];
 
-  foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'do_service']) as $term) {
+  foreach ($terms as $term) {
     if (!$term instanceof TermInterface) {
       continue;
     }
 
     $name = mb_strtolower(trim((string) $term->label()));
 
-    if (!isset($pages[$name])) {
+    if (!isset($titles[$name])) {
       Helper::reporter()->skipped(sprintf('No service page is named "%s".', $term->label()));
 
       continue;
     }
 
-    $map[(int) $term->id()] = $pages[$name];
+    $map[(int) $term->id()] = $titles[$name];
   }
 
   return $map;
@@ -166,6 +170,11 @@ function _do_base_service_reference_remap(array $map): void {
   }
 
   $table_mapping = $storage->getTableMapping();
+
+  if (!$table_mapping instanceof DefaultTableMapping) {
+    throw new \RuntimeException('Node storage does not use the default table mapping.');
+  }
+
   $column = $table_mapping->getFieldColumnName($field_storage, 'target_id');
   $database = \Drupal::database();
   $tables = [

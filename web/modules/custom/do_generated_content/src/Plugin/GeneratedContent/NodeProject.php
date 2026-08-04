@@ -126,10 +126,11 @@ class NodeProject extends NodeGeneratorBase {
   protected function servicePages(): array {
     $alias_storage = $this->entityTypeManager->getStorage('path_alias');
     $ids = $alias_storage->getQuery()->accessCheck(FALSE)->condition('alias', '/services/%', 'LIKE')->execute();
+    $aliases = $alias_storage->loadMultiple($ids);
     $nids = [];
 
-    foreach ($alias_storage->loadMultiple($ids) as $alias) {
-      if (preg_match('#^/node/(\d+)$#', $alias->getPath(), $matches)) {
+    foreach ($aliases as $alias) {
+      if (preg_match('#^/node/(\d+)$#', (string) $alias->getPath(), $matches)) {
         $nids[] = (int) $matches[1];
       }
     }
