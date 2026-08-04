@@ -36,17 +36,6 @@ To rebuild by hand:
 ahoy drush xmlsitemap:rebuild
 ```
 
-## Outstanding: remove the `drupal/simple_sitemap` package
-
-`composer.json` still requires `drupal/simple_sitemap` even though the module is not installed. Drupal needs a module's code present to run its uninstall path, and `do_base_update_11001()` performs that uninstall during `drush updatedb`. Removing the package before that update has run in an environment would leave it with an installed-but-codeless module and a `drush cim` that cannot complete.
-
-Once the uninstall has run everywhere, the package can be dropped:
-
-1. Confirm every environment reports `simple_sitemap` as uninstalled.
-2. Remove `drupal/simple_sitemap` from `composer.json`.
-3. Confirm no `simple_sitemap*` tables remain.
-4. Delete this section.
-
 ## Related configuration
 
 `composer.json` patches `seckit` because its JS/CSS/noscript protection breaks `sitemap.xml`. That patch applies to the route rather than to any particular sitemap module, so it is required regardless of which module serves the route.
