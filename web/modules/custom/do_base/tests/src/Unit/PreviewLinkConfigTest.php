@@ -104,7 +104,18 @@ class PreviewLinkConfigTest extends UnitTestCase {
   }
 
   /**
-   * Tests that only site administrators can change the preview link bounds.
+   * Tests that site administrators can change the preview link bounds.
+   */
+  public function testSiteAdministratorCanAdminister(): void {
+    // Act.
+    $permissions = $this->loadConfig('user.role.civictheme_site_administrator.yml')['permissions'];
+
+    // Assert.
+    $this->assertContains('administer preview link settings', $permissions);
+  }
+
+  /**
+   * Tests that no other role can change the preview link bounds.
    */
   #[DataProvider('dataProviderRoleCannotAdminister')]
   public function testRoleCannotAdminister(string $role_id): void {

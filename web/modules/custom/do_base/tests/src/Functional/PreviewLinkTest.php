@@ -100,6 +100,10 @@ class PreviewLinkTest extends DoBaseFunctionalTestBase {
 
   /**
    * Tests that a link stops working once it expires.
+   *
+   * The link is opened first so the refusal is known to come from the expiry
+   * rather than from a URL that never worked, and the canonical route is
+   * checked afterwards because by then the session is holding a stale token.
    */
   public function testExpiredLinkIsRefused(): void {
     // Prepare.
@@ -107,11 +111,50 @@ class PreviewLinkTest extends DoBaseFunctionalTestBase {
     $preview_link = $this->createPreviewLink($node);
     $url = $preview_link->getUrl($node);
 
+    // Act.
+    $this->drupalGet($url);
+
+    // Assert.
+    $this->assertSession()->statusCodeEquals(200);
+
+    // Prepare.
     $preview_link->setExpiry(new \DateTime('-1 minute'));
     $preview_link->save();
 
     // Act.
     $this->drupalGet($url);
+
+    // Assert.
+    $this->assertSession()->statusCodeEquals(403);
+
+    // Act.
+    $this->drupalGet($node->toUrl());
+
+    // Assert.
+    $this->assertSession()->statusCodeEquals(403);
+  }
+
+  /**
+   * Tests that a link unlocks only the content it was created for.
+   *
+   * Preview links carry several entities so a page's paragraphs and media
+   * travel with it, which makes it worth proving that the session a token
+   * opens does not reach unpublished content the link never named.
+   */
+  public function testLinkDoesNotUnlockUnrelatedContent(): void {
+    // Prepare.
+    $linked = $this->createModeratedNode('[TEST] Linked Draft', 'draft');
+    $unrelated = $this->createModeratedNode('[TEST] Unrelated Draft', 'draft');
+    $preview_link = $this->createPreviewLink($linked);
+
+    // Act.
+    $this->drupalGet($preview_link->getUrl($linked));
+
+    // Assert.
+    $this->assertSession()->statusCodeEquals(200);
+
+    // Act.
+    $this->drupalGet($unrelated->toUrl());
 
     // Assert.
     $this->assertSession()->statusCodeEquals(403);
