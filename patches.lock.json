@@ -1,5 +1,5 @@
 {
-    "_hash": "3db242e40f1c2e468f8cea8ccf1e67aaa720b593f315477731f63218693f876e",
+    "_hash": "e5579542845110495a4e1fe8e7404268b5126985681b2d74a9ac057b90ab118f",
     "patches": {
         "drupal/civictheme": [
             {
@@ -19,6 +19,18 @@
                 "description": "Skip the Cloudflare API call in the zone-name update hook and use a static zone name",
                 "url": "patches/cloudflare-static-zone-name-update-hook.patch",
                 "sha256": "f71d74bdeea0a778a493d28f9e88a6ebccbb3fcfb1671374b9cf153babb6e043",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ],
+        "drupal/environment_indicator": [
+            {
+                "package": "drupal/environment_indicator",
+                "description": "Add a Navigation integration submodule - https://www.drupal.org/project/environment_indicator/issues/3457688",
+                "url": "patches/environment-indicator-navigation.patch",
+                "sha256": "3dc73539c124b5fc12b324d6ac9900be395f8765c17f3ced7281d9c8d3fcf2b5",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"

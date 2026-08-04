@@ -1,0 +1,23 @@
+uuid: 6b86a0a9-c598-44bc-ae4a-1c99925104ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_vertical_spacing
+    - node.type.blog
+  module:
+    - options
+id: node.blog.field_c_n_vertical_spacing
+field_name: field_c_n_vertical_spacing
+entity_type: node
+bundle: blog
+label: 'Vertical spacing'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: both
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,29 @@
+uuid: 08952470-19bb-4a73-9077-0e7a525a60f0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_thumbnail
+    - media.type.civictheme_image
+    - node.type.project
+id: node.project.field_c_n_thumbnail
+field_name: field_c_n_thumbnail
+entity_type: node
+bundle: project
+label: Thumbnail
+description: 'Image to appear in teasers and on cards.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      civictheme_image: civictheme_image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

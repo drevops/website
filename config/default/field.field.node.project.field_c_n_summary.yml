@@ -1,0 +1,19 @@
+uuid: a45ffd45-6025-440e-8d64-e688f8fee1a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_summary
+    - node.type.project
+id: node.project.field_c_n_summary
+field_name: field_c_n_summary
+entity_type: node
+bundle: project
+label: Summary
+description: 'Short summary of the project. Shown in teasers and on cards.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

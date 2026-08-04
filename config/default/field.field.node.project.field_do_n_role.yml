@@ -1,0 +1,19 @@
+uuid: 102e941f-7e3f-4cfc-852e-f2e24593b688
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_do_n_role
+    - node.type.project
+id: node.project.field_do_n_role
+field_name: field_do_n_role
+entity_type: node
+bundle: project
+label: Role
+description: 'The roles held on this project.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

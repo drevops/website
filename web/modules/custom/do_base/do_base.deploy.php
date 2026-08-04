@@ -9,9 +9,24 @@
 
 declare(strict_types=1);
 
+use Drupal\civictheme\CivicthemeColorManager;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Sql\DefaultTableMapping;
+use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
+use Drupal\Core\File\FileExists;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\drupal_helpers\Helper;
+use Drupal\drupal_helpers\Report\Reporter;
+use Drupal\entity_usage\RecreateTrackingDataForFieldQueuer;
+use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
+use Drupal\menu_link_content\MenuLinkContentInterface;
+use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\path_alias\PathAliasInterface;
+use Drupal\pathauto\PathautoState;
+use Drupal\search_api\Entity\Index;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Creates the How We Work page from the static prototype.
@@ -339,6 +354,64 @@ function do_base_deploy_populate_how_we_work_page(): string {
 }
 
 /**
+ * Creates the Our Work page and puts it first in the primary navigation.
+ */
+function do_base_deploy_populate_our_work_page(): string {
+  $node_uuid = '1287abe9-edc6-4cc9-a078-f7261a6c6e1d';
+  $menu_name = 'civictheme-primary-navigation';
+  $link_title = 'Our work';
+
+  $existing = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['uuid' => $node_uuid]);
+  $node = reset($existing);
+
+  if ($node instanceof NodeInterface) {
+    Helper::reporter()->skipped('The Our Work page already exists.');
+  }
+  else {
+    $node = _do_base_our_work_build_page($node_uuid);
+    Helper::reporter()->created(sprintf('Created the Our Work page (node %s).', $node->id()));
+  }
+
+  $link = Helper::menu()->findItem($menu_name, ['title' => $link_title]);
+
+  if ($link instanceof MenuLinkContentInterface) {
+    Helper::reporter()->skipped(sprintf('The "%s" link already exists in the primary navigation.', $link_title));
+
+    return Helper::report();
+  }
+
+  // createTree() numbers links from their position in the tree it is handed,
+  // which describes this link alone and so says nothing about where it belongs
+  // among the links already in the menu. Reading the weight first keeps the
+  // link being created out of its own calculation.
+  $weight = _do_base_menu_leading_weight($menu_name);
+
+  Helper::menu()->createTree($menu_name, [$link_title => 'entity:node/' . $node->id()]);
+  Helper::menu()->updateItem($menu_name, ['title' => $link_title], ['weight' => $weight]);
+
+  return Helper::report();
+}
+
+/**
+ * Regenerates project aliases from the pathauto pattern.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every alias is regenerated, or NULL while batching.
+ */
+function do_base_deploy_move_projects_to_work(?array &$sandbox = NULL): ?string {
+  // The query doubles as the idempotency guard: an alias regenerated onto the
+  // new prefix no longer matches, so a repeat deployment finds nothing to do.
+  $query = \Drupal::entityQuery('path_alias')->condition('alias', '/projects/%', 'LIKE');
+
+  return Helper::entity($sandbox)->batchQuery($query, static function (PathAliasInterface $alias): void {
+    _do_base_project_realias($alias);
+  }, status: Reporter::UPDATED);
+}
+
+/**
  * Rebuilds the XML sitemap.
  */
 function do_base_deploy_rebuild_xmlsitemap(): string {
@@ -366,4 +439,536 @@ function do_base_deploy_rebuild_xmlsitemap(): string {
   Helper::reporter()->updated('Queued the XML sitemap rebuild.');
 
   return Helper::report();
+}
+
+/**
+ * Rebuilds the generated theme colour stylesheet.
+ */
+function do_base_deploy_refresh_theme_colors(): string {
+  /** @var \Drupal\civictheme\CivicthemeColorManager $color_manager */
+  $color_manager = \Drupal::classResolver(CivicthemeColorManager::class);
+
+  // The stylesheet is written only while it is missing, so colours reaching
+  // the site as configuration are never painted into it. Deleting it leaves
+  // the next request to rebuild it from the values the site actually holds.
+  $color_manager->invalidateCache();
+
+  Helper::reporter()->updated('Purged the generated theme colour stylesheet.');
+
+  return Helper::report();
+}
+
+/**
+ * Moves blog articles onto the Blog post content type.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every article is migrated, or NULL while batching.
+ */
+function do_base_deploy_migrate_blog_posts(?array &$sandbox = NULL): ?string {
+  $term = _do_base_blog_topic_term();
+
+  if (!$term instanceof TermInterface) {
+    Helper::reporter()->skipped('The "Blog" topic term does not exist, so there is nothing to migrate.');
+
+    return Helper::report();
+  }
+
+  // The query doubles as the idempotency guard: once an article is on the blog
+  // bundle it no longer matches, so a repeat deployment finds nothing to do.
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', 'civictheme_page')
+    ->condition('field_c_n_topics', $term->id());
+
+  // Each article rewrites its row in more than forty field tables, so the batch
+  // is kept well below the helper's default to keep any single request short.
+  return Helper::entity($sandbox, 10)->batchQuery($query, static function (NodeInterface $node): void {
+    _do_base_blog_migrate_node($node);
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Points automated lists of blog articles at the Blog post content type.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every list is repointed, or NULL while batching.
+ */
+function do_base_deploy_repoint_blog_lists(?array &$sandbox = NULL): ?string {
+  $term = _do_base_blog_topic_term();
+
+  if (!$term instanceof TermInterface) {
+    Helper::reporter()->skipped('The "Blog" topic term does not exist, so there is nothing to repoint.');
+
+    return Helper::report();
+  }
+
+  // Scoping by the Blog topic rather than by the targeted bundle leaves lists
+  // that legitimately point at pages, such as case studies, untouched.
+  $query = \Drupal::entityQuery('paragraph')
+    ->condition('type', 'civictheme_automated_list')
+    ->condition('field_c_p_list_content_type', 'civictheme_page')
+    ->condition('field_c_p_list_topics', $term->id());
+
+  return Helper::entity($sandbox)->batchQuery($query, static function (ParagraphInterface $paragraph): void {
+    _do_base_blog_repoint_list($paragraph);
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Rebuilds usage tracking for services now that they are pages.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every project is retracked, or NULL while batching.
+ */
+function do_base_deploy_retrack_service_usage(?array &$sandbox = NULL): ?string {
+  // Every project is walked, not only those still holding a reference: a
+  // project whose references were all dropped is exactly the one whose
+  // recorded usage now names terms that no longer exist.
+  $query = \Drupal::entityQuery('node')->condition('type', 'project');
+
+  return Helper::entity($sandbox)->batchQuery($query, static function (NodeInterface $node): void {
+    // The migration rewrote the stored ids without saving a node, so nothing
+    // told entity_usage that these references now point at pages. Asking the
+    // module to recompute the field keeps its own bookkeeping authoritative
+    // rather than writing rows on its behalf.
+    \Drupal::service(RecreateTrackingDataForFieldQueuer::class)
+      ->processRecord('node', (string) $node->id(), (string) $node->getRevisionId(), 'entity_reference', 'field_do_n_services');
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Seeds the Sector and Technology vocabularies.
+ */
+function do_base_deploy_seed_project_vocabularies(): string {
+  $trees = [
+    'do_sector' => [
+      'Federal government',
+      'State government',
+      'Local government',
+      'Higher education',
+      'Health',
+      'Not-for-profit',
+      'Commercial',
+    ],
+    'do_technology' => [
+      'Drupal',
+      'PHP',
+      'JavaScript',
+      'Docker',
+      'Kubernetes',
+      'AWS',
+      'Lagoon',
+      'Acquia Cloud',
+      'GitHub Actions',
+      'CircleCI',
+      'Terraform',
+      'Behat',
+      'PHPUnit',
+    ],
+  ];
+
+  foreach ($trees as $vocabulary => $tree) {
+    // These are a starting point rather than a closed set, so the default safe
+    // mode is used: terms an author adds later survive the next deployment.
+    Helper::term()->createTree($vocabulary, $tree);
+  }
+
+  return Helper::report();
+}
+
+/**
+ * Assembles the Our Work page.
+ */
+function _do_base_our_work_build_page(string $node_uuid): NodeInterface {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $paragraph_storage = $entity_type_manager->getStorage('paragraph');
+
+  $component = function (string $type, array $fields) use ($paragraph_storage): array {
+    $paragraph = $paragraph_storage->create(['type' => $type] + $fields);
+
+    if (!$paragraph instanceof ParagraphInterface) {
+      throw new \RuntimeException(sprintf('Failed to create a "%s" paragraph.', $type));
+    }
+
+    $paragraph->save();
+
+    return ['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()];
+  };
+
+  $rich_text = (fn(string $html): array => ['value' => $html, 'format' => 'civictheme_rich_text']);
+
+  // A failed save mid-way must not leave orphaned paragraphs behind, so the
+  // whole assembly commits or rolls back as one unit.
+  $transaction = \Drupal::database()->startTransaction();
+
+  try {
+    $banner_content = $component('civictheme_content', [
+      'field_c_p_content' => $rich_text(
+        '<p class="ct-text-large">Every project here is a platform we designed, built, upgraded or rescued. Each one names the client where we are free to, the'
+        . ' year, the sector and the technologies, along with the part we actually played. No case study gloss, no invented metrics.</p>'
+        . '<p><a class="ct-button ct-theme-light ct-theme-dark ct-button--primary ct-button--regular" href="/contact"><strong>Talk to us about your'
+        . ' platform</strong></a></p>'
+      ),
+      'field_c_p_theme' => 'dark',
+      'field_c_p_background' => FALSE,
+      'field_c_p_vertical_spacing' => 'bottom',
+    ]);
+
+    $intro = $component('civictheme_content', [
+      'field_c_p_content' => $rich_text(
+        '<p class="text-align-center eyebrow">What you are looking at</p>'
+        . '<h2 class="text-align-center"><strong>The work, not the pitch.</strong></h2>'
+        . '<p class="text-align-center ct-text-large">Most portfolios are written to impress. This one is written so you can check it. Every entry names the client,'
+        . ' the year, the sector and the technologies involved, along with the part we actually played, which is sometimes the whole platform and sometimes one'
+        . ' difficult piece of it.</p>'
+        . '<p class="text-align-center ct-text-large">Where a project produced something open source, the contributions are linked from its page, so you can read the'
+        . ' code instead of taking our word for it. Where a site is public, the link goes straight to it.</p>'
+      ),
+      'field_c_p_theme' => 'light',
+      'field_c_p_background' => TRUE,
+      'field_c_p_vertical_spacing' => 'both',
+    ]);
+
+    $projects = $component('civictheme_automated_list', [
+      'field_c_p_content' => $rich_text(
+        '<p class="text-align-center eyebrow">Every project</p>'
+        . '<h2 class="text-align-center"><strong>Newest work first.</strong></h2>'
+      ),
+      'field_c_p_list_type' => 'civictheme_automated_list__block1',
+      'field_c_p_list_content_type' => 'project',
+      'field_c_p_list_limit_type' => 'unlimited',
+      'field_c_p_list_limit' => 12,
+      'field_c_p_list_item_view_as' => 'civictheme_promo_card',
+      'field_c_p_list_item_theme' => 'light',
+      'field_c_p_list_column_count' => 3,
+      'field_c_p_list_fill_width' => FALSE,
+      'field_c_p_theme' => 'light',
+      'field_c_p_background' => FALSE,
+      'field_c_p_vertical_spacing' => 'both',
+    ]);
+
+    $values = [
+      'type' => 'civictheme_page',
+      'uuid' => $node_uuid,
+      'title' => 'Our work',
+      'status' => 1,
+      'moderation_state' => 'published',
+      'field_c_n_summary' => 'Platforms we have designed, built, upgraded and kept running. Each project names the client, the year, the sector and the technologies,'
+        . ' along with the part we actually played.',
+      'field_c_n_banner_theme' => 'dark',
+      'field_c_n_banner_type' => 'large',
+      'field_c_n_banner_title' => 'Work you can go and look at.',
+      'field_c_n_banner_blend_mode' => 'soft-light',
+      'field_c_n_banner_hide_breadcrumb' => FALSE,
+      'field_c_n_banner_components' => [$banner_content],
+      'field_c_n_hide_sidebar' => TRUE,
+      'field_c_n_show_last_updated' => FALSE,
+      'field_c_n_vertical_spacing' => 'none',
+      'field_c_n_components' => [$intro, $projects],
+      // The alias is shorter than the title, so pathauto is switched off for
+      // this node rather than left to derive one; without the skip it would
+      // take the alias back the first time an author saves the page.
+      'path' => ['alias' => '/work', 'pathauto' => PathautoState::SKIP],
+    ];
+
+    // A missing image leaves the banner a flat dark band, which is a far
+    // smaller loss than a deployment that stops.
+    $banner_media = _do_base_our_work_banner_media();
+
+    if ($banner_media instanceof MediaInterface) {
+      $values['field_c_n_banner_background'] = ['target_id' => $banner_media->id()];
+    }
+
+    $node = $entity_type_manager->getStorage('node')->create($values);
+    $node->save();
+  }
+  catch (\Throwable $throwable) {
+    $transaction->rollBack();
+
+    throw $throwable;
+  }
+
+  return $node;
+}
+
+/**
+ * Loads or creates the media entity holding the Our Work banner image.
+ */
+function _do_base_our_work_banner_media(): ?MediaInterface {
+  $media_uuid = 'a93f1457-90ca-4ce0-8685-38f32322317f';
+  $media_storage = \Drupal::entityTypeManager()->getStorage('media');
+
+  $existing = $media_storage->loadByProperties(['uuid' => $media_uuid]);
+  $media = reset($existing);
+
+  if ($media instanceof MediaInterface) {
+    return $media;
+  }
+
+  $source = DRUPAL_ROOT . '/' . \Drupal::service('extension.list.module')->getPath('do_base') . '/assets/our-work-banner.jpg';
+
+  if (!is_file($source)) {
+    return NULL;
+  }
+
+  $directory = 'public://images';
+
+  if (!\Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
+    return NULL;
+  }
+
+  $file = \Drupal::service('file.repository')->writeData((string) file_get_contents($source), $directory . '/our-work-banner.jpg', FileExists::Replace);
+
+  if (!$file instanceof FileInterface) {
+    return NULL;
+  }
+
+  // CivicTheme image media carry the alt text as their library name, so an
+  // author browsing the library sees what the image shows.
+  $description = 'Layered slabs of teal glass and brushed metal bars against a soft grey-blue background.';
+
+  $media = $media_storage->create([
+    'bundle' => 'civictheme_image',
+    'uuid' => $media_uuid,
+    'name' => $description,
+    'status' => 1,
+    'field_c_m_image' => ['target_id' => $file->id(), 'alt' => $description],
+  ]);
+  $media->save();
+
+  return $media;
+}
+
+/**
+ * Returns a weight that sorts ahead of every top-level link in a menu.
+ */
+function _do_base_menu_leading_weight(string $menu_name): int {
+  $links = \Drupal::entityTypeManager()->getStorage('menu_link_content')->loadByProperties(['menu_name' => $menu_name]);
+
+  // Seeded so that a menu with no top-level links still yields a weight.
+  $weights = [0];
+
+  foreach ($links as $link) {
+    if ($link instanceof MenuLinkContentInterface && $link->getParentId() === '') {
+      $weights[] = $link->getWeight();
+    }
+  }
+
+  return min($weights) - 1;
+}
+
+/**
+ * Regenerates the alias of the project a path alias points at.
+ */
+function _do_base_project_realias(PathAliasInterface $alias): void {
+  if (!preg_match('#^/node/(\d+)$#', $alias->getPath(), $matches)) {
+    return;
+  }
+
+  $node = \Drupal::entityTypeManager()->getStorage('node')->load($matches[1]);
+
+  if (!$node instanceof NodeInterface || $node->bundle() !== 'project') {
+    return;
+  }
+
+  // Regenerating rather than rewriting the alias string keeps the result
+  // defined by the pattern alone, and lets the redirect module record the
+  // superseded path so inbound links keep resolving.
+  \Drupal::service('pathauto.generator')->updateEntityAlias($node, 'update');
+}
+
+/**
+ * Loads the taxonomy term that defines which articles are blog articles.
+ */
+function _do_base_blog_topic_term(): ?TermInterface {
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+    'vid' => 'civictheme_topics',
+    'name' => 'Blog',
+  ]);
+
+  $term = reset($terms);
+
+  return $term instanceof TermInterface ? $term : NULL;
+}
+
+/**
+ * Moves a single article onto the blog bundle.
+ */
+function _do_base_blog_migrate_node(NodeInterface $node): void {
+  $nid = $node->id();
+  $langcodes = array_keys($node->getTranslationLanguages());
+  $database = \Drupal::database();
+
+  // Drupal treats a loaded entity's bundle as immutable, and the only
+  // entity-API alternative - delete and recreate - would discard the node ID,
+  // its revisions and every paragraph reference. An article left half-migrated
+  // would be readable through neither bundle, so each one commits or rolls back
+  // on its own, which is also what makes an interrupted batch safe to resume.
+  $transaction = $database->startTransaction();
+
+  try {
+    $database->update('node')->fields(['type' => 'blog'])->condition('nid', $nid)->execute();
+    $database->update('node_field_data')->fields(['type' => 'blog'])->condition('nid', $nid)->execute();
+
+    foreach (_do_base_blog_bundle_tables('civictheme_page', 'blog') as $table) {
+      $database->update($table)->fields(['bundle' => 'blog'])->condition('entity_id', $nid)->condition('bundle', 'civictheme_page')->execute();
+    }
+
+    // The sitemap records each link's bundle alongside it, and the rebuild that
+    // would otherwise correct it runs only once per environment.
+    if ($database->schema()->tableExists('xmlsitemap')) {
+      $database->update('xmlsitemap')->fields(['subtype' => 'blog'])->condition('type', 'node')->condition('id', $nid)->execute();
+    }
+  }
+  catch (\Throwable $throwable) {
+    $transaction->rollBack();
+
+    throw $throwable;
+  }
+
+  \Drupal::entityTypeManager()->getStorage('node')->resetCache([$nid]);
+  _do_base_blog_reindex($nid, $langcodes);
+
+  Cache::invalidateTags(['node:' . $nid, 'node_list', 'node_list:blog', 'node_list:civictheme_page']);
+}
+
+/**
+ * Points a single automated list at the blog bundle, in every revision.
+ */
+function _do_base_blog_repoint_list(ParagraphInterface $paragraph): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+
+  if (!$storage instanceof SqlContentEntityStorage) {
+    throw new \RuntimeException('Paragraph storage is not SQL-backed, so field tables cannot be resolved.');
+  }
+
+  $table_mapping = $storage->getTableMapping();
+
+  if (!$table_mapping instanceof DefaultTableMapping) {
+    throw new \RuntimeException('Paragraph storage does not use the default table mapping.');
+  }
+
+  $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('paragraph', 'civictheme_automated_list');
+  $storage_definition = $definitions['field_c_p_list_content_type']->getFieldStorageDefinition();
+  $column = $table_mapping->getFieldColumnName($storage_definition, 'value');
+  $pid = $paragraph->id();
+
+  // Saving the paragraph would only rewrite its current revision, while the
+  // host node references one specific revision that is not necessarily that
+  // one, so the value is set across every revision instead. Older revisions
+  // want the new bundle too: left on the old one they render an empty list,
+  // because no page carries the Blog topic once the migration has run.
+  $candidates = [
+    $table_mapping->getDedicatedDataTableName($storage_definition),
+    $table_mapping->getDedicatedRevisionTableName($storage_definition),
+  ];
+
+  $database = \Drupal::database();
+
+  foreach ($candidates as $candidate) {
+    if (!$database->schema()->tableExists($candidate)) {
+      continue;
+    }
+
+    $database->update($candidate)->fields([$column => 'blog'])->condition('entity_id', $pid)->condition($column, 'civictheme_page')->execute();
+  }
+
+  $tags = ['paragraph:' . $pid];
+  $parent = $paragraph->getParentEntity();
+
+  if ($parent instanceof NodeInterface) {
+    $tags[] = 'node:' . $parent->id();
+  }
+
+  $storage->resetCache([$pid]);
+  Cache::invalidateTags($tags);
+}
+
+/**
+ * Lists the node field tables that record the bundle for the given bundles.
+ */
+function _do_base_blog_bundle_tables(string ...$bundles): array {
+  static $cache = [];
+
+  $key = implode(':', $bundles);
+
+  if (isset($cache[$key])) {
+    return $cache[$key];
+  }
+
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  if (!$storage instanceof SqlContentEntityStorage) {
+    throw new \RuntimeException('Node storage is not SQL-backed, so field tables cannot be resolved.');
+  }
+
+  $table_mapping = $storage->getTableMapping();
+
+  if (!$table_mapping instanceof DefaultTableMapping) {
+    throw new \RuntimeException('Node storage does not use the default table mapping.');
+  }
+
+  $field_manager = \Drupal::service('entity_field.manager');
+  $schema = \Drupal::database()->schema();
+  $tables = [];
+
+  // Deriving the list from the storage definitions rather than naming the
+  // tables keeps a field added to either bundle later from being missed. The
+  // union of both bundles is taken so a field attached to only one of them
+  // cannot leave rows stranded under the old bundle.
+  foreach ($bundles as $bundle) {
+    foreach ($field_manager->getFieldDefinitions('node', $bundle) as $definition) {
+      $storage_definition = $definition->getFieldStorageDefinition();
+
+      if (!$table_mapping->requiresDedicatedTableStorage($storage_definition)) {
+        continue;
+      }
+
+      $candidates = [
+        $table_mapping->getDedicatedDataTableName($storage_definition),
+        $table_mapping->getDedicatedRevisionTableName($storage_definition),
+      ];
+
+      foreach ($candidates as $candidate) {
+        if ($schema->tableExists($candidate)) {
+          $tables[$candidate] = $candidate;
+        }
+      }
+    }
+  }
+
+  $cache[$key] = $tables;
+
+  return $tables;
+}
+
+/**
+ * Queues a node for reindexing in each of the given languages.
+ */
+function _do_base_blog_reindex(int|string $nid, array $langcodes): void {
+  if (!\Drupal::moduleHandler()->moduleExists('search_api')) {
+    return;
+  }
+
+  // Changing the bundle in storage fires no entity hooks, so the indexed
+  // document would otherwise keep describing the article as a page.
+  $item_ids = array_map(static fn (string $langcode): string => $nid . ':' . $langcode, array_values($langcodes));
+
+  foreach (\Drupal::entityTypeManager()->getStorage('search_api_index')->loadMultiple() as $entity) {
+    if (!$entity instanceof Index) {
+      continue;
+    }
+
+    if ($entity->isValidDatasource('entity:node')) {
+      $entity->trackItemsUpdated('entity:node', $item_ids);
+    }
+  }
 }

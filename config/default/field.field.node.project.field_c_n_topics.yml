@@ -1,0 +1,29 @@
+uuid: 443625a9-f195-422e-9009-21f2c1871ee3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_topics
+    - node.type.project
+    - taxonomy.vocabulary.civictheme_topics
+id: node.project.field_c_n_topics
+field_name: field_c_n_topics
+entity_type: node
+bundle: project
+label: Topics
+description: 'Group content by topics to allow sorting in lists.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      civictheme_topics: civictheme_topics
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

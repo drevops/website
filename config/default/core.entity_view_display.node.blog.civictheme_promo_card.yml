@@ -1,0 +1,87 @@
+uuid: 7ad73b59-e752-4518-989f-7702b6ac0367
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.civictheme_promo_card
+    - field.field.node.blog.field_c_n_banner_background
+    - field.field.node.blog.field_c_n_banner_blend_mode
+    - field.field.node.blog.field_c_n_banner_components
+    - field.field.node.blog.field_c_n_banner_components_bott
+    - field.field.node.blog.field_c_n_banner_featured_image
+    - field.field.node.blog.field_c_n_banner_hide_breadcrumb
+    - field.field.node.blog.field_c_n_banner_theme
+    - field.field.node.blog.field_c_n_banner_title
+    - field.field.node.blog.field_c_n_banner_type
+    - field.field.node.blog.field_c_n_components
+    - field.field.node.blog.field_c_n_custom_last_updated
+    - field.field.node.blog.field_c_n_hide_sidebar
+    - field.field.node.blog.field_c_n_hide_tags
+    - field.field.node.blog.field_c_n_show_last_updated
+    - field.field.node.blog.field_c_n_show_toc
+    - field.field.node.blog.field_c_n_site_section
+    - field.field.node.blog.field_c_n_summary
+    - field.field.node.blog.field_c_n_thumbnail
+    - field.field.node.blog.field_c_n_topics
+    - field.field.node.blog.field_c_n_vertical_spacing
+    - field.field.node.blog.field_n_metatags
+    - node.type.blog
+  module:
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.blog.civictheme_promo_card
+targetEntityType: node
+bundle: blog
+mode: civictheme_promo_card
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_c_n_summary:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_n_thumbnail:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  field_c_n_banner_background: true
+  field_c_n_banner_blend_mode: true
+  field_c_n_banner_components: true
+  field_c_n_banner_components_bott: true
+  field_c_n_banner_featured_image: true
+  field_c_n_banner_hide_breadcrumb: true
+  field_c_n_banner_theme: true
+  field_c_n_banner_title: true
+  field_c_n_banner_type: true
+  field_c_n_components: true
+  field_c_n_custom_last_updated: true
+  field_c_n_hide_sidebar: true
+  field_c_n_hide_tags: true
+  field_c_n_show_last_updated: true
+  field_c_n_show_toc: true
+  field_c_n_site_section: true
+  field_c_n_topics: true
+  field_c_n_vertical_spacing: true
+  field_n_metatags: true
+  langcode: true
+  search_api_excerpt: true

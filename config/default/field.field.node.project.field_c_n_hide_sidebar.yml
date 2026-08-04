@@ -1,0 +1,23 @@
+uuid: 270e8a5b-aaf4-41d2-92df-d91c80070560
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_hide_sidebar
+    - node.type.project
+id: node.project.field_c_n_hide_sidebar
+field_name: field_c_n_hide_sidebar
+entity_type: node
+bundle: project
+label: 'Hide sidebar'
+description: "Hide sidebar making this page's component appear edge-to-edge."
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

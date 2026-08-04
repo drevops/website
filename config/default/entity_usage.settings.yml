@@ -1,6 +1,7 @@
 _core:
   default_config_hash: AXUBMTvVtpcNp0jKjDaWjSHqMy6HjuUf7j4yVbXgazI
 local_task_enabled_entity_types:
+  - node
   - paragraphs_library_item
 track_enabled_base_fields: false
 edit_warning_message_entity_types:

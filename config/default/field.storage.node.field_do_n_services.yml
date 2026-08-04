@@ -1,0 +1,19 @@
+uuid: 0181abec-980f-48d2-b07a-83379f3f5fd4
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_do_n_services
+field_name: field_do_n_services
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

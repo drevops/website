@@ -17,10 +17,13 @@ require_once __DIR__ . '/includes/manual_list.inc';
 require_once __DIR__ . '/includes/steps.inc';
 require_once __DIR__ . '/includes/page.inc';
 require_once __DIR__ . '/includes/node.inc';
+require_once __DIR__ . '/includes/blog.inc';
+require_once __DIR__ . '/includes/project.inc';
 require_once __DIR__ . '/includes/cards.inc';
 require_once __DIR__ . '/includes/sidebar_navigation.inc';
 require_once __DIR__ . '/includes/content_moderation.inc';
 require_once __DIR__ . '/includes/admin_navigation.inc';
+require_once __DIR__ . '/includes/error_page.inc';
 
 /**
  * Adds a CSS class to a block wrapper.
@@ -68,6 +71,7 @@ function drevops_preprocess_civictheme_tag_list(array &$variables): void {
  */
 function drevops_preprocess_block(array &$variables): void {
   _drevops_preprocess_block__system_main_block($variables);
+  _drevops_preprocess_block__system_main_block__error($variables);
   _drevops_preprocess_block__civictheme_banner($variables);
   _drevops_preprocess_block__civictheme_banner__breadcrumb($variables);
   _drevops_preprocess_block__content_moderation_control($variables);
@@ -78,6 +82,7 @@ function drevops_preprocess_block(array &$variables): void {
  */
 function drevops_preprocess_page(array &$variables): void {
   _drevops_preprocess_page($variables);
+  _drevops_preprocess_page__error($variables);
 }
 
 /**

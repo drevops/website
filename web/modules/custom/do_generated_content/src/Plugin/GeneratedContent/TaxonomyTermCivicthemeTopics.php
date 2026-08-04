@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\do_generated_content\Plugin\GeneratedContent;
 
+use Drupal\do_generated_content\Generator\TaxonomyTermGeneratorBase;
 use Drupal\generated_content\Attribute\GeneratedContent;
-use Drupal\generated_content\Plugin\GeneratedContent\GeneratedContentPluginBase;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Generated topic taxonomy terms.
@@ -20,40 +19,22 @@ use Drupal\taxonomy\Entity\Term;
   weight: 11,
   tracking: TRUE,
 )]
-class TaxonomyTermCivicthemeTopics extends GeneratedContentPluginBase {
+class TaxonomyTermCivicthemeTopics extends TaxonomyTermGeneratorBase {
 
   /**
    * {@inheritdoc}
    */
-  public function generate(): array {
-    $entities = [];
-
-    $topics = [
-      'Drupal',
-      'DevOps',
-      'CI/CD',
-      'Testing',
-      'Automation',
-      'Open Source',
-      'Web Development',
-      'Performance',
-      'Security',
-      'Accessibility',
-    ];
-
-    foreach ($topics as $topic) {
-      $term = Term::create([
-        'vid' => 'civictheme_topics',
-        'name' => $topic,
-      ]);
-
-      $term->save();
-      $entities[] = $term;
-
-      $this->helper::log('Created topic: %s', $topic);
-    }
-
-    return $entities;
-  }
+  protected const NAMES = [
+    'Drupal',
+    'DevOps',
+    'CI/CD',
+    'Testing',
+    'Automation',
+    'Open Source',
+    'Web Development',
+    'Performance',
+    'Security',
+    'Accessibility',
+  ];
 
 }

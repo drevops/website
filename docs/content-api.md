@@ -6,9 +6,11 @@ This document is the authoring contract: it describes the endpoints, the content
 
 ## Governance model (read this first)
 
-Pages created through the API are **never published automatically**. A human reviews and publishes them.
+A page the API creates is **never published in the request that creates it**. It lands as a draft for a human to review.
 
-- **Pages** (`civictheme_page` nodes) are always created as **draft**. The server forces this: even if a request asks for `published`, the page is coerced to `draft`.
+That guarantee covers creation, not the whole lifecycle. The service account holds every transition of the editorial workflow, so a client updating a node it created earlier - or one an editor authored - may move it to any state the workflow allows, including published. Treat the draft-first rule as a safeguard against an agent publishing in one shot, not as a guarantee that only humans ever publish.
+
+- **Nodes** of every content type are always created as **draft**. The server forces this: even if a request asks for `published`, the node is coerced to `draft`.
 - **Images** (`civictheme_image` media) are created **published** - they are assets, invisible until referenced by a published page. The server forces this too, so a client never has to set media moderation state.
 
 So the workflow is: the agent creates a draft page with published images, an editor reviews the draft, and when they publish the page it renders immediately because the images are already live.
@@ -21,7 +23,11 @@ Send the API key in the `api-key` request header on every request:
 api-key: <key>
 ```
 
-The key belongs to a dedicated, least-privilege service account (`do_content_api_service`) that may only create pages, images, and the supported components. Pages it authors are forced to draft by the moderation policy - a human publishes them.
+The key belongs to a dedicated service account (`do_content_api_service`) that fully manages content. It may create, edit and delete `blog`, `civictheme_alert`, `civictheme_event`, `civictheme_page` and `project` nodes regardless of who authored them, move them through every state of the editorial workflow, and read unpublished content and pending revisions. Any other content type is outside its reach until the role grants that bundle explicitly.
+
+Its media access is narrower than its node access: it can create images and the supported components, and read unpublished media, but cannot edit or delete media authored by anyone else.
+
+Treat the key as an administrative credential. It carries enough access to remove published pages, so store it in a secret manager, issue a separate key per environment, and revoke it at `/user/<uid>/key-auth` the moment a client no longer needs it.
 
 Retrieve (or regenerate) the key as an administrator at `/user/<uid>/key-auth` for the service account, or have a developer read it from the account. Always send it over HTTPS. On deployed environments the `shield` module may sit in front of the site; the API path must be allow-listed there or the client must also supply the Shield credentials.
 
@@ -30,7 +36,7 @@ Retrieve (or regenerate) the key as an administrator at `/user/<uid>/key-auth` f
 The feature ships as configuration, so it is enabled by a normal deployment:
 
 1. Importing configuration enables `jsonapi` (with writes allowed), `key_auth`, `subrequests`, and the `do_content_api` module, and creates the `do_content_api` service role.
-1. The `drush deploy` step runs a deploy hook that creates the `do_content_api_service` account (idempotent - it is skipped if the account already exists). The API key is generated automatically.
+1. The `drush deploy` step runs a deploy hook that creates the `do_content_api_service` account, and the API key is generated automatically. Later runs reconcile an existing service account back to exactly the `do_content_api` role, leave a deliberately blocked account blocked, and refuse to touch an unrelated account that happens to share the username.
 1. Retrieve the key at `/user/<uid>/key-auth` and give it to the client.
 
 No keys are committed to the repository; each environment issues its own.
@@ -50,9 +56,13 @@ A page is a `civictheme_page` node whose `field_c_n_components` is an **ordered 
 | Field | Type | Notes |
 | --- | --- | --- |
 | `title` | attribute (string) | Required. |
-| `moderation_state` | attribute | Always ends up `draft` (server-enforced). |
+| `moderation_state` | attribute | Forced to `draft` on create; honoured on update. |
 | `field_c_n_components` | relationship (paragraphs) | Ordered list of component paragraphs. |
 | `field_c_n_summary` | attribute (string) | Optional teaser/summary. |
+
+### Other content types
+
+`blog`, `project`, `civictheme_event` and `civictheme_alert` are creatable at `/jsonapi/node/<bundle>` with the same authentication, draft policy and component model. Each carries its own fields on top of the shared ones above, and a bundle's required fields are enforced by entity validation: a request missing one comes back `422` naming the field, which is the quickest way to discover them. `project`, for example, requires `field_do_n_status` and `field_do_n_year`.
 
 ### Supported components (v1)
 
@@ -133,5 +143,5 @@ The response is HTTP `207` with one entry per `requestId`. Each entry has its ow
 - **Order tokens correctly.** Use `drupal_internal__revision_id` from each paragraph's creation response. The numeric token is written quoted (`"target_revision_id":"{{...}}"`); the replacer strips the quotes.
 - **Alt text is required** on every image.
 - **Rich text needs a format**: `civictheme_rich_text`.
-- **Page moderation state is ignored** - every page is created as `draft` regardless of the `moderation_state` sent; a human publishes it.
+- **Page moderation state is ignored on create** - every page is created as `draft` regardless of the `moderation_state` sent. Updates honour the state sent.
 - **Cards (`civictheme_*_card`) are not placed directly on the page** - they live inside a `civictheme_manual_list` via `field_c_p_list_items`.

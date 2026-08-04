@@ -1,0 +1,103 @@
+uuid: c0b31e35-3538-458f-be11-5882c0790043
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.civictheme_navigation_card
+    - field.field.node.project.field_c_n_banner_background
+    - field.field.node.project.field_c_n_banner_blend_mode
+    - field.field.node.project.field_c_n_banner_components
+    - field.field.node.project.field_c_n_banner_components_bott
+    - field.field.node.project.field_c_n_banner_featured_image
+    - field.field.node.project.field_c_n_banner_hide_breadcrumb
+    - field.field.node.project.field_c_n_banner_theme
+    - field.field.node.project.field_c_n_banner_title
+    - field.field.node.project.field_c_n_banner_type
+    - field.field.node.project.field_c_n_components
+    - field.field.node.project.field_c_n_custom_last_updated
+    - field.field.node.project.field_c_n_hide_sidebar
+    - field.field.node.project.field_c_n_hide_tags
+    - field.field.node.project.field_c_n_show_last_updated
+    - field.field.node.project.field_c_n_show_toc
+    - field.field.node.project.field_c_n_site_section
+    - field.field.node.project.field_c_n_summary
+    - field.field.node.project.field_c_n_thumbnail
+    - field.field.node.project.field_c_n_topics
+    - field.field.node.project.field_c_n_vertical_spacing
+    - field.field.node.project.field_do_n_client
+    - field.field.node.project.field_do_n_delivered_at
+    - field.field.node.project.field_do_n_live_url
+    - field.field.node.project.field_do_n_oss_contributions
+    - field.field.node.project.field_do_n_role
+    - field.field.node.project.field_do_n_sector
+    - field.field.node.project.field_do_n_services
+    - field.field.node.project.field_do_n_status
+    - field.field.node.project.field_do_n_technologies
+    - field.field.node.project.field_do_n_year
+    - field.field.node.project.field_n_metatags
+    - node.type.project
+  module:
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.project.civictheme_navigation_card
+targetEntityType: node
+bundle: project
+mode: civictheme_navigation_card
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_c_n_summary:
+    type: basic_string
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_c_n_thumbnail:
+    type: entity_reference_label
+    label: visually_hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_c_n_banner_background: true
+  field_c_n_banner_blend_mode: true
+  field_c_n_banner_components: true
+  field_c_n_banner_components_bott: true
+  field_c_n_banner_featured_image: true
+  field_c_n_banner_hide_breadcrumb: true
+  field_c_n_banner_theme: true
+  field_c_n_banner_title: true
+  field_c_n_banner_type: true
+  field_c_n_components: true
+  field_c_n_custom_last_updated: true
+  field_c_n_hide_sidebar: true
+  field_c_n_hide_tags: true
+  field_c_n_show_last_updated: true
+  field_c_n_show_toc: true
+  field_c_n_site_section: true
+  field_c_n_topics: true
+  field_c_n_vertical_spacing: true
+  field_do_n_client: true
+  field_do_n_delivered_at: true
+  field_do_n_live_url: true
+  field_do_n_oss_contributions: true
+  field_do_n_role: true
+  field_do_n_sector: true
+  field_do_n_services: true
+  field_do_n_status: true
+  field_do_n_technologies: true
+  field_do_n_year: true
+  field_n_metatags: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

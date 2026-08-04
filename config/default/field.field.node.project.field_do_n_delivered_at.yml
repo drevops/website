@@ -1,0 +1,19 @@
+uuid: f76b170b-0b63-42f1-a6c6-c0d458667b2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_do_n_delivered_at
+    - node.type.project
+id: node.project.field_do_n_delivered_at
+field_name: field_do_n_delivered_at
+entity_type: node
+bundle: project
+label: 'Delivered at'
+description: 'The organisation the work was delivered under. Leave empty when it cannot be named.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,23 @@
+uuid: 5eb86e75-e793-4aa3-8aaf-bf2a8308eb90
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_banner_hide_breadcrumb
+    - node.type.project
+id: node.project.field_c_n_banner_hide_breadcrumb
+field_name: field_c_n_banner_hide_breadcrumb
+entity_type: node
+bundle: project
+label: 'Hide breadcrumb'
+description: 'Hide breadcrumb shown in banner.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

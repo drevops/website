@@ -1,0 +1,232 @@
+uuid: a6ebee46-1c2c-4ee2-a036-d8955bc9a1b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.project.field_c_n_banner_background
+    - field.field.node.project.field_c_n_banner_blend_mode
+    - field.field.node.project.field_c_n_banner_components
+    - field.field.node.project.field_c_n_banner_components_bott
+    - field.field.node.project.field_c_n_banner_featured_image
+    - field.field.node.project.field_c_n_banner_hide_breadcrumb
+    - field.field.node.project.field_c_n_banner_theme
+    - field.field.node.project.field_c_n_banner_title
+    - field.field.node.project.field_c_n_banner_type
+    - field.field.node.project.field_c_n_components
+    - field.field.node.project.field_c_n_custom_last_updated
+    - field.field.node.project.field_c_n_hide_sidebar
+    - field.field.node.project.field_c_n_hide_tags
+    - field.field.node.project.field_c_n_show_last_updated
+    - field.field.node.project.field_c_n_show_toc
+    - field.field.node.project.field_c_n_site_section
+    - field.field.node.project.field_c_n_summary
+    - field.field.node.project.field_c_n_thumbnail
+    - field.field.node.project.field_c_n_topics
+    - field.field.node.project.field_c_n_vertical_spacing
+    - field.field.node.project.field_do_n_client
+    - field.field.node.project.field_do_n_delivered_at
+    - field.field.node.project.field_do_n_live_url
+    - field.field.node.project.field_do_n_oss_contributions
+    - field.field.node.project.field_do_n_role
+    - field.field.node.project.field_do_n_sector
+    - field.field.node.project.field_do_n_services
+    - field.field.node.project.field_do_n_status
+    - field.field.node.project.field_do_n_technologies
+    - field.field.node.project.field_do_n_year
+    - field.field.node.project.field_n_metatags
+    - node.type.project
+  module:
+    - datetime
+    - entity_reference_revisions
+    - layout_builder
+    - layout_builder_restrictions
+    - metatag
+    - options
+    - user
+  theme:
+    - civictheme
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: civictheme_three_columns
+        layout_settings:
+          label: 'CivicTheme Three Columns'
+          context_mapping: {  }
+          is_contained: false
+          vertical_spacing: auto
+        components:
+          5cf72ad7-c313-4cf3-9d4e-0573bbfa84a0:
+            uuid: 5cf72ad7-c313-4cf3-9d4e-0573bbfa84a0
+            region: main
+            configuration:
+              id: 'extra_field_block:node:project:content_moderation_control'
+              label: 'Moderation control'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          e1164245-8b1a-4a3f-8b30-30b00be44144:
+            uuid: e1164245-8b1a-4a3f-8b30-30b00be44144
+            region: main
+            configuration:
+              id: 'field_block:node:project:field_c_n_components'
+              label: Components
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_revisions_entity_view
+                label: hidden
+                settings:
+                  view_mode: default
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+          50ce2930-effc-42f3-84b1-b4d3618bcb59:
+            uuid: 50ce2930-effc-42f3-84b1-b4d3618bcb59
+            region: content
+            configuration:
+              id: 'field_block:node:project:field_n_metatags'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: metatag_empty_formatter
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts:
+        - civictheme_three_columns
+      denylisted_blocks: {  }
+      allowlisted_blocks: {  }
+      restricted_categories: {  }
+id: node.project.default
+targetEntityType: node
+bundle: project
+mode: default
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_c_n_banner_hide_breadcrumb:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_c_n_banner_title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_c_n_components:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_c_n_custom_last_updated:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_c_n_hide_tags:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_c_n_show_last_updated:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_c_n_site_section:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_c_n_vertical_spacing:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_n_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
+hidden:
+  field_c_n_banner_background: true
+  field_c_n_banner_blend_mode: true
+  field_c_n_banner_components: true
+  field_c_n_banner_components_bott: true
+  field_c_n_banner_featured_image: true
+  field_c_n_banner_theme: true
+  field_c_n_banner_type: true
+  field_c_n_hide_sidebar: true
+  field_c_n_show_toc: true
+  field_c_n_summary: true
+  field_c_n_thumbnail: true
+  field_c_n_topics: true
+  field_do_n_client: true
+  field_do_n_delivered_at: true
+  field_do_n_live_url: true
+  field_do_n_oss_contributions: true
+  field_do_n_role: true
+  field_do_n_sector: true
+  field_do_n_services: true
+  field_do_n_status: true
+  field_do_n_technologies: true
+  field_do_n_year: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

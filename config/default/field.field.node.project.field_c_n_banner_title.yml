@@ -1,0 +1,19 @@
+uuid: 956622e7-68df-4c62-880e-46583f6c9e06
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_c_n_banner_title
+    - node.type.project
+id: node.project.field_c_n_banner_title
+field_name: field_c_n_banner_title
+entity_type: node
+bundle: project
+label: 'Banner title'
+description: 'Override banner title. Leave empty to use page title.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
