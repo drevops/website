@@ -56,7 +56,9 @@ class PreviewLinkConfigTest extends UnitTestCase {
     // A page is assembled from paragraphs and media, which have to travel with
     // the node for the preview to render the way the published page will.
     yield 'a link can carry referenced entities' => ['multiple_entities', TRUE];
-    yield 'the editor is told a link was created' => ['display_message', 'subsequent'];
+    // The notice reaches the recipient only when a normal URL redirected them
+    // here, so landing on the link itself opens on the content, not a banner.
+    yield 'a redirected recipient is told why they can see the page' => ['display_message', 'subsequent'];
   }
 
   /**
