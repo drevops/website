@@ -74,7 +74,9 @@ A field exists to categorise content or to point at it, and the two want differe
 
 Ask which page the reader should land on. If the answer is "a listing of everything sharing this value", use a term. If it is "the page about this thing", reference that page and add no vocabulary.
 
-Nothing marks a page as a service, because nothing needs to: the field's `target_bundles` restricts it to Page, and which pages are offered is an editorial choice rather than a structural one.
+Nothing marks a page as a service, because nothing needs to: the field's `target_bundles` restricts it to Page, and which pages are offered is an editorial choice rather than a structural one. An author may reference any page.
+
+Generated content is the one place that has to guess, because it has no author to choose for it. `NodeProject` takes the pages aliased under `/services/`, which is where the site keeps them, and generates projects with no services on a site that has none. That heuristic belongs to content generation alone - it is not a rule the field enforces, and moving a page out from under that path changes nothing for a project already referencing it.
 
 ## The theme layer
 

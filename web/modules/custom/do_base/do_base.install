@@ -96,13 +96,35 @@ function do_base_update_11003(): string {
     return Helper::report();
   }
 
-  $map = _do_base_service_page_map();
-
-  _do_base_service_reference_remap($map);
-  _do_base_service_field_retarget();
+  _do_base_service_migrate(_do_base_service_page_map());
   _do_base_service_vocabulary_drop();
 
   return Helper::report();
+}
+
+/**
+ * Rewrites the stored references and retargets the field as one unit.
+ *
+ * The guard that makes this update re-runnable is the field's target type, so
+ * the rewrite must not outlive a failure that leaves the target type behind:
+ * a second run would read the node ids it already wrote as term ids and drop
+ * every one of them.
+ *
+ * @param array<int, int> $map
+ *   Node ids keyed by the term id they replace.
+ */
+function _do_base_service_migrate(array $map): void {
+  $transaction = \Drupal::database()->startTransaction();
+
+  try {
+    _do_base_service_reference_remap($map);
+    _do_base_service_field_retarget();
+  }
+  catch (\Throwable $throwable) {
+    $transaction->rollBack();
+
+    throw $throwable;
+  }
 }
 
 /**
@@ -121,7 +143,7 @@ function _do_base_service_page_map(): array {
   $titles = [];
 
   foreach ($pages as $page) {
-    $titles[mb_strtolower(trim((string) $page->label()))] = (int) $page->id();
+    $titles[mb_strtolower(trim((string) $page->label()))][] = (int) $page->id();
   }
 
   $terms = $entity_type_manager->getStorage('taxonomy_term')->loadByProperties(['vid' => 'do_service']);
@@ -140,7 +162,14 @@ function _do_base_service_page_map(): array {
       continue;
     }
 
-    $map[(int) $term->id()] = $titles[$name];
+    // Node titles are not unique, and picking one of several pages would
+    // silently attach every project to whichever came back first. Which page
+    // is meant is an editorial question, so the deployment stops and asks.
+    if (count($titles[$name]) > 1) {
+      throw new \RuntimeException(sprintf('More than one page is named "%s", so the service term cannot be matched to one of them. Rename the duplicates and run the update again.', $term->label()));
+    }
+
+    $map[(int) $term->id()] = reset($titles[$name]);
   }
 
   return $map;
