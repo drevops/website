@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Pre-process Project nodes.
@@ -95,9 +95,9 @@ function _drevops_project_at_a_glance_rows(NodeInterface $node, array &$variable
     'field_do_n_year' => ['label' => t('Year'), 'resolver' => 'scalar'],
     'field_do_n_status' => ['label' => t('Status'), 'resolver' => 'list'],
     'field_do_n_live_url' => ['label' => t('Live site'), 'resolver' => 'link'],
-    'field_do_n_sector' => ['label' => t('Sector'), 'resolver' => 'terms'],
-    'field_do_n_services' => ['label' => t('Services'), 'resolver' => 'terms'],
-    'field_do_n_technologies' => ['label' => t('Technologies'), 'resolver' => 'terms'],
+    'field_do_n_sector' => ['label' => t('Sector'), 'resolver' => 'entities'],
+    'field_do_n_services' => ['label' => t('Services'), 'resolver' => 'entities'],
+    'field_do_n_technologies' => ['label' => t('Technologies'), 'resolver' => 'entities'],
   ];
 
   $rows = [];
@@ -111,7 +111,7 @@ function _drevops_project_at_a_glance_rows(NodeInterface $node, array &$variable
       'scalar' => _drevops_project_scalar_values($node, $field_name),
       'list' => _drevops_project_list_values($node, $field_name),
       'link' => _drevops_project_link_values($node, $field_name),
-      'terms' => _drevops_project_term_values($node, $field_name, $variables),
+      'entities' => _drevops_project_entity_values($node, $field_name, $variables),
     };
 
     if ($values === []) {
@@ -194,22 +194,22 @@ function _drevops_project_link_values(NodeInterface $node, string $field_name): 
 }
 
 /**
- * Resolves the terms referenced by a field as links to their term pages.
+ * Resolves the entities referenced by a field as links to their own pages.
  */
-function _drevops_project_term_values(NodeInterface $node, string $field_name, array &$variables): array {
+function _drevops_project_entity_values(NodeInterface $node, string $field_name, array &$variables): array {
   $values = [];
 
-  // The CivicTheme helper drops terms the reader cannot view and records each
-  // one as a cacheable dependency, so a renamed term cannot serve a stale
-  // label from the node's render cache.
-  foreach (civictheme_get_field_referenced_entities($node, $field_name, $variables) as $term) {
-    if (!$term instanceof TermInterface) {
+  // The CivicTheme helper drops entities the reader cannot view and records
+  // each one as a cacheable dependency, so a renamed entity cannot serve a
+  // stale label from the node's render cache.
+  foreach (civictheme_get_field_referenced_entities($node, $field_name, $variables) as $entity) {
+    if (!$entity instanceof EntityInterface) {
       continue;
     }
 
     $values[] = [
-      'text' => (string) $term->label(),
-      'url' => $term->toUrl()->toString(),
+      'text' => (string) $entity->label(),
+      'url' => $entity->toUrl()->toString(),
     ];
   }
 

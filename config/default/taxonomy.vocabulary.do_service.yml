@@ -1,9 +1,0 @@
-uuid: ac449193-2324-40c1-8457-747be798b273
-langcode: en
-status: true
-dependencies: {  }
-name: Service
-vid: do_service
-description: 'The services provided on a project.'
-weight: 0
-new_revision: false

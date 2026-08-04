@@ -17,6 +17,7 @@ use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\drupal_helpers\Helper;
 use Drupal\drupal_helpers\Report\Reporter;
+use Drupal\entity_usage\RecreateTrackingDataForFieldQueuer;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
@@ -519,7 +520,32 @@ function do_base_deploy_repoint_blog_lists(?array &$sandbox = NULL): ?string {
 }
 
 /**
- * Seeds the Sector, Service and Technology vocabularies.
+ * Rebuilds usage tracking for services now that they are pages.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every project is retracked, or NULL while batching.
+ */
+function do_base_deploy_retrack_service_usage(?array &$sandbox = NULL): ?string {
+  // Every project is walked, not only those still holding a reference: a
+  // project whose references were all dropped is exactly the one whose
+  // recorded usage now names terms that no longer exist.
+  $query = \Drupal::entityQuery('node')->condition('type', 'project');
+
+  return Helper::entity($sandbox)->batchQuery($query, static function (NodeInterface $node): void {
+    // The migration rewrote the stored ids without saving a node, so nothing
+    // told entity_usage that these references now point at pages. Asking the
+    // module to recompute the field keeps its own bookkeeping authoritative
+    // rather than writing rows on its behalf.
+    \Drupal::service(RecreateTrackingDataForFieldQueuer::class)
+      ->processRecord('node', (string) $node->id(), (string) $node->getRevisionId(), 'entity_reference', 'field_do_n_services');
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Seeds the Sector and Technology vocabularies.
  */
 function do_base_deploy_seed_project_vocabularies(): string {
   $trees = [
@@ -531,17 +557,6 @@ function do_base_deploy_seed_project_vocabularies(): string {
       'Health',
       'Not-for-profit',
       'Commercial',
-    ],
-    'do_service' => [
-      'Discovery and strategy',
-      'Architecture',
-      'Development',
-      'DevOps and hosting',
-      'Migration',
-      'UX and design',
-      'Accessibility',
-      'Support and maintenance',
-      'Training',
     ],
     'do_technology' => [
       'Drupal',
