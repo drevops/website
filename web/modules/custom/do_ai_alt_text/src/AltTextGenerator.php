@@ -19,6 +19,7 @@ use Drupal\Core\Template\TwigEnvironment;
 use Drupal\do_ai_alt_text\Exception\AltTextGenerationException;
 use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
 
 /**
  * Generates image alt text with AI and writes it back onto entities.
@@ -36,6 +37,7 @@ class AltTextGenerator {
     protected LanguageManagerInterface $languageManager,
     protected TwigEnvironment $twig,
     protected ProviderHelper $providerHelper,
+    protected MimeTypeGuesserInterface $mimeTypeGuesser,
   ) {
   }
 
@@ -125,8 +127,8 @@ class AltTextGenerator {
     ]);
 
     try {
-      $output = $ai_provider->chat($input, (string) ($provider['model_id'] ?? ''));
-      $alt_text = $this->normalise((string) $output->getNormalized()->getText());
+      $normalized = $ai_provider->chat($input, (string) ($provider['model_id'] ?? ''))->getNormalized();
+      $alt_text = $normalized instanceof ChatMessage ? $this->normalise($normalized->getText()) : '';
     }
     catch (\Exception $exception) {
       throw new AltTextGenerationException(sprintf('The AI provider could not describe file %s: %s', $file->getFilename(), $exception->getMessage()), 0, $exception);
@@ -197,7 +199,9 @@ class AltTextGenerator {
 
       if ($image_style->createDerivative($uri, $derivative_uri) && file_exists($derivative_uri)) {
         $uri = $derivative_uri;
-        $mime_type = mime_content_type($derivative_uri) ?: $mime_type;
+        // A style may convert the image, so the derivative's own type is what
+        // the provider must be told about.
+        $mime_type = $this->mimeTypeGuesser->guessMimeType($derivative_uri) ?: $mime_type;
         $filename = basename($derivative_uri);
       }
     }

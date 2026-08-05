@@ -7,3 +7,4 @@ services:
       - '@language_manager'
       - '@twig'
       - '@ai_image_alt_text.provider'
+      - '@file.mime_type.guesser'
