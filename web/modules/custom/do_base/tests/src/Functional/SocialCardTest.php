@@ -169,6 +169,7 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
     $this->assertSame($chosen, $this->metatagContent('og:image'));
     $this->assertSame($chosen, $this->metatagContent('twitter:image'), 'The choice is expected to carry over to the tag that has none.');
     $this->assertNull($this->getSession()->getPage()->find('css', 'meta[property="og:image:width"]'));
+    $this->assertNull($this->getSession()->getPage()->find('css', 'meta[property="og:image:height"]'));
     $this->assertNull($this->getSession()->getPage()->find('css', 'meta[property="og:image:alt"]'));
     $this->assertNull($this->getSession()->getPage()->find('css', 'meta[name="twitter:image:alt"]'));
   }

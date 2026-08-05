@@ -26,6 +26,8 @@ Feature: Page content metatags
     And the response should contain "<meta property=\"og:title\" content=\"[TEST] Social Card Page | DrevOps\""
     And the response should contain "<meta property=\"og:description\" content=\"[TEST] A summary shown on a share card\""
     And the response should contain "/modules/custom/do_base/assets/social-share.jpg\""
+    # Both networks reject a root-relative image URL outright.
+    And the response should not contain "content=\"/modules/custom/do_base/assets/social-share.jpg\""
     And the response should contain "<meta property=\"og:image:width\" content=\"1200\""
     And the response should contain "<meta property=\"og:image:height\" content=\"630\""
     # Without this card type X renders a small square thumbnail instead of the
@@ -76,3 +78,6 @@ Feature: Page content metatags
     # The post carries no thumbnail, so this also proves the structured data
     # image shares the resolver's fallback rather than being dropped.
     And the response should contain "/modules/custom/do_base/assets/social-share.jpg"
+    # Only the Open Graph and Twitter tags get a host prepended for them, so
+    # the structured data image has to be absolute before it is ever set.
+    And the response should not contain "\"url\": \"/modules/custom/do_base/assets/social-share.jpg\""

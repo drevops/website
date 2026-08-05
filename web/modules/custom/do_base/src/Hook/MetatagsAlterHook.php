@@ -9,12 +9,12 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\media\MediaInterface;
 use Drupal\schema_metatag\SchemaMetatagManager;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Fills in the image and text a page carries when it is shared.
@@ -25,7 +25,6 @@ final class MetatagsAlterHook {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected ConfigFactoryInterface $configFactory,
     protected ModuleExtensionList $moduleExtensionList,
-    protected RequestStack $requestStack,
   ) {}
 
   /**
@@ -167,12 +166,14 @@ final class MetatagsAlterHook {
    */
   protected function fallbackImage(): array {
     $path = $this->moduleExtensionList->getPath('do_base');
-    $base_path = $this->requestStack->getCurrentRequest()?->getBasePath() ?? '';
 
+    // Absolute, because the structured data tags render their value verbatim:
+    // only the Open Graph and Twitter tags declare 'absolute_url' and get a
+    // host prepended for them, and schema.org will not accept a relative URL.
     // The dimensions are stated rather than measured, so they must be kept in
     // step with the file itself if it is ever replaced.
     return [
-      'url' => $base_path . '/' . $path . '/assets/social-share.jpg',
+      'url' => Url::fromUri('base:' . $path . '/assets/social-share.jpg', ['absolute' => TRUE])->toString(),
       'alt' => (string) $this->configFactory->get('system.site')->get('name'),
       'width' => 1200,
       'height' => 630,
