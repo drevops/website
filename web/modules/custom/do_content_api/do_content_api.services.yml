@@ -3,6 +3,9 @@ services:
     class: Drupal\do_content_api\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+  Drupal\do_content_api\Hook\EntityCreateAccessHook:
+    arguments:
+      - '@request_stack'
   Drupal\do_content_api\Hook\ModerationPolicyHook:
     arguments:
       - '@current_user'

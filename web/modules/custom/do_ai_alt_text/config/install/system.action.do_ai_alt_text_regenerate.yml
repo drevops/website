@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - do_ai_alt_text
+id: do_ai_alt_text_regenerate
+label: 'Re-generate image alt text with AI'
+type: media
+plugin: do_ai_alt_text_regenerate
+configuration: {  }
