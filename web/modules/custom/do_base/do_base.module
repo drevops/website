@@ -17,26 +17,6 @@ use Drupal\media\MediaInterface;
 use Drupal\schema_metatag\SchemaMetatagManager;
 
 /**
- * Image style that sizes an image for a social share card.
- */
-const DO_BASE_SOCIAL_IMAGE_STYLE = 'social_share';
-
-/**
- * Path of the fallback social share image, relative to the module directory.
- */
-const DO_BASE_SOCIAL_IMAGE_FALLBACK = 'assets/social-share.jpg';
-
-/**
- * Pixel width of the fallback social share image.
- */
-const DO_BASE_SOCIAL_IMAGE_FALLBACK_WIDTH = 1200;
-
-/**
- * Pixel height of the fallback social share image.
- */
-const DO_BASE_SOCIAL_IMAGE_FALLBACK_HEIGHT = 630;
-
-/**
  * Implements hook_mail_alter().
  */
 function do_base_mail_alter(array &$message): void {
@@ -177,7 +157,7 @@ function _do_base_metatags_set_social_image(array &$metatags, ?ContentEntityInte
  *   The image URL, its alt text and the dimensions it will be served at.
  */
 function _do_base_social_image(?ContentEntityInterface $entity): array {
-  return ($entity !== NULL ? _do_base_social_image_from_thumbnail($entity) : NULL) ?? _do_base_social_image_fallback();
+  return ($entity instanceof ContentEntityInterface ? _do_base_social_image_from_thumbnail($entity) : NULL) ?? _do_base_social_image_fallback();
 }
 
 /**
@@ -204,7 +184,7 @@ function _do_base_social_image_from_thumbnail(ContentEntityInterface $entity): ?
     return NULL;
   }
 
-  $style = \Drupal::entityTypeManager()->getStorage('image_style')->load(DO_BASE_SOCIAL_IMAGE_STYLE);
+  $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('social_share');
   $uri = $item->entity->getFileUri();
 
   // The image field accepts SVG, which no image toolkit can derive, and a
@@ -215,14 +195,16 @@ function _do_base_social_image_from_thumbnail(ContentEntityInterface $entity): ?
     return NULL;
   }
 
+  $values = $item->getValue();
+
   // Reading the dimensions back from the style keeps them true to whatever the
   // effects actually do, so the tags cannot drift from the style config.
-  $dimensions = ['width' => $item->width, 'height' => $item->height];
+  $dimensions = ['width' => $values['width'] ?? NULL, 'height' => $values['height'] ?? NULL];
   $style->transformDimensions($dimensions, $uri);
 
   return [
     'url' => $style->buildUrl($uri),
-    'alt' => (string) $item->alt,
+    'alt' => (string) ($values['alt'] ?? ''),
     'width' => (int) $dimensions['width'],
     'height' => (int) $dimensions['height'],
   ];
@@ -237,11 +219,13 @@ function _do_base_social_image_from_thumbnail(ContentEntityInterface $entity): ?
 function _do_base_social_image_fallback(): array {
   $path = \Drupal::service('extension.list.module')->getPath('do_base');
 
+  // The dimensions are stated rather than measured, so they must be kept in
+  // step with the file itself if it is ever replaced.
   return [
-    'url' => base_path() . $path . '/' . DO_BASE_SOCIAL_IMAGE_FALLBACK,
+    'url' => base_path() . $path . '/assets/social-share.jpg',
     'alt' => (string) \Drupal::config('system.site')->get('name'),
-    'width' => DO_BASE_SOCIAL_IMAGE_FALLBACK_WIDTH,
-    'height' => DO_BASE_SOCIAL_IMAGE_FALLBACK_HEIGHT,
+    'width' => 1200,
+    'height' => 630,
   ];
 }
 

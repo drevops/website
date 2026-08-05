@@ -61,7 +61,7 @@ Both live in `web/modules/custom/do_base/assets/` and are generated from the the
 - `social-share.jpg` (1200x630) - the fallback share card: the theme's geometric background, darkened, with the primary logo centred. JPEG rather than PNG because the background is a photographic render, which PNG stores at roughly six times the size.
 - `logo.png` (600x142) - the `Organization` logo in the structured data. Schema.org requires a raster image, and the brand logo exists only as SVG.
 
-Replacing either file is the whole change if a designed asset arrives later; the dimensions of `social-share.jpg` are also declared as constants in `do_base.module` and must be kept in step with it.
+Replacing either file is the whole change if a designed asset arrives later. The dimensions of `social-share.jpg` are stated in `_do_base_social_image_fallback()` rather than measured, so they must be kept in step with the file.
 
 ## Known limits
 

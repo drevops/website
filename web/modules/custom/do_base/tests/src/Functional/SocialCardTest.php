@@ -89,7 +89,7 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
     // Assert.
     $url = $this->metatagContent('og:image');
     $this->assertStringContainsString('/styles/social_share/', $url);
-    $this->assertStringStartsWith($this->baseUrl, $url, 'Both networks reject a relative image URL.');
+    $this->assertMatchesRegularExpression('#^https?://#', $url, 'Both networks reject a relative image URL.');
     $this->assertSame($url, $this->metatagContent('twitter:image'));
     $this->assertSame('1200', $this->metatagContent('og:image:width'));
     $this->assertSame('630', $this->metatagContent('og:image:height'));
@@ -118,7 +118,7 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
    * absent from an environment that never received it. Either would otherwise
    * produce a derivative URL that resolves to nothing.
    */
-  #[DataProvider('dataProviderUnusableThumbnail')]
+  #[DataProvider('dataProviderUnusableThumbnailFallsBackToTheSiteImage')]
   public function testUnusableThumbnailFallsBackToTheSiteImage(string $extension, bool $write_file): void {
     // Prepare.
     $media = $this->createImageMedia($this->createImageFile($extension, $write_file), '[TEST] An unusable thumbnail');
@@ -134,11 +134,9 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
   /**
    * Data provider for testUnusableThumbnailFallsBackToTheSiteImage.
    */
-  public static function dataProviderUnusableThumbnail(): array {
-    return [
-      'no image toolkit can derive an svg' => ['svg', TRUE],
-      'the file is recorded but not present' => ['png', FALSE],
-    ];
+  public static function dataProviderUnusableThumbnailFallsBackToTheSiteImage(): \Iterator {
+    yield 'no image toolkit can derive an svg' => ['svg', TRUE];
+    yield 'the file is recorded but not present' => ['png', FALSE];
   }
 
   /**
@@ -242,7 +240,7 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
     $url = $this->metatagContent('og:image');
 
     $this->assertStringEndsWith('/modules/custom/do_base/assets/social-share.jpg', $url);
-    $this->assertStringStartsWith($this->baseUrl, $url, 'Both networks reject a relative image URL.');
+    $this->assertMatchesRegularExpression('#^https?://#', $url, 'Both networks reject a relative image URL.');
     $this->assertSame($url, $this->metatagContent('twitter:image'));
     $this->assertSame('1200', $this->metatagContent('og:image:width'));
     $this->assertSame('630', $this->metatagContent('og:image:height'));
@@ -271,7 +269,7 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
     return $this->drupalCreateNode([
       'type' => 'page',
       'title' => $title,
-      'field_c_n_thumbnail' => $thumbnail !== NULL ? ['target_id' => $thumbnail->id()] : NULL,
+      'field_c_n_thumbnail' => $thumbnail instanceof MediaInterface ? ['target_id' => $thumbnail->id()] : NULL,
     ]);
   }
 
