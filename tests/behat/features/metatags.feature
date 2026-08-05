@@ -73,3 +73,6 @@ Feature: Page content metatags
     And the response should contain "\"@type\": \"Organization\""
     And the response should contain "\"@type\": \"WebSite\""
     And the response should contain "\"headline\": \"[TEST] Social Card Post\""
+    # The post carries no thumbnail, so this also proves the structured data
+    # image shares the resolver's fallback rather than being dropped.
+    And the response should contain "/modules/custom/do_base/assets/social-share.png"

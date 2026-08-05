@@ -52,6 +52,8 @@ An editor who sets `og:image` by hand on a node keeps it: the hook leaves the wh
 
 A thumbnail is passed over in favour of the fallback when no image toolkit can derive it (the image field accepts SVG) or when the file is recorded in the database but absent from the environment.
 
+The `Article` image in the structured data is filled from the same resolved value, so it carries the same fallbacks. It is set as an `ImageObject` rather than a bare URL because `SchemaImageObjectBase::output()` drops any value without a `url` key.
+
 ## Image assets
 
 Both live in `web/modules/custom/do_base/assets/` and are generated from the theme's brand assets:
@@ -63,10 +65,15 @@ Replacing either file is the whole change if a designed asset arrives later; the
 
 ## Known limits
 
-- `schema_article_image` is resolved through a token rather than through the hook, so it does not share the SVG and missing-file protections that `og:image` has. Blog posts all carry raster thumbnails, so this has no effect in practice.
 - `Article.author` is the organisation rather than a person. The site has no per-author profiles to point at.
 - `twitter:creator` is unset for the same reason.
 - No `robots` meta tag default is set. Indexing is governed by `/robots.txt`, and `do_base` adds `noindex, nofollow` to preview link pages only.
+
+## Why publication dates come from `created`
+
+`article:published_time` and `Article.datePublished` are taken from the node's `created` timestamp, not from the moment a draft was first published. That is deliberate: `created` is the editorially-controlled "Authored on" date, and it is the field `views.view.civictheme_automated_list` sorts the blog by, so it is already the date the site presents as a post's date. Structured data is expected to agree with what a visitor sees, and a separate first-publication timestamp would disagree with the visible ordering.
+
+Changing this would mean adding a field populated on the first published transition and backfilling existing posts - a content-modelling change, not an SEO one.
 
 ## Verifying a change
 

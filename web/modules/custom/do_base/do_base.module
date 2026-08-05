@@ -14,6 +14,7 @@ use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\media\MediaInterface;
+use Drupal\schema_metatag\SchemaMetatagManager;
 
 /**
  * Image style that sizes an image for a social share card.
@@ -136,21 +137,37 @@ function _do_base_metatags_mirror_social_text(array &$metatags): void {
  * Gives the social tags the image that represents the page.
  */
 function _do_base_metatags_set_social_image(array &$metatags, ?ContentEntityInterface $entity): void {
-  // An 'og:image' already in the set was entered by hand on the entity, and it
-  // describes a file whose dimensions and alt text this code cannot know, so
-  // the whole image family is left to whoever set it.
-  if (!empty($metatags['og_image'])) {
-    return;
+  // An image already in the set was chosen by hand on the entity. Its
+  // dimensions and alt text describe a file this code never saw, so neither is
+  // asserted alongside it.
+  if (empty($metatags['og_image'])) {
+    $image = _do_base_social_image($entity);
+
+    $metatags['og_image'] = $image['url'];
+    $metatags['og_image_width'] = (string) $image['width'];
+    $metatags['og_image_height'] = (string) $image['height'];
+    $metatags['og_image_alt'] = $image['alt'];
   }
 
-  $image = _do_base_social_image($entity);
+  if (empty($metatags['twitter_cards_image'])) {
+    $metatags['twitter_cards_image'] = $metatags['og_image'];
 
-  $metatags['og_image'] = $image['url'];
-  $metatags['og_image_width'] = (string) $image['width'];
-  $metatags['og_image_height'] = (string) $image['height'];
-  $metatags['og_image_alt'] = $image['alt'];
-  $metatags['twitter_cards_image'] = $image['url'];
-  $metatags['twitter_cards_image_alt'] = $image['alt'];
+    if (!empty($metatags['og_image_alt'])) {
+      $metatags['twitter_cards_image_alt'] = $metatags['og_image_alt'];
+    }
+  }
+
+  // Structured data takes the same image, so an article that fell back to the
+  // site-wide one is not left describing an image it does not have. The type
+  // guard keeps this to pages already carrying Article markup, which is the
+  // only group the tag belongs to.
+  if (!empty($metatags['schema_article_type']) && empty($metatags['schema_article_image']) && class_exists(SchemaMetatagManager::class)) {
+    $metatags['schema_article_image'] = SchemaMetatagManager::serialize([
+      '@type' => 'ImageObject',
+      'representativeOfPage' => 'True',
+      'url' => $metatags['og_image'],
+    ]);
+  }
 }
 
 /**

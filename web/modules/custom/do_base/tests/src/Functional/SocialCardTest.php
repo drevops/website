@@ -169,8 +169,30 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
 
     // Assert.
     $this->assertSame($chosen, $this->metatagContent('og:image'));
+    $this->assertSame($chosen, $this->metatagContent('twitter:image'), 'The choice is expected to carry over to the tag that has none.');
     $this->assertNull($this->getSession()->getPage()->find('css', 'meta[property="og:image:width"]'));
     $this->assertNull($this->getSession()->getPage()->find('css', 'meta[property="og:image:alt"]'));
+    $this->assertNull($this->getSession()->getPage()->find('css', 'meta[name="twitter:image:alt"]'));
+  }
+
+  /**
+   * Tests that an image chosen for X alone still leaves Open Graph an image.
+   *
+   * The metatag field exposes both image tags, so either can be set without
+   * the other. The tag that was not set still needs an image of its own.
+   */
+  public function testImageChosenForTwitterAloneLeavesOpenGraphResolved(): void {
+    // Prepare.
+    $chosen = 'https://example.com/chosen.png';
+    $node = $this->createPage('[TEST] Page With Chosen Twitter Image');
+    $node->set('field_n_metatags', json_encode(['twitter_cards_image' => $chosen]))->save();
+
+    // Act.
+    $this->drupalGet($node->toUrl());
+
+    // Assert.
+    $this->assertSame($chosen, $this->metatagContent('twitter:image'));
+    $this->assertStringEndsWith('/modules/custom/do_base/assets/social-share.png', $this->metatagContent('og:image'));
   }
 
   /**
