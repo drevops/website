@@ -1,0 +1,83 @@
+# SEO and social sharing
+
+This document describes the meta tags, share cards and structured data the site publishes. The XML sitemap is covered separately in [Sitemap](sitemap.md).
+
+## Modules
+
+| Module | Role |
+|---|---|
+| `metatag` | Meta tag defaults per entity type and bundle, plus a per-node override field (`field_n_metatags`) |
+| `metatag_open_graph` | `og:*` tags read by Facebook, LinkedIn and Slack |
+| `metatag_twitter_cards` | `twitter:*` tags read by X |
+| `metatag_dc` | Dublin Core tags |
+| `schema_metatag` | Renders JSON-LD structured data through the same metatag defaults |
+| `schema_organization`, `schema_web_site`, `schema_article` | The three Schema.org types this site publishes |
+| `pathauto` | Readable, stable URL aliases |
+| `redirect` | Keeps old URLs working after an alias changes |
+| `redirect_404` | Records 404 paths at `/admin/config/search/redirect/404` so real lost traffic can be turned into redirects |
+| `robotstxt` | Serves `/robots.txt` from configuration |
+| `xmlsitemap` | See [Sitemap](sitemap.md) |
+
+Deliberately not installed: `yoast_seo` (a heavy analyser on every node form), `seo_checklist` (an admin checklist with no runtime effect), `linkchecker` (a crawler with ongoing cron cost) and `metatag_hreflang` (meaningless while the site is single-language).
+
+## What every page publishes
+
+- `title`, `description` and `canonical_url`, from the metatag defaults.
+- The full Open Graph set: `og:site_name`, `og:type`, `og:url`, `og:title`, `og:description`, `og:image` with `og:image:width`, `og:image:height` and `og:image:alt`.
+- The full Twitter Card set: `twitter:card`, `twitter:site`, `twitter:title`, `twitter:description`, `twitter:image` and `twitter:image:alt`.
+- A JSON-LD `@graph` carrying `Organization` and `WebSite`, plus `Article` on blog posts.
+
+`twitter:card` is `summary_large_image` site-wide. Any other value makes X render a small square thumbnail, which is why the share image is produced at 1200x630.
+
+## Where each value comes from
+
+Configuration holds the values that genuinely differ between pages:
+
+| Metatag default | Holds |
+|---|---|
+| `global` | Site-level values, the Twitter card type and handle, and the `Organization` and `WebSite` structured data |
+| `front` | The front page's canonical and Open Graph URL |
+| `node` | Node title, description and URL |
+| `node__blog` | `og:type: article`, the article timestamps and the `Article` structured data |
+| `node__civictheme_page`, `node__project` | The summary field the description is taken from |
+
+The social **title and description are not configured**. `do_base_metatags_alter()` derives them from the `title` and `description` tags, and the Twitter pair from the Open Graph pair. This keeps one source of truth for the wording, and it is also the only way those tags reach the front page: `metatag_get_default_tags()` treats the front page, 403 and 404 as special pages and stops after the global and special defaults, never reading the entity or bundle defaults.
+
+The social **image is not configured either**, because a metatag default that resolves to nothing is dropped rather than falling back to its parent, and most pages have no thumbnail. `do_base_metatags_alter()` resolves it instead:
+
+1. The node's `field_c_n_thumbnail` media, rendered through the `social_share` image style (1200x630, focal point aware), with the media's alt text.
+2. Otherwise `web/modules/custom/do_base/assets/social-share.png`, with the site name as alt text.
+
+An editor who sets `og:image` by hand on a node keeps it: the hook leaves the whole image family alone in that case, and emits no width, height or alt, because it cannot know them for a file it did not choose.
+
+A thumbnail is passed over in favour of the fallback when no image toolkit can derive it (the image field accepts SVG) or when the file is recorded in the database but absent from the environment.
+
+## Image assets
+
+Both live in `web/modules/custom/do_base/assets/` and are generated from the theme's brand assets:
+
+- `social-share.png` (1200x630) - the fallback share card: the theme's geometric background, darkened, with the primary logo centred.
+- `logo.png` (600x142) - the `Organization` logo in the structured data. Schema.org requires a raster image, and the brand logo exists only as SVG.
+
+Replacing either file is the whole change if a designed asset arrives later; the dimensions of `social-share.png` are also declared as constants in `do_base.module` and must be kept in step with it.
+
+## Known limits
+
+- `schema_article_image` is resolved through a token rather than through the hook, so it does not share the SVG and missing-file protections that `og:image` has. Blog posts all carry raster thumbnails, so this has no effect in practice.
+- `Article.author` is the organisation rather than a person. The site has no per-author profiles to point at.
+- `twitter:creator` is unset for the same reason.
+- No `robots` meta tag default is set. Indexing is governed by `/robots.txt`, and `do_base` adds `noindex, nofollow` to preview link pages only.
+
+## Verifying a change
+
+```bash
+ahoy test-bdd -- --tags=@metatags
+ahoy test-functional -- --filter=SocialCardTest
+```
+
+The Behat feature asserts the rendered tags against the real configuration and theme; the PHPUnit test covers the resolver's fallbacks, which are the paths that fail silently in production. External validators worth a look after a change that touches structured data: the [Schema Markup Validator](https://validator.schema.org/) and [Google's Rich Results Test](https://search.google.com/test/rich-results).
+
+## Related
+
+- [Sitemap](sitemap.md) - XML sitemap coverage and generation
+- [Development](development.md) - function visibility conventions the hook follows
