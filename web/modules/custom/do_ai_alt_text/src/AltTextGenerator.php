@@ -144,7 +144,9 @@ class AltTextGenerator {
       $normalized = $output instanceof ChatOutput ? $output->getNormalized() : NULL;
       $alt_text = $normalized instanceof ChatMessage ? $this->normalise($normalized->getText()) : '';
     }
-    catch (\Exception $exception) {
+    // The proxy resolves the concrete provider at call time, so a mismatch
+    // surfaces as an Error rather than an Exception.
+    catch (\Throwable $exception) {
       throw new AltTextGenerationException(sprintf('The AI provider could not describe file %s: %s', $file->getFilename(), $exception->getMessage()), 0, $exception);
     }
 

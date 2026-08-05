@@ -281,7 +281,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
     RegenerateImageAltText::batchRegenerate((int) $media->id(), $context);
 
     // Assert.
-    $this->assertSame(1, $context['results'][RegenerateImageAltText::RESULT_SKIPPED]);
+    $this->assertSame(1, $context['results'][RegenerateImageAltText::RESULT_INACCESSIBLE]);
   }
 
   /**
@@ -294,7 +294,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   }
 
   /**
-   * Tests that a media item deleted before the batch reached it is skipped.
+   * Tests that a media item deleted before the batch reached it is reported.
    */
   public function testBatchRegenerateSkipsDeletedMedia(): void {
     // Prepare.
@@ -305,7 +305,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
     RegenerateImageAltText::batchRegenerate(404, $context);
 
     // Assert.
-    $this->assertSame(1, $context['results'][RegenerateImageAltText::RESULT_SKIPPED]);
+    $this->assertSame(1, $context['results'][RegenerateImageAltText::RESULT_INACCESSIBLE]);
   }
 
   /**
@@ -331,6 +331,8 @@ class RegenerateImageAltTextTest extends KernelTestBase {
     yield 'nothing described' => [TRUE, [], 'status', 'Re-generated the alt text of 0 media items.'];
     yield 'items skipped' => [TRUE, ['skipped' => 2], 'warning', '2 media items had no image to describe.'];
     yield 'one item skipped' => [TRUE, ['skipped' => 1], 'warning', '1 media item had no image to describe.'];
+    yield 'items inaccessible' => [TRUE, ['inaccessible' => 2], 'warning', '2 media items were deleted or are no longer yours to edit.'];
+    yield 'one item inaccessible' => [TRUE, ['inaccessible' => 1], 'warning', '1 media item was deleted or is no longer yours to edit.'];
     yield 'items failed' => [TRUE, ['failed' => 3], 'error', 'The alt text of 3 media items could not be re-generated. Check the logs for details.'];
   }
 

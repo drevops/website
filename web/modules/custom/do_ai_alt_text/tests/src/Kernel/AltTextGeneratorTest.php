@@ -231,19 +231,21 @@ class AltTextGeneratorTest extends KernelTestBase {
     $this->chatFailure = new \RuntimeException('Quota exceeded.');
     $this->chatFailsAtCall = 2;
 
-    // Assert.
-    $this->expectException(AltTextGenerationException::class);
-
     // Act.
     try {
       $this->generator()->regenerateForMedia($media);
+      $this->fail('Expected ' . AltTextGenerationException::class . ' was not thrown.');
     }
-    finally {
-      $reloaded = Media::load($media->id());
-      $this->assertSame(2, $this->chatCalls);
-      $this->assertSame('First alt text.', $reloaded->get($field_name)->alt);
-      $this->assertSame('Second alt text.', $reloaded->get('field_extra_images')->alt);
+    catch (AltTextGenerationException) {
+      // Expected; the assertions below prove nothing was persisted.
     }
+
+    // Assert.
+    $reloaded = Media::load($media->id());
+    $this->assertInstanceOf(Media::class, $reloaded);
+    $this->assertSame(2, $this->chatCalls);
+    $this->assertSame('First alt text.', $reloaded->get($field_name)->alt);
+    $this->assertSame('Second alt text.', $reloaded->get('field_extra_images')->alt);
   }
 
   /**

@@ -238,6 +238,7 @@ class AltTextGeneratorTest extends UnitTestCase {
     $generator->generateForFile($this->createFile(), 'en');
 
     // Assert.
+    $this->assertInstanceOf(ChatInput::class, $this->capturedChatInput);
     $image = $this->capturedChatInput->getMessages()[0]->getImages()[0];
     $this->assertSame('derivative.png', $image->getFilename());
     $this->assertSame('image/png', $image->getMimeType());
@@ -258,6 +259,7 @@ class AltTextGeneratorTest extends UnitTestCase {
     $generator->generateForFile($this->createFile(), 'en');
 
     // Assert.
+    $this->assertInstanceOf(ChatInput::class, $this->capturedChatInput);
     $image = $this->capturedChatInput->getMessages()[0]->getImages()[0];
     $this->assertSame('image.png', $image->getFilename());
     $this->assertSame(file_get_contents($this->fixturePath()), $image->getBinary());
@@ -274,6 +276,7 @@ class AltTextGeneratorTest extends UnitTestCase {
     $generator->generateForFile($this->createFile(), 'en');
 
     // Assert.
+    $this->assertInstanceOf(ChatInput::class, $this->capturedChatInput);
     $image = $this->capturedChatInput->getMessages()[0]->getImages()[0];
     $this->assertSame('image.png', $image->getFilename());
   }

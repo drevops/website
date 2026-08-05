@@ -29,6 +29,8 @@ final class RegenerateImageAltText extends ActionBase implements ContainerFactor
 
   const string RESULT_SKIPPED = 'skipped';
 
+  const string RESULT_INACCESSIBLE = 'inaccessible';
+
   const string RESULT_FAILED = 'failed';
 
   public function __construct(
@@ -122,7 +124,9 @@ final class RegenerateImageAltText extends ActionBase implements ContainerFactor
     try {
       return $this->altTextGenerator->regenerateForMedia($media) > 0 ? self::RESULT_UPDATED : self::RESULT_SKIPPED;
     }
-    catch (\Exception $exception) {
+    // One unusable item must not take the rest of the batch down with it, so
+    // an Error is recorded the same way a failed generation is.
+    catch (\Throwable $exception) {
       $this->logger->error('Could not re-generate alt text for media @id: @message', [
         '@id' => $media->id(),
         '@message' => $exception->getMessage(),
@@ -144,6 +148,7 @@ final class RegenerateImageAltText extends ActionBase implements ContainerFactor
     $context['results'] += [
       self::RESULT_UPDATED => 0,
       self::RESULT_SKIPPED => 0,
+      self::RESULT_INACCESSIBLE => 0,
       self::RESULT_FAILED => 0,
     ];
 
@@ -155,7 +160,7 @@ final class RegenerateImageAltText extends ActionBase implements ContainerFactor
     // A batch outlives the request that queued it, so access is re-checked
     // rather than trusted from the form submission.
     if (!$media instanceof MediaInterface || !$action->access($media)) {
-      $context['results'][self::RESULT_SKIPPED]++;
+      $context['results'][self::RESULT_INACCESSIBLE]++;
 
       return;
     }
@@ -184,12 +189,17 @@ final class RegenerateImageAltText extends ActionBase implements ContainerFactor
     $translation = \Drupal::translation();
     $updated = $results[self::RESULT_UPDATED] ?? 0;
     $skipped = $results[self::RESULT_SKIPPED] ?? 0;
+    $inaccessible = $results[self::RESULT_INACCESSIBLE] ?? 0;
     $failed = $results[self::RESULT_FAILED] ?? 0;
 
     $messenger->addStatus($translation->formatPlural($updated, 'Re-generated the alt text of 1 media item.', 'Re-generated the alt text of @count media items.'));
 
     if ($skipped > 0) {
       $messenger->addWarning($translation->formatPlural($skipped, '1 media item had no image to describe.', '@count media items had no image to describe.'));
+    }
+
+    if ($inaccessible > 0) {
+      $messenger->addWarning($translation->formatPlural($inaccessible, '1 media item was deleted or is no longer yours to edit.', '@count media items were deleted or are no longer yours to edit.'));
     }
 
     if ($failed > 0) {

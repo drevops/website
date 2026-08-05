@@ -9,6 +9,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
 use Drupal\media\MediaInterface;
+use Drupal\media\MediaTypeInterface;
 
 /**
  * Builds the media items cases run against.
@@ -63,7 +64,10 @@ trait ImageMediaCreationTrait {
    *   Source field name.
    */
   protected function getSourceFieldName(string $media_type_id): string {
-    return \Drupal::entityTypeManager()->getStorage('media_type')->load($media_type_id)->getSource()->getConfiguration()['source_field'];
+    $media_type = \Drupal::entityTypeManager()->getStorage('media_type')->load($media_type_id);
+    $this->assertInstanceOf(MediaTypeInterface::class, $media_type);
+
+    return $media_type->getSource()->getConfiguration()['source_field'];
   }
 
   /**

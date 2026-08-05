@@ -57,6 +57,6 @@ parameters:
     - # The AI module wraps every provider plugin in a proxy that forwards
       # operations such as chat() through __call() instead of declaring them,
       # so the operation interfaces are invisible to static analysis.
-      message: '#Call to an undefined method Drupal\\ai\\Plugin\\ProviderProxy::#'
+      message: '#Call to an undefined method Drupal\\ai\\Plugin\\ProviderProxy::chat\(\)#'
       paths:
-        - web/modules/custom/do_ai_alt_text/*
+        - web/modules/custom/do_ai_alt_text/src/AltTextGenerator.php
