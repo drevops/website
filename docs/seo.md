@@ -41,9 +41,9 @@ Configuration holds the values that genuinely differ between pages:
 | `node__blog` | `og:type: article`, the article timestamps and the `Article` structured data |
 | `node__civictheme_page`, `node__project` | The summary field the description is taken from |
 
-The social **title and description are not configured**. `do_base_metatags_alter()` derives them from the `title` and `description` tags, and the Twitter pair from the Open Graph pair. This keeps one source of truth for the wording, and it is also the only way those tags reach the front page: `metatag_get_default_tags()` treats the front page, 403 and 404 as special pages and stops after the global and special defaults, never reading the entity or bundle defaults.
+The social **title and description are not configured**. `MetatagsAlterHook` derives them from the `title` and `description` tags, and the Twitter pair from the Open Graph pair. This keeps one source of truth for the wording, and it is also the only way those tags reach the front page: `metatag_get_default_tags()` treats the front page, 403 and 404 as special pages and stops after the global and special defaults, never reading the entity or bundle defaults.
 
-The social **image is not configured either**, because a metatag default that resolves to nothing is dropped rather than falling back to its parent, and most pages have no thumbnail. `do_base_metatags_alter()` resolves it instead:
+The social **image is not configured either**, because a metatag default that resolves to nothing is dropped rather than falling back to its parent, and most pages have no thumbnail. `MetatagsAlterHook` resolves it instead:
 
 1. The node's `field_c_n_thumbnail` media, rendered through the `social_share` image style (1200x630, focal point aware), with the media's alt text.
 2. Otherwise `web/modules/custom/do_base/assets/social-share.jpg`, with the site name as alt text.
@@ -58,10 +58,10 @@ The `Article` image in the structured data is filled from the same resolved valu
 
 Both live in `web/modules/custom/do_base/assets/` and are generated from the theme's brand assets:
 
-- `social-share.jpg` (1200x630) - the fallback share card: the theme's geometric background, darkened, with the primary logo centred. JPEG rather than PNG because the background is a photographic render, which PNG stores at roughly six times the size.
+- `social-share.jpg` (1200x630) - the fallback share card: the brand wordmark over the dark navy page background, under the site's positioning line with its accent phrase picked out in coral. It is rendered from `.artifacts/tmp/social-card.html`, which carries the same colour tokens, Lexend weights and letter spacing as the branding styleguide, so the card matches the rest of the brand rather than approximating it.
 - `logo.png` (600x142) - the `Organization` logo in the structured data. Schema.org requires a raster image, and the brand logo exists only as SVG.
 
-Replacing either file is the whole change if a designed asset arrives later. The dimensions of `social-share.jpg` are stated in `_do_base_social_image_fallback()` rather than measured, so they must be kept in step with the file.
+Replacing either file is the whole change if a designed asset arrives later. The dimensions of `social-share.jpg` are stated in `MetatagsAlterHook::fallbackImage()` rather than measured, so they must be kept in step with the file.
 
 ## Known limits
 
