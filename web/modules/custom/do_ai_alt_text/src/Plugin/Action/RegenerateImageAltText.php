@@ -60,7 +60,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function execute($entity = NULL): void {
-    if ($entity instanceof MediaInterface) {
+    if ($entity instanceof MediaInterface && $this->access($entity)) {
       $this->regenerate($entity);
     }
   }

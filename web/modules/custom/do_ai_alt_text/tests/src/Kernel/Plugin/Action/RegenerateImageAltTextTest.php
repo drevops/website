@@ -10,8 +10,8 @@ use Drupal\do_ai_alt_text\Exception\AltTextGenerationException;
 use Drupal\do_ai_alt_text\Plugin\Action\RegenerateImageAltText;
 use Drupal\file\Entity\File;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\media\Entity\Media;
 use Drupal\media\MediaInterface;
+use Drupal\Tests\do_ai_alt_text\Traits\ImageMediaCreationTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
 #[Group('do_ai_alt_text')]
 class RegenerateImageAltTextTest extends KernelTestBase {
 
+  use ImageMediaCreationTrait;
   use MediaTypeCreationTrait;
   use UserCreationTrait;
 
@@ -82,6 +83,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
     // Reserve uid 1; the superuser bypasses permission checks, so the actors
     // created in each case must be regular accounts.
     $this->createUser();
+    $this->setCurrentUser($this->createUser(['generate ai alt tags', 'update any media']));
   }
 
   /**
@@ -99,8 +101,21 @@ class RegenerateImageAltTextTest extends KernelTestBase {
    */
   public function testExecuteRegeneratesAltText(): void {
     // Prepare.
-    $media = $this->createImageMedia();
+    $media = $this->createTestMedia();
     $this->generator->expects($this->once())->method('regenerateForMedia')->with($media)->willReturn(1);
+
+    // Act.
+    $this->action()->execute($media);
+  }
+
+  /**
+   * Tests that an unauthorised caller never reaches the provider.
+   */
+  public function testExecuteRefusesUnauthorisedUser(): void {
+    // Prepare.
+    $this->setCurrentUser($this->createUser(['update any media']));
+    $media = $this->createTestMedia();
+    $this->generator->expects($this->never())->method('regenerateForMedia');
 
     // Act.
     $this->action()->execute($media);
@@ -123,7 +138,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
    */
   public function testExecuteLogsGeneratorFailure(): void {
     // Prepare.
-    $media = $this->createImageMedia();
+    $media = $this->createTestMedia();
     $this->generator->method('regenerateForMedia')->willThrowException(new AltTextGenerationException('Quota exceeded.'));
 
     // Act.
@@ -141,7 +156,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   public function testAccess(array $permissions, bool $expected): void {
     // Prepare.
     $account = $this->createUser($permissions);
-    $media = $this->createImageMedia();
+    $media = $this->createTestMedia();
 
     // Act.
     $result = $this->action()->access($media, $account);
@@ -179,8 +194,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
    */
   public function testAccessFallsBackToCurrentUser(): void {
     // Prepare.
-    $this->setCurrentUser($this->createUser(['generate ai alt tags', 'update any media']));
-    $media = $this->createImageMedia();
+    $media = $this->createTestMedia();
 
     // Act.
     $result = $this->action()->access($media);
@@ -194,8 +208,8 @@ class RegenerateImageAltTextTest extends KernelTestBase {
    */
   public function testExecuteMultipleQueuesOneOperationPerItem(): void {
     // Prepare.
-    $first = $this->createImageMedia();
-    $second = $this->createImageMedia();
+    $first = $this->createTestMedia();
+    $second = $this->createTestMedia();
 
     // Act.
     $this->action()->executeMultiple([$first, $second]);
@@ -226,8 +240,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   #[DataProvider('dataProviderBatchRegenerate')]
   public function testBatchRegenerateTalliesOutcome(int $regenerated, bool $fails, string $expected): void {
     // Prepare.
-    $this->setCurrentUser($this->createUser(['generate ai alt tags', 'update any media']));
-    $media = $this->createImageMedia();
+    $media = $this->createTestMedia();
 
     if ($fails) {
       $this->generator->method('regenerateForMedia')->willThrowException(new AltTextGenerationException('Quota exceeded.'));
@@ -261,7 +274,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   public function testBatchRegenerateSkipsInaccessibleMedia(array $permissions): void {
     // Prepare.
     $this->setCurrentUser($this->createUser($permissions));
-    $media = $this->createImageMedia();
+    $media = $this->createTestMedia();
     $this->generator->expects($this->never())->method('regenerateForMedia');
     $context = ['results' => []];
 
@@ -286,7 +299,6 @@ class RegenerateImageAltTextTest extends KernelTestBase {
    */
   public function testBatchRegenerateSkipsDeletedMedia(): void {
     // Prepare.
-    $this->setCurrentUser($this->createUser(['generate ai alt tags', 'update any media']));
     $this->generator->expects($this->never())->method('regenerateForMedia');
     $context = ['results' => []];
 
@@ -333,19 +345,8 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   /**
    * Creates a media item holding the fixture image.
    */
-  protected function createImageMedia(): MediaInterface {
-    $file = File::create(['uri' => 'public://' . $this->randomMachineName() . '.png']);
-    file_put_contents($file->getFileUri(), (string) file_get_contents(dirname(__DIR__, 4) . '/fixtures/image.png'));
-    $file->save();
-
-    $media = Media::create([
-      'bundle' => 'test_image',
-      'name' => 'Test image',
-      'field_media_image' => ['target_id' => $file->id(), 'alt' => 'Hand written alt text.'],
-    ]);
-    $media->save();
-
-    return $media;
+  protected function createTestMedia(): MediaInterface {
+    return $this->createImageMedia('test_image', $this->getSourceFieldName('test_image'), 'Hand written alt text.');
   }
 
 }

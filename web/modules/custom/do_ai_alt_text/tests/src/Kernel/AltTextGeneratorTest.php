@@ -7,12 +7,11 @@ namespace Drupal\Tests\do_ai_alt_text\Kernel;
 use Drupal\do_ai_alt_text\AltTextGenerator;
 use Drupal\do_ai_alt_text\Exception\AltTextGenerationException;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\media\Entity\Media;
-use Drupal\media\MediaInterface;
 use Drupal\Tests\do_ai_alt_text\Traits\AiProviderStubTrait;
+use Drupal\Tests\do_ai_alt_text\Traits\ImageMediaCreationTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
@@ -25,6 +24,7 @@ use PHPUnit\Framework\Attributes\Group;
 class AltTextGeneratorTest extends KernelTestBase {
 
   use AiProviderStubTrait;
+  use ImageMediaCreationTrait;
   use MediaTypeCreationTrait;
 
   /**
@@ -239,57 +239,6 @@ class AltTextGeneratorTest extends KernelTestBase {
    */
   protected function generator(): AltTextGenerator {
     return $this->container->get('do_ai_alt_text.generator');
-  }
-
-  /**
-   * Returns the source field name of a media type.
-   */
-  protected function getSourceFieldName(string $media_type_id): string {
-    return \Drupal::entityTypeManager()->getStorage('media_type')->load($media_type_id)->getSource()->getConfiguration()['source_field'];
-  }
-
-  /**
-   * Adds an extra image field to a media type.
-   */
-  protected function addImageField(string $media_type_id, string $field_name, int $cardinality): void {
-    FieldStorageConfig::create([
-      'entity_type' => 'media',
-      'field_name' => $field_name,
-      'type' => 'image',
-      'cardinality' => $cardinality,
-    ])->save();
-
-    FieldConfig::create([
-      'entity_type' => 'media',
-      'bundle' => $media_type_id,
-      'field_name' => $field_name,
-      'settings' => ['alt_field' => TRUE],
-    ])->save();
-  }
-
-  /**
-   * Creates a media item holding the fixture image.
-   */
-  protected function createImageMedia(string $media_type_id, string $field_name, string $alt): MediaInterface {
-    $media = Media::create([
-      'bundle' => $media_type_id,
-      'name' => 'Test image',
-      $field_name => ['target_id' => $this->createImageFile()->id(), 'alt' => $alt],
-    ]);
-    $media->save();
-
-    return $media;
-  }
-
-  /**
-   * Creates a file entity backed by the fixture image.
-   */
-  protected function createImageFile(): File {
-    $file = File::create(['uri' => 'public://' . $this->randomMachineName() . '.png']);
-    file_put_contents($file->getFileUri(), (string) file_get_contents(dirname(__DIR__, 2) . '/fixtures/image.png'));
-    $file->save();
-
-    return $file;
   }
 
 }

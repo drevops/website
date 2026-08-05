@@ -47,7 +47,8 @@ class AltTextGenerator {
    * Replaces the alt text of every image a media item references.
    *
    * The media item is saved once all values are in place, so a failure part
-   * way through leaves it exactly as it was.
+   * way through persists nothing. The passed object may already carry new
+   * values by then and has to be reloaded before it is used again.
    *
    * @param \Drupal\media\MediaInterface $media
    *   Media item holding the image fields.
@@ -122,8 +123,14 @@ class AltTextGenerator {
     }
 
     $settings = $this->configFactory->get('ai_image_alt_text.settings');
+    $template = trim((string) $settings->get('prompt'));
 
-    $prompt = $this->twig->renderInline((string) $settings->get('prompt'), [
+    // Without instructions the provider would be paid to guess what is wanted.
+    if ($template === '') {
+      throw new AltTextGenerationException('No alt text prompt is configured.');
+    }
+
+    $prompt = $this->twig->renderInline($template, [
       'entity_lang_name' => $this->languageManager->getLanguageName($langcode) ?: 'English',
       'filename' => $file->getFilename(),
     ]);

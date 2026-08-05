@@ -154,6 +154,31 @@ class AltTextGeneratorTest extends UnitTestCase {
   }
 
   /**
+   * Tests that a blank prompt is refused before the provider is paid.
+   */
+  #[DataProvider('dataProviderBlankPrompt')]
+  public function testGenerateForFileRequiresPrompt(?string $prompt): void {
+    // Prepare.
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'), NULL, '', $prompt);
+
+    // Assert.
+    $this->expectException(AltTextGenerationException::class);
+    $this->expectExceptionMessage('No alt text prompt is configured.');
+
+    // Act.
+    $generator->generateForFile($this->createFile(), 'en');
+  }
+
+  /**
+   * Data provider for testGenerateForFileRequiresPrompt().
+   */
+  public static function dataProviderBlankPrompt(): \Iterator {
+    yield 'unset' => [NULL];
+    yield 'empty' => [''];
+    yield 'whitespace only' => ["  \n  "];
+  }
+
+  /**
    * Tests that a failing provider call is wrapped with the file context.
    */
   public function testGenerateForFileWrapsProviderFailure(): void {
@@ -216,6 +241,7 @@ class AltTextGeneratorTest extends UnitTestCase {
     $image = $this->capturedChatInput->getMessages()[0]->getImages()[0];
     $this->assertSame('derivative.png', $image->getFilename());
     $this->assertSame('image/png', $image->getMimeType());
+    $this->assertSame(file_get_contents($this->derivativePath()), $image->getBinary());
   }
 
   /**
@@ -261,18 +287,20 @@ class AltTextGeneratorTest extends UnitTestCase {
    *   Image style the storage returns, or NULL when it no longer exists.
    * @param string $image_style_name
    *   Image style name held in the contrib module's settings.
+   * @param string|null $prompt
+   *   Prompt held in the contrib module's settings.
    *
    * @return \Drupal\do_ai_alt_text\AltTextGenerator
    *   Generator under test.
    */
-  protected function createGenerator(?ProviderProxy $provider, ?ImageStyleInterface $image_style = NULL, string $image_style_name = ''): AltTextGenerator {
+  protected function createGenerator(?ProviderProxy $provider, ?ImageStyleInterface $image_style = NULL, string $image_style_name = '', ?string $prompt = self::PROMPT): AltTextGenerator {
     if ($image_style instanceof ImageStyleInterface) {
       $image_style_name = 'ai_image_alt_text';
     }
 
     $settings = $this->createMock(ImmutableConfig::class);
     $settings->method('get')->willReturnMap([
-      ['prompt', self::PROMPT],
+      ['prompt', $prompt],
       ['image_style', $image_style_name],
     ]);
 
