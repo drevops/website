@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\do_ai_alt_text\Unit;
 
 use Drupal\ai\OperationType\Chat\ChatInput;
-use Drupal\ai\OperationType\Chat\ChatInterface;
-use Drupal\ai\OperationType\Chat\ChatMessage;
-use Drupal\ai\OperationType\Chat\ChatOutput;
-use Drupal\ai_image_alt_text\ProviderHelper;
+use Drupal\ai\Plugin\ProviderProxy;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -19,6 +16,7 @@ use Drupal\do_ai_alt_text\AltTextGenerator;
 use Drupal\do_ai_alt_text\Exception\AltTextGenerationException;
 use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
+use Drupal\Tests\do_ai_alt_text\Traits\AiProviderStubTrait;
 use Drupal\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -32,22 +30,19 @@ use Symfony\Component\Mime\MimeTypeGuesserInterface;
 #[Group('do_ai_alt_text')]
 class AltTextGeneratorTest extends UnitTestCase {
 
+  use AiProviderStubTrait;
+
   /**
    * Prompt stored in the contrib module's settings.
    */
   const PROMPT = 'Describe {{ filename }} in {{ entity_lang_name }}.';
 
   /**
-   * Chat input the provider was last called with.
-   */
-  protected ?ChatInput $capturedInput = NULL;
-
-  /**
    * Tests that provider output becomes the alt text.
    */
   public function testGenerateForFileReturnsProviderText(): void {
     // Prepare.
-    $generator = $this->createGenerator($this->createProvider('A dog asleep on a rug.'));
+    $generator = $this->createGenerator($this->createAiProvider('A dog asleep on a rug.'));
 
     // Act.
     $result = $generator->generateForFile($this->createFile(), 'en');
@@ -61,14 +56,14 @@ class AltTextGeneratorTest extends UnitTestCase {
    */
   public function testGenerateForFileRendersPrompt(): void {
     // Prepare.
-    $generator = $this->createGenerator($this->createProvider('Alt text.'));
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'));
 
     // Act.
     $generator->generateForFile($this->createFile(), 'de');
 
     // Assert.
-    $this->assertInstanceOf(ChatInput::class, $this->capturedInput);
-    $this->assertSame('Describe image.png in German.', $this->capturedInput->getMessages()[0]->getText());
+    $this->assertInstanceOf(ChatInput::class, $this->capturedChatInput);
+    $this->assertSame('Describe image.png in German.', $this->capturedChatInput->getMessages()[0]->getText());
   }
 
   /**
@@ -77,7 +72,7 @@ class AltTextGeneratorTest extends UnitTestCase {
   #[DataProvider('dataProviderNormalisation')]
   public function testGenerateForFileNormalisesProviderText(string $raw, string $expected): void {
     // Prepare.
-    $generator = $this->createGenerator($this->createProvider($raw));
+    $generator = $this->createGenerator($this->createAiProvider($raw));
 
     // Act.
     $result = $generator->generateForFile($this->createFile(), 'en');
@@ -103,7 +98,7 @@ class AltTextGeneratorTest extends UnitTestCase {
   public function testGenerateForFileTruncatesLongText(): void {
     // Prepare.
     $raw = trim(str_repeat('description ', 100));
-    $generator = $this->createGenerator($this->createProvider($raw));
+    $generator = $this->createGenerator($this->createAiProvider($raw));
 
     // Act.
     $result = $generator->generateForFile($this->createFile(), 'en');
@@ -118,7 +113,7 @@ class AltTextGeneratorTest extends UnitTestCase {
    */
   public function testGenerateForFileRejectsNonImage(): void {
     // Prepare.
-    $generator = $this->createGenerator($this->createProvider('Alt text.'));
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'));
 
     // Assert.
     $this->expectException(AltTextGenerationException::class);
@@ -133,7 +128,7 @@ class AltTextGeneratorTest extends UnitTestCase {
    */
   public function testGenerateForFileRejectsUnknownMimeType(): void {
     // Prepare.
-    $generator = $this->createGenerator($this->createProvider('Alt text.'));
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'));
 
     // Assert.
     $this->expectException(AltTextGenerationException::class);
@@ -163,9 +158,8 @@ class AltTextGeneratorTest extends UnitTestCase {
    */
   public function testGenerateForFileWrapsProviderFailure(): void {
     // Prepare.
-    $provider = $this->createMock(ChatInterface::class);
-    $provider->method('chat')->willThrowException(new \RuntimeException('Quota exceeded.'));
-    $generator = $this->createGenerator($provider);
+    $this->chatFailure = new \RuntimeException('Quota exceeded.');
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'));
 
     // Assert.
     $this->expectException(AltTextGenerationException::class);
@@ -180,7 +174,7 @@ class AltTextGeneratorTest extends UnitTestCase {
    */
   public function testGenerateForFileRejectsEmptyResponse(): void {
     // Prepare.
-    $generator = $this->createGenerator($this->createProvider("  \n  "));
+    $generator = $this->createGenerator($this->createAiProvider("  \n  "));
 
     // Assert.
     $this->expectException(AltTextGenerationException::class);
@@ -195,7 +189,7 @@ class AltTextGeneratorTest extends UnitTestCase {
    */
   public function testGenerateForFileRejectsUnreadableFile(): void {
     // Prepare.
-    $generator = $this->createGenerator($this->createProvider('Alt text.'));
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'));
 
     // Assert.
     $this->expectException(AltTextGenerationException::class);
@@ -213,13 +207,13 @@ class AltTextGeneratorTest extends UnitTestCase {
     $image_style = $this->createMock(ImageStyleInterface::class);
     $image_style->method('buildUri')->willReturn($this->derivativePath());
     $image_style->method('createDerivative')->willReturn(TRUE);
-    $generator = $this->createGenerator($this->createProvider('Alt text.'), $image_style);
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'), $image_style);
 
     // Act.
     $generator->generateForFile($this->createFile(), 'en');
 
     // Assert.
-    $image = $this->capturedInput->getMessages()[0]->getImages()[0];
+    $image = $this->capturedChatInput->getMessages()[0]->getImages()[0];
     $this->assertSame('derivative.png', $image->getFilename());
     $this->assertSame('image/png', $image->getMimeType());
   }
@@ -232,13 +226,13 @@ class AltTextGeneratorTest extends UnitTestCase {
     $image_style = $this->createMock(ImageStyleInterface::class);
     $image_style->method('buildUri')->willReturn($this->derivativePath());
     $image_style->method('createDerivative')->willReturn(FALSE);
-    $generator = $this->createGenerator($this->createProvider('Alt text.'), $image_style);
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'), $image_style);
 
     // Act.
     $generator->generateForFile($this->createFile(), 'en');
 
     // Assert.
-    $image = $this->capturedInput->getMessages()[0]->getImages()[0];
+    $image = $this->capturedChatInput->getMessages()[0]->getImages()[0];
     $this->assertSame('image.png', $image->getFilename());
     $this->assertSame(file_get_contents($this->fixturePath()), $image->getBinary());
   }
@@ -248,20 +242,20 @@ class AltTextGeneratorTest extends UnitTestCase {
    */
   public function testGenerateForFileFallsBackWhenStyleIsMissing(): void {
     // Prepare.
-    $generator = $this->createGenerator($this->createProvider('Alt text.'), NULL, 'ai_image_alt_text');
+    $generator = $this->createGenerator($this->createAiProvider('Alt text.'), NULL, 'ai_image_alt_text');
 
     // Act.
     $generator->generateForFile($this->createFile(), 'en');
 
     // Assert.
-    $image = $this->capturedInput->getMessages()[0]->getImages()[0];
+    $image = $this->capturedChatInput->getMessages()[0]->getImages()[0];
     $this->assertSame('image.png', $image->getFilename());
   }
 
   /**
    * Builds a generator wired to the given provider and image style.
    *
-   * @param \Drupal\ai\OperationType\Chat\ChatInterface|null $provider
+   * @param \Drupal\ai\Plugin\ProviderProxy|null $provider
    *   Provider the helper resolves to, or NULL for an unconfigured site.
    * @param \Drupal\image\ImageStyleInterface|null $image_style
    *   Image style the storage returns, or NULL when it no longer exists.
@@ -271,7 +265,7 @@ class AltTextGeneratorTest extends UnitTestCase {
    * @return \Drupal\do_ai_alt_text\AltTextGenerator
    *   Generator under test.
    */
-  protected function createGenerator(?ChatInterface $provider, ?ImageStyleInterface $image_style = NULL, string $image_style_name = ''): AltTextGenerator {
+  protected function createGenerator(?ProviderProxy $provider, ?ImageStyleInterface $image_style = NULL, string $image_style_name = ''): AltTextGenerator {
     if ($image_style instanceof ImageStyleInterface) {
       $image_style_name = 'ai_image_alt_text';
     }
@@ -300,33 +294,10 @@ class AltTextGeneratorTest extends UnitTestCase {
       '{{ entity_lang_name }}' => $context['entity_lang_name'],
     ]));
 
-    $provider_helper = $this->createMock(ProviderHelper::class);
-    $provider_helper->method('getSetProvider')->willReturn($provider === NULL ? NULL : ['provider_id' => $provider, 'model_id' => 'test-model']);
-
     $mime_type_guesser = $this->createMock(MimeTypeGuesserInterface::class);
     $mime_type_guesser->method('guessMimeType')->willReturn('image/png');
 
-    return new AltTextGenerator($config_factory, $entity_type_manager, $language_manager, $twig, $provider_helper, $mime_type_guesser);
-  }
-
-  /**
-   * Builds a provider that answers with the given text.
-   *
-   * @param string $text
-   *   Text the provider answers with.
-   *
-   * @return \Drupal\ai\OperationType\Chat\ChatInterface
-   *   Provider double.
-   */
-  protected function createProvider(string $text): ChatInterface {
-    $provider = $this->createMock(ChatInterface::class);
-    $provider->method('chat')->willReturnCallback(function (ChatInput $input) use ($text): ChatOutput {
-      $this->capturedInput = $input;
-
-      return new ChatOutput(new ChatMessage('assistant', $text), [], []);
-    });
-
-    return $provider;
+    return new AltTextGenerator($config_factory, $entity_type_manager, $language_manager, $twig, $this->createAiProviderHelper($provider), $mime_type_guesser);
   }
 
   /**

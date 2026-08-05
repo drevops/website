@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Drupal\do_ai_alt_text;
 
 use Drupal\ai\OperationType\Chat\ChatInput;
-use Drupal\ai\OperationType\Chat\ChatInterface;
 use Drupal\ai\OperationType\Chat\ChatMessage;
+use Drupal\ai\OperationType\Chat\ChatOutput;
 use Drupal\ai\OperationType\GenericType\ImageFile;
+use Drupal\ai\Plugin\ProviderProxy;
 use Drupal\ai_image_alt_text\ProviderHelper;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -19,10 +20,11 @@ use Drupal\Core\Template\TwigEnvironment;
 use Drupal\do_ai_alt_text\Exception\AltTextGenerationException;
 use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
+use Drupal\media\MediaInterface;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 
 /**
- * Generates image alt text with AI and writes it back onto entities.
+ * Generates image alt text with AI and writes it back onto media items.
  */
 class AltTextGenerator {
 
@@ -42,13 +44,13 @@ class AltTextGenerator {
   }
 
   /**
-   * Replaces the alt text of every image an entity references.
+   * Replaces the alt text of every image a media item references.
    *
-   * The entity is saved once all values are in place, so a failure part way
-   * through leaves it exactly as it was.
+   * The media item is saved once all values are in place, so a failure part
+   * way through leaves it exactly as it was.
    *
-   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
-   *   Entity holding the image fields.
+   * @param \Drupal\media\MediaInterface $media
+   *   Media item holding the image fields.
    *
    * @return int
    *   Number of image values whose alt text was replaced.
@@ -56,12 +58,13 @@ class AltTextGenerator {
    * @throws \Drupal\do_ai_alt_text\Exception\AltTextGenerationException
    *   When alt text could not be generated for one of the images.
    */
-  public function regenerateForEntity(FieldableEntityInterface $entity): int {
-    $langcode = $entity->language()->getId();
+  public function regenerateForMedia(MediaInterface $media): int {
+    $langcode = $media->language()->getId();
+    $field_names = $this->getAltTextFieldNames($media);
     $updated = 0;
 
-    foreach ($this->getAltTextFieldNames($entity) as $field_name) {
-      foreach ($entity->get($field_name) as $item) {
+    foreach ($field_names as $field_name) {
+      foreach ($media->get($field_name) as $item) {
         $file = $item->entity;
 
         if (!$file instanceof FileInterface) {
@@ -79,9 +82,12 @@ class AltTextGenerator {
       }
     }
 
-    if ($updated > 0) {
-      $entity->save();
+    if ($updated === 0) {
+      return 0;
     }
+
+    $this->syncThumbnailAltText($media, $field_names);
+    $media->save();
 
     return $updated;
   }
@@ -111,7 +117,7 @@ class AltTextGenerator {
     $provider = $this->providerHelper->getSetProvider();
     $ai_provider = $provider['provider_id'] ?? NULL;
 
-    if (!$ai_provider instanceof ChatInterface) {
+    if (!$ai_provider instanceof ProviderProxy) {
       throw new AltTextGenerationException('No AI provider is configured for image vision.');
     }
 
@@ -127,7 +133,8 @@ class AltTextGenerator {
     ]);
 
     try {
-      $normalized = $ai_provider->chat($input, (string) ($provider['model_id'] ?? ''))->getNormalized();
+      $output = $ai_provider->chat($input, (string) ($provider['model_id'] ?? ''));
+      $normalized = $output instanceof ChatOutput ? $output->getNormalized() : NULL;
       $alt_text = $normalized instanceof ChatMessage ? $this->normalise($normalized->getText()) : '';
     }
     catch (\Exception $exception) {
@@ -169,6 +176,26 @@ class AltTextGenerator {
     }
 
     return $field_names;
+  }
+
+  /**
+   * Carries new alt text over to the media item's thumbnail.
+   *
+   * @param \Drupal\media\MediaInterface $media
+   *   Media item that was described.
+   * @param string[] $field_names
+   *   Fields that were described.
+   */
+  protected function syncThumbnailAltText(MediaInterface $media, array $field_names): void {
+    $source_field = $media->getSource()->getConfiguration()['source_field'] ?? '';
+
+    if (!in_array($source_field, $field_names, TRUE) || $media->get($source_field)->isEmpty()) {
+      return;
+    }
+
+    // The thumbnail holds its own copy of the alt text and core refreshes it
+    // only when the referenced file changes, which rewording alone is not.
+    $media->get('thumbnail')->alt = $media->get($source_field)->alt;
   }
 
   /**

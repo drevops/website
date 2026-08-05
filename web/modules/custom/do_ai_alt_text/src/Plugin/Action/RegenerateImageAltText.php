@@ -117,7 +117,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
    */
   protected function regenerate(MediaInterface $media): string {
     try {
-      return $this->generator->regenerateForEntity($media) > 0 ? static::RESULT_UPDATED : static::RESULT_SKIPPED;
+      return $this->generator->regenerateForMedia($media) > 0 ? static::RESULT_UPDATED : static::RESULT_SKIPPED;
     }
     catch (\Exception $exception) {
       $this->logger->error('Could not re-generate alt text for media @id: @message', [

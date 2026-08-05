@@ -100,7 +100,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   public function testExecuteRegeneratesAltText(): void {
     // Prepare.
     $media = $this->createImageMedia();
-    $this->generator->expects($this->once())->method('regenerateForEntity')->with($media)->willReturn(1);
+    $this->generator->expects($this->once())->method('regenerateForMedia')->with($media)->willReturn(1);
 
     // Act.
     $this->action()->execute($media);
@@ -111,7 +111,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
    */
   public function testExecuteIgnoresNonMedia(): void {
     // Prepare.
-    $this->generator->expects($this->never())->method('regenerateForEntity');
+    $this->generator->expects($this->never())->method('regenerateForMedia');
 
     // Act.
     $this->action()->execute(NULL);
@@ -124,7 +124,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   public function testExecuteLogsGeneratorFailure(): void {
     // Prepare.
     $media = $this->createImageMedia();
-    $this->generator->method('regenerateForEntity')->willThrowException(new AltTextGenerationException('Quota exceeded.'));
+    $this->generator->method('regenerateForMedia')->willThrowException(new AltTextGenerationException('Quota exceeded.'));
 
     // Act.
     $this->action()->execute($media);
@@ -230,10 +230,10 @@ class RegenerateImageAltTextTest extends KernelTestBase {
     $media = $this->createImageMedia();
 
     if ($fails) {
-      $this->generator->method('regenerateForEntity')->willThrowException(new AltTextGenerationException('Quota exceeded.'));
+      $this->generator->method('regenerateForMedia')->willThrowException(new AltTextGenerationException('Quota exceeded.'));
     }
     else {
-      $this->generator->method('regenerateForEntity')->willReturn($regenerated);
+      $this->generator->method('regenerateForMedia')->willReturn($regenerated);
     }
 
     $context = ['results' => []];
@@ -261,7 +261,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
     // Prepare.
     $this->setCurrentUser($this->createUser(['generate ai alt tags']));
     $media = $this->createImageMedia();
-    $this->generator->expects($this->never())->method('regenerateForEntity');
+    $this->generator->expects($this->never())->method('regenerateForMedia');
     $context = ['results' => []];
 
     // Act.
@@ -277,7 +277,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   public function testBatchRegenerateSkipsDeletedMedia(): void {
     // Prepare.
     $this->setCurrentUser($this->createUser(['generate ai alt tags', 'update any media']));
-    $this->generator->expects($this->never())->method('regenerateForEntity');
+    $this->generator->expects($this->never())->method('regenerateForMedia');
     $context = ['results' => []];
 
     // Act.

@@ -55,6 +55,8 @@ x-environment: &default-environment
   DRUPAL_SHIELD_PASS: ${DRUPAL_SHIELD_PASS:-}
   # Redis integration flag.
   DRUPAL_REDIS_ENABLED: ${DRUPAL_REDIS_ENABLED:-}
+  # Gemini API key used by the AI provider.
+  DRUPAL_AI_PROVIDER_GEMINI_API_KEY: ${DRUPAL_AI_PROVIDER_GEMINI_API_KEY:-}
 
 # The default user under which the containers should run.
 x-user: &default-user
