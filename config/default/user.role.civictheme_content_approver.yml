@@ -16,6 +16,7 @@ dependencies:
     - moderated_content_bulk_publish
     - navigation
     - node
+    - preview_link
     - scheduled_transitions
     - system
 _core:
@@ -33,6 +34,7 @@ permissions:
   - 'administer linkit profiles'
   - 'administer scheduled transitions'
   - 'generate ai alt tags'
+  - 'generate preview links'
   - 'moderated content bulk archive'
   - 'moderated content bulk publish'
   - 'moderated content bulk unpublish'

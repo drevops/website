@@ -9,3 +9,8 @@ services:
     arguments: ['@class_resolver', '@theme_handler']
     tags:
       - { name: event_subscriber }
+  do_base.preview_link_cache_subscriber:
+    class: Drupal\do_base\EventSubscriber\PreviewLinkCacheSubscriber
+    arguments: ['@page_cache_kill_switch']
+    tags:
+      - { name: event_subscriber }
