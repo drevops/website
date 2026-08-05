@@ -21,7 +21,7 @@ Opening the link binds its token to the visitor's session, so from that point th
 | Setting | Value | Why |
 |---|---|---|
 | `enabled_entity_types` | `node`, no bundle list | An empty bundle list means every content type, so a type added later gets preview links without a config change. |
-| `expiry_seconds` | `604800` (7 days) | Long enough for a review round, short enough to bound how long unpublished content stays reachable. |
+| `expiry_seconds` | `1209600` (14 days) | Covers a review that spans a couple of weeks, including a reviewer who is away for one of them, while still bounding how long unpublished content stays reachable. |
 | `multiple_entities` | `true` | A page is assembled from paragraphs and media, which have to travel with the node for the preview to render like the published page will. |
 | `display_message` | `subsequent` | Shows the recipient why they can see the page, and offers to drop the token, but only when they arrive by being redirected from a normal URL. Landing on the preview link itself says nothing, which keeps the first thing they see the content rather than a notice. |
 

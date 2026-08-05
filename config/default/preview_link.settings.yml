@@ -4,4 +4,4 @@ display_message: subsequent
 enabled_entity_types:
   node: {  }
 multiple_entities: true
-expiry_seconds: 604800
+expiry_seconds: 1209600

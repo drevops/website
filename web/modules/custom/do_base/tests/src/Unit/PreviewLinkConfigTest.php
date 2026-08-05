@@ -52,7 +52,7 @@ class PreviewLinkConfigTest extends UnitTestCase {
    * Data provider for testSetting.
    */
   public static function dataProviderSetting(): \Iterator {
-    yield 'links expire after a week' => ['expiry_seconds', 604800];
+    yield 'links expire after a fortnight' => ['expiry_seconds', 1209600];
     // A page is assembled from paragraphs and media, which have to travel with
     // the node for the preview to render the way the published page will.
     yield 'a link can carry referenced entities' => ['multiple_entities', TRUE];
