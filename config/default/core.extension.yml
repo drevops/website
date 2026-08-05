@@ -27,6 +27,7 @@ module:
   datetime_range: 0
   dblog: 0
   diff: 0
+  do_ai_alt_text: 0
   do_base: 0
   do_content_api: 0
   do_feed: 0
