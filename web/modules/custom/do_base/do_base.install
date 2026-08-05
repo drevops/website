@@ -27,12 +27,9 @@ function do_base_update_11001(): string {
   \Drupal::service('module_installer')->install(['drupal_helpers']);
 
   // Uninstalling ahead of config import keeps xmlsitemap from being installed
-  // while simple_sitemap still holds the /sitemap.xml route. The
-  // drupal/simple_sitemap package stays in composer.json until this has run
-  // everywhere, because the uninstall needs the module's own code to drop its
-  // tables and remove its config. The uninstall also rebuilds the container,
-  // replacing the shared reporter with an empty one, so the helper's own
-  // return value is what reports the outcome.
+  // while simple_sitemap still holds the /sitemap.xml route. The uninstall also
+  // rebuilds the container, replacing the shared reporter with an empty one, so
+  // the helper's own return value is what reports the outcome.
   return Helper::module()->uninstall('simple_sitemap');
 }
 
@@ -54,10 +51,7 @@ function do_base_update_11002(): string {
   // both at once. Dependents are removed first so the toolbar uninstall has
   // nothing left to cascade to. Each uninstall rebuilds the container and
   // replaces the shared reporter with an empty one, so the helper's own return
-  // values are what report the outcome. An uninstall needs the module's own
-  // code to drop its tables and remove its config, so the drupal/admin_toolbar
-  // and drupal/gin_toolbar packages stay in composer.json until this has run
-  // in every environment.
+  // values are what report the outcome.
   $messages = [];
 
   foreach (['admin_toolbar_tools', 'admin_toolbar', 'gin_toolbar', 'toolbar'] as $module) {
