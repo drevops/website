@@ -66,7 +66,7 @@ class AltTextGenerator {
 
     foreach ($field_names as $field_name) {
       foreach ($media->get($field_name) as $item) {
-        $file = $item->entity;
+        $file = $item->get('entity')->getValue();
 
         if (!$file instanceof FileInterface) {
           continue;
@@ -78,7 +78,7 @@ class AltTextGenerator {
           continue;
         }
 
-        $item->alt = $this->generateForFile($file, $langcode);
+        $item->set('alt', $this->generateForFile($file, $langcode));
         $updated++;
       }
     }
@@ -169,13 +169,14 @@ class AltTextGenerator {
    */
   protected function getAltTextFieldNames(FieldableEntityInterface $entity): array {
     $field_names = [];
+    $definitions = $entity->getFieldDefinitions();
 
-    foreach ($entity->getFieldDefinitions() as $field_name => $definition) {
-      if (!$definition instanceof FieldConfigInterface) {
+    foreach ($definitions as $field_name => $field_definition) {
+      if (!$field_definition instanceof FieldConfigInterface) {
         continue;
       }
 
-      if ($definition->getType() !== 'image' || !$definition->getSetting('alt_field')) {
+      if ($field_definition->getType() !== 'image' || !$field_definition->getSetting('alt_field')) {
         continue;
       }
 

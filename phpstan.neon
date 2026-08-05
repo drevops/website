@@ -11,6 +11,8 @@ parameters:
 
   level: 7
 
+  tmpDir: .artifacts/phpstan
+
   phpVersion: 80421
 
   paths:
@@ -52,3 +54,9 @@ parameters:
         - web/themes/custom/*/tests/*
         - tests/phpunit/*
       reportUnmatched: false
+    - # The AI module wraps every provider plugin in a proxy that forwards
+      # operations such as chat() through __call() instead of declaring them,
+      # so the operation interfaces are invisible to static analysis.
+      message: '#Call to an undefined method Drupal\\ai\\Plugin\\ProviderProxy::#'
+      paths:
+        - web/modules/custom/do_ai_alt_text/*

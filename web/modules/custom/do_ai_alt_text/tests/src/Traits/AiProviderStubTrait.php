@@ -60,6 +60,19 @@ trait AiProviderStubTrait {
       public function __construct(protected string $answer, protected \Closure $record) {
       }
 
+      /**
+       * Answers a chat request with the fixed text this stub was built with.
+       *
+       * @param \Drupal\ai\OperationType\Chat\ChatInput $input
+       *   Prompt and images the caller assembled.
+       * @param string $model_id
+       *   Model the caller asked for.
+       * @param array $tags
+       *   Tags the caller attached to the request.
+       *
+       * @return \Drupal\ai\OperationType\Chat\ChatOutput
+       *   Fixed answer.
+       */
       public function chat(ChatInput $input, string $model_id, array $tags = []): ChatOutput {
         ($this->record)($input);
 
@@ -80,7 +93,7 @@ trait AiProviderStubTrait {
    */
   protected function createAiProviderHelper(?ProviderProxy $provider): ProviderHelper {
     $provider_helper = $this->createMock(ProviderHelper::class);
-    $provider_helper->method('getSetProvider')->willReturn($provider === NULL ? NULL : ['provider_id' => $provider, 'model_id' => 'test-model']);
+    $provider_helper->method('getSetProvider')->willReturn($provider instanceof ProviderProxy ? ['provider_id' => $provider, 'model_id' => 'test-model'] : NULL);
 
     return $provider_helper;
   }

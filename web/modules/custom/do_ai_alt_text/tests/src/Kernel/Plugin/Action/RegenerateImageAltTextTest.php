@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\do_ai_alt_text\Kernel\Plugin\Action;
 
-use Drupal\Core\Action\ActionInterface;
 use Drupal\do_ai_alt_text\AltTextGenerator;
 use Drupal\do_ai_alt_text\Exception\AltTextGenerationException;
 use Drupal\do_ai_alt_text\Plugin\Action\RegenerateImageAltText;
@@ -129,7 +128,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
     $this->generator->expects($this->never())->method('regenerateForMedia');
 
     // Act.
-    $this->action()->execute(NULL);
+    $this->action()->execute();
     $this->action()->execute(File::create(['uri' => 'public://ignored.png']));
   }
 
@@ -237,7 +236,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   /**
    * Tests the outcome a batch operation records for each media item.
    */
-  #[DataProvider('dataProviderBatchRegenerate')]
+  #[DataProvider('dataProviderBatchRegenerateTalliesOutcome')]
   public function testBatchRegenerateTalliesOutcome(int $regenerated, bool $fails, string $expected): void {
     // Prepare.
     $media = $this->createTestMedia();
@@ -261,7 +260,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   /**
    * Data provider for testBatchRegenerateTalliesOutcome().
    */
-  public static function dataProviderBatchRegenerate(): \Iterator {
+  public static function dataProviderBatchRegenerateTalliesOutcome(): \Iterator {
     yield 'image described' => [1, FALSE, RegenerateImageAltText::RESULT_UPDATED];
     yield 'nothing to describe' => [0, FALSE, RegenerateImageAltText::RESULT_SKIPPED];
     yield 'provider failed' => [0, TRUE, RegenerateImageAltText::RESULT_FAILED];
@@ -270,7 +269,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   /**
    * Tests that a batch operation re-checks access before describing an image.
    */
-  #[DataProvider('dataProviderBatchRegenerateAccess')]
+  #[DataProvider('dataProviderBatchRegenerateSkipsInaccessibleMedia')]
   public function testBatchRegenerateSkipsInaccessibleMedia(array $permissions): void {
     // Prepare.
     $this->setCurrentUser($this->createUser($permissions));
@@ -288,7 +287,7 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   /**
    * Data provider for testBatchRegenerateSkipsInaccessibleMedia().
    */
-  public static function dataProviderBatchRegenerateAccess(): \Iterator {
+  public static function dataProviderBatchRegenerateSkipsInaccessibleMedia(): \Iterator {
     yield 'no permissions' => [[]];
     yield 'cannot edit media' => [['generate ai alt tags']];
     yield 'cannot generate' => [['update any media']];
@@ -338,8 +337,11 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   /**
    * Returns the action under test.
    */
-  protected function action(): ActionInterface {
-    return $this->container->get('plugin.manager.action')->createInstance('do_ai_alt_text_regenerate');
+  protected function action(): RegenerateImageAltText {
+    $action = $this->container->get('plugin.manager.action')->createInstance('do_ai_alt_text_regenerate');
+    $this->assertInstanceOf(RegenerateImageAltText::class, $action);
+
+    return $action;
   }
 
   /**

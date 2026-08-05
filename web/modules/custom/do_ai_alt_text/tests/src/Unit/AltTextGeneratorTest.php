@@ -69,7 +69,7 @@ class AltTextGeneratorTest extends UnitTestCase {
   /**
    * Tests that provider output is flattened onto a single line.
    */
-  #[DataProvider('dataProviderNormalisation')]
+  #[DataProvider('dataProviderGenerateForFileNormalisesProviderText')]
   public function testGenerateForFileNormalisesProviderText(string $raw, string $expected): void {
     // Prepare.
     $generator = $this->createGenerator($this->createAiProvider($raw));
@@ -84,7 +84,7 @@ class AltTextGeneratorTest extends UnitTestCase {
   /**
    * Data provider for testGenerateForFileNormalisesProviderText().
    */
-  public static function dataProviderNormalisation(): \Iterator {
+  public static function dataProviderGenerateForFileNormalisesProviderText(): \Iterator {
     yield 'surrounding whitespace' => ['  A cat.  ', 'A cat.'];
     yield 'newlines' => ["A cat\non a mat.", 'A cat on a mat.'];
     yield 'repeated spaces' => ['A    cat.', 'A cat.'];
@@ -105,7 +105,7 @@ class AltTextGeneratorTest extends UnitTestCase {
 
     // Assert.
     $this->assertLessThanOrEqual(AltTextGenerator::ALT_MAX_LENGTH, mb_strlen($result));
-    $this->assertStringStartsWith($result, $raw);
+    $this->assertSame($result, substr($raw, 0, strlen($result)));
   }
 
   /**
@@ -156,7 +156,7 @@ class AltTextGeneratorTest extends UnitTestCase {
   /**
    * Tests that a blank prompt is refused before the provider is paid.
    */
-  #[DataProvider('dataProviderBlankPrompt')]
+  #[DataProvider('dataProviderGenerateForFileRequiresPrompt')]
   public function testGenerateForFileRequiresPrompt(?string $prompt): void {
     // Prepare.
     $generator = $this->createGenerator($this->createAiProvider('Alt text.'), NULL, '', $prompt);
@@ -172,7 +172,7 @@ class AltTextGeneratorTest extends UnitTestCase {
   /**
    * Data provider for testGenerateForFileRequiresPrompt().
    */
-  public static function dataProviderBlankPrompt(): \Iterator {
+  public static function dataProviderGenerateForFileRequiresPrompt(): \Iterator {
     yield 'unset' => [NULL];
     yield 'empty' => [''];
     yield 'whitespace only' => ["  \n  "];

@@ -69,7 +69,7 @@ class AltTextGeneratorTest extends KernelTestBase {
   public function testRegenerateForMediaReplacesAltText(): void {
     // Prepare.
     $media_type = $this->createMediaType('image', ['id' => 'test_image', 'label' => 'Image']);
-    $field_name = $this->getSourceFieldName($media_type->id());
+    $field_name = $this->getSourceFieldName((string) $media_type->id());
     $media = $this->createImageMedia('test_image', $field_name, 'Hand written alt text.');
 
     // Act.
@@ -88,7 +88,7 @@ class AltTextGeneratorTest extends KernelTestBase {
   public function testRegenerateForMediaSyncsThumbnailAltText(): void {
     // Prepare.
     $media_type = $this->createMediaType('image', ['id' => 'test_image', 'label' => 'Image']);
-    $field_name = $this->getSourceFieldName($media_type->id());
+    $field_name = $this->getSourceFieldName((string) $media_type->id());
     $media = $this->createImageMedia('test_image', $field_name, 'Hand written alt text.');
     $this->assertSame('Hand written alt text.', $media->get('thumbnail')->alt);
 
@@ -112,7 +112,7 @@ class AltTextGeneratorTest extends KernelTestBase {
     $media = Media::create([
       'bundle' => 'test_file',
       'name' => 'Document',
-      $this->getSourceFieldName($media_type->id()) => ['target_id' => $file->id()],
+      $this->getSourceFieldName((string) $media_type->id()) => ['target_id' => $file->id()],
       'field_extra_images' => ['target_id' => $this->createImageFile()->id(), 'alt' => 'Hand written alt text.'],
     ]);
     $media->save();
@@ -132,7 +132,7 @@ class AltTextGeneratorTest extends KernelTestBase {
   public function testRegenerateForMediaDescribesEveryDelta(): void {
     // Prepare.
     $media_type = $this->createMediaType('image', ['id' => 'test_image', 'label' => 'Image']);
-    $field_name = $this->getSourceFieldName($media_type->id());
+    $field_name = $this->getSourceFieldName((string) $media_type->id());
     $this->addImageField('test_image', 'field_extra_images', 2);
     $media = $this->createImageMedia('test_image', $field_name, 'Hand written alt text.');
     $media->set('field_extra_images', [
@@ -147,8 +147,8 @@ class AltTextGeneratorTest extends KernelTestBase {
     // Assert.
     $this->assertSame(3, $updated);
     $reloaded = Media::load($media->id());
-    $this->assertSame(self::GENERATED_ALT, $reloaded->get('field_extra_images')[0]->alt);
-    $this->assertSame(self::GENERATED_ALT, $reloaded->get('field_extra_images')[1]->alt);
+    $this->assertSame(self::GENERATED_ALT, $reloaded->get('field_extra_images')->get(0)->get('alt')->getValue());
+    $this->assertSame(self::GENERATED_ALT, $reloaded->get('field_extra_images')->get(1)->get('alt')->getValue());
   }
 
   /**
@@ -157,8 +157,10 @@ class AltTextGeneratorTest extends KernelTestBase {
   public function testRegenerateForMediaSkipsFieldsWithoutAltText(): void {
     // Prepare.
     $media_type = $this->createMediaType('image', ['id' => 'test_image', 'label' => 'Image']);
-    $field_name = $this->getSourceFieldName($media_type->id());
-    FieldConfig::loadByName('media', 'test_image', $field_name)->setSetting('alt_field', FALSE)->save();
+    $field_name = $this->getSourceFieldName((string) $media_type->id());
+    $field = FieldConfig::loadByName('media', 'test_image', $field_name);
+    $this->assertInstanceOf(FieldConfig::class, $field);
+    $field->setSetting('alt_field', FALSE)->save();
     $media = $this->createImageMedia('test_image', $field_name, 'Hand written alt text.');
 
     // Act.
@@ -181,7 +183,7 @@ class AltTextGeneratorTest extends KernelTestBase {
     $media = Media::create([
       'bundle' => 'test_file',
       'name' => 'Document',
-      $this->getSourceFieldName($media_type->id()) => ['target_id' => $file->id()],
+      $this->getSourceFieldName((string) $media_type->id()) => ['target_id' => $file->id()],
     ]);
     $media->save();
 
@@ -199,7 +201,7 @@ class AltTextGeneratorTest extends KernelTestBase {
   public function testRegenerateForMediaSkipsMissingFile(): void {
     // Prepare.
     $media_type = $this->createMediaType('image', ['id' => 'test_image', 'label' => 'Image']);
-    $field_name = $this->getSourceFieldName($media_type->id());
+    $field_name = $this->getSourceFieldName((string) $media_type->id());
     $media = $this->createImageMedia('test_image', $field_name, 'Hand written alt text.');
     File::load($media->get($field_name)->target_id)->delete();
     $media = Media::load($media->id());
@@ -218,7 +220,7 @@ class AltTextGeneratorTest extends KernelTestBase {
   public function testRegenerateForMediaLeavesEntityUntouchedOnFailure(): void {
     // Prepare.
     $media_type = $this->createMediaType('image', ['id' => 'test_image', 'label' => 'Image']);
-    $field_name = $this->getSourceFieldName($media_type->id());
+    $field_name = $this->getSourceFieldName((string) $media_type->id());
     $this->addImageField('test_image', 'field_extra_images', 1);
     $media = $this->createImageMedia('test_image', $field_name, 'First alt text.');
     $media->set('field_extra_images', ['target_id' => $this->createImageFile()->id(), 'alt' => 'Second alt text.']);

@@ -23,20 +23,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   label: new TranslatableMarkup('Re-generate image alt text with AI'),
   type: 'media',
 )]
-class RegenerateImageAltText extends ActionBase implements ContainerFactoryPluginInterface {
+final class RegenerateImageAltText extends ActionBase implements ContainerFactoryPluginInterface {
 
-  const RESULT_UPDATED = 'updated';
+  const string RESULT_UPDATED = 'updated';
 
-  const RESULT_SKIPPED = 'skipped';
+  const string RESULT_SKIPPED = 'skipped';
 
-  const RESULT_FAILED = 'failed';
+  const string RESULT_FAILED = 'failed';
 
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    protected AltTextGenerator $generator,
-    protected AccountInterface $currentUser,
+    protected AltTextGenerator $altTextGenerator,
+    protected AccountInterface $account,
     protected LoggerInterface $logger,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -46,7 +46,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
-    return new static(
+    return new self(
       $configuration,
       $plugin_id,
       $plugin_definition,
@@ -58,6 +58,9 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
 
   /**
    * {@inheritdoc}
+   *
+   * @param mixed $entity
+   *   Media item to describe. Anything else is ignored.
    */
   public function execute($entity = NULL): void {
     if ($entity instanceof MediaInterface && $this->access($entity)) {
@@ -73,7 +76,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
 
     foreach ($entities as $entity) {
       if ($entity instanceof MediaInterface) {
-        $operations[] = [[static::class, 'batchRegenerate'], [$entity->id()]];
+        $operations[] = [[self::class, 'batchRegenerate'], [$entity->id()]];
       }
     }
 
@@ -86,7 +89,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
     batch_set([
       'title' => $this->t('Re-generating image alt text with AI'),
       'operations' => $operations,
-      'finished' => [static::class, 'batchFinished'],
+      'finished' => [self::class, 'batchFinished'],
     ]);
   }
 
@@ -94,7 +97,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
-    $account = $account ?: $this->currentUser;
+    $account = $account ?: $this->account;
 
     if (!$object instanceof MediaInterface) {
       $access = AccessResult::forbidden('Only media items can be described.');
@@ -117,7 +120,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
    */
   protected function regenerate(MediaInterface $media): string {
     try {
-      return $this->generator->regenerateForMedia($media) > 0 ? static::RESULT_UPDATED : static::RESULT_SKIPPED;
+      return $this->altTextGenerator->regenerateForMedia($media) > 0 ? self::RESULT_UPDATED : self::RESULT_SKIPPED;
     }
     catch (\Exception $exception) {
       $this->logger->error('Could not re-generate alt text for media @id: @message', [
@@ -125,7 +128,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
         '@message' => $exception->getMessage(),
       ]);
 
-      return static::RESULT_FAILED;
+      return self::RESULT_FAILED;
     }
   }
 
@@ -139,9 +142,9 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
    */
   public static function batchRegenerate(int|string $media_id, array &$context): void {
     $context['results'] += [
-      static::RESULT_UPDATED => 0,
-      static::RESULT_SKIPPED => 0,
-      static::RESULT_FAILED => 0,
+      self::RESULT_UPDATED => 0,
+      self::RESULT_SKIPPED => 0,
+      self::RESULT_FAILED => 0,
     ];
 
     $media = \Drupal::entityTypeManager()->getStorage('media')->load($media_id);
@@ -152,7 +155,7 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
     // A batch outlives the request that queued it, so access is re-checked
     // rather than trusted from the form submission.
     if (!$media instanceof MediaInterface || !$action->access($media)) {
-      $context['results'][static::RESULT_SKIPPED]++;
+      $context['results'][self::RESULT_SKIPPED]++;
 
       return;
     }
@@ -179,9 +182,9 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
     }
 
     $translation = \Drupal::translation();
-    $updated = $results[static::RESULT_UPDATED] ?? 0;
-    $skipped = $results[static::RESULT_SKIPPED] ?? 0;
-    $failed = $results[static::RESULT_FAILED] ?? 0;
+    $updated = $results[self::RESULT_UPDATED] ?? 0;
+    $skipped = $results[self::RESULT_SKIPPED] ?? 0;
+    $failed = $results[self::RESULT_FAILED] ?? 0;
 
     $messenger->addStatus($translation->formatPlural($updated, 'Re-generated the alt text of 1 media item.', 'Re-generated the alt text of @count media items.'));
 
