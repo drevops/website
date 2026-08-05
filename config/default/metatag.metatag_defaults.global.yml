@@ -8,4 +8,18 @@ id: global
 label: Global
 tags:
   canonical_url: '[current-page:url]'
+  og_site_name: '[site:name]'
+  og_type: website
+  og_url: '[current-page:url]'
+  schema_organization_id: '[site:url]'
+  schema_organization_logo: 'a:4:{s:5:"@type";s:11:"ImageObject";s:3:"url";s:48:"[site:url]modules/custom/do_base/assets/logo.png";s:5:"width";s:3:"600";s:6:"height";s:3:"142";}'
+  schema_organization_name: '[site:name]'
+  schema_organization_same_as: 'https://github.com/drevops, https://www.linkedin.com/company/drevops, https://x.com/drev_ops'
+  schema_organization_type: Organization
+  schema_organization_url: '[site:url]'
+  schema_web_site_name: '[site:name]'
+  schema_web_site_type: WebSite
+  schema_web_site_url: '[site:url]'
   title: '[current-page:title] | [site:name]'
+  twitter_cards_site: '@drev_ops'
+  twitter_cards_type: summary_large_image

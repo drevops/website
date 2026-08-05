@@ -11,4 +11,5 @@ applies to this project. For **how** to perform operations, see
 - [Deployment](deployment.md) - Deployment configuration
 - [Releasing](releasing.md) - Release process and versioning
 - [Sitemap](sitemap.md) - XML sitemap module, coverage and generation
+- [SEO](seo.md) - Meta tags, social share cards and structured data
 - [FAQs](faqs.md) - Project-specific FAQs

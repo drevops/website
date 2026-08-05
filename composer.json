@@ -48,6 +48,7 @@
         "drupal/redis": "^1.11",
         "drupal/robotstxt": "^1.6",
         "drupal/scheduled_transitions": "^2.8.4",
+        "drupal/schema_metatag": "^3.0.4",
         "drupal/sdc_devel": "^1.0.3",
         "drupal/search_api": "^1.41",
         "drupal/search_api_solr": "^4.4.0",

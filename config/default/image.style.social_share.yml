@@ -1,0 +1,17 @@
+uuid: 9c47ccd3-afd5-4dfd-852d-6f3cfd21907f
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: social_share
+label: 'Social share'
+effects:
+  226e6628-7213-4c7e-bd0b-edaf917baf9f:
+    uuid: 226e6628-7213-4c7e-bd0b-edaf917baf9f
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 630
+      crop_type: focal_point
