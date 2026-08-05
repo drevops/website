@@ -25,7 +25,7 @@ Feature: Page content metatags
     And the response should contain "<meta property=\"og:type\" content=\"website\""
     And the response should contain "<meta property=\"og:title\" content=\"[TEST] Social Card Page | DrevOps\""
     And the response should contain "<meta property=\"og:description\" content=\"[TEST] A summary shown on a share card\""
-    And the response should contain "/modules/custom/do_base/assets/social-share.png\""
+    And the response should contain "/modules/custom/do_base/assets/social-share.jpg\""
     And the response should contain "<meta property=\"og:image:width\" content=\"1200\""
     And the response should contain "<meta property=\"og:image:height\" content=\"630\""
     # Without this card type X renders a small square thumbnail instead of the
@@ -49,7 +49,7 @@ Feature: Page content metatags
       | [TEST] Social Card Thumbnail Page | 1      | [TEST] Social Card Image |
     When I visit the "civictheme_page" content page with the title "[TEST] Social Card Thumbnail Page"
     Then the response should contain "/styles/social_share/"
-    And the response should not contain "/modules/custom/do_base/assets/social-share.png"
+    And the response should not contain "/modules/custom/do_base/assets/social-share.jpg"
 
   @api
   Scenario: Front page is shared with a complete card
@@ -75,4 +75,4 @@ Feature: Page content metatags
     And the response should contain "\"headline\": \"[TEST] Social Card Post\""
     # The post carries no thumbnail, so this also proves the structured data
     # image shares the resolver's fallback rather than being dropped.
-    And the response should contain "/modules/custom/do_base/assets/social-share.png"
+    And the response should contain "/modules/custom/do_base/assets/social-share.jpg"

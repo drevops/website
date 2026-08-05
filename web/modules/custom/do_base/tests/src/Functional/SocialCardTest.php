@@ -192,7 +192,7 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
 
     // Assert.
     $this->assertSame($chosen, $this->metatagContent('twitter:image'));
-    $this->assertStringEndsWith('/modules/custom/do_base/assets/social-share.png', $this->metatagContent('og:image'));
+    $this->assertStringEndsWith('/modules/custom/do_base/assets/social-share.jpg', $this->metatagContent('og:image'));
   }
 
   /**
@@ -241,7 +241,7 @@ class SocialCardTest extends DoBaseFunctionalTestBase {
   protected function assertFallbackImage(): void {
     $url = $this->metatagContent('og:image');
 
-    $this->assertStringEndsWith('/modules/custom/do_base/assets/social-share.png', $url);
+    $this->assertStringEndsWith('/modules/custom/do_base/assets/social-share.jpg', $url);
     $this->assertStringStartsWith($this->baseUrl, $url, 'Both networks reject a relative image URL.');
     $this->assertSame($url, $this->metatagContent('twitter:image'));
     $this->assertSame('1200', $this->metatagContent('og:image:width'));

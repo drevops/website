@@ -24,7 +24,7 @@ const DO_BASE_SOCIAL_IMAGE_STYLE = 'social_share';
 /**
  * Path of the fallback social share image, relative to the module directory.
  */
-const DO_BASE_SOCIAL_IMAGE_FALLBACK = 'assets/social-share.png';
+const DO_BASE_SOCIAL_IMAGE_FALLBACK = 'assets/social-share.jpg';
 
 /**
  * Pixel width of the fallback social share image.

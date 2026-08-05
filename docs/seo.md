@@ -46,7 +46,7 @@ The social **title and description are not configured**. `do_base_metatags_alter
 The social **image is not configured either**, because a metatag default that resolves to nothing is dropped rather than falling back to its parent, and most pages have no thumbnail. `do_base_metatags_alter()` resolves it instead:
 
 1. The node's `field_c_n_thumbnail` media, rendered through the `social_share` image style (1200x630, focal point aware), with the media's alt text.
-2. Otherwise `web/modules/custom/do_base/assets/social-share.png`, with the site name as alt text.
+2. Otherwise `web/modules/custom/do_base/assets/social-share.jpg`, with the site name as alt text.
 
 An editor who sets `og:image` by hand on a node keeps it: the hook leaves the whole image family alone in that case, and emits no width, height or alt, because it cannot know them for a file it did not choose.
 
@@ -58,10 +58,10 @@ The `Article` image in the structured data is filled from the same resolved valu
 
 Both live in `web/modules/custom/do_base/assets/` and are generated from the theme's brand assets:
 
-- `social-share.png` (1200x630) - the fallback share card: the theme's geometric background, darkened, with the primary logo centred.
+- `social-share.jpg` (1200x630) - the fallback share card: the theme's geometric background, darkened, with the primary logo centred. JPEG rather than PNG because the background is a photographic render, which PNG stores at roughly six times the size.
 - `logo.png` (600x142) - the `Organization` logo in the structured data. Schema.org requires a raster image, and the brand logo exists only as SVG.
 
-Replacing either file is the whole change if a designed asset arrives later; the dimensions of `social-share.png` are also declared as constants in `do_base.module` and must be kept in step with it.
+Replacing either file is the whole change if a designed asset arrives later; the dimensions of `social-share.jpg` are also declared as constants in `do_base.module` and must be kept in step with it.
 
 ## Known limits
 
