@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\do_base\Unit;
 
 use Drupal\Tests\UnitTestCase;
+use Drupal\Tests\do_base\Traits\ExportedConfigTrait;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Tests that the exported date configuration renders Australian dates.
@@ -21,6 +21,8 @@ use Symfony\Component\Yaml\Yaml;
 #[CoversNothing]
 #[Group('do_base')]
 class DateFormatConfigTest extends UnitTestCase {
+
+  use ExportedConfigTrait;
 
   /**
    * Reference date rendered through each pattern: 4 August 2026, 2:30pm.
@@ -111,16 +113,6 @@ class DateFormatConfigTest extends UnitTestCase {
     yield 'default timezone' => [['timezone', 'default'], 'Australia/Melbourne'];
     yield 'default country' => [['country', 'default'], 'AU'];
     yield 'week starts on Monday' => [['first_day'], 1];
-  }
-
-  /**
-   * Reads an exported configuration file from the default config directory.
-   */
-  protected function loadConfig(string $file_name): array {
-    $path = dirname($this->root) . '/config/default/' . $file_name;
-    $this->assertFileExists($path);
-
-    return Yaml::parseFile($path);
   }
 
 }

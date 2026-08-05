@@ -26,15 +26,45 @@ function do_base_mail_alter(array &$message): void {
  * Implements hook_page_attachments().
  */
 function do_base_page_attachments(array &$attachments): void {
-  // Attach a CSP nonce to script-src on every page so that Drupal core's
-  // inline scripts (BigPipe placeholders, drupalSettings, etc.) continue to
-  // run under a strict Content-Security-Policy. The fallback 'unsafe-inline'
-  // is only used by browsers that do not support CSP3 nonces; modern
-  // browsers ignore it when a nonce is present.
+  _do_base_attach_preview_link_robots($attachments);
+  _do_base_attach_csp_nonce($attachments);
+}
+
+/**
+ * Keeps preview link pages out of search indexes.
+ */
+function _do_base_attach_preview_link_robots(array &$attachments): void {
+  $route = \Drupal::routeMatch()->getRouteObject();
+
+  if ($route === NULL || $route->getOption('_preview_link_route') !== TRUE) {
+    return;
+  }
+
+  // A preview link renders unpublished content to anyone holding the token,
+  // and the URL is meant to be pasted into mail and chat clients that follow
+  // links, so the page must never reach a search index.
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'robots',
+        'content' => 'noindex, nofollow',
+      ],
+    ],
+    'do_base_preview_link_robots',
+  ];
+}
+
+/**
+ * Attaches a CSP nonce so core's inline scripts survive a strict policy.
+ */
+function _do_base_attach_csp_nonce(array &$attachments): void {
   if (!class_exists(Csp::class)) {
     return;
   }
 
+  // The 'unsafe-inline' fallback is only used by browsers without CSP3 nonce
+  // support; modern browsers ignore it once a nonce is present.
   $existing = $attachments['#attached']['csp_nonce']['script'] ?? [];
   $attachments['#attached']['csp_nonce']['script'] = array_values(array_unique(array_merge($existing, [Csp::POLICY_UNSAFE_INLINE])));
 

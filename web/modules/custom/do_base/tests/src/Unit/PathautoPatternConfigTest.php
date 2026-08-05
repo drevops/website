@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\do_base\Unit;
 
 use Drupal\Tests\UnitTestCase;
+use Drupal\Tests\do_base\Traits\ExportedConfigTrait;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Tests the URL alias patterns exported for each content type.
@@ -20,6 +20,8 @@ use Symfony\Component\Yaml\Yaml;
 #[CoversNothing]
 #[Group('do_base')]
 class PathautoPatternConfigTest extends UnitTestCase {
+
+  use ExportedConfigTrait;
 
   /**
    * Tests that a content type generates aliases under its expected prefix.
@@ -66,16 +68,6 @@ class PathautoPatternConfigTest extends UnitTestCase {
     yield 'blog post' => ['blog'];
     yield 'event' => ['civictheme_event'];
     yield 'project' => ['project'];
-  }
-
-  /**
-   * Reads an exported configuration file from the default config directory.
-   */
-  protected function loadConfig(string $file_name): array {
-    $path = dirname($this->root) . '/config/default/' . $file_name;
-    $this->assertFileExists($path);
-
-    return Yaml::parseFile($path);
   }
 
 }
