@@ -1,0 +1,10 @@
+name: DrevOps Website AI Alt Text
+type: module
+description: Bulk re-generation of image alt text with AI.
+core_version_requirement: ^11
+package: website
+dependencies:
+  - ai:ai
+  - ai_image_alt_text:ai_image_alt_text
+  - drupal:image
+  - drupal:media

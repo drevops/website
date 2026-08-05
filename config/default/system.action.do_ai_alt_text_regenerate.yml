@@ -1,0 +1,13 @@
+uuid: e54c9b83-f8a2-4a40-acc1-30de27dbcf63
+langcode: en
+status: true
+dependencies:
+  module:
+    - do_ai_alt_text
+_core:
+  default_config_hash: 410JR-9h83ahVpKmK-JRiwzdrW1zQXTFbyUdxJOaZUM
+id: do_ai_alt_text_regenerate
+label: 'Re-generate image alt text with AI'
+type: media
+plugin: do_ai_alt_text_regenerate
+configuration: {  }
