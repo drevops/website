@@ -146,18 +146,18 @@ class RegenerateImageAltText extends ActionBase implements ContainerFactoryPlugi
 
     $media = \Drupal::entityTypeManager()->getStorage('media')->load($media_id);
 
+    /** @var \Drupal\do_ai_alt_text\Plugin\Action\RegenerateImageAltText $action */
+    $action = \Drupal::service('plugin.manager.action')->createInstance('do_ai_alt_text_regenerate');
+
     // A batch outlives the request that queued it, so access is re-checked
     // rather than trusted from the form submission.
-    if (!$media instanceof MediaInterface || !$media->access('update')) {
+    if (!$media instanceof MediaInterface || !$action->access($media)) {
       $context['results'][static::RESULT_SKIPPED]++;
 
       return;
     }
 
     $context['message'] = new TranslatableMarkup('Re-generating alt text for @label', ['@label' => $media->label()]);
-
-    /** @var \Drupal\do_ai_alt_text\Plugin\Action\RegenerateImageAltText $action */
-    $action = \Drupal::service('plugin.manager.action')->createInstance('do_ai_alt_text_regenerate');
     $context['results'][$action->regenerate($media)]++;
   }
 

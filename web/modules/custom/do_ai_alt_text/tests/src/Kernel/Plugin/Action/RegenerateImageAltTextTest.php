@@ -257,9 +257,10 @@ class RegenerateImageAltTextTest extends KernelTestBase {
   /**
    * Tests that a batch operation re-checks access before describing an image.
    */
-  public function testBatchRegenerateSkipsInaccessibleMedia(): void {
+  #[DataProvider('dataProviderBatchRegenerateAccess')]
+  public function testBatchRegenerateSkipsInaccessibleMedia(array $permissions): void {
     // Prepare.
-    $this->setCurrentUser($this->createUser(['generate ai alt tags']));
+    $this->setCurrentUser($this->createUser($permissions));
     $media = $this->createImageMedia();
     $this->generator->expects($this->never())->method('regenerateForMedia');
     $context = ['results' => []];
@@ -269,6 +270,15 @@ class RegenerateImageAltTextTest extends KernelTestBase {
 
     // Assert.
     $this->assertSame(1, $context['results'][RegenerateImageAltText::RESULT_SKIPPED]);
+  }
+
+  /**
+   * Data provider for testBatchRegenerateSkipsInaccessibleMedia().
+   */
+  public static function dataProviderBatchRegenerateAccess(): \Iterator {
+    yield 'no permissions' => [[]];
+    yield 'cannot edit media' => [['generate ai alt tags']];
+    yield 'cannot generate' => [['update any media']];
   }
 
   /**
