@@ -106,12 +106,16 @@ class PreviewLinkConfigTest extends UnitTestCase {
   }
 
   /**
-   * Tests that no role beyond the editorial three can mint a preview link.
+   * Tests that no role beyond the expected ones holds each permission.
    *
-   * Naming the roles that must not hold the permission would leave a role
-   * added later untested, so every exported role is weighed against the
-   * allowlist instead. A recipient needs no permission at all, so a site-wide
-   * role holding this one would hand link creation to every visitor.
+   * Naming the roles that must not hold a permission would leave a role added
+   * later untested, so every exported role is weighed against the allowlist
+   * instead. A recipient needs no permission at all, so a site-wide role
+   * holding one of these would hand link creation to every visitor.
+   *
+   * A role flagged 'is_admin' holds every permission without listing any, so
+   * it counts as granted here. Reading only the explicit list would let a new
+   * administrative role pick both permissions up unnoticed.
    */
   #[DataProvider('dataProviderPermissionIsConfinedToItsRoles')]
   public function testPermissionIsConfinedToItsRoles(string $permission, array $expected): void {
@@ -119,7 +123,9 @@ class PreviewLinkConfigTest extends UnitTestCase {
     $granted = [];
 
     foreach ($this->loadBundleNames('user.role') as $role_id) {
-      if (in_array($permission, $this->loadConfig('user.role.' . $role_id . '.yml')['permissions'] ?? [], TRUE)) {
+      $role = $this->loadConfig('user.role.' . $role_id . '.yml');
+
+      if (($role['is_admin'] ?? FALSE) === TRUE || in_array($permission, $role['permissions'] ?? [], TRUE)) {
         $granted[] = $role_id;
       }
     }
@@ -132,18 +138,15 @@ class PreviewLinkConfigTest extends UnitTestCase {
 
   /**
    * Data provider for testPermissionIsConfinedToItsRoles.
-   *
-   * The administrator role carries 'is_admin', so it holds every permission
-   * without listing any, and is absent from these lists by design.
    */
   public static function dataProviderPermissionIsConfinedToItsRoles(): \Iterator {
     yield 'generating links' => [
       'generate preview links',
-      ['civictheme_content_approver', 'civictheme_content_author', 'civictheme_site_administrator'],
+      ['administrator', 'civictheme_content_approver', 'civictheme_content_author', 'civictheme_site_administrator'],
     ];
     yield 'changing the bounds' => [
       'administer preview link settings',
-      ['civictheme_site_administrator'],
+      ['administrator', 'civictheme_site_administrator'],
     ];
   }
 
