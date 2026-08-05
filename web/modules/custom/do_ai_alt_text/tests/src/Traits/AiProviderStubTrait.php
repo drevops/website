@@ -31,6 +31,11 @@ trait AiProviderStubTrait {
   protected ?\Exception $chatFailure = NULL;
 
   /**
+   * Call number the stub starts throwing on, counting from one.
+   */
+  protected int $chatFailsAtCall = 1;
+
+  /**
    * Builds a provider that answers with the given text.
    *
    * @param string $answer
@@ -45,7 +50,7 @@ trait AiProviderStubTrait {
       $this->capturedChatInput = $input;
       $this->chatCalls++;
 
-      if ($this->chatFailure instanceof \Exception) {
+      if ($this->chatFailure instanceof \Exception && $this->chatCalls >= $this->chatFailsAtCall) {
         throw $this->chatFailure;
       }
     };

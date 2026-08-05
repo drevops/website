@@ -213,14 +213,21 @@ class AltTextGeneratorTest extends KernelTestBase {
   }
 
   /**
-   * Tests that a failure part way through leaves the media item untouched.
+   * Tests that a failure part way through persists nothing.
    */
   public function testRegenerateForMediaLeavesEntityUntouchedOnFailure(): void {
     // Prepare.
     $media_type = $this->createMediaType('image', ['id' => 'test_image', 'label' => 'Image']);
     $field_name = $this->getSourceFieldName($media_type->id());
-    $media = $this->createImageMedia('test_image', $field_name, 'Hand written alt text.');
+    $this->addImageField('test_image', 'field_extra_images', 1);
+    $media = $this->createImageMedia('test_image', $field_name, 'First alt text.');
+    $media->set('field_extra_images', ['target_id' => $this->createImageFile()->id(), 'alt' => 'Second alt text.']);
+    $media->save();
+
+    // The first image is described before the second one fails, so the write
+    // has already started when the run is abandoned.
     $this->chatFailure = new \RuntimeException('Quota exceeded.');
+    $this->chatFailsAtCall = 2;
 
     // Assert.
     $this->expectException(AltTextGenerationException::class);
@@ -230,7 +237,10 @@ class AltTextGeneratorTest extends KernelTestBase {
       $this->generator()->regenerateForMedia($media);
     }
     finally {
-      $this->assertSame('Hand written alt text.', Media::load($media->id())->get($field_name)->alt);
+      $reloaded = Media::load($media->id());
+      $this->assertSame(2, $this->chatCalls);
+      $this->assertSame('First alt text.', $reloaded->get($field_name)->alt);
+      $this->assertSame('Second alt text.', $reloaded->get('field_extra_images')->alt);
     }
   }
 

@@ -240,12 +240,16 @@ class AltTextGenerator {
       }
     }
 
-    if (!file_exists($uri)) {
+    $binary = file_exists($uri) ? file_get_contents($uri) : FALSE;
+
+    // An empty payload would still be billed, and the provider would describe
+    // nothing, so an unreadable image fails the item instead.
+    if ($binary === FALSE) {
       throw new AltTextGenerationException(sprintf('Image file %s could not be read.', $filename));
     }
 
     $image = new ImageFile();
-    $image->setBinary((string) file_get_contents($uri));
+    $image->setBinary($binary);
     $image->setMimeType($mime_type);
     $image->setFilename($filename);
 
