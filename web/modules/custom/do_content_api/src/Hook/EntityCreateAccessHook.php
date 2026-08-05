@@ -8,11 +8,16 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Session\AccountInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Grants paragraph create access to authorised content-authoring clients.
  */
 final class EntityCreateAccessHook {
+
+  public function __construct(
+    protected RequestStack $requestStack,
+  ) {}
 
   /**
    * Paragraph bundles that may be created through the authoring API.
@@ -45,22 +50,29 @@ final class EntityCreateAccessHook {
       return AccessResult::neutral();
     }
 
+    // The paragraphs access handler already grants create access on HTML
+    // requests, and a forbidden result here would override it for every role
+    // that bypasses permission checks and so matches the gate below.
+    if ($this->requestStack->getCurrentRequest()?->getRequestFormat() === 'html') {
+      return AccessResult::neutral()->addCacheContexts(['request_format']);
+    }
+
     // Editorial users keep the stock paragraphs access behaviour.
     if (!$account->hasPermission('use content authoring api')) {
-      return AccessResult::neutral()->cachePerPermissions();
+      return AccessResult::neutral()->cachePerPermissions()->addCacheContexts(['request_format']);
     }
 
     // A bundle-less capability check gets no opinion.
     if ($entity_bundle === NULL) {
-      return AccessResult::neutral()->cachePerPermissions();
+      return AccessResult::neutral()->cachePerPermissions()->addCacheContexts(['request_format']);
     }
 
     // The paragraphs access handler returns neutral for every non-HTML request
     // format. Restore create access for the allow-listed bundles and explicitly
     // deny the rest so no other handler can widen the authoring surface.
     return in_array($entity_bundle, self::ALLOWED_PARAGRAPH_BUNDLES, TRUE)
-      ? AccessResult::allowed()->cachePerPermissions()
-      : AccessResult::forbidden()->cachePerPermissions();
+      ? AccessResult::allowed()->cachePerPermissions()->addCacheContexts(['request_format'])
+      : AccessResult::forbidden()->cachePerPermissions()->addCacheContexts(['request_format']);
   }
 
 }
