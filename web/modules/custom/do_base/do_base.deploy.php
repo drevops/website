@@ -615,24 +615,6 @@ function do_base_deploy_realias_blog_posts(?array &$sandbox = NULL): ?string {
 }
 
 /**
- * Adds primary navigation links for pages nothing links to.
- */
-function do_base_deploy_relink_orphan_pages(): string {
-  $menu_name = 'civictheme-primary-navigation';
-
-  $pages = [
-    'How we work' => '/how-we-work',
-    'AI integration & automation' => '/ai-integration-automation',
-  ];
-
-  foreach ($pages as $title => $alias) {
-    _do_base_menu_link_alias($menu_name, $title, $alias);
-  }
-
-  return Helper::report();
-}
-
-/**
  * Sets the search result title and description on the pages that need one.
  *
  * @param array|null $sandbox
@@ -1036,54 +1018,6 @@ function _do_base_seo_metatags(): array {
       'description' => 'Drupal projects we have delivered and supported, from government platforms to community organisations, plus the open-source tools that came out of it.',
     ],
   ];
-}
-
-/**
- * Returns a weight that sorts behind every top-level link in a menu.
- */
-function _do_base_menu_trailing_weight(string $menu_name): int {
-  $links = \Drupal::entityTypeManager()->getStorage('menu_link_content')->loadByProperties(['menu_name' => $menu_name]);
-
-  // Seeded so that a menu with no top-level links still yields a weight.
-  $weights = [0];
-
-  foreach ($links as $link) {
-    if ($link instanceof MenuLinkContentInterface && $link->getParentId() === '') {
-      $weights[] = $link->getWeight();
-    }
-  }
-
-  return max($weights) + 1;
-}
-
-/**
- * Adds a menu link to the page behind an alias.
- */
-function _do_base_menu_link_alias(string $menu_name, string $title, string $alias): void {
-  if (Helper::menu()->findItem($menu_name, ['title' => $title]) instanceof MenuLinkContentInterface) {
-    Helper::reporter()->skipped(sprintf('The "%s" link already exists.', $title));
-
-    return;
-  }
-
-  $path = \Drupal::service('path_alias.manager')->getPathByAlias($alias);
-
-  if (!preg_match('#^/node/(\d+)$#', $path, $matches)) {
-    Helper::reporter()->skipped(sprintf('No node is aliased to "%s".', $alias));
-
-    return;
-  }
-
-  // createTree() numbers links from their position in the tree it is handed,
-  // which describes this link alone and so says nothing about where it belongs
-  // among the links already in the menu. Reading the weight first keeps the
-  // link being created out of its own calculation.
-  $weight = _do_base_menu_trailing_weight($menu_name);
-
-  Helper::menu()->createTree($menu_name, [$title => 'entity:node/' . $matches[1]]);
-  Helper::menu()->updateItem($menu_name, ['title' => $title], ['weight' => $weight]);
-
-  Helper::reporter()->created(sprintf('Created the "%s" link.', $title));
 }
 
 /**
