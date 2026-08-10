@@ -29,6 +29,11 @@ class ImageStyleConfigTest extends UnitTestCase {
   protected const FEATURED_STYLE = 'banner_featured';
 
   /**
+   * Machine name of the style behind the divider graphic.
+   */
+  protected const DIVIDER_STYLE = 'divider';
+
+  /**
    * Tests that every style the theme asks for by name is exported.
    */
   #[DataProvider('dataProviderStyleNamedByTheme')]
@@ -65,6 +70,23 @@ class ImageStyleConfigTest extends UnitTestCase {
     $this->assertSame('focal_point', $effect['data']['crop_type']);
     $this->assertGreaterThan(0, $effect['data']['width']);
     $this->assertGreaterThan(0, $effect['data']['height']);
+  }
+
+  /**
+   * Tests that the divider graphic is capped at the size it is drawn at.
+   *
+   * CSS bounds the rendered height, so an uncapped derivative sends pixels the
+   * page never draws. Upscaling a small graphic to the cap blurs it instead.
+   */
+  public function testDividerIsScaledWithinBounds(): void {
+    // Act.
+    $effect = $this->effect(static::DIVIDER_STYLE, 'image_scale');
+
+    // Assert.
+    $this->assertNotNull($effect, 'The divider style does not scale.');
+    $this->assertGreaterThan(0, $effect['data']['width']);
+    $this->assertGreaterThan(0, $effect['data']['height']);
+    $this->assertFalse($effect['data']['upscale']);
   }
 
   /**
