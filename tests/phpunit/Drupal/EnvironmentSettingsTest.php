@@ -279,6 +279,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'] = [
       '^localhost$',
     ];
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 
@@ -354,6 +355,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^localhost$',
     ];
 
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 
@@ -437,6 +439,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'] = [
       '^localhost$',
     ];
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 
@@ -492,6 +495,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^example-site\.docker\.amazee\.io$',
       '^nginx$',
     ];
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 
@@ -546,6 +550,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['trusted_host_patterns'] = [
       '^localhost$',
     ];
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 
@@ -600,6 +605,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^.+\.amazee\.io$',
       '^example1\.com|example2/com$',
     ];
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 
@@ -654,6 +660,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^.+\.amazee\.io$',
       '^example1\.com|example2/com$',
     ];
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 
@@ -708,6 +715,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^.+\.amazee\.io$',
       '^example1\.com|example2/com$',
     ];
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 
@@ -762,6 +770,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^.+\.amazee\.io$',
       '^example1\.com|example2/com$',
     ];
+    $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
   }
 

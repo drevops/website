@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\do_base\Hook;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -21,6 +22,16 @@ use Drupal\schema_metatag\SchemaMetatagManager;
  */
 final class MetatagsAlterHook {
 
+  /**
+   * The point past which a search result stops showing the description.
+   */
+  public const DESCRIPTION_MAX_LENGTH = 155;
+
+  /**
+   * The tags carrying that description.
+   */
+  protected const DESCRIPTION_TAGS = ['description', 'og_description', 'twitter_cards_description'];
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected ConfigFactoryInterface $configFactory,
@@ -36,6 +47,29 @@ final class MetatagsAlterHook {
 
     $this->mirrorSocialText($metatags);
     $this->setSocialImage($metatags, $entity instanceof ContentEntityInterface ? $entity : NULL);
+  }
+
+  /**
+   * Implements hook_metatags_attachments_alter().
+   */
+  #[Hook('metatags_attachments_alter')]
+  public function trimDescriptions(array &$attachments): void {
+    // Tokens are replaced after hook_metatags_alter(), so a description is
+    // still a token when the tags themselves are altered and only reaches its
+    // full length here.
+    foreach ($attachments['#attached']['html_head'] ?? [] as $delta => $element) {
+      if (!in_array($element[1] ?? '', static::DESCRIPTION_TAGS, TRUE)) {
+        continue;
+      }
+
+      $content = $element[0]['#attributes']['content'] ?? NULL;
+
+      if (!is_string($content) || mb_strlen($content) <= static::DESCRIPTION_MAX_LENGTH) {
+        continue;
+      }
+
+      $attachments['#attached']['html_head'][$delta][0]['#attributes']['content'] = Unicode::truncate($content, static::DESCRIPTION_MAX_LENGTH, TRUE, TRUE);
+    }
   }
 
   /**

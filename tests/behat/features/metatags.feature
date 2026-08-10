@@ -62,6 +62,30 @@ Feature: Page content metatags
     And the response should contain "<meta name=\"twitter:card\" content=\"summary_large_image\""
     And the response should contain "<meta name=\"twitter:image\" content=\""
 
+  @api
+  Scenario: Description is cut to the length a search result shows
+    # The summary carries no commas because the content step reads a comma as a
+    # separator between field values and would store only the text before it.
+    Given the following civictheme_page content:
+      | title                    | status | field_c_n_summary                                                                                                                                                                                                                |
+      | [TEST] Long Summary Page | 1      | [TEST] This summary runs well past the point at which a search result stops showing it so the tag has to be cut down before it is rendered rather than left at whatever length an editor happened to write in the field it uses. |
+    When I visit the "civictheme_page" content page with the title "[TEST] Long Summary Page"
+    Then the response should contain "content=\"[TEST] This summary runs well past the point at which a search result stops showing it so the tag has to be"
+    # The cut lands on a word boundary, so the tail of the summary is dropped
+    # and the tag is left ending in an ellipsis.
+    And the response should contain "…\""
+    And the response should not contain "in the field it uses"
+
+  @api
+  Scenario: Page carries breadcrumb structured data
+    Given the following civictheme_page content:
+      | title                    | status |
+      | [TEST] Breadcrumb Page   | 1      |
+    When I visit the "civictheme_page" content page with the title "[TEST] Breadcrumb Page"
+    Then the response should contain "\"@type\": \"WebPage\""
+    And the response should contain "\"@type\": \"BreadcrumbList\""
+    And the response should contain "\"@type\": \"ListItem\""
+
   @api @blog
   Scenario: Blog post is marked up as an article for search engines
     Given the following blog content:

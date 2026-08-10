@@ -296,6 +296,78 @@ class MetatagsAlterHookTest extends DoBaseKernelTestBase {
   }
 
   /**
+   * Tests that an over-long description is cut to what a result shows.
+   */
+  #[DataProvider('dataProviderLongDescriptionIsTrimmed')]
+  public function testLongDescriptionIsTrimmed(string $tag): void {
+    // Prepare.
+    $description = '[TEST] ' . str_repeat('word ', 60);
+    $attachments = $this->headAttachments([$tag => $description]);
+
+    // Act.
+    $this->hook->trimDescriptions($attachments);
+
+    // Assert.
+    $trimmed = $attachments['#attached']['html_head'][0][0]['#attributes']['content'];
+    $this->assertLessThanOrEqual(MetatagsAlterHook::DESCRIPTION_MAX_LENGTH, mb_strlen($trimmed));
+    $this->assertStringEndsWith('…', $trimmed);
+    $this->assertStringStartsWith('[TEST] word', $trimmed);
+  }
+
+  /**
+   * Data provider for testLongDescriptionIsTrimmed.
+   */
+  public static function dataProviderLongDescriptionIsTrimmed(): \Iterator {
+    yield 'search result' => ['description'];
+    yield 'open graph' => ['og_description'];
+    yield 'twitter' => ['twitter_cards_description'];
+  }
+
+  /**
+   * Tests that a description already short enough is left alone.
+   */
+  public function testShortDescriptionIsLeftAlone(): void {
+    // Prepare.
+    $description = '[TEST] Short enough to show in full.';
+    $attachments = $this->headAttachments(['description' => $description]);
+
+    // Act.
+    $this->hook->trimDescriptions($attachments);
+
+    // Assert.
+    $this->assertSame($description, $attachments['#attached']['html_head'][0][0]['#attributes']['content']);
+  }
+
+  /**
+   * Tests that tags other than the descriptions are left alone.
+   */
+  public function testOtherTagsAreLeftAlone(): void {
+    // Prepare.
+    $title = '[TEST] ' . str_repeat('word ', 60);
+    $attachments = $this->headAttachments(['title' => $title]);
+
+    // Act.
+    $this->hook->trimDescriptions($attachments);
+
+    // Assert.
+    $this->assertSame($title, $attachments['#attached']['html_head'][0][0]['#attributes']['content']);
+  }
+
+  /**
+   * Tests that attachments carrying no head elements are handled.
+   */
+  public function testAttachmentsWithoutHeadElementsAreHandled(): void {
+    // Prepare.
+    $attachments = [];
+
+    // Act.
+    $this->hook->trimDescriptions($attachments);
+
+    // Assert.
+    $this->assertSame([], $attachments);
+  }
+
+  /**
    * Tests that an article's structured data carries the resolved image.
    *
    * Only the Open Graph and Twitter tags get a host prepended for them, so an
@@ -350,6 +422,28 @@ class MetatagsAlterHookTest extends DoBaseKernelTestBase {
   protected function alter(array &$metatags, ?NodeInterface $node = NULL): void {
     $context = ['entity' => $node];
     $this->hook->alter($metatags, $context);
+  }
+
+  /**
+   * Builds page attachments carrying one rendered meta tag per given value.
+   *
+   * @param array $tags
+   *   Tag content keyed by metatag name.
+   *
+   * @return array
+   *   The attachments, shaped as metatag hands them over.
+   */
+  protected function headAttachments(array $tags): array {
+    $attachments = [];
+
+    foreach ($tags as $name => $content) {
+      $attachments['#attached']['html_head'][] = [
+        ['#tag' => 'meta', '#attributes' => ['name' => $name, 'content' => $content]],
+        $name,
+      ];
+    }
+
+    return $attachments;
   }
 
   /**

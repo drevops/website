@@ -11,4 +11,6 @@ tags:
   description: '[node:summary]'
   og_updated_time: '[node:changed:custom:c]'
   og_url: '[node:url]'
+  schema_web_page_breadcrumb: 'Yes'
+  schema_web_page_type: WebPage
   title: '[node:title] | [site:name]'

@@ -1,0 +1,68 @@
+# Front-end performance
+
+This document describes what the site does to keep pages light and stable while they load. Meta tags and structured data are covered in [SEO](seo.md).
+
+## Images always go through an image style
+
+An image style does two things here: it caps the pixel dimensions, and it converts to WebP. Both matter, because the source files are large brand renders and a 4K PNG hero is several megabytes.
+
+| Style | Used for |
+|---|---|
+| `banner_background` | The banner background: scaled to 1920 wide, converted to WebP |
+| `civictheme_*` | Cards, campaigns and slides: cropped by the CivicTheme sizes, converted to WebP |
+| `wide` | The banner featured image |
+| `social_share` | Share cards, deliberately **not** converted, because some social crawlers still handle WebP badly |
+
+CivicTheme resolves both banner images with no image style at all, which yields the URL of the original upload. `_drevops_banner_apply_image_styles()` re-resolves them. It covers the block field and the node field, because the node's value wins when both are set.
+
+When adding an image style that renders photographic content, copy the `image_convert` effect from `image.style.large.yml`. A style with only a crop effect ships whatever format was uploaded.
+
+## Images carry their own dimensions
+
+Without `width` and `height` a browser cannot reserve space for an image, so every image on the page moves the content under it as it arrives.
+
+The image component accepts both, but nothing that includes it passes them: the props are built from a media entity, which carries neither. `components/01-atoms/image/image.twig` overrides the CivicTheme component and fills them in through the `do_image_dimensions()` Twig function.
+
+That function works from the source file and the style's own transform rather than measuring the derivative, so the numbers are right even on the request that generates that derivative for the first time. Vectors have no raster size, so their ratio is read from the `viewBox`; only the ratio matters, since CSS decides the rendered size.
+
+Components are included from Twig rather than rendered through a render element, so there is no preprocess step and no `#pre_render` to hook. A Twig function called from the template is the only interception point.
+
+## Overriding a CivicTheme component
+
+Drupal matches components by name within an extension, so a same-named component in this theme is a new component rather than an override. The `replaces:` key in the `.component.yml` is what makes it an override:
+
+```yaml
+name: Image
+replaces: civictheme:image
+```
+
+Without it the theme's version is simply never used, and the rendered markup keeps saying `data-component-id="civictheme:image"`.
+
+## Fonts are served from this origin
+
+Lexend and Rubik ship in `assets/fonts/` and are declared in `components/00-base/fonts/fonts.scss`. Nothing is fetched from `fonts.googleapis.com`, which is why the CSP no longer allows it.
+
+They are declared by hand rather than through CivicTheme's `$ct-fonts` map, because the generator that map feeds emits one `@font-face` per weight and supports neither the variable weight ranges these faces ship as nor the `unicode-range` and `font-display` descriptors a self-hosted face needs. The map still names the families, with an empty `types` list so it emits nothing.
+
+Only the Latin subsets are preloaded, by `_drevops_attach_font_preloads()`. The extended subsets are needed by a small minority of pages, and a preload the page does not use is a wasted request.
+
+Replacing a face means replacing the `woff2` files and the `unicode-range` values together. The ranges are Google's own subsetting boundaries and are what keeps a visitor reading only Latin text from downloading the extended file.
+
+## The banner background is preloaded
+
+The banner paints its background from CSS, so the browser cannot discover the file until the stylesheet has been fetched and parsed. On the pages carrying one, that background is the largest contentful paint.
+
+`_do_base_attach_banner_preload()` emits a `rel="preload"` for it. The URL has to be the one the stylesheet asks for, or the file is fetched twice: the preload resolves the same image style, and skips the whole thing when the file has no derivative.
+
+## Verifying a change
+
+```bash
+ahoy test-kernel -- --filter=ImageDimensionsExtensionTest
+```
+
+For the rendered end, check that a page's images carry `width` and `height`, that no request goes to `fonts.googleapis.com`, and that image URLs contain `/styles/`. Lighthouse under mobile emulation is the quickest way to see the three metrics these affect: largest contentful paint, cumulative layout shift, and total byte weight.
+
+## Related
+
+- [SEO](seo.md) - meta tags, share cards and structured data
+- [Sitemap](sitemap.md) - XML sitemap coverage and generation

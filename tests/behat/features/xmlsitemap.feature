@@ -24,6 +24,18 @@ Feature: XML sitemap
     And the response should contain "sitemap-indexed-page"
     And the response should not contain "sitemap-excluded-page"
 
+  @api
+  Scenario: Sitemap lists URLs on the canonical host
+    Given I run drush "xmlsitemap:rebuild" "--yes"
+    And I am an anonymous user
+    When I go to "sitemap.xml"
+    Then the response status code should be 200
+    # Cron regenerates the sitemap with no request to take a host from, so the
+    # host is stated in settings. Any other host makes every listed URL a
+    # redirect, because that is what the site serves.
+    And the response should contain "<loc>https://www.drevops.com/"
+    And the response should not contain "<loc>https://drevops.com/"
+
   @api @blog
   Scenario: Sitemap lists published blog posts only
     Given the following "blog" content:

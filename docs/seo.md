@@ -11,7 +11,7 @@ This document describes the meta tags, share cards and structured data the site 
 | `metatag_twitter_cards` | `twitter:*` tags read by X |
 | `metatag_dc` | Dublin Core tags |
 | `schema_metatag` | Renders JSON-LD structured data through the same metatag defaults |
-| `schema_organization`, `schema_web_site`, `schema_article` | The three Schema.org types this site publishes |
+| `schema_organization`, `schema_web_site`, `schema_article`, `schema_web_page` | The Schema.org types this site publishes |
 | `pathauto` | Readable, stable URL aliases |
 | `redirect` | Keeps old URLs working after an alias changes |
 | `redirect_404` | Records 404 paths at `/admin/config/search/redirect/404` so real lost traffic can be turned into redirects |
@@ -25,7 +25,7 @@ Deliberately not installed: `yoast_seo` (a heavy analyser on every node form), `
 - `title`, `description` and `canonical_url`, from the metatag defaults.
 - The full Open Graph set: `og:site_name`, `og:type`, `og:url`, `og:title`, `og:description`, `og:image` with `og:image:width`, `og:image:height` and `og:image:alt`.
 - The full Twitter Card set: `twitter:card`, `twitter:site`, `twitter:title`, `twitter:description`, `twitter:image` and `twitter:image:alt`.
-- A JSON-LD `@graph` carrying `Organization` and `WebSite`, plus `Article` on blog posts.
+- A JSON-LD `@graph` carrying `Organization` and `WebSite`, plus `WebPage` with its `BreadcrumbList` on nodes and `Article` on blog posts.
 
 `twitter:card` is `summary_large_image` site-wide. Any other value makes X render a small square thumbnail, which is why the share image is produced at 1200x630.
 
@@ -40,6 +40,7 @@ Configuration holds the values that genuinely differ between pages:
 | `node` | Node title, description and URL |
 | `node__blog` | `og:type: article`, the article timestamps and the `Article` structured data |
 | `node__civictheme_page`, `node__project` | The summary field the description is taken from |
+| `node` | `WebPage` and its breadcrumb, alongside the node title, description and URL |
 
 The social **title and description are not configured**. `MetatagsAlterHook` derives them from the `title` and `description` tags, and the Twitter pair from the Open Graph pair. This keeps one source of truth for the wording, and it is also the only way those tags reach the front page: `metatag_get_default_tags()` treats the front page, 403 and 404 as special pages and stops after the global and special defaults, never reading the entity or bundle defaults.
 
@@ -53,6 +54,16 @@ An editor who sets `og:image` by hand on a node keeps it: the hook leaves the wh
 A thumbnail is passed over in favour of the fallback when no image toolkit can derive it (the image field accepts SVG) or when the file is recorded in the database but absent from the environment.
 
 The `Article` image in the structured data is filled from the same resolved value, so it carries the same fallbacks. It is set as an `ImageObject` rather than a bare URL because `SchemaImageObjectBase::output()` drops any value without a `url` key.
+
+## Title and description length
+
+A search result shows roughly 60 characters of the title and 155 of the description, and cuts whatever is past that. Two things keep the tags inside those bounds.
+
+`MetatagsAlterHook::trimDescriptions()` cuts `description`, `og:description` and `twitter:description` to 155 characters on a word boundary. It runs on `hook_metatags_attachments_alter()` rather than `hook_metatags_alter()`, because tokens are still unreplaced when the tags themselves are altered: at that point a description is the literal `[node:field_c_n_summary:value]` and there is nothing to measure. All three tags get the same treatment so the wording stays identical wherever it appears.
+
+That is a floor, not a substitute for writing to length. Pages whose derived wording was too long, too short, or missing carry an explicit value in `field_n_metatags`, written once by `do_base_deploy_set_seo_metatags()`. The hook replaces a tag only when the value it finds falls outside those bounds, so wording an editor writes later is left alone and a repeat deployment is a no-op.
+
+The titles it writes carry qualifiers the visible heading does not need: a page headed `GovCMS` is titled `GovCMS Development and Migration`, because the heading has a whole page for context and a search result has one line. They use `[site:name]` rather than a literal brand, matching the `node` default they replace.
 
 ## Image assets
 
