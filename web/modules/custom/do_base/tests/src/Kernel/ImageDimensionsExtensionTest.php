@@ -89,7 +89,7 @@ class ImageDimensionsExtensionTest extends DoBaseKernelTestBase {
    */
   public function testConvertedDerivativeIsTracedToItsSource(): void {
     // Prepare.
-    $this->createScaleStyle('do_test_convert', 200);
+    $this->createScaleStyle('do_test_convert', 200, 'webp');
 
     // Act.
     $dimensions = $this->extension->dimensions($this->publicUrl('styles/do_test_convert/public/do_test/source.png.webp'));
@@ -193,13 +193,25 @@ class ImageDimensionsExtensionTest extends DoBaseKernelTestBase {
 
   /**
    * Creates an image style that scales to a given width.
+   *
+   * @param string $name
+   *   Machine name of the style.
+   * @param int $width
+   *   Width to scale to.
+   * @param string|null $extension
+   *   Extension to convert to, or NULL to leave the format alone.
    */
-  protected function createScaleStyle(string $name, int $width): void {
+  protected function createScaleStyle(string $name, int $width, ?string $extension = NULL): void {
     $style = ImageStyle::create(['name' => $name, 'label' => $name]);
     $style->addImageEffect([
       'id' => 'image_scale',
       'data' => ['width' => $width, 'height' => NULL, 'upscale' => FALSE],
     ]);
+
+    if ($extension !== NULL) {
+      $style->addImageEffect(['id' => 'image_convert', 'data' => ['extension' => $extension]]);
+    }
+
     $style->save();
   }
 

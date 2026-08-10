@@ -870,7 +870,7 @@ function _do_base_set_seo_metatags(NodeInterface $node, array $tags): void {
     // Wording already inside the length a result shows is left alone, whoever
     // wrote it. That also makes a repeat deployment a no-op, since everything
     // written here is inside those bounds.
-    if (isset($current[$tag]) && _do_base_seo_metatag_fits($tag, (string) $current[$tag])) {
+    if (isset($current[$tag]) && _do_base_seo_metatag_fits($tag, (string) $current[$tag], $node)) {
       continue;
     }
 
@@ -896,12 +896,16 @@ function _do_base_set_seo_metatags(NodeInterface $node, array $tags): void {
  *   The metatag name.
  * @param string $value
  *   The value, which may still carry tokens.
+ * @param \Drupal\node\NodeInterface $node
+ *   The node the value belongs to, giving its tokens something to resolve
+ *   against. A value is measured rendered, because that is the length a
+ *   search result has to fit.
  *
  * @return bool
  *   TRUE when the value needs no replacing.
  */
-function _do_base_seo_metatag_fits(string $tag, string $value): bool {
-  $length = mb_strlen(str_replace('[site:name]', (string) \Drupal::config('system.site')->get('name'), $value));
+function _do_base_seo_metatag_fits(string $tag, string $value, NodeInterface $node): bool {
+  $length = mb_strlen(\Drupal::token()->replace($value, ['node' => $node], ['clear' => TRUE]));
 
   // The lengths a search result shows before it cuts the value off.
   return match ($tag) {

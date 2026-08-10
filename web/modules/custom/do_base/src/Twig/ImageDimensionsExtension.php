@@ -20,6 +20,13 @@ use Twig\TwigFunction;
  */
 final class ImageDimensionsExtension extends AbstractExtension {
 
+  /**
+   * Dimensions already resolved this request, keyed by path.
+   *
+   * @var array<string, array<string, int>>
+   */
+  protected array $resolved = [];
+
   public function __construct(
     private readonly ImageFactory $imageFactory,
     private readonly StreamWrapperManagerInterface $streamWrapperManager,
@@ -80,6 +87,13 @@ final class ImageDimensionsExtension extends AbstractExtension {
    *   Associative array of 'width' and 'height', or empty.
    */
   protected function managedFile(string $relative): array {
+    // A listing renders the same image style over and over, and each miss here
+    // costs opening and parsing a file.
+    if (isset($this->resolved[$relative])) {
+      return $this->resolved[$relative];
+    }
+
+    $key = $relative;
     $style = NULL;
 
     if (preg_match('~^styles/([^/]+)/[^/]+/(.+)$~', $relative, $matches) === 1) {
@@ -110,13 +124,13 @@ final class ImageDimensionsExtension extends AbstractExtension {
       }
 
       if (empty($dimensions['width']) || empty($dimensions['height'])) {
-        return [];
+        return $this->resolved[$key] = [];
       }
 
-      return $dimensions;
+      return $this->resolved[$key] = $dimensions;
     }
 
-    return [];
+    return $this->resolved[$key] = [];
   }
 
   /**
@@ -137,7 +151,13 @@ final class ImageDimensionsExtension extends AbstractExtension {
       return [];
     }
 
-    $file = $this->appRoot . '/' . $path;
+    // A path is only ever read once it is known to sit under the application
+    // root, so that a traversal in the URL cannot reach a file outside it.
+    $file = realpath($this->appRoot . '/' . $path);
+    if ($file === FALSE || !str_starts_with($file, $this->appRoot . '/')) {
+      return [];
+    }
+
     if (!is_file($file) || !is_readable($file)) {
       return [];
     }
