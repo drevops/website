@@ -11,8 +11,8 @@ Feature: Our work page
     When I go to "/work"
     Then the response status code should be 200
     And I should see the text "Work you can go and look at."
-    And I should see the text "The work, not the pitch."
-    And I should see the text "Newest work first."
+    And I should see the text "Client work"
+    And I should see the text "Open Source work"
     # The link leads the menu, so the first item is the one that must point here.
     And the element ".ct-navigation__menu .ct-menu__item--level-0:first-child .ct-menu__item__link" with the attribute "href" and the value "/work" should exist
 
@@ -37,8 +37,10 @@ Feature: Our work page
     And I am an anonymous user
     When I go to "/work"
     Then the response status code should be 200
-    # Asserting the page fills rather than the total, so projects already on the
-    # site cannot change the outcome.
-    And the element ".ct-layout__main" should contain 12 elements matching ".ct-promo-card"
+    # The page carries more than one list, so the count is scoped to the first
+    # one - the paginated list of client projects - rather than to the whole
+    # main region. Asserting the page fills rather than the total keeps projects
+    # already on the site from changing the outcome.
+    And the element "[data-component-id='civictheme:list']" should contain 12 elements matching ".ct-promo-card"
     And should see a ".ct-pagination__items" element
     And I should not see the text "[TEST] Our work draft"
