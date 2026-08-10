@@ -75,7 +75,7 @@ function _drevops_banner_apply_image_styles(array &$variables, FieldableEntityIn
   $featured = $featured ?: civictheme_get_field_value($block, 'field_c_b_featured_image', TRUE, build: $variables);
 
   if ($featured instanceof MediaInterface) {
-    $variables['featured_image'] = civictheme_media_image_get_variables($featured, 'wide');
+    $variables['featured_image'] = civictheme_media_image_get_variables($featured, 'banner_featured');
   }
 }
 
