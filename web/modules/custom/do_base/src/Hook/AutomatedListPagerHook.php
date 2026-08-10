@@ -8,7 +8,6 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\views\Plugin\views\pager\PagerPluginBase;
-use Drupal\views\Plugin\ViewsPluginManager;
 use Drupal\views\ViewExecutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -47,7 +46,6 @@ final class AutomatedListPagerHook {
 
   public function __construct(
     protected RequestStack $requestStack,
-    protected ViewsPluginManager $viewsPluginManager,
     protected PagerManagerInterface $pagerManager,
   ) {}
 
@@ -56,23 +54,31 @@ final class AutomatedListPagerHook {
    */
   #[Hook('civictheme_automated_list_view_alter')]
   public function alter(ViewExecutable $view): void {
-    $pager = $view->display_handler->getOption('pager');
+    $options = $view->display_handler->getOption('pager');
 
-    if (!is_array($pager) || !isset($pager['type']) || !isset($pager['options']['id'])) {
+    if (!is_array($options) || !isset($options['options']['id'])) {
       return;
     }
 
+    $pager = $view->display_handler->getPlugin('pager');
+
     // A list showing a fixed number of items has no pager to keep apart, and
     // an id spent on it would leave a dead slot in every URL on the page.
-    if (!$this->paginates((string) $pager['type'])) {
+    if (!$pager instanceof PagerPluginBase || !$pager->usePager()) {
       return;
     }
 
     $this->restoreRequestedPages();
 
-    $pager['options']['id'] = $this->allocate($this->listKey($view));
+    $id = $this->allocate($this->listKey($view));
 
-    $view->display_handler->setOption('pager', $pager);
+    // A display builds its pager plugin once and never rebuilds it from its
+    // options, so the id has to reach the instance the view will run with.
+    // The display's own copy is moved with it to keep the two in step.
+    $pager->options['id'] = $id;
+    $options['options']['id'] = $id;
+
+    $view->display_handler->setOption('pager', $options);
   }
 
   /**
@@ -145,23 +151,6 @@ final class AutomatedListPagerHook {
     }
 
     return 'paragraph:' . $paragraph->id();
-  }
-
-  /**
-   * Tells whether a pager plugin splits results across pages.
-   */
-  protected function paginates(string $type): bool {
-    if (!$this->viewsPluginManager->hasDefinition($type)) {
-      return FALSE;
-    }
-
-    // A throwaway instance rather than the display's own, because a display
-    // keeps the pager plugin it builds and never re-reads its options: one
-    // built through the display would freeze its element id at the value the
-    // options carry right now.
-    $plugin = $this->viewsPluginManager->createInstance($type);
-
-    return $plugin instanceof PagerPluginBase && $plugin->usePager();
   }
 
 }

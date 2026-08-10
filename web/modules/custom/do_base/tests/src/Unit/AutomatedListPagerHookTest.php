@@ -10,7 +10,6 @@ use Drupal\do_base\Hook\AutomatedListPagerHook;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\Plugin\views\pager\PagerPluginBase;
-use Drupal\views\Plugin\ViewsPluginManager;
 use Drupal\views\ViewExecutable;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -48,6 +47,11 @@ class AutomatedListPagerHookTest extends DoBaseUnitTestBase {
    * @var array<int, int>
    */
   protected array $restored = [];
+
+  /**
+   * Whether the pager plugin under test splits results across pages.
+   */
+  protected bool $paginates = TRUE;
 
   /**
    * Tests that each list is given the next free element id.
@@ -152,9 +156,8 @@ class AutomatedListPagerHookTest extends DoBaseUnitTestBase {
   public static function dataProviderUnreadablePagerIsLeftAlone(): \Iterator {
     yield 'no pager' => [NULL];
     yield 'not an array' => ['full'];
-    yield 'no type' => [['options' => ['id' => 0]]];
+    yield 'no plugin behind it' => [['options' => ['id' => 0]]];
     yield 'no element id' => [['type' => 'full', 'options' => ['items_per_page' => 12]]];
-    yield 'unknown type' => [['type' => 'nonexistent', 'options' => ['id' => 0]]];
   }
 
   /**
@@ -241,12 +244,7 @@ class AutomatedListPagerHookTest extends DoBaseUnitTestBase {
    *   Pagers already registered for the request, keyed by element id.
    */
   protected function hook(bool $paginates = TRUE, ?RequestStack $requests = NULL, array $existing = []): AutomatedListPagerHook {
-    $plugin = $this->createMock(PagerPluginBase::class);
-    $plugin->method('usePager')->willReturn($paginates);
-
-    $plugins = $this->createMock(ViewsPluginManager::class);
-    $plugins->method('hasDefinition')->willReturnCallback(static fn(string $type): bool => in_array($type, ['full', 'mini', 'some'], TRUE));
-    $plugins->method('createInstance')->willReturn($plugin);
+    $this->paginates = $paginates;
 
     $pagers = $this->createMock(PagerManagerInterface::class);
     $pagers->method('getPager')->willReturnCallback(static fn(int $element): ?Pager => $existing[$element] ?? NULL);
@@ -257,7 +255,7 @@ class AutomatedListPagerHookTest extends DoBaseUnitTestBase {
       return $pager;
     });
 
-    return new AutomatedListPagerHook($requests ?? $this->requests('/page'), $plugins, $pagers);
+    return new AutomatedListPagerHook($requests ?? $this->requests('/page'), $pagers);
   }
 
   /**
@@ -279,9 +277,19 @@ class AutomatedListPagerHookTest extends DoBaseUnitTestBase {
    *   The pager option the display reports, defaulting to the exported one.
    */
   protected function view(?string $paragraph_id, mixed $pager = self::PAGER): ViewExecutable {
+    $plugin = is_array($pager) && isset($pager['type']) ? $this->createMock(PagerPluginBase::class) : NULL;
+
+    if ($plugin instanceof PagerPluginBase) {
+      $plugin->method('usePager')->willReturn($this->paginates);
+    }
+
     $display = $this->createMock(DisplayPluginBase::class);
     $display->method('getOption')->willReturnCallback(static fn(string $option): mixed => $option === 'pager' ? $pager : NULL);
-    $display->method('setOption')->willReturnCallback(function (string $option, mixed $value): mixed {
+    $display->method('getPlugin')->willReturnCallback(static fn(string $type): mixed => $type === 'pager' ? $plugin : NULL);
+    $display->method('setOption')->willReturnCallback(function (string $option, mixed $value) use ($plugin): mixed {
+      // The plugin the view runs with carries the id; the display's copy is
+      // asserted alongside it so the two cannot drift.
+      $this->assertSame($value['options']['id'], $plugin?->options['id']);
       $this->assigned[] = $value['options']['id'];
 
       return $value;
