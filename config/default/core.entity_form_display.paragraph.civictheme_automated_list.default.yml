@@ -20,6 +20,7 @@ dependencies:
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_link_below
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_site_sections
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_topics
+    - field.field.paragraph.civictheme_automated_list.field_c_p_list_topics_from_page
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_type
     - field.field.paragraph.civictheme_automated_list.field_c_p_theme
     - field.field.paragraph.civictheme_automated_list.field_c_p_title
@@ -329,6 +330,13 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_c_p_list_topics_from_page:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_c_p_list_type:
     type: options_select

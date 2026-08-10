@@ -37,15 +37,32 @@ function _drevops_node_add_topic_tags(NodeInterface $node, array &$variables): v
     return;
   }
 
-  $topics = civictheme_get_referenced_entity_labels($node, 'field_c_n_topics', $variables);
+  if (!$node->hasField('field_c_n_topics')) {
+    return;
+  }
 
-  if (empty($topics)) {
+  $tags = [];
+
+  foreach ($node->get('field_c_n_topics')->referencedEntities() as $term) {
+    if (!$term->access('view')) {
+      continue;
+    }
+
+    // A tag with a URL renders as a link, which is what gives the post a
+    // second inbound route that does not shift as the listing paginates.
+    $tags[] = [
+      'content' => (string) $term->label(),
+      'url' => $term->toUrl()->toString(),
+    ];
+  }
+
+  if ($tags === []) {
     return;
   }
 
   $variables['content'][] = [
     '#theme' => 'civictheme_tag_list',
-    '#tags' => array_map(static fn($label): array => ['content' => (string) $label], $topics),
+    '#tags' => $tags,
     '#vertical_spacing' => 'both',
     '#weight' => 100,
   ];
