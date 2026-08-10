@@ -887,7 +887,9 @@ function _do_base_set_seo_metatags(NodeInterface $node, array $tags): void {
  *   TRUE when the value needs no replacing.
  */
 function _do_base_seo_metatag_fits(string $tag, string $value, NodeInterface $node): bool {
-  $length = mb_strlen(\Drupal::token()->replace($value, ['node' => $node], ['clear' => TRUE]));
+  // Plain, because a search result shows characters rather than markup: an
+  // escaped ampersand would otherwise count as five.
+  $length = mb_strlen(\Drupal::token()->replacePlain($value, ['node' => $node], ['clear' => TRUE]));
 
   // The lengths a search result shows before it cuts the value off.
   return match ($tag) {
