@@ -33,5 +33,16 @@ Feature: Content Security Policy
     And the response header "Content-Security-Policy" should contain the value "https://www.googletagmanager.com"
     And the response header "Content-Security-Policy" should contain the value "https://www.recaptcha.net"
     And the response header "Content-Security-Policy" should contain the value "https://www.youtube.com"
-    And the response header "Content-Security-Policy" should contain the value "https://fonts.gstatic.com"
     And the response header "Content-Security-Policy" should contain the value "https://www.google-analytics.com"
+
+  @api
+  Scenario: CSP allows no external font source
+    Given I am an anonymous user
+    When I go to the homepage
+    Then the response status code should be 200
+    # Both faces are served from this origin, so a policy that still reaches
+    # out to Google is one a stylesheet could quietly start using again. There
+    # is no "font-src" to assert: the module omits a directive that matches
+    # "default-src", so fonts fall through to the "'self'" asserted above.
+    And the response header "Content-Security-Policy" should not contain the value "https://fonts.gstatic.com"
+    And the response header "Content-Security-Policy" should not contain the value "https://fonts.googleapis.com"

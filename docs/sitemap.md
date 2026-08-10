@@ -20,6 +20,12 @@ A bundle is included only when an `xmlsitemap.settings.<entity_type>.<bundle>` c
 
 Only `xmlsitemap` itself is enabled. The `xmlsitemap_custom` and `xmlsitemap_engines` submodules are deliberately left off - the front page is covered natively by `frontpage_priority` and `frontpage_changefreq`, and pinging search engines on every change is not wanted.
 
+## The host the URLs carry
+
+Cron regenerates the sitemap, and cron has no request to take a host from, so `xmlsitemap` keeps its own base URL. Left unset it falls back to a state value seeded at install time from whichever host ran the installer, and state is not exported configuration, so that value never travels with the code and never shows up in a diff.
+
+`web/sites/default/includes/modules/settings.xmlsitemap.php` states it instead. It has to match the host in the canonical tags and in `robots.txt`, because anything else makes every URL in the sitemap a redirect to the host the site actually serves.
+
 ## Front page de-duplication
 
 `system.site:page.front` points at a node that has no path alias, so that node would otherwise be listed twice: once as `/` and once under its internal path. `do_base_xmlsitemap_link_alter()` drops the second entry, because two sitemap URLs serving identical content read as duplicate content to search engines.

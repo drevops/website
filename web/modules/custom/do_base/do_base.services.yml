@@ -4,6 +4,11 @@ services:
     arguments: ['@theme.manager']
     tags:
       - { name: twig.extension }
+  do_base.twig.image_dimensions:
+    class: Drupal\do_base\Twig\ImageDimensionsExtension
+    arguments: ['@image.factory', '@stream_wrapper_manager', '@entity_type.manager', '%app.root%']
+    tags:
+      - { name: twig.extension }
   do_base.theme_color_subscriber:
     class: Drupal\do_base\EventSubscriber\ThemeColorSubscriber
     arguments: ['@class_resolver', '@theme_handler']
