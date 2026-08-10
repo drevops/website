@@ -38,9 +38,6 @@ function _drevops_node_add_topic_tags(NodeInterface $node, array &$variables): v
     return;
   }
 
-  // The helper access-checks the terms and records them against the render
-  // array, so the tag list is invalidated when a topic is renamed or its
-  // access changes. Reading the field directly would drop both.
   $terms = civictheme_get_field_referenced_entities($node, 'field_c_n_topics', $variables);
 
   if (empty($terms)) {
@@ -50,8 +47,6 @@ function _drevops_node_add_topic_tags(NodeInterface $node, array &$variables): v
   $tags = [];
 
   foreach ($terms as $term) {
-    // A tag with a URL renders as a link, which is what gives the post a
-    // second inbound route that does not shift as the listing paginates.
     $tags[] = [
       'content' => Xss::filter((string) $term->label()),
       'url' => $term->toUrl()->toString(),
