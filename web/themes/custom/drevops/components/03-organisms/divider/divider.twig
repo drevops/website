@@ -25,7 +25,7 @@
 <div class="ct-divider {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
   {% block image %}
     {{ include('civictheme:image', {
-      theme: theme,
+      theme: theme|default('light'),
       url: image.url,
       alt: '',
       attributes: create_attribute({'role': 'presentation'}),
