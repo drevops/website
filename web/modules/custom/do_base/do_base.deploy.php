@@ -16,7 +16,6 @@ use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\do_base\Hook\MetatagsAlterHook;
 use Drupal\drupal_helpers\Helper;
 use Drupal\drupal_helpers\Report\Reporter;
 use Drupal\entity_usage\RecreateTrackingDataForFieldQueuer;
@@ -904,9 +903,10 @@ function _do_base_set_seo_metatags(NodeInterface $node, array $tags): void {
 function _do_base_seo_metatag_fits(string $tag, string $value): bool {
   $length = mb_strlen(str_replace('[site:name]', (string) \Drupal::config('system.site')->get('name'), $value));
 
+  // The lengths a search result shows before it cuts the value off.
   return match ($tag) {
     'title' => $length >= 30 && $length <= 60,
-    'description' => $length >= 70 && $length <= MetatagsAlterHook::DESCRIPTION_MAX_LENGTH,
+    'description' => $length >= 70 && $length <= 155,
     default => TRUE,
   };
 }

@@ -57,13 +57,15 @@ The `Article` image in the structured data is filled from the same resolved valu
 
 ## Title and description length
 
-A search result shows roughly 60 characters of the title and 155 of the description, and cuts whatever is past that. Two things keep the tags inside those bounds.
+A search result shows roughly 60 characters of the title and 155 of the description, and cuts whatever is past that.
 
-`MetatagsAlterHook::trimDescriptions()` cuts `description`, `og:description` and `twitter:description` to 155 characters on a word boundary. It runs on `hook_metatags_attachments_alter()` rather than `hook_metatags_alter()`, because tokens are still unreplaced when the tags themselves are altered: at that point a description is the literal `[node:field_c_n_summary:value]` and there is nothing to measure. All three tags get the same treatment so the wording stays identical wherever it appears.
+Nothing trims a tag at render time. A description cut by a rule rather than by an author breaks mid-sentence and reads worse than a description written to fit, and the tag it produces is nobody's wording. Pages that need a shorter or a different one carry it explicitly in `field_n_metatags`, written by `do_base_deploy_set_seo_metatags()` from the values in `_do_base_seo_metatags()`.
 
-That is a floor, not a substitute for writing to length. Pages whose derived wording was too long, too short, or missing carry an explicit value in `field_n_metatags`, written once by `do_base_deploy_set_seo_metatags()`. The hook replaces a tag only when the value it finds falls outside those bounds, so wording an editor writes later is left alone and a repeat deployment is a no-op.
+That hook replaces a tag only when the value it finds falls outside the lengths above, so wording an editor writes later is left alone and a repeat deployment is a no-op. Everything it writes is inside those lengths, which is what makes the second run do nothing.
 
 The titles it writes carry qualifiers the visible heading does not need: a page headed `GovCMS` is titled `GovCMS Development and Migration`, because the heading has a whole page for context and a search result has one line. They use `[site:name]` rather than a literal brand, matching the `node` default they replace.
+
+A page not listed there falls back to `[node:field_c_n_summary:value]`, which is as long as the summary an editor wrote. Adding a page to `_do_base_seo_metatags()` is the way to fix that, and it is worth checking a new page's rendered description against 155 characters rather than assuming the summary happens to fit.
 
 ## Image assets
 
