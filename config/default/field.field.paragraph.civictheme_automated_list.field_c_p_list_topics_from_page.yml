@@ -12,7 +12,7 @@ bundle: civictheme_automated_list
 label: 'Use topics of the current page'
 description: 'Lists content sharing a topic with the page this list is placed on, and leaves that page out. Turning this on ignores the Topics chosen below.'
 required: false
-translatable: true
+translatable: false
 default_value:
   -
     value: 0
