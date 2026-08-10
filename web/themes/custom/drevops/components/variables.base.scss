@@ -9,9 +9,6 @@
 //
 // stylelint-disable scss/dollar-variable-pattern
 
-// Example to override existing CivicTheme's palette color and define
-// custom colors, which will automatically appear in Storybook.
-
 $ct-colors-brands: (
   'light': (
     'brand1': #00698f,
@@ -25,9 +22,7 @@ $ct-colors-brands: (
   )
 );
 
-// Example to override existing CivicTheme's palette color variants.
 $ct-colors: (
-  // Override palette color variant.
   'light': (
     'success': green,
     'custom1': brown,
@@ -39,16 +34,19 @@ $ct-colors: (
   ),
 );
 
-// Example to define 2 custom local fonts which will automatically appear
-// in Storybook.
+// Both faces are declared in 00-base/fonts/fonts.scss instead. The generator
+// this map feeds emits one @font-face per weight, and supports neither the
+// variable weight ranges these ship as nor the unicode-range and font-display
+// descriptors they need. An empty 'types' list registers the family name
+// without emitting anything.
 $ct-fonts: (
+  'primary': (
+    'family': '"Lexend", sans-serif',
+    'types': (),
+  ),
   'secondary': (
     'family': 'Rubik, sans-serif',
-    'types': (
-      (
-        'uri': 'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap',
-      ),
-    ),
+    'types': (),
   ),
   'tertiary': (
     'family': 'Roboto, sans-serif',

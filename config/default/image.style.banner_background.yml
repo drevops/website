@@ -1,0 +1,21 @@
+uuid: 199c29c4-f94f-463c-9c3d-34693e08c00f
+langcode: en
+status: true
+dependencies: {  }
+name: banner_background
+label: 'Banner background (1920 wide, WebP)'
+effects:
+  ebbff644-9a41-4bbb-8aae-5a9e75fc60f9:
+    uuid: ebbff644-9a41-4bbb-8aae-5a9e75fc60f9
+    id: image_scale
+    weight: 1
+    data:
+      width: 1920
+      height: null
+      upscale: false
+  a4de6937-9de6-4ef4-a664-eaf57d7bd23c:
+    uuid: a4de6937-9de6-4ef4-a664-eaf57d7bd23c
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp
