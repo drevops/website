@@ -9,11 +9,17 @@ An image style does two things here: it caps the pixel dimensions, and it conver
 | Style | Used for |
 |---|---|
 | `banner_background` | The banner background: scaled to 1920 wide, converted to WebP |
+| `banner_featured` | The banner featured image: cropped to 1090x818 around the focal point, converted to WebP |
 | `civictheme_*` | Cards, campaigns and slides: cropped by the CivicTheme sizes, converted to WebP |
-| `wide` | The banner featured image |
+| `divider` | The divider graphic: scaled to fit within 1090x480, converted to WebP |
+| `wide` | An image placed in content and rendered as a figure |
 | `social_share` | Share cards, deliberately **not** converted, because some social crawlers still handle WebP badly |
 
-CivicTheme resolves both banner images with no image style at all, which yields the URL of the original upload. `_drevops_banner_apply_image_styles()` re-resolves them. It covers the block field and the node field, because the node's value wins when both are set.
+CivicTheme resolves several of these with no image style at all, which yields the URL of the original upload. Three preprocessors here re-resolve them: `_drevops_banner_apply_image_styles()` for the two banner images, `drevops_preprocess_paragraph__divider()` for the divider, and `drevops_preprocess_media__civictheme_image()` for the figure. The banner one covers the block field and the node field, because the node's value wins when both are set.
+
+The featured image sits in a box 40% of the viewport wide and no more than 600px tall, filled with `object-fit: cover`. Its ratio moves with the viewport and with how tall the banner's own content makes it, so the browser trims a different part of the image on every screen. A focal point crop puts the subject at the centre of the derivative, which is the part `cover` keeps whichever way it trims.
+
+`drevops_preprocess_media__civictheme_image()` also clears the width and height CivicTheme measured on the source file, because they describe a different image once a style has resized it.
 
 When adding an image style that renders photographic content, copy the `image_convert` effect from `image.style.large.yml`. A style with only a crop effect ships whatever format was uploaded.
 
