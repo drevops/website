@@ -38,6 +38,10 @@ replaces: civictheme:image
 
 Without it the theme's version is simply never used, and the rendered markup keeps saying `data-component-id="civictheme:image"`.
 
+**Copy the component's stylesheet along with its template.** A component's library is built from the files sitting in its own directory, so once `replaces:` points rendering at the override, the original's `.scss` is no longer part of what loads. An override carrying only a `.twig` renders the right markup with none of the component's CSS, which reads as the component being unstyled rather than as a missing file. `promo` and `pagination` both have one; `image` and `mobile-navigation-trigger` do not.
+
+Checking the markup is not enough to catch this, because the markup is correct. Compare a computed style against the same element on production, or look at the page.
+
 ## Fonts are served from this origin
 
 Lexend and Rubik ship in `assets/fonts/` and are declared in `components/00-base/fonts/fonts.scss`. Nothing is fetched from `fonts.googleapis.com`, which is why the CSP no longer allows it.
