@@ -163,6 +163,30 @@ final class ComponentGenerator {
   }
 
   /**
+   * Build an Automated list that follows the topics of the page it sits on.
+   *
+   * @return \Drupal\paragraphs\Entity\Paragraph
+   *   The saved paragraph.
+   */
+  public function relatedList(): Paragraph {
+    $paragraph = Paragraph::create([
+      'type' => 'civictheme_automated_list',
+      'field_c_p_title' => 'Related posts',
+      'field_c_p_list_type' => 'civictheme_automated_list__block1',
+      'field_c_p_list_content_type' => 'blog',
+      'field_c_p_list_limit_type' => 'limited',
+      'field_c_p_list_limit' => 3,
+      'field_c_p_list_column_count' => 3,
+      'field_c_p_list_topics_from_page' => 1,
+    ]);
+    $paragraph->save();
+
+    $this->createdBundles['civictheme_automated_list'] = 'civictheme_automated_list';
+
+    return $paragraph;
+  }
+
+  /**
    * Bundles built so far, at every nesting level.
    *
    * @return string[]

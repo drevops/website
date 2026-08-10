@@ -220,7 +220,7 @@ display:
         type: grid
         options:
           uses_fields: false
-          columns: 3
+          columns: 1
           automatic_width: true
           alignment: horizontal
           row_class_custom: ''
@@ -231,7 +231,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: civictheme_promo_card
+          view_mode: civictheme_snippet
       query:
         type: views_query
         options:
