@@ -6,6 +6,7 @@ namespace Drupal\do_base\Twig;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Image\ImageFactory;
+use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\image\ImageStyleInterface;
 use Twig\Extension\AbstractExtension;
@@ -55,9 +56,10 @@ final class ImageDimensionsExtension extends AbstractExtension {
       return [];
     }
 
-    $public_path = $this->streamWrapperManager->getViaScheme('public')?->getDirectoryPath();
+    $wrapper = $this->streamWrapperManager->getViaScheme('public');
+    $public_path = $wrapper instanceof PublicStream ? $wrapper->getDirectoryPath() : '';
 
-    if (!empty($public_path) && str_starts_with($path, $public_path . '/')) {
+    if ($public_path !== '' && str_starts_with($path, $public_path . '/')) {
       return $this->managedFile(urldecode(substr($path, strlen($public_path) + 1)));
     }
 

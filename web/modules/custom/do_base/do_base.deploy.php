@@ -652,7 +652,7 @@ function do_base_deploy_set_seo_metatags(?array &$sandbox = NULL): ?string {
     $path = $alias === '/' ? (string) \Drupal::config('system.site')->get('page.front') : $alias_manager->getPathByAlias($alias);
 
     if (preg_match('#^/node/(\d+)$#', $path, $matches)) {
-      $nids[$matches[1]] = $alias;
+      $nids[(int) $matches[1]] = $alias;
     }
   }
 
@@ -665,7 +665,8 @@ function do_base_deploy_set_seo_metatags(?array &$sandbox = NULL): ?string {
   $query = \Drupal::entityQuery('node')->condition('nid', array_keys($nids), 'IN');
 
   return Helper::entity($sandbox, 10)->batchQuery($query, static function (NodeInterface $node) use ($nids, $overrides): void {
-    _do_base_set_seo_metatags($node, $overrides[$nids[$node->id()]] ?? []);
+    $alias = $nids[(int) $node->id()] ?? '';
+    _do_base_set_seo_metatags($node, $overrides[$alias] ?? []);
   });
 }
 

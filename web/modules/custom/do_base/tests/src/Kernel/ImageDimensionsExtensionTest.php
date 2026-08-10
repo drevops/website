@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\do_base\Kernel;
 
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\do_base\Twig\ImageDimensionsExtension;
 use Drupal\image\Entity\ImageStyle;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -114,7 +115,8 @@ class ImageDimensionsExtensionTest extends DoBaseKernelTestBase {
   public function testVectorReportsItsViewBox(): void {
     // Prepare.
     $path = 'do_test_vector.svg';
-    file_put_contents($this->container->getParameter('app.root') . '/' . $path, '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"></svg>');
+    $file = \Drupal::root() . '/' . $path;
+    file_put_contents($file, '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"></svg>');
 
     // Act.
     $dimensions = $this->extension->dimensions('/' . $path);
@@ -122,7 +124,7 @@ class ImageDimensionsExtensionTest extends DoBaseKernelTestBase {
     // Assert.
     $this->assertSame(['width' => 120, 'height' => 60], $dimensions);
 
-    unlink($this->container->getParameter('app.root') . '/' . $path);
+    unlink($file);
   }
 
   /**
@@ -171,17 +173,21 @@ class ImageDimensionsExtensionTest extends DoBaseKernelTestBase {
    * Returns the URL a file in the public directory is served at.
    */
   protected function publicUrl(string $relative): string {
-    $directory = $this->container->get('stream_wrapper_manager')->getViaScheme('public')->getDirectoryPath();
+    $wrapper = $this->container->get('stream_wrapper_manager')->getViaScheme('public');
+    $this->assertInstanceOf(PublicStream::class, $wrapper);
 
-    return '/' . $directory . '/' . $relative;
+    return '/' . $wrapper->getDirectoryPath() . '/' . $relative;
   }
 
   /**
    * Writes a PNG of known dimensions.
    */
   protected function writeImage(string $uri): void {
+    $path = $this->container->get('file_system')->realpath($uri);
+    $this->assertIsString($path);
+
     $resource = imagecreatetruecolor(static::SOURCE_WIDTH, static::SOURCE_HEIGHT);
-    imagepng($resource, $this->container->get('file_system')->realpath($uri));
+    imagepng($resource, $path);
     imagedestroy($resource);
   }
 
