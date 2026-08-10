@@ -1,0 +1,21 @@
+uuid: 12950d43-9e28-4023-af34-1ad10d79a313
+langcode: en
+status: true
+dependencies: {  }
+name: divider
+label: 'Divider (480 tall, WebP)'
+effects:
+  8bef4bca-0946-4c77-b443-d3e6bdecf045:
+    uuid: 8bef4bca-0946-4c77-b443-d3e6bdecf045
+    id: image_scale
+    weight: 1
+    data:
+      width: 1090
+      height: 480
+      upscale: false
+  bd7d2701-0350-48a9-8961-3697c2dfd7c6:
+    uuid: bd7d2701-0350-48a9-8961-3697c2dfd7c6
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

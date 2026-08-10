@@ -13,6 +13,7 @@ require_once __DIR__ . '/includes/system_main_block.inc';
 require_once __DIR__ . '/includes/banner.inc';
 require_once __DIR__ . '/includes/paragraphs.inc';
 require_once __DIR__ . '/includes/divider.inc';
+require_once __DIR__ . '/includes/media.inc';
 require_once __DIR__ . '/includes/manual_list.inc';
 require_once __DIR__ . '/includes/steps.inc';
 require_once __DIR__ . '/includes/page.inc';
