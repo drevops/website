@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Utility\Xss;
 use Drupal\node\NodeInterface;
 
 /**
@@ -37,27 +38,24 @@ function _drevops_node_add_topic_tags(NodeInterface $node, array &$variables): v
     return;
   }
 
-  if (!$node->hasField('field_c_n_topics')) {
+  // The helper access-checks the terms and records them against the render
+  // array, so the tag list is invalidated when a topic is renamed or its
+  // access changes. Reading the field directly would drop both.
+  $terms = civictheme_get_field_referenced_entities($node, 'field_c_n_topics', $variables);
+
+  if (empty($terms)) {
     return;
   }
 
   $tags = [];
 
-  foreach ($node->get('field_c_n_topics')->referencedEntities() as $term) {
-    if (!$term->access('view')) {
-      continue;
-    }
-
+  foreach ($terms as $term) {
     // A tag with a URL renders as a link, which is what gives the post a
     // second inbound route that does not shift as the listing paginates.
     $tags[] = [
-      'content' => (string) $term->label(),
+      'content' => Xss::filter((string) $term->label()),
       'url' => $term->toUrl()->toString(),
     ];
-  }
-
-  if ($tags === []) {
-    return;
   }
 
   $variables['content'][] = [
