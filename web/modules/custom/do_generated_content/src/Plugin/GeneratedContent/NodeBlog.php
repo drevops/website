@@ -30,13 +30,7 @@ class NodeBlog extends NodeGeneratorBase {
    * {@inheritdoc}
    */
   protected function bundleValues(int $index): array {
-    $values = $this->commonValues($index) + $this->bannerValues($index) + $this->pageValues($index);
-
-    // Mirrors what the deploy hook puts on every real blog post, so generated
-    // content exercises the related list rather than only production does.
-    $values['field_c_n_components'][] = $this->generator()->relatedList();
-
-    return $values;
+    return $this->commonValues($index) + $this->bannerValues($index) + $this->pageValues($index);
   }
 
 }
