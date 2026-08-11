@@ -36,7 +36,7 @@ class ImageStyleConfigTest extends UnitTestCase {
   /**
    * Tests that every style the theme asks for by name is exported.
    */
-  #[DataProvider('dataProviderStyleNamedByTheme')]
+  #[DataProvider('dataProviderStyleNamedByThemeIsExported')]
   public function testStyleNamedByThemeIsExported(string $name): void {
     // Act.
     $style = $this->loadConfig('image.style.' . $name . '.yml');
@@ -48,10 +48,8 @@ class ImageStyleConfigTest extends UnitTestCase {
   /**
    * Data provider for testStyleNamedByThemeIsExported.
    */
-  public static function dataProviderStyleNamedByTheme(): \Iterator {
-    foreach (static::themeStyleNames() as $name) {
-      yield $name => [$name];
-    }
+  public static function dataProviderStyleNamedByThemeIsExported(): \Iterator {
+    yield from static::styleNameCases();
   }
 
   /**
@@ -96,7 +94,7 @@ class ImageStyleConfigTest extends UnitTestCase {
    * and generated art uploaded as multi-megabyte PNGs. A style without a
    * convert effect serves the uploaded format.
    */
-  #[DataProvider('dataProviderStyleNamedByTheme')]
+  #[DataProvider('dataProviderStyleNamedByThemeConvertsToWebp')]
   public function testStyleNamedByThemeConvertsToWebp(string $name): void {
     // Act.
     $effect = $this->effect($name, 'image_convert');
@@ -104,6 +102,13 @@ class ImageStyleConfigTest extends UnitTestCase {
     // Assert.
     $this->assertNotNull($effect, sprintf('Style "%s" does not convert.', $name));
     $this->assertSame('webp', $effect['data']['extension']);
+  }
+
+  /**
+   * Data provider for testStyleNamedByThemeConvertsToWebp.
+   */
+  public static function dataProviderStyleNamedByThemeConvertsToWebp(): \Iterator {
+    yield from static::styleNameCases();
   }
 
   /**
@@ -119,6 +124,15 @@ class ImageStyleConfigTest extends UnitTestCase {
     }
 
     return NULL;
+  }
+
+  /**
+   * Yields one case per style name, keyed by the name.
+   */
+  protected static function styleNameCases(): \Iterator {
+    foreach (static::themeStyleNames() as $name) {
+      yield $name => [$name];
+    }
   }
 
   /**
