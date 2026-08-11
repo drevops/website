@@ -13,7 +13,9 @@ require_once __DIR__ . '/includes/system_main_block.inc';
 require_once __DIR__ . '/includes/banner.inc';
 require_once __DIR__ . '/includes/paragraphs.inc';
 require_once __DIR__ . '/includes/divider.inc';
+require_once __DIR__ . '/includes/media.inc';
 require_once __DIR__ . '/includes/manual_list.inc';
+require_once __DIR__ . '/includes/automated_list.inc';
 require_once __DIR__ . '/includes/steps.inc';
 require_once __DIR__ . '/includes/page.inc';
 require_once __DIR__ . '/includes/node.inc';
@@ -40,6 +42,13 @@ function _drevops_block_add_class(array &$variables, string $class): void {
   }
 
   $variables['attributes']['class'][] = $class;
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function drevops_page_attachments_alter(array &$attachments): void {
+  _drevops_attach_font_preloads($attachments);
 }
 
 /**

@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Utility\Xss;
 use Drupal\node\NodeInterface;
 
 /**
@@ -37,15 +38,24 @@ function _drevops_node_add_topic_tags(NodeInterface $node, array &$variables): v
     return;
   }
 
-  $topics = civictheme_get_referenced_entity_labels($node, 'field_c_n_topics', $variables);
+  $terms = civictheme_get_field_referenced_entities($node, 'field_c_n_topics', $variables);
 
-  if (empty($topics)) {
+  if (empty($terms)) {
     return;
+  }
+
+  $tags = [];
+
+  foreach ($terms as $term) {
+    $tags[] = [
+      'content' => Xss::filter((string) $term->label()),
+      'url' => $term->toUrl()->toString(),
+    ];
   }
 
   $variables['content'][] = [
     '#theme' => 'civictheme_tag_list',
-    '#tags' => array_map(static fn($label): array => ['content' => (string) $label], $topics),
+    '#tags' => $tags,
     '#vertical_spacing' => 'both',
     '#weight' => 100,
   ];

@@ -1,0 +1,39 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Image
+status: stable
+description: Basic image component
+replaces: civictheme:image
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+    url:
+      type: string
+      title: URL
+      description: Image URL.
+    alt:
+      type: string
+      title: Alt text
+      description: Image alt text.
+    width:
+      type: ['integer', 'null']
+      title: Width
+      description: Image width.
+    height:
+      type: ['integer', 'null']
+      title: Height
+      description: Image height.
+    modifier_class:
+      type: string
+      title: Modifier classes
+      description: Additional CSS classes.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Additional HTML attributes
+      description: Additional HTML attributes to add to the component.

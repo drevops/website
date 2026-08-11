@@ -1,0 +1,24 @@
+uuid: 5d9a1e32-1f80-40d0-8067-054765cf9763
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.civictheme_topics
+  module:
+    - taxonomy
+id: civictheme_topics
+label: Topic
+type: 'canonical_entities:taxonomy_term'
+pattern: '/topics/[term:name]'
+selection_criteria:
+  9f1d5c7a-3e4b-4a2d-8c6f-1b7e2a9d4c53:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      civictheme_topics: civictheme_topics
+    uuid: 9f1d5c7a-3e4b-4a2d-8c6f-1b7e2a9d4c53
+selection_logic: and
+weight: -5
+relationships: {  }

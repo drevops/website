@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * CivicTheme Mobile Navigation Trigger component.
+ *
+ * Attribute objects are mutable and shared with the caller, so the flyout
+ * attributes are set on a copy to keep them off the block wrapper.
+ *
+ * Props:
+ * - theme: [string] Theme variation (light or dark).
+ * - text: [string] Button text.
+ * - icon: [string] Icon symbol name.
+ * - modifier_class: [string] Additional CSS classes.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
+ */
+#}
+
+{% set modifier_class = 'ct-mobile-navigation-trigger %s'|format(modifier_class|default('')) %}
+{% set trigger_attributes = create_attribute(attributes is defined and attributes is not null ? attributes.toArray() : {}) %}
+
+{% include 'civictheme:button' with {
+  theme: theme,
+  kind: 'button',
+  icon: icon|default('bars'),
+  icon_placement: 'after',
+  size: 'small',
+  text: text,
+  modifier_class: modifier_class,
+  attributes: trigger_attributes.setAttribute('data-flyout-open-trigger', '').setAttribute('data-flyout-target', '.ct-mobile-navigation').setAttribute('aria-expanded', 'false'),
+} only %}

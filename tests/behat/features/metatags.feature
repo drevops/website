@@ -62,6 +62,16 @@ Feature: Page content metatags
     And the response should contain "<meta name=\"twitter:card\" content=\"summary_large_image\""
     And the response should contain "<meta name=\"twitter:image\" content=\""
 
+  @api
+  Scenario: Page carries breadcrumb structured data
+    Given the following civictheme_page content:
+      | title                    | status |
+      | [TEST] Breadcrumb Page   | 1      |
+    When I visit the "civictheme_page" content page with the title "[TEST] Breadcrumb Page"
+    Then the response should contain "\"@type\": \"WebPage\""
+    And the response should contain "\"@type\": \"BreadcrumbList\""
+    And the response should contain "\"@type\": \"ListItem\""
+
   @api @blog
   Scenario: Blog post is marked up as an article for search engines
     Given the following blog content:

@@ -99,12 +99,15 @@ The `docs/` directory contains **what** applies to this project:
 
 - `docs/development.md` - Coding agreements: function visibility and using `drupal_helpers`
 - `docs/content-types.md` - Adding custom node bundles and the theme layer they need
+- `docs/automated-lists.md` - Automated list component and its pagination
 - `docs/testing.md` - Testing conventions and agreements
 - `docs/ci.md` - CI provider and configuration
 - `docs/deployment.md` - Hosting provider and deployment rules
 - `docs/releasing.md` - Version scheme and release process
 - `docs/sitemap.md` - XML sitemap module, coverage and generation
 - `docs/seo.md` - Meta tags, social share cards and structured data
+- `docs/related-content.md` - Related-content lists and topic pages
+- `docs/performance.md` - Image styles, self-hosted fonts and layout stability
 - `docs/preview-links.md` - sharing unpublished content by link
 - `docs/faqs.md` - Project-specific FAQs
 

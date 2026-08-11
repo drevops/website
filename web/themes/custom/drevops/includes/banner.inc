@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 use Drupal\civictheme\CivicthemeConstants;
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\media\MediaInterface;
 
 /**
  * Pre-process for Banner block.
@@ -48,6 +50,32 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
   // @phpstan-ignore-next-line instanceof.alwaysFalse
   if (!empty($variables['title']) && is_string($variables['title']) && !($variables['title'] instanceof MarkupInterface)) {
     $variables['title'] = Markup::create($variables['title']);
+  }
+
+  _drevops_banner_apply_image_styles($variables, $block, $node);
+}
+
+/**
+ * Re-resolves banner images through image styles.
+ *
+ * CivicTheme resolves both of them with no style, which yields the URL of the
+ * original upload.
+ *
+ * @see civictheme_media_image_get_variables()
+ */
+function _drevops_banner_apply_image_styles(array &$variables, FieldableEntityInterface $block, mixed $node): void {
+  $background = $node instanceof FieldableEntityInterface ? civictheme_get_field_value($node, 'field_c_n_banner_background', TRUE) : NULL;
+  $background = $background ?: civictheme_get_field_value($block, 'field_c_b_background_image', TRUE, build: $variables);
+
+  if ($background instanceof MediaInterface) {
+    $variables['background_image'] = civictheme_media_image_get_variables($background, 'banner_background');
+  }
+
+  $featured = $node instanceof FieldableEntityInterface ? civictheme_get_field_value($node, 'field_c_n_banner_featured_image', TRUE, build: $variables) : NULL;
+  $featured = $featured ?: civictheme_get_field_value($block, 'field_c_b_featured_image', TRUE, build: $variables);
+
+  if ($featured instanceof MediaInterface) {
+    $variables['featured_image'] = civictheme_media_image_get_variables($featured, 'banner_featured');
   }
 }
 

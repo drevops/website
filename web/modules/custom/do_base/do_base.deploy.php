@@ -10,6 +10,7 @@
 declare(strict_types=1);
 
 use Drupal\civictheme\CivicthemeColorManager;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
@@ -22,6 +23,7 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
+use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\path_alias\PathAliasInterface;
 use Drupal\pathauto\PathautoState;
@@ -585,6 +587,72 @@ function do_base_deploy_seed_project_vocabularies(): string {
 }
 
 /**
+ * Regenerates blog aliases that do not follow the pathauto pattern.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every alias is regenerated, or NULL while batching.
+ */
+function do_base_deploy_realias_blog_posts(?array &$sandbox = NULL): ?string {
+  $nids = \Drupal::entityQuery('node')->condition('type', 'blog')->accessCheck(FALSE)->execute();
+
+  if (empty($nids)) {
+    Helper::reporter()->skipped('There are no blog posts.');
+
+    return Helper::report();
+  }
+
+  // The query doubles as the idempotency guard: an alias regenerated onto the
+  // pattern no longer matches, so a repeat deployment finds nothing to do.
+  $query = \Drupal::entityQuery('path_alias')
+    ->condition('alias', '/blog/%', 'NOT LIKE')
+    ->condition('path', array_map(static fn(string $nid): string => '/node/' . $nid, $nids), 'IN');
+
+  return Helper::entity($sandbox)->batchQuery($query, static function (PathAliasInterface $alias): void {
+    _do_base_blog_realias($alias);
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Sets the search result title and description on the pages that need one.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every page is set, or NULL while batching.
+ */
+function do_base_deploy_set_seo_metatags(?array &$sandbox = NULL): ?string {
+  $overrides = _do_base_seo_metatags();
+  $alias_manager = \Drupal::service('path_alias.manager');
+
+  $nids = [];
+  foreach (array_keys($overrides) as $alias) {
+    // The front page is reached through the site setting rather than an alias.
+    $path = $alias === '/' ? (string) \Drupal::config('system.site')->get('page.front') : $alias_manager->getPathByAlias($alias);
+
+    if (preg_match('#^/node/(\d+)$#', $path, $matches)) {
+      $nids[(int) $matches[1]] = $alias;
+    }
+  }
+
+  if (empty($nids)) {
+    Helper::reporter()->skipped('None of the pages carrying an override exist.');
+
+    return Helper::report();
+  }
+
+  $query = \Drupal::entityQuery('node')->condition('nid', array_keys($nids), 'IN');
+
+  return Helper::entity($sandbox, 10)->batchQuery($query, static function (NodeInterface $node) use ($nids, $overrides): void {
+    $alias = $nids[(int) $node->id()] ?? '';
+    _do_base_set_seo_metatags($node, $overrides[$alias] ?? []);
+  });
+}
+
+/**
  * Assembles the Our Work page.
  */
 function _do_base_our_work_build_page(string $node_uuid): NodeInterface {
@@ -763,6 +831,216 @@ function _do_base_menu_leading_weight(string $menu_name): int {
   }
 
   return min($weights) - 1;
+}
+
+/**
+ * Writes a title and description onto a node.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The node to write to.
+ * @param array $tags
+ *   Metatag values keyed by tag name.
+ */
+function _do_base_set_seo_metatags(NodeInterface $node, array $tags): void {
+  if (empty($tags) || !$node->hasField('field_n_metatags')) {
+    return;
+  }
+
+  $current = Json::decode((string) $node->get('field_n_metatags')->value) ?: [];
+  $changed = FALSE;
+
+  foreach ($tags as $tag => $value) {
+    // Wording already inside the length a result shows is left alone, whoever
+    // wrote it. That also makes a repeat deployment a no-op, since everything
+    // written here is inside those bounds.
+    if (isset($current[$tag]) && _do_base_seo_metatag_fits($tag, (string) $current[$tag], $node)) {
+      continue;
+    }
+
+    $current[$tag] = $value;
+    $changed = TRUE;
+  }
+
+  if (!$changed) {
+    return;
+  }
+
+  $node->set('field_n_metatags', Json::encode($current));
+  $node->setNewRevision(FALSE);
+  $node->save();
+
+  Helper::reporter()->updated(sprintf('Set the search result wording on "%s".', $node->getTitle()));
+}
+
+/**
+ * Reports whether a tag value fits what a search result shows.
+ *
+ * @param string $tag
+ *   The metatag name.
+ * @param string $value
+ *   The value, which may still carry tokens.
+ * @param \Drupal\node\NodeInterface $node
+ *   The node the value belongs to, giving its tokens something to resolve
+ *   against. A value is measured rendered, because that is the length a
+ *   search result has to fit.
+ *
+ * @return bool
+ *   TRUE when the value needs no replacing.
+ */
+function _do_base_seo_metatag_fits(string $tag, string $value, NodeInterface $node): bool {
+  // Plain, because a search result shows characters rather than markup: an
+  // escaped ampersand would otherwise count as five.
+  $length = mb_strlen(\Drupal::token()->replacePlain($value, ['node' => $node], ['clear' => TRUE]));
+
+  // The lengths a search result shows before it cuts the value off.
+  return match ($tag) {
+    'title' => $length >= 30 && $length <= 60,
+    'description' => $length >= 70 && $length <= 155,
+    default => TRUE,
+  };
+}
+
+/**
+ * Returns the title and description to publish for each page, keyed by alias.
+ *
+ * The title is what a search result shows rather than what the page displays,
+ * so it carries the qualifiers a heading does not need. The description is
+ * written to sit inside the length a result will show.
+ *
+ * @return array<string, array<string, string>>
+ *   Metatag values keyed by tag name, keyed by path alias.
+ */
+function _do_base_seo_metatags(): array {
+  return [
+    '/' => [
+      'description' => 'Australian Drupal and DevOps consultancy. We build and support Drupal platforms with senior engineering and automated testing from the first commit.',
+    ],
+    '/about-us' => [
+      'title' => 'About Us: Australian Drupal and DevOps Team | [site:name]',
+      'description' => 'An Australian Drupal and DevOps consultancy since 2016, working with government, education and enterprise teams who need real engineering.',
+    ],
+    '/ai-assisted-delivery' => [
+      'description' => 'Already on Drupal? We cost the same senior, fully-tested work two ways, by hand and AI-assisted, so you see the difference before you change.',
+    ],
+    '/ai-integration-automation' => [
+      'description' => 'AI integration and automation for Drupal platforms, built with the same testing and review gates as everything else we ship.',
+    ],
+    '/blog' => [
+      'title' => 'Drupal and DevOps Blog | [site:name]',
+      'description' => 'Real-world Drupal and DevOps practice from the DrevOps team: technical deep-dives, release notes, and what we have learned running open-source tools.',
+    ],
+    '/blog/ai-written-code-safe-what-we-put-around-it-it-ships' => [
+      'description' => 'Is AI-written code safe? AI speeds up the writing, never the checking. Every change is still reviewed, tested and gated before it ships.',
+    ],
+    '/blog/are-ai-restrictions-actually-growing-open-source' => [
+      'description' => 'AI policies meant to limit AI on private code have an unexpected effect: developers extract generic logic into public modules, and open source grows.',
+    ],
+    '/blog/becoming-maintainers-drupal-driver-and-drupal-extension-projects' => [
+      'description' => 'Alex Skrypnyk now co-maintains Drupal Driver and Drupal Extension. Three coordinated alphas of the Drupal Behat stack just shipped.',
+    ],
+    '/blog/how-we-upgrade-and-modernise-drupal-sites' => [
+      'description' => 'Off Drupal 7, or stuck on 9 or 10? How we upgrade: assess, modernise with Rector, migrate content, and prove it with automated tests.',
+    ],
+    '/blog/same-senior-drupal-work-about-third-less' => [
+      'description' => 'The same senior, tested Drupal work for about a third less on suitable work, because delivery got faster, not because corners were cut.',
+    ],
+    '/blog/vortex-134' => [
+      'description' => 'Vortex 1.34.0 (Flux) adds Composer security audits, Composer Patches v2, modernised dev dependencies, and moves end-to-end tests to PHPUnit.',
+    ],
+    '/blog/vortex-135-released' => [
+      'description' => 'Vortex 1.35 adds full Drupal 11.3 compatibility and updates container images, GitHub Actions and automation tooling for stability and security.',
+    ],
+    '/blog/vortex-136-released' => [
+      'description' => 'Vortex 1.36 makes the template AI-native and migration-ready, with structured agent support, CI-testable migrations and full-stack JS testing.',
+    ],
+    '/blog/vortex-137-released' => [
+      'description' => 'Vortex 1.37 extracts demo code into its own module, splits linting into a standalone CI job, and restructures the CircleCI config for maintenance.',
+    ],
+    '/blog/vortex-1390-photon-whats-release' => [
+      'description' => 'Vortex 1.39.0 adds opt-in visual regression testing, accessibility checks in the box, faster CI, and a reliability fix for Lagoon projects.',
+    ],
+    '/blog/vortex-1-40-0-spectrum' => [
+      'description' => 'Vortex 1.40.0 ships CI secret and workflow scanning, test results on your PRs, site-wide accessibility checks and SDC tooling out of the box.',
+    ],
+    '/blog/vortex-138-released' => [
+      'description' => 'Vortex 1.38 brings new testing, default modules, security and deployment improvements, plus a runtime bump. Here is what changed and why.',
+    ],
+    '/blog/vortex-2570-released' => [
+      'description' => 'Vortex 25.7.0 adds Drupal 11.2 support, faster CI, better Docker and Composer handling for local development, and a more robust installer.',
+    ],
+    '/blog/vortex-2580-released' => [
+      'description' => 'Vortex 25.8.0 adds Drupal CMS support, cuts CI build times by up to 5 minutes, improves Lagoon hosting, and significantly enhances the installer.',
+    ],
+    '/blog/what-ai-actually-doing-open-source' => [
+      'description' => 'From maintaining around 40 repos: AI speeds up consuming open source far faster than contributing back, and that gap is the real threat.',
+    ],
+    '/contact' => [
+      'title' => 'Contact Our Drupal Team | [site:name]',
+      'description' => 'Talk to the engineers who would do the work. Tell us what you are running and what is not working, and we will tell you what we would do.',
+    ],
+    '/how-we-work' => [
+      'title' => 'How We Work: Process, Pricing, Delivery | [site:name]',
+      'description' => 'What working with DrevOps looks like, from first conversation to go-live: what happens at each step and how we build a price with nothing hidden.',
+    ],
+    '/responsible-ai' => [
+      'title' => 'Responsible AI Policy | [site:name]',
+      'description' => 'How DrevOps uses AI responsibly: safeguards around data security, governance and human oversight, so nothing you share trains a public model.',
+    ],
+    '/services' => [
+      'title' => 'Drupal and DevOps Services | [site:name]',
+      'description' => 'Expert-led Drupal and DevOps services: builds, upgrades, migrations, automated testing, CI/CD and ongoing support for platforms that matter.',
+    ],
+    '/services/audit' => [
+      'title' => 'Drupal Site Audit and Health Check | [site:name]',
+    ],
+    '/services/automated-testing' => [
+      'title' => 'Automated Testing for Drupal | [site:name]',
+    ],
+    '/services/ci-cd-pipelines' => [
+      'description' => 'Automated CI/CD pipelines that test, build and deploy your Drupal application safely, using GitHub Actions, CircleCI, Azure Pipelines or GitLab CI.',
+    ],
+    '/services/civictheme' => [
+      'title' => 'CivicTheme Design System Development | [site:name]',
+    ],
+    '/services/containerisation' => [
+      'title' => 'Docker Containerisation for Drupal | [site:name]',
+    ],
+    '/services/drupal-upgrades' => [
+      'title' => 'Drupal Core and Contrib Upgrades | [site:name]',
+    ],
+    '/services/govcms' => [
+      'title' => 'GovCMS Development and Migration | [site:name]',
+    ],
+    '/services/migrations' => [
+      'title' => 'Drupal Migrations from Any CMS | [site:name]',
+    ],
+    '/services/support-plans' => [
+      'title' => 'SLA-backed Drupal Support Plans | [site:name]',
+    ],
+    '/work' => [
+      'description' => 'Drupal projects we have delivered and supported, from government platforms to community organisations, plus the open-source tools that came out of it.',
+    ],
+  ];
+}
+
+/**
+ * Regenerates the alias of the blog post a path alias points at.
+ */
+function _do_base_blog_realias(PathAliasInterface $alias): void {
+  if (!preg_match('#^/node/(\d+)$#', $alias->getPath(), $matches)) {
+    return;
+  }
+
+  $node = \Drupal::entityTypeManager()->getStorage('node')->load($matches[1]);
+
+  if (!$node instanceof NodeInterface || $node->bundle() !== 'blog') {
+    return;
+  }
+
+  // Regenerating rather than rewriting the alias string keeps the result
+  // defined by the pattern alone, and lets the redirect module record the
+  // superseded path so inbound links keep resolving.
+  \Drupal::service('pathauto.generator')->updateEntityAlias($node, 'update');
 }
 
 /**
@@ -971,4 +1249,83 @@ function _do_base_blog_reindex(int|string $nid, array $langcodes): void {
       $entity->trackItemsUpdated('entity:node', $item_ids);
     }
   }
+}
+
+/**
+ * Gives every topic term a URL alias so topic pages are reachable.
+ */
+function do_base_deploy_alias_topic_terms(?array &$sandbox = NULL): ?string {
+  $query = \Drupal::entityQuery('taxonomy_term')
+    ->accessCheck(FALSE)
+    ->condition('vid', 'civictheme_topics');
+
+  return Helper::entity($sandbox, 25)->batchQuery($query, static function (TermInterface $term): void {
+    _do_base_alias_topic_term($term);
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Puts a topic term back under the alias pattern and saves it.
+ */
+function _do_base_alias_topic_term(TermInterface $term): void {
+  if (!$term->hasField('path')) {
+    return;
+  }
+
+  // Terms created programmatically carry SKIP, which is why most topics have
+  // no alias at all. Handing them back to the pattern is what puts them on
+  // /topics/<name>, and it keeps them there when an editor renames one.
+  $term->set('path', ['pathauto' => PathautoState::CREATE]);
+  $term->save();
+}
+
+/**
+ * Adds a related-content list to the foot of every blog post.
+ */
+function do_base_deploy_add_related_lists(?array &$sandbox = NULL): ?string {
+  $query = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('type', 'blog');
+
+  return Helper::entity($sandbox, 10)->batchQuery($query, static function (NodeInterface $node): void {
+    _do_base_add_related_list($node);
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Appends an Automated list configured to follow the post's own topics.
+ */
+function _do_base_add_related_list(NodeInterface $node): void {
+  if (!$node->hasField('field_c_n_components')) {
+    return;
+  }
+
+  foreach ($node->get('field_c_n_components')->referencedEntities() as $existing) {
+    if ($existing instanceof ParagraphInterface && $existing->bundle() === 'civictheme_automated_list' && !$existing->get('field_c_p_list_topics_from_page')->isEmpty() && (bool) $existing->get('field_c_p_list_topics_from_page')->value) {
+      return;
+    }
+  }
+
+  $paragraph = Paragraph::create([
+    'type' => 'civictheme_automated_list',
+    'field_c_p_title' => 'Related posts',
+    'field_c_p_list_type' => 'civictheme_automated_list__block1',
+    'field_c_p_list_content_type' => 'blog',
+    'field_c_p_list_limit_type' => 'limited',
+    'field_c_p_list_limit' => 3,
+    'field_c_p_list_column_count' => 3,
+    'field_c_p_list_topics_from_page' => 1,
+  ]);
+  $paragraph->setParentEntity($node, 'field_c_n_components');
+  $paragraph->save();
+
+  $components = $node->get('field_c_n_components')->getValue();
+  $components[] = [
+    'target_id' => $paragraph->id(),
+    'target_revision_id' => $paragraph->getRevisionId(),
+  ];
+
+  $node->set('field_c_n_components', $components);
+  $node->setNewRevision(FALSE);
+  $node->save();
 }

@@ -1,0 +1,23 @@
+uuid: fb579dc8-21da-4a99-887b-920afb0cde42
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: banner_featured
+label: 'Banner featured image (1090x818, WebP)'
+effects:
+  24958aa6-09b2-48bd-b29e-b38b76f1168d:
+    uuid: 24958aa6-09b2-48bd-b29e-b38b76f1168d
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1090
+      height: 818
+      crop_type: focal_point
+  a405d584-d557-469f-bdc0-9e7fb2b290d9:
+    uuid: a405d584-d557-469f-bdc0-9e7fb2b290d9
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp
