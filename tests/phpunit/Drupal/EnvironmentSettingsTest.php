@@ -259,6 +259,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -333,6 +334,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 1800;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     // Verify settings overrides.
@@ -417,6 +419,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -471,6 +474,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -527,6 +531,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['purge_control.settings']['purge_auto_control'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -579,6 +584,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -634,6 +640,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -689,6 +696,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -744,6 +752,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['system.performance']['css']['preprocess'] = TRUE;
     $config['system.performance']['js']['preprocess'] = TRUE;
+    $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
