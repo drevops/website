@@ -115,7 +115,7 @@ class ImageStyleConfigTest extends UnitTestCase {
    * Returns an effect of a style, or NULL when the style does not have one.
    */
   protected function effect(string $name, string $effect_id): ?array {
-    $effects = $this->loadConfig('image.style.' . $name . '.yml')['effects'];
+    $effects = $this->loadConfig('image.style.' . $name . '.yml')['effects'] ?? [];
 
     foreach ($effects as $effect) {
       if ($effect['id'] === $effect_id) {
