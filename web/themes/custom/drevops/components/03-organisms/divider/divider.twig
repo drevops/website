@@ -24,6 +24,13 @@
 
 <div class="ct-divider {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
   {% block image %}
-    <img src="{{ image.url }}" alt="" role="presentation">
+    {% if image is defined and image.url is not empty %}
+      {{ include('civictheme:image', {
+        theme: theme|default('light'),
+        url: image.url,
+        alt: '',
+        attributes: create_attribute({role: 'presentation'}),
+      }, with_context: false) }}
+    {% endif %}
   {% endblock %}
 </div>

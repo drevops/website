@@ -33,3 +33,7 @@ props:
       type: string
       title: Modifier classes
       description: Additional CSS classes.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Additional HTML attributes
+      description: Additional HTML attributes to add to the component.
