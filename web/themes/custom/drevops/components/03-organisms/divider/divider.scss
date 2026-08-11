@@ -9,6 +9,9 @@
   border-bottom: solid ct-particle(0.125);
 
   img {
+    // The dimension attributes set a width, so clamping the height alone would
+    // distort the image.
+    width: auto;
     height: 100%;
     max-width: 100%;
   }
