@@ -301,6 +301,10 @@ final class ComponentGenerator {
       'field_c_p_list_filters_exp' => $this->option('civictheme_automated_list', 'field_c_p_list_filters_exp', $index),
       'field_c_p_list_column_count' => $this->option('civictheme_automated_list', 'field_c_p_list_column_count', $index),
       'field_c_p_list_fill_width' => CaseMatrix::bit($index, 1),
+      // Shares bit 0 rather than taking a high bit of its own: this component
+      // is itself placed on only a few nodes of a run, so a high bit turns on
+      // for a list that reaches a page too rarely to be worth looking at.
+      'field_c_p_list_topics_from_page' => CaseMatrix::bit($index, 0),
       'field_c_p_list_limit' => CaseMatrix::cycle([3, 6, 9], $index),
       'field_c_p_list_link_above' => $this->link('View all'),
       'field_c_p_list_link_below' => $this->link('See more'),

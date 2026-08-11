@@ -23,6 +23,7 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
+use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\path_alias\PathAliasInterface;
 use Drupal\pathauto\PathautoState;
@@ -1248,4 +1249,83 @@ function _do_base_blog_reindex(int|string $nid, array $langcodes): void {
       $entity->trackItemsUpdated('entity:node', $item_ids);
     }
   }
+}
+
+/**
+ * Gives every topic term a URL alias so topic pages are reachable.
+ */
+function do_base_deploy_alias_topic_terms(?array &$sandbox = NULL): ?string {
+  $query = \Drupal::entityQuery('taxonomy_term')
+    ->accessCheck(FALSE)
+    ->condition('vid', 'civictheme_topics');
+
+  return Helper::entity($sandbox, 25)->batchQuery($query, static function (TermInterface $term): void {
+    _do_base_alias_topic_term($term);
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Puts a topic term back under the alias pattern and saves it.
+ */
+function _do_base_alias_topic_term(TermInterface $term): void {
+  if (!$term->hasField('path')) {
+    return;
+  }
+
+  // Terms created programmatically carry SKIP, which is why most topics have
+  // no alias at all. Handing them back to the pattern is what puts them on
+  // /topics/<name>, and it keeps them there when an editor renames one.
+  $term->set('path', ['pathauto' => PathautoState::CREATE]);
+  $term->save();
+}
+
+/**
+ * Adds a related-content list to the foot of every blog post.
+ */
+function do_base_deploy_add_related_lists(?array &$sandbox = NULL): ?string {
+  $query = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('type', 'blog');
+
+  return Helper::entity($sandbox, 10)->batchQuery($query, static function (NodeInterface $node): void {
+    _do_base_add_related_list($node);
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Appends an Automated list configured to follow the post's own topics.
+ */
+function _do_base_add_related_list(NodeInterface $node): void {
+  if (!$node->hasField('field_c_n_components')) {
+    return;
+  }
+
+  foreach ($node->get('field_c_n_components')->referencedEntities() as $existing) {
+    if ($existing instanceof ParagraphInterface && $existing->bundle() === 'civictheme_automated_list' && !$existing->get('field_c_p_list_topics_from_page')->isEmpty() && (bool) $existing->get('field_c_p_list_topics_from_page')->value) {
+      return;
+    }
+  }
+
+  $paragraph = Paragraph::create([
+    'type' => 'civictheme_automated_list',
+    'field_c_p_title' => 'Related posts',
+    'field_c_p_list_type' => 'civictheme_automated_list__block1',
+    'field_c_p_list_content_type' => 'blog',
+    'field_c_p_list_limit_type' => 'limited',
+    'field_c_p_list_limit' => 3,
+    'field_c_p_list_column_count' => 3,
+    'field_c_p_list_topics_from_page' => 1,
+  ]);
+  $paragraph->setParentEntity($node, 'field_c_n_components');
+  $paragraph->save();
+
+  $components = $node->get('field_c_n_components')->getValue();
+  $components[] = [
+    'target_id' => $paragraph->id(),
+    'target_revision_id' => $paragraph->getRevisionId(),
+  ];
+
+  $node->set('field_c_n_components', $components);
+  $node->setNewRevision(FALSE);
+  $node->save();
 }

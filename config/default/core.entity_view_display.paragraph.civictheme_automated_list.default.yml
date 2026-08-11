@@ -20,6 +20,7 @@ dependencies:
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_link_below
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_site_sections
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_topics
+    - field.field.paragraph.civictheme_automated_list.field_c_p_list_topics_from_page
     - field.field.paragraph.civictheme_automated_list.field_c_p_list_type
     - field.field.paragraph.civictheme_automated_list.field_c_p_theme
     - field.field.paragraph.civictheme_automated_list.field_c_p_title
@@ -187,4 +188,5 @@ hidden:
   field_c_p_list_feed_description: true
   field_c_p_list_feed_slug: true
   field_c_p_list_feed_title: true
+  field_c_p_list_topics_from_page: true
   search_api_excerpt: true

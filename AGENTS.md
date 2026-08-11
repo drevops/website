@@ -106,6 +106,7 @@ The `docs/` directory contains **what** applies to this project:
 - `docs/releasing.md` - Version scheme and release process
 - `docs/sitemap.md` - XML sitemap module, coverage and generation
 - `docs/seo.md` - Meta tags, social share cards and structured data
+- `docs/related-content.md` - Related-content lists and topic pages
 - `docs/performance.md` - Image styles, self-hosted fonts and layout stability
 - `docs/preview-links.md` - sharing unpublished content by link
 - `docs/faqs.md` - Project-specific FAQs
