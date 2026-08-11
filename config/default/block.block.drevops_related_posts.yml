@@ -1,0 +1,28 @@
+uuid: 0672b3ef-3a1c-433f-b72c-7662a0727809
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:civictheme_component_block:c1c2b47c-4c96-4f9e-9b6e-2b1f5f3d7e10'
+  module:
+    - block_content
+    - system
+  theme:
+    - drevops
+id: drevops_related_posts
+theme: drevops
+region: content_bottom
+weight: -1
+provider: null
+plugin: 'block_content:c1c2b47c-4c96-4f9e-9b6e-2b1f5f3d7e10'
+settings:
+  id: 'block_content:c1c2b47c-4c96-4f9e-9b6e-2b1f5f3d7e10'
+  label: 'Related posts'
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/blog/*\r\n/services/*"

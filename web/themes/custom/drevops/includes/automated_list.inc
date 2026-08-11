@@ -59,11 +59,13 @@ function drevops_preprocess_paragraph__civictheme_automated_list(array &$variabl
     return;
   }
 
-  // A post whose topics nothing else shares would otherwise leave a heading
-  // introducing an empty space.
+  // The list is placed as a block on every page in its visibility list, so a
+  // page whose topics nothing else shares has to collapse to nothing: the
+  // heading and its spacing would otherwise render an empty section.
   if (_drevops_automated_list_is_empty($variables['rows'] ?? NULL)) {
     $variables['title'] = NULL;
     $variables['rows'] = NULL;
+    $variables['vertical_spacing'] = NULL;
   }
 }
 
