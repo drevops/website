@@ -84,6 +84,7 @@ third_party_settings:
     group_filters:
       children:
         - field_c_p_list_filters_exp
+        - field_c_p_list_topics_from_page
       label: Filters
       region: content
       parent_name: group_content
@@ -333,7 +334,7 @@ content:
     third_party_settings: {  }
   field_c_p_list_topics_from_page:
     type: boolean_checkbox
-    weight: 6
+    weight: 45
     region: content
     settings:
       display_label: true
