@@ -66,5 +66,8 @@ Feature: Automated list following the page's own topics
     Then I should see the link "[TEST] Shared Topic"
 
     When I click "[TEST] Shared Topic"
-    Then I should see "[TEST] Post Same Topic"
+    Then the path should be "/topics/test-shared-topic"
+    And I should see "[TEST] Post Same Topic"
     And I should see "[TEST] Post Being Read"
+    And I should not see "[TEST] Post Other Topic"
+    And I should not see "[TEST] Post Without Topic"
