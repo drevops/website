@@ -28,4 +28,12 @@ if echo "${environment}" | grep -q -e local -e ci; then
   drush pm:enable sdc_devel
 fi
 
+# Scenarios tagged "@testmode" restrict lists to test content, so the module
+# has to be enabled wherever the test suite runs. It is excluded from the
+# exported configuration, which is why it is enabled here rather than shipped
+# as installed.
+if echo "${environment}" | grep -q -e local -e ci; then
+  drush pm:enable testmode
+fi
+
 info "Finished enabling development modules."
