@@ -14,10 +14,11 @@
   #{$root}__header {
     &--sticky {
       position: sticky;
+
       // Administration chrome that reserves space at the top of the viewport
       // publishes it through this variable, so the header pins below the
       // administration top bar instead of underneath it.
-      top: var(--drupal-displace-offset-top, 0px);
+      top: var(--drupal-displace-offset-top, 0);
       height: 0;
       z-index: $ct-header-sticky-zindex;
 
