@@ -2,16 +2,12 @@
 // Eyebrow.
 //
 // Small, uppercase kicker label intended to sit above a heading. The brand
-// palette has no orange, so this colour is a deliberate accent rather than a
-// CivicTheme token; adjust `$ct-eyebrow-color` to taste. The chosen value
-// clears WCAG AA contrast on light backgrounds.
+// assigns kickers the same accent it assigns rules, which is what the
+// `highlight` palette slot holds: teal on light bands, bright cyan on dark.
 //
 
-$ct-eyebrow-color: #c1430a !default;
-
-// The orange reads too dark against dark bands, so those flip to the
-// palette's light-blue interaction accent, which clears WCAG AA there.
-$ct-eyebrow-color-dark: #90cfeb !default;
+$ct-eyebrow-color: ct-color-light('highlight') !default;
+$ct-eyebrow-color-dark: ct-color-dark('highlight') !default;
 
 .eyebrow {
   display: block;
