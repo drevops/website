@@ -6,6 +6,7 @@ applies to this project. For **how** to perform operations, see
 
 - [Development](development.md) - Coding agreements: function visibility and using `drupal_helpers`
 - [Content types](content-types.md) - Adding custom node bundles and the theme layer they need
+- [Brand colours](brand-colours.md) - The brand palette, where it lives and how to change it
 - [Testing](testing.md) - Testing conventions and agreements
 - [CI](ci.md) - Continuous integration configuration
 - [Deployment](deployment.md) - Deployment configuration

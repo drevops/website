@@ -99,6 +99,7 @@ The `docs/` directory contains **what** applies to this project:
 
 - `docs/development.md` - Coding agreements: function visibility and using `drupal_helpers`
 - `docs/content-types.md` - Adding custom node bundles and the theme layer they need
+- `docs/brand-colours.md` - The brand palette, where it lives and how to change it
 - `docs/automated-lists.md` - Automated list component and its pagination
 - `docs/testing.md` - Testing conventions and agreements
 - `docs/ci.md` - CI provider and configuration

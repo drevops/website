@@ -9,27 +9,66 @@
 //
 // stylelint-disable scss/dollar-variable-pattern
 
+// The brand palette. These values are the Storybook fallbacks baked into
+// `var(--ct-color-*, <fallback>)`; in Drupal the generated stylesheet defines
+// the same variables from `config/default/drevops.settings.yml`, which is the
+// source of truth. Both must be edited together - see `docs/brand-colours.md`.
 $ct-colors-brands: (
   'light': (
-    'brand1': #00698f,
-    'brand2': #e6e9eb,
-    'brand3': #121313,
+    'brand1': #1e7582,
+    'brand2': #eff6ff,
+    'brand3': #1e7582,
   ),
   'dark': (
-    'brand1': #61daff,
-    'brand2': #003a4f,
-    'brand3': #00698f,
+    'brand1': #96e7f4,
+    'brand2': #152235,
+    'brand3': #96e7f4,
   )
 );
+
+// Every slot is set explicitly rather than derived from the brand colours
+// above: CivicTheme derives by mixing with pure black and white, which pulls
+// the intermediate steps off the brand's blue ramp and toward grey.
 $ct-colors: (
   'light': (
-    'success': green,
-    'custom1': brown,
+    'heading': #152235,
+    'body': #2b394d,
+    'background-light': #ffffff,
+    'background': #eff6ff,
+    'background-dark': #c8d9f3,
+    'border-light': #c8d9f3,
+    'border': #8fa0b8,
+    'border-dark': #425166,
+    'interaction-text': #ffffff,
+    'interaction-background': #1e7582,
+    'interaction-hover-text': #ffffff,
+    'interaction-hover-background': #045a65,
+    'interaction-focus': #cd5b43,
+    'highlight': #1e7582,
+    'information': #326971,
+    'warning': #a37a00,
+    'error': #b7202e,
+    'success': #208436,
   ),
   'dark': (
-    'custom1': red,
-    'custom2': orange,
-    'custom3': blue,
+    'heading': #ffffff,
+    'body': #eff6ff,
+    'background-light': #2b394d,
+    'background': #152235,
+    'background-dark': #030d1e,
+    'border-light': #5b6a80,
+    'border': #425166,
+    'border-dark': #2b394d,
+    'interaction-text': #030d1e,
+    'interaction-background': #96e7f4,
+    'interaction-hover-text': #030d1e,
+    'interaction-hover-background': #e1fbff,
+    'interaction-focus': #ff9c86,
+    'highlight': #96e7f4,
+    'information': #9cccd3,
+    'warning': #ffcf3d,
+    'error': #ea858f,
+    'success': #8ce3a0,
   ),
 );
 
