@@ -66,17 +66,20 @@
 
   {% block header_block %}
     {# Custom: Use include() instead of {% include only %} and add is_sticky support. #}
-    {{ include('civictheme:header', {
-      theme: header_theme,
-      is_sticky: header_is_sticky,
-      content_top1: header_top_1,
-      content_top2: header_top_2,
-      content_top3: header_top_3,
-      content_middle1: header_middle_1,
-      content_middle2: header_middle_2,
-      content_middle3: header_middle_3,
-      content_bottom1: header_bottom_1,
-    }, with_context: false) }}
+    {% set header_sticky_class = header_is_sticky ? 'ct-page__header--sticky' : '' %}
+    <div class="ct-page__header {{ header_sticky_class }}">
+      {{ include('civictheme:header', {
+        theme: header_theme,
+        is_sticky: header_is_sticky,
+        content_top1: header_top_1,
+        content_top2: header_top_2,
+        content_top3: header_top_3,
+        content_middle1: header_middle_1,
+        content_middle2: header_middle_2,
+        content_middle3: header_middle_3,
+        content_bottom1: header_bottom_1,
+      }, with_context: false) }}
+    </div>
   {% endblock %}
 
   {% block banner_block %}

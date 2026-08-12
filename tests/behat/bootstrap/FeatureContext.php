@@ -178,6 +178,28 @@ class FeatureContext extends DrupalContext {
   }
 
   /**
+   * Assert that an element sits flush against the top of the viewport.
+   *
+   * The behat-steps "at the top of the viewport" step accepts any offset
+   * between zero and the viewport height, so it passes for an element that
+   * merely happens to be on screen. A sticky element has to be flush.
+   *
+   * @code
+   * Then the element ".ct-header" should be pinned to the top of the viewport
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the element :selector should be pinned to the top of the viewport')]
+  public function elementAssertPinnedToViewportTop(string $selector): void {
+    $offset = (int) round((float) $this->elementExecuteJs($selector, 'return {{ELEMENT}}.getBoundingClientRect().top;'));
+
+    if ($offset !== 0) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to be pinned to the top of the viewport, but it is %dpx from it.', $selector, $offset));
+    }
+  }
+
+  /**
    * Assert that an element resolves to a computed style value.
    *
    * Asserting on markup alone cannot tell whether a rule reached the element:
