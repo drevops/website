@@ -1280,30 +1280,17 @@ function _do_base_alias_topic_term(TermInterface $term): void {
 }
 
 /**
- * Adds a related-content list to the foot of every blog post.
+ * Builds the Related posts block that the block layout places in a region.
  */
-function do_base_deploy_add_related_lists(?array &$sandbox = NULL): ?string {
-  $query = \Drupal::entityQuery('node')
-    ->accessCheck(FALSE)
-    ->condition('type', 'blog');
+function do_base_deploy_add_related_posts_block(): string {
+  $uuid = 'c1c2b47c-4c96-4f9e-9b6e-2b1f5f3d7e10';
 
-  return Helper::entity($sandbox, 10)->batchQuery($query, static function (NodeInterface $node): void {
-    _do_base_add_related_list($node);
-  }, status: Reporter::UPDATED);
-}
+  $existing = \Drupal::service('entity.repository')->loadEntityByUuid('block_content', $uuid);
 
-/**
- * Appends an Automated list configured to follow the post's own topics.
- */
-function _do_base_add_related_list(NodeInterface $node): void {
-  if (!$node->hasField('field_c_n_components')) {
-    return;
-  }
+  if ($existing !== NULL) {
+    Helper::reporter()->skipped('The Related posts block already exists.');
 
-  foreach ($node->get('field_c_n_components')->referencedEntities() as $existing) {
-    if ($existing instanceof ParagraphInterface && $existing->bundle() === 'civictheme_automated_list' && !$existing->get('field_c_p_list_topics_from_page')->isEmpty() && (bool) $existing->get('field_c_p_list_topics_from_page')->value) {
-      return;
-    }
+    return Helper::report();
   }
 
   $paragraph = Paragraph::create([
@@ -1316,16 +1303,79 @@ function _do_base_add_related_list(NodeInterface $node): void {
     'field_c_p_list_column_count' => 3,
     'field_c_p_list_topics_from_page' => 1,
   ]);
-  $paragraph->setParentEntity($node, 'field_c_n_components');
-  $paragraph->save();
 
-  $components = $node->get('field_c_n_components')->getValue();
-  $components[] = [
-    'target_id' => $paragraph->id(),
-    'target_revision_id' => $paragraph->getRevisionId(),
-  ];
+  $block_content = \Drupal::entityTypeManager()->getStorage('block_content')->create([
+    'uuid' => $uuid,
+    'type' => 'civictheme_component_block',
+    'info' => 'Related posts',
+    'moderation_state' => 'published',
+  ]);
+  $block_content->get('field_c_b_components')->appendItem($paragraph);
+  $block_content->save();
 
-  $node->set('field_c_n_components', $components);
+  Helper::reporter()->created('Created the Related posts block.');
+
+  return Helper::report();
+}
+
+/**
+ * Strips the related-content list from the foot of every blog post.
+ *
+ * @param array|null $sandbox
+ *   Batch sandbox, matching the nullable reference the batch helper takes.
+ *
+ * @return string|null
+ *   Summary once every post is stripped, or NULL while batching.
+ */
+function do_base_deploy_remove_related_lists(?array &$sandbox = NULL): ?string {
+  // The query doubles as the idempotency guard: a post loses its list on the
+  // first pass and no longer matches on the next.
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', 'blog')
+    ->condition('field_c_n_components.entity:paragraph.field_c_p_list_topics_from_page', 1);
+
+  return Helper::entity($sandbox, 10)->batchQuery($query, static function (NodeInterface $node): void {
+    _do_base_remove_related_list($node);
+  }, status: Reporter::UPDATED);
+}
+
+/**
+ * Drops the page-topics Automated lists a post carries.
+ */
+function _do_base_remove_related_list(NodeInterface $node): void {
+  $dropped = [];
+
+  foreach ($node->get('field_c_n_components')->referencedEntities() as $paragraph) {
+    if ($paragraph instanceof ParagraphInterface && _do_base_is_related_list($paragraph)) {
+      $dropped[(int) $paragraph->id()] = $paragraph;
+    }
+  }
+
+  if ($dropped === []) {
+    return;
+  }
+
+  $items = $node->get('field_c_n_components')->getValue();
+  $kept = array_filter($items, static fn (array $item): bool => !isset($dropped[(int) $item['target_id']]));
+
+  $node->set('field_c_n_components', array_values($kept));
   $node->setNewRevision(FALSE);
   $node->save();
+
+  // Dropping the reference does not delete the paragraph, and the orphan left
+  // behind still holds a revision row per node revision it was ever part of.
+  foreach ($dropped as $paragraph) {
+    $paragraph->delete();
+  }
+}
+
+/**
+ * Tells whether a paragraph is an Automated list following the page's topics.
+ */
+function _do_base_is_related_list(ParagraphInterface $paragraph): bool {
+  if ($paragraph->bundle() !== 'civictheme_automated_list' || !$paragraph->hasField('field_c_p_list_topics_from_page')) {
+    return FALSE;
+  }
+
+  return (bool) $paragraph->get('field_c_p_list_topics_from_page')->value;
 }

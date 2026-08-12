@@ -46,6 +46,7 @@ third_party_settings:
           label: 'CivicTheme Three Columns'
           context_mapping: {  }
           is_contained: false
+          vertical_spacing: auto
         components:
           5cf72ad7-c313-4cf3-9d4e-0573bbfa84a0:
             uuid: 5cf72ad7-c313-4cf3-9d4e-0573bbfa84a0
