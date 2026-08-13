@@ -1319,6 +1319,66 @@ function do_base_deploy_add_related_posts_block(): string {
 }
 
 /**
+ * Puts an empty Image list on the homepage above the blog list.
+ *
+ * The component is placed without images so an author can fill it from the
+ * media library. It renders nothing until they do, so an empty band never
+ * reaches a visitor.
+ */
+function do_base_deploy_add_homepage_image_list(): string {
+  $node = _do_base_front_page_node();
+
+  if (!$node instanceof NodeInterface) {
+    Helper::reporter()->skipped('The front page is not a node, so there is nothing to place the image list on.');
+
+    return Helper::report();
+  }
+
+  // Only three of the site's bundles carry components, so a front page set to
+  // an event or an alert has nowhere to put this. Reading the field regardless
+  // would throw and take the whole deployment down with it.
+  if (!$node->hasField('field_c_n_components')) {
+    Helper::reporter()->skipped(sprintf('The front page "%s" has no components field, so there is nowhere to place the image list.', $node->getTitle()));
+
+    return Helper::report();
+  }
+
+  // The guard is that the component is on the page, not merely that the
+  // paragraph exists. A run interrupted between saving the paragraph and
+  // saving the node leaves one behind that no page references, and that is
+  // exactly the state the next run has to finish rather than skip.
+  $paragraph = \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', _do_base_image_list_uuid());
+
+  if ($paragraph instanceof ParagraphInterface && _do_base_node_references_paragraph($node, $paragraph)) {
+    Helper::reporter()->skipped('The homepage image list already exists.');
+
+    return Helper::report();
+  }
+
+  if (!$paragraph instanceof ParagraphInterface) {
+    $paragraph = _do_base_image_list_paragraph();
+  }
+
+  $items = $node->get('field_c_n_components')->getValue();
+  $delta = _do_base_blog_list_delta($node);
+
+  $reference = [
+    'target_id' => $paragraph->id(),
+    'target_revision_id' => $paragraph->getRevisionId(),
+  ];
+
+  array_splice($items, $delta, 0, [$reference]);
+
+  $node->set('field_c_n_components', $items);
+  $node->setNewRevision(FALSE);
+  $node->save();
+
+  Helper::reporter()->created(sprintf('Placed the image list at position %d on "%s".', $delta, $node->getTitle()));
+
+  return Helper::report();
+}
+
+/**
  * Strips the related-content list from the foot of every blog post.
  *
  * @param array|null $sandbox
@@ -1367,6 +1427,108 @@ function _do_base_remove_related_list(NodeInterface $node): void {
   foreach ($dropped as $paragraph) {
     $paragraph->delete();
   }
+}
+
+/**
+ * Loads the node the site serves as its front page.
+ */
+function _do_base_front_page_node(): ?NodeInterface {
+  $front = (string) \Drupal::config('system.site')->get('page.front');
+
+  if (!preg_match('#^/node/(\d+)$#', $front, $matches)) {
+    return NULL;
+  }
+
+  $node = \Drupal::entityTypeManager()->getStorage('node')->load($matches[1]);
+
+  return $node instanceof NodeInterface ? $node : NULL;
+}
+
+/**
+ * Finds the position of the blog list among a node's components.
+ *
+ * Resolved by looking for the list rather than by a fixed delta, so an editor
+ * reordering the page does not silently move the component placed above it. A
+ * page with no blog list puts that component last, which is still a sensible
+ * place for it.
+ */
+function _do_base_blog_list_delta(NodeInterface $node): int {
+  $field = $node->get('field_c_n_components');
+  $values = $field->getValue();
+
+  // The position is read from the raw values rather than taken from the loop
+  // over the referenced entities: the field is spliced by delta, and
+  // referencedEntities() renumbers from zero once a reference stops resolving.
+  // The earliest delta wins, so a paragraph placed on the page twice puts the
+  // component above the first of them rather than between the two.
+  $deltas = [];
+
+  foreach ($values as $delta => $value) {
+    $target_id = (int) ($value['target_id'] ?? 0);
+
+    if ($target_id !== 0 && !isset($deltas[$target_id])) {
+      $deltas[$target_id] = $delta;
+    }
+  }
+
+  foreach ($field->referencedEntities() as $paragraph) {
+    if (!$paragraph instanceof ParagraphInterface || $paragraph->bundle() !== 'civictheme_automated_list') {
+      continue;
+    }
+
+    if (!$paragraph->hasField('field_c_p_list_content_type')) {
+      continue;
+    }
+
+    if ($paragraph->get('field_c_p_list_content_type')->getString() === 'blog') {
+      return (int) ($deltas[$paragraph->id()] ?? count($values));
+    }
+  }
+
+  return count($values);
+}
+
+/**
+ * The fixed identity of the homepage image list, across every environment.
+ */
+function _do_base_image_list_uuid(): string {
+  return 'd4b0f9a2-3c17-4e6d-9f52-8a1c6b0e7d34';
+}
+
+/**
+ * Tells whether a node's components already include a paragraph.
+ */
+function _do_base_node_references_paragraph(NodeInterface $node, ParagraphInterface $paragraph): bool {
+  foreach ($node->get('field_c_n_components')->getValue() as $item) {
+    if ((int) ($item['target_id'] ?? 0) === (int) $paragraph->id()) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Builds the homepage image list.
+ *
+ * No images are attached. The site ships none of its own, and inventing
+ * artwork for real organisations would misrepresent them, so the component is
+ * placed as an empty shell for an author to fill from the media library.
+ */
+function _do_base_image_list_paragraph(): ParagraphInterface {
+  $paragraph = Paragraph::create([
+    'type' => 'image_list',
+    'uuid' => _do_base_image_list_uuid(),
+    'field_c_p_theme' => 'light',
+    // The blog list below already carries a tinted background, so this band is
+    // left plain to keep the homepage alternating rather than running two
+    // tinted sections together.
+    'field_c_p_background' => FALSE,
+    'field_c_p_vertical_spacing' => 'both',
+  ]);
+  $paragraph->save();
+
+  return $paragraph;
 }
 
 /**

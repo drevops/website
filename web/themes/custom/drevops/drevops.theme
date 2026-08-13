@@ -17,6 +17,7 @@ require_once __DIR__ . '/includes/media.inc';
 require_once __DIR__ . '/includes/manual_list.inc';
 require_once __DIR__ . '/includes/automated_list.inc';
 require_once __DIR__ . '/includes/steps.inc';
+require_once __DIR__ . '/includes/image_list.inc';
 require_once __DIR__ . '/includes/page.inc';
 require_once __DIR__ . '/includes/node.inc';
 require_once __DIR__ . '/includes/blog.inc';

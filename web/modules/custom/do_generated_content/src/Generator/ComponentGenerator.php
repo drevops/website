@@ -91,6 +91,7 @@ final class ComponentGenerator {
       'civictheme_webform',
       'divider',
       'from_library',
+      'image_list',
       'steps',
       'steps_item',
     ];
@@ -145,6 +146,7 @@ final class ComponentGenerator {
       'civictheme_webform' => $this->webform($index),
       'divider' => $this->divider($index),
       'from_library' => $this->fromLibrary(),
+      'image_list' => $this->imageList($index),
       'steps' => $this->steps($index),
       'steps_item' => $this->stepsItem($position),
       default => throw new \InvalidArgumentException(sprintf('Unsupported component bundle %s.', $bundle)),
@@ -696,6 +698,28 @@ final class ComponentGenerator {
    */
   protected function fromLibrary(): array {
     return ['field_reusable_paragraph' => ['target_id' => $this->libraryItem()->id()]];
+  }
+
+  /**
+   * Build an image list.
+   *
+   * @return array|null
+   *   Field values, or NULL when no image has been generated yet: a list with
+   *   no images renders nothing, so there would be nothing to look at.
+   */
+  protected function imageList(int $index): ?array {
+    $images = $this->generatedContentHelper::randomMediaItems('civictheme_image', 8);
+
+    if ($images === []) {
+      return NULL;
+    }
+
+    return $this->chrome('image_list', $index) + [
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
+      'field_c_p_content' => $this->richText(1),
+      'field_c_p_background' => CaseMatrix::bit($index, 0),
+      'field_c_p_image' => array_map(static fn(MediaInterface $media): array => ['target_id' => $media->id()], $images),
+    ];
   }
 
   /**

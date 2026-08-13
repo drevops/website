@@ -1,0 +1,10 @@
+uuid: ad60296d-77b5-44fa-afb6-7deec8564131
+langcode: en
+status: true
+dependencies: {  }
+id: image_list
+label: 'Image list'
+icon_uuid: null
+icon_default: null
+description: 'A row of images rendered as a single band, wrapping to fit the screen.'
+behavior_plugins: {  }

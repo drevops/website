@@ -138,6 +138,13 @@ $ct-steps-light-receive-border-color: ct-color-light('highlight') !default;
 $ct-steps-dark-receive-border-color: ct-color-dark('highlight') !default;
 
 //
+// Image list.
+//
+$ct-image-list-light-background-color: ct-color-light('background') !default;
+$ct-image-list-dark-background-color: ct-color-dark('background') !default;
+$ct-image-list-dark-plate-background-color: ct-color-light('background-light') !default;
+
+//
 // At a glance.
 //
 $ct-at-a-glance-light-background-color: ct-color-light('background-light') !default;
