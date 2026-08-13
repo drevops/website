@@ -24,13 +24,13 @@ function drevops_preprocess_paragraph__image_list(array &$variables): void {
 /**
  * Pre-process for Images paragraph field.
  *
- * CivicTheme's own image pre-processor reads a single-valued field, so the
- * multi-value counterpart is resolved here.
+ * CivicTheme's own pre-processor reads the first value of this field and is
+ * what every card uses; this component reads all of them.
  */
 function _drevops_preprocess_paragraph__paragraph_field__images(array &$variables): void {
   $variables['images'] = [];
 
-  $entities = civictheme_get_field_value($variables['paragraph'], 'field_p_images', build: $variables) ?? [];
+  $entities = civictheme_get_field_value($variables['paragraph'], 'field_c_p_image', build: $variables) ?? [];
 
   foreach ($entities as $entity) {
     if (!$entity instanceof MediaInterface) {

@@ -5,10 +5,10 @@ dependencies:
   config:
     - field.field.paragraph.image_list.field_c_p_background
     - field.field.paragraph.image_list.field_c_p_content
+    - field.field.paragraph.image_list.field_c_p_image
     - field.field.paragraph.image_list.field_c_p_theme
     - field.field.paragraph.image_list.field_c_p_title
     - field.field.paragraph.image_list.field_c_p_vertical_spacing
-    - field.field.paragraph.image_list.field_p_images
     - paragraphs.paragraphs_type.image_list
   module:
     - media_library
@@ -33,6 +33,13 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_c_p_image:
+    type: media_library_widget
+    weight: 2
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
   field_c_p_theme:
     type: options_buttons
     weight: 3
@@ -52,13 +59,6 @@ content:
     weight: 4
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_p_images:
-    type: media_library_widget
-    weight: 2
-    region: content
-    settings:
-      media_types: {  }
     third_party_settings: {  }
 hidden:
   created: true

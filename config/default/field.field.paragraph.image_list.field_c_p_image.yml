@@ -1,13 +1,13 @@
-uuid: 4282b2d6-de87-47d8-aa6b-ee6cc01a06a7
+uuid: db8e25b6-c863-4aff-a287-c3b794427eb2
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_p_images
+    - field.storage.paragraph.field_c_p_image
     - media.type.civictheme_image
     - paragraphs.paragraphs_type.image_list
-id: paragraph.image_list.field_p_images
-field_name: field_p_images
+id: paragraph.image_list.field_c_p_image
+field_name: field_c_p_image
 entity_type: paragraph
 bundle: image_list
 label: Images

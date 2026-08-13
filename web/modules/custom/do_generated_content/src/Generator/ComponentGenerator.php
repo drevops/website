@@ -718,7 +718,7 @@ final class ComponentGenerator {
       'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_background' => CaseMatrix::bit($index, 0),
-      'field_p_images' => array_map(static fn(MediaInterface $media): array => ['target_id' => $media->id()], $images),
+      'field_c_p_image' => array_map(static fn(MediaInterface $media): array => ['target_id' => $media->id()], $images),
     ];
   }
 

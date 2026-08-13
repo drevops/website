@@ -29,7 +29,7 @@ Feature: Image list render
       | field_c_p_theme            | light                                                          |
       | field_c_p_vertical_spacing | both                                                           |
       | field_c_p_background       | 0                                                              |
-      | field_p_images             | [TEST] DO Image one, [TEST] DO Image two, [TEST] DO Image three |
+      | field_c_p_image            | [TEST] DO Image one, [TEST] DO Image two, [TEST] DO Image three |
 
     When I visit the "civictheme_page" content page with the title "[TEST] Page Image list test 1"
     Then I should see an "article .ct-image-list" element
@@ -51,7 +51,7 @@ Feature: Image list render
       | field_c_p_theme            | dark                         |
       | field_c_p_vertical_spacing | top                          |
       | field_c_p_background       | 1                            |
-      | field_p_images             | [TEST] DO Image one          |
+      | field_c_p_image            | [TEST] DO Image one          |
 
     When I visit the "civictheme_page" content page with the title "[TEST] Page Image list test 2"
     Then I should see an "article .ct-image-list" element
