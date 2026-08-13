@@ -19,52 +19,45 @@
     @include ct-content();
   }
 
+  // Flex layout and responsive gaps come from ct-item-list--horizontal--large;
+  // only the centring and the measure are set here.
   #{$root}__items {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
     justify-content: center;
-    gap: ct-spacing(3);
-    padding: 0;
+    align-items: center;
 
     // Capped rather than left to fill the container: on the widest screens the
     // first row would otherwise absorb almost every image and strand the
     // remainder on a row of their own.
     max-width: ct-particle(137.5);
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 
-    @include ct-breakpoint(m) {
-      gap: ct-spacing(4);
-    }
-  }
+    .ct-item-list__item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  #{$root}__item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      // A set of logos or marks mixes wide artwork with square artwork, so the
+      // box is fixed and the image is fitted inside it. Sizing on width alone
+      // would let a square image stand several times taller than the wide one
+      // beside it.
+      width: ct-particle(15);
+      height: ct-particle(5.5);
 
-    // A set of logos or marks mixes wide artwork with square artwork, so the
-    // box is fixed and the image is fitted inside it. Sizing on width alone
-    // would let a square image stand several times taller than the wide one
-    // beside it.
-    flex: 0 0 auto;
-    width: ct-particle(15);
-    height: ct-particle(5.5);
+      @include ct-breakpoint(s) {
+        width: ct-particle(16);
+        height: ct-particle(6);
+      }
 
-    @include ct-breakpoint(s) {
-      width: ct-particle(16);
-      height: ct-particle(6);
-    }
+      @include ct-breakpoint(m) {
+        width: ct-particle(17);
+        height: ct-particle(6.25);
+      }
 
-    @include ct-breakpoint(m) {
-      width: ct-particle(17);
-      height: ct-particle(6.25);
-    }
-
-    @include ct-breakpoint(l) {
-      width: ct-particle(18);
-      height: ct-particle(6.5);
+      @include ct-breakpoint(l) {
+        width: ct-particle(18);
+        height: ct-particle(6.5);
+      }
     }
   }
 
@@ -89,7 +82,7 @@
     // misrepresenting it, so the dark theme puts a light plate behind each
     // image rather than filtering it.
     @if $theme == 'dark' {
-      #{$root}__item {
+      #{$root}__items .ct-item-list__item {
         background-color: $ct-image-list-dark-plate-background-color;
         border-radius: ct-particle(0.5);
         padding: ct-spacing(1);

@@ -37,8 +37,9 @@ Feature: Image list render
     And I should not see an "article .ct-image-list.ct-theme-dark" element
     And I should see an "article .ct-image-list.ct-vertical-spacing-inset--both" element
     And I should not see an "article .ct-image-list.ct-image-list--with-background" element
-    And I should see 3 ".ct-image-list__item" elements
-    And I should see 3 ".ct-image-list__item img" elements
+    And I should see an "article .ct-image-list__items.ct-item-list--horizontal.ct-item-list--large" element
+    And I should see 3 ".ct-image-list__items .ct-item-list__item" elements
+    And I should see 3 ".ct-image-list__items .ct-item-list__item img" elements
     And I should see the text "[TEST] Image list title"
     And save screenshot
 
@@ -58,7 +59,7 @@ Feature: Image list render
     And I should not see an "article .ct-image-list.ct-theme-light" element
     And I should see an "article .ct-image-list.ct-image-list--with-background" element
     And I should see an "article .ct-image-list.ct-vertical-spacing-inset--top" element
-    And I should see 1 ".ct-image-list__item" elements
+    And I should see 1 ".ct-image-list__items .ct-item-list__item" elements
     And I should see the text "[TEST] Image list dark title"
     And save screenshot
 

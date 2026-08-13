@@ -47,21 +47,32 @@
 
       <div class="row">
         <div class="col-xxs-12">
-          {# Removing the bullets also removes the list semantics in Safari. #}
-          <ul class="ct-image-list__items" role="list">
-            {% for image in images %}
-              {% if image.url is not empty %}
-                <li class="ct-image-list__item">
-                  {{ include('civictheme:image', {
-                    theme: theme|default('light'),
-                    url: image.url,
-                    alt: image.alt,
-                    modifier_class: 'ct-image-list__image',
-                  }, with_context: false) }}
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+          {% set image_items = [] %}
+
+          {% for image in images %}
+            {% if image.url is not empty %}
+              {% set image_item %}
+                {{ include('civictheme:image', {
+                  theme: theme|default('light'),
+                  url: image.url,
+                  alt: image.alt|default(''),
+                  modifier_class: 'ct-image-list__image',
+                }, with_context: false) }}
+              {% endset %}
+              {% set image_items = image_items|merge([image_item]) %}
+            {% endif %}
+          {% endfor %}
+
+          {# The list markup, its flex layout and its responsive gaps all come
+             from the base component. The role is restated because removing the
+             bullets also removes the list semantics in Safari. #}
+          {{ include('civictheme:item-list', {
+            items: image_items,
+            direction: 'horizontal',
+            size: 'large',
+            modifier_class: 'ct-image-list__items',
+            attributes: create_attribute({role: 'list'}),
+          }, with_context: false) }}
         </div>
       </div>
     </div>
