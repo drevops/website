@@ -1459,7 +1459,17 @@ function _do_base_blog_list_delta(NodeInterface $node): int {
   // The position is read from the raw values rather than taken from the loop
   // over the referenced entities: the field is spliced by delta, and
   // referencedEntities() renumbers from zero once a reference stops resolving.
-  $deltas = array_flip(array_column($values, 'target_id'));
+  // The earliest delta wins, so a paragraph placed on the page twice puts the
+  // component above the first of them rather than between the two.
+  $deltas = [];
+
+  foreach ($values as $delta => $value) {
+    $target_id = (int) ($value['target_id'] ?? 0);
+
+    if ($target_id !== 0 && !isset($deltas[$target_id])) {
+      $deltas[$target_id] = $delta;
+    }
+  }
 
   foreach ($field->referencedEntities() as $paragraph) {
     if (!$paragraph instanceof ParagraphInterface || $paragraph->bundle() !== 'civictheme_automated_list') {
