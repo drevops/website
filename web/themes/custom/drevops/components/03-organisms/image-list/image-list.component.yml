@@ -1,7 +1,7 @@
 $schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/modules/sdc/src/metadata.schema.json
-name: Logo strip
+name: Image list
 status: stable
-description: A row of logos rendered as a single band, wrapping to fit the screen.
+description: A row of images rendered as a single band, wrapping to fit the screen.
 props:
   type: object
   properties:
@@ -13,10 +13,10 @@ props:
         - light
         - dark
       default: light
-    logos:
+    images:
       type: array
-      title: Logos
-      description: Logo images rendered in order.
+      title: Images
+      description: Images rendered in order.
       items:
         type: object
         properties:
@@ -51,7 +51,7 @@ props:
 slots:
   title:
     title: Title
-    description: Optional heading shown above the logos.
+    description: Optional heading shown above the images.
   content:
     title: Content
-    description: Optional intro content shown above the logos.
+    description: Optional intro content shown above the images.

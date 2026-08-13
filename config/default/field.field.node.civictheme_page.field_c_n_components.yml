@@ -21,7 +21,6 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_webform
     - paragraphs.paragraphs_type.divider
     - paragraphs.paragraphs_type.from_library
-    - paragraphs.paragraphs_type.logo_strip
     - paragraphs.paragraphs_type.steps
   module:
     - entity_reference_revisions
@@ -58,7 +57,7 @@ settings:
       from_library: from_library
       civictheme_message: civictheme_message
       steps: steps
-      logo_strip: logo_strip
+      image_list: image_list
     negate: 0
     target_bundles_drag_drop:
       civictheme_accordion:
@@ -157,7 +156,7 @@ settings:
       from_library:
         weight: 62
         enabled: true
-      logo_strip:
+      image_list:
         weight: 63
         enabled: true
       steps:

@@ -1,13 +1,13 @@
 {#
 /**
  * @file
- * Logo strip component.
+ * Image list component.
  *
  * Variables:
  * - theme: [string] Theme: light, dark.
- * - title: [string] Optional heading shown above the logos.
- * - content: [string] Optional intro content shown above the logos.
- * - logos: [array] Logo images:
+ * - title: [string] Optional heading shown above the images.
+ * - content: [string] Optional intro content shown above the images.
+ * - images: [array] Images:
  *   - url: [string] Image URL.
  *   - alt: [string] Image alt text.
  * - vertical_spacing: [string] With top, bottom or both vertical spaces.
@@ -17,28 +17,28 @@
  */
 #}
 
-{% set with_background_class = with_background ? 'ct-logo-strip--with-background' : '' %}
+{% set with_background_class = with_background ? 'ct-image-list--with-background' : '' %}
 {% set vertical_spacing_class = vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s'|format(theme_class, with_background_class, vertical_spacing_class, modifier_class|default('')) %}
 
-{% if logos %}
-  <div class="ct-logo-strip {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+{% if images %}
+  <div class="ct-image-list {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     <div class="container">
       {% if title or content %}
         <div class="row">
           <div class="col-xxs-12">
-            <div class="ct-logo-strip__header">
+            <div class="ct-image-list__header">
               {% if title %}
                 {{ include('civictheme:heading', {
                   content: title,
                   level: 2,
                   theme: theme,
-                  modifier_class: 'ct-logo-strip__title',
+                  modifier_class: 'ct-image-list__title',
                 }, with_context: false) }}
               {% endif %}
               {% if content %}
-                <div class="ct-logo-strip__content">{{ content }}</div>
+                <div class="ct-image-list__content">{{ content }}</div>
               {% endif %}
             </div>
           </div>
@@ -48,15 +48,15 @@
       <div class="row">
         <div class="col-xxs-12">
           {# Removing the bullets also removes the list semantics in Safari. #}
-          <ul class="ct-logo-strip__items" role="list">
-            {% for logo in logos %}
-              {% if logo.url is not empty %}
-                <li class="ct-logo-strip__item">
+          <ul class="ct-image-list__items" role="list">
+            {% for image in images %}
+              {% if image.url is not empty %}
+                <li class="ct-image-list__item">
                   {{ include('civictheme:image', {
                     theme: theme|default('light'),
-                    url: logo.url,
-                    alt: logo.alt,
-                    modifier_class: 'ct-logo-strip__image',
+                    url: image.url,
+                    alt: image.alt,
+                    modifier_class: 'ct-image-list__image',
                   }, with_context: false) }}
                 </li>
               {% endif %}

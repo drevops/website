@@ -1,16 +1,16 @@
-uuid: e26959f9-4699-4fc9-be37-4e72b616f587
+uuid: b744aff8-dc86-4e8c-a177-6bb0456059e5
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.paragraph.field_c_p_vertical_spacing
-    - paragraphs.paragraphs_type.logo_strip
+    - paragraphs.paragraphs_type.image_list
   module:
     - options
-id: paragraph.logo_strip.field_c_p_vertical_spacing
+id: paragraph.image_list.field_c_p_vertical_spacing
 field_name: field_c_p_vertical_spacing
 entity_type: paragraph
-bundle: logo_strip
+bundle: image_list
 label: 'Vertical spacing'
 description: 'Adds additional vertical spacing to a component'
 required: true

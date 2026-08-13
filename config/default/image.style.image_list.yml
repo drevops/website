@@ -1,0 +1,21 @@
+uuid: be65753e-cf04-43e9-9738-285f13c4ffb1
+langcode: en
+status: true
+dependencies: {  }
+name: image_list
+label: 'Image list (320x160, WebP)'
+effects:
+  4da4bcd9-a025-447c-8269-ba93b559b159:
+    uuid: 4da4bcd9-a025-447c-8269-ba93b559b159
+    id: image_scale
+    weight: 1
+    data:
+      width: 320
+      height: 160
+      upscale: false
+  5dcdbfad-d5e1-44ba-9156-69cc79b29cd3:
+    uuid: 5dcdbfad-d5e1-44ba-9156-69cc79b29cd3
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

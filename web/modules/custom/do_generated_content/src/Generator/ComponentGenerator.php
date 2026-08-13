@@ -91,7 +91,7 @@ final class ComponentGenerator {
       'civictheme_webform',
       'divider',
       'from_library',
-      'logo_strip',
+      'image_list',
       'steps',
       'steps_item',
     ];
@@ -146,7 +146,7 @@ final class ComponentGenerator {
       'civictheme_webform' => $this->webform($index),
       'divider' => $this->divider($index),
       'from_library' => $this->fromLibrary(),
-      'logo_strip' => $this->logoStrip($index),
+      'image_list' => $this->imageList($index),
       'steps' => $this->steps($index),
       'steps_item' => $this->stepsItem($position),
       default => throw new \InvalidArgumentException(sprintf('Unsupported component bundle %s.', $bundle)),
@@ -701,24 +701,24 @@ final class ComponentGenerator {
   }
 
   /**
-   * Build a logo strip.
+   * Build an image list.
    *
    * @return array|null
-   *   Field values, or NULL when no image has been generated yet: a strip with
-   *   no logos renders nothing, and its logos field is required.
+   *   Field values, or NULL when no image has been generated yet: a list with
+   *   no images renders nothing, so there would be nothing to look at.
    */
-  protected function logoStrip(int $index): ?array {
-    $logos = $this->generatedContentHelper::randomMediaItems('civictheme_image', 8);
+  protected function imageList(int $index): ?array {
+    $images = $this->generatedContentHelper::randomMediaItems('civictheme_image', 8);
 
-    if ($logos === []) {
+    if ($images === []) {
       return NULL;
     }
 
-    return $this->chrome('logo_strip', $index) + [
+    return $this->chrome('image_list', $index) + [
       'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
       'field_c_p_content' => $this->richText(1),
       'field_c_p_background' => CaseMatrix::bit($index, 0),
-      'field_p_logos' => array_map(static fn(MediaInterface $media): array => ['target_id' => $media->id()], $logos),
+      'field_p_images' => array_map(static fn(MediaInterface $media): array => ['target_id' => $media->id()], $images),
     ];
   }
 

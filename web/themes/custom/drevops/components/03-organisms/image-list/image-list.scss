@@ -1,8 +1,8 @@
 //
-// Logo strip component.
+// Image list component.
 //
 
-.ct-logo-strip {
+.ct-image-list {
   $root: &;
 
   #{$root}__header {
@@ -29,7 +29,7 @@
     padding: 0;
 
     // Capped rather than left to fill the container: on the widest screens the
-    // first row would otherwise absorb almost every logo and strand the
+    // first row would otherwise absorb almost every image and strand the
     // remainder on a row of their own.
     max-width: ct-particle(137.5);
     margin: 0 auto;
@@ -44,9 +44,10 @@
     align-items: center;
     justify-content: center;
 
-    // A logo set mixes wide wordmarks with square marks, so the box is fixed
-    // and the image is fitted inside it. Sizing on width alone would let a
-    // square mark stand several times taller than the wordmark beside it.
+    // A set of logos or marks mixes wide artwork with square artwork, so the
+    // box is fixed and the image is fitted inside it. Sizing on width alone
+    // would let a square image stand several times taller than the wide one
+    // beside it.
     flex: 0 0 auto;
     width: ct-particle(15);
     height: ct-particle(5.5);
@@ -77,19 +78,19 @@
 
   @include ct-component-theme($root) using($root, $theme) {
     &#{$root}--with-background {
-      background-color: if($theme == 'light', $ct-logo-strip-light-background-color, $ct-logo-strip-dark-background-color);
+      background-color: if($theme == 'light', $ct-image-list-light-background-color, $ct-image-list-dark-background-color);
     }
 
     #{$root}__content {
       @include ct-content-theme($theme);
     }
 
-    // Logos carry their own colours, which cannot be recoloured without
-    // misrepresenting them, so the dark theme puts a light plate behind each
-    // one rather than filtering the artwork.
+    // Artwork carries its own colours, which cannot be recoloured without
+    // misrepresenting it, so the dark theme puts a light plate behind each
+    // image rather than filtering it.
     @if $theme == 'dark' {
       #{$root}__item {
-        background-color: $ct-logo-strip-dark-plate-background-color;
+        background-color: $ct-image-list-dark-plate-background-color;
         border-radius: ct-particle(0.5);
         padding: ct-spacing(1);
         box-sizing: content-box;

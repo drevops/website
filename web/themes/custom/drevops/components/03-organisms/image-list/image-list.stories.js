@@ -1,8 +1,8 @@
 // phpcs:ignoreFile
-import Component from './logo-strip.twig';
+import Component from './image-list.twig';
 
 const meta = {
-  title: 'Organisms/Logo strip',
+  title: 'Organisms/Image list',
   component: Component,
   argTypes: {
     theme: {
@@ -15,7 +15,7 @@ const meta = {
     content: {
       control: { type: 'text' },
     },
-    logos: {
+    images: {
       control: { type: 'object' },
     },
     vertical_spacing: {
@@ -41,23 +41,23 @@ const placeholder = (label) => ({
   alt: label,
 });
 
-export const LogoStrip = {
+export const ImageList = {
   parameters: {
     layout: 'fullscreen',
   },
   args: {
     theme: 'light',
-    title: 'Open source we build and maintain',
-    content: '<p>Tools we wrote for our own delivery and released for everyone else to use.</p>',
-    logos: [
-      placeholder('Vortex'),
-      placeholder('CivicTheme'),
-      placeholder('Publica'),
-      placeholder('behat-steps'),
-      placeholder('git-artifact'),
-      placeholder('ci-runner'),
-      placeholder('migratr'),
-      placeholder('site-check'),
+    title: 'Who is in the network',
+    content: '<p>Organisations taking part, shown in the order they joined.</p>',
+    images: [
+      placeholder('One'),
+      placeholder('Two'),
+      placeholder('Three'),
+      placeholder('Four'),
+      placeholder('Five'),
+      placeholder('Six'),
+      placeholder('Seven'),
+      placeholder('Eight'),
     ],
     vertical_spacing: 'both',
     with_background: true,

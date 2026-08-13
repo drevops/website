@@ -1,14 +1,14 @@
-uuid: 244a0170-2c61-4fc6-9af0-5170cfa93f69
+uuid: a84abbf9-f0dc-4c62-9e63-4bd9d93c2403
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.paragraph.field_c_p_background
-    - paragraphs.paragraphs_type.logo_strip
-id: paragraph.logo_strip.field_c_p_background
+    - paragraphs.paragraphs_type.image_list
+id: paragraph.image_list.field_c_p_background
 field_name: field_c_p_background
 entity_type: paragraph
-bundle: logo_strip
+bundle: image_list
 label: Background
 description: 'Apply a themed background colour and provide horizontal spacing to the component.'
 required: false

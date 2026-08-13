@@ -1,18 +1,18 @@
-uuid: 9390212b-5189-486a-ba79-1e80b2889845
+uuid: 4282b2d6-de87-47d8-aa6b-ee6cc01a06a7
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_p_logos
+    - field.storage.paragraph.field_p_images
     - media.type.civictheme_image
-    - paragraphs.paragraphs_type.logo_strip
-id: paragraph.logo_strip.field_p_logos
-field_name: field_p_logos
+    - paragraphs.paragraphs_type.image_list
+id: paragraph.image_list.field_p_images
+field_name: field_p_images
 entity_type: paragraph
-bundle: logo_strip
-label: Logos
-description: 'Images shown in the strip, in the order they are listed.'
-required: true
+bundle: image_list
+label: Images
+description: 'Images shown in the list, in the order they are listed.'
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''

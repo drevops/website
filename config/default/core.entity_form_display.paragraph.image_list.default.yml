@@ -1,21 +1,21 @@
-uuid: 6f17beea-7559-4c6b-ae45-a4429cebc675
+uuid: c791cf92-99ab-4b0a-b236-3da575e11796
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.logo_strip.field_c_p_background
-    - field.field.paragraph.logo_strip.field_c_p_content
-    - field.field.paragraph.logo_strip.field_c_p_theme
-    - field.field.paragraph.logo_strip.field_c_p_title
-    - field.field.paragraph.logo_strip.field_c_p_vertical_spacing
-    - field.field.paragraph.logo_strip.field_p_logos
-    - paragraphs.paragraphs_type.logo_strip
+    - field.field.paragraph.image_list.field_c_p_background
+    - field.field.paragraph.image_list.field_c_p_content
+    - field.field.paragraph.image_list.field_c_p_theme
+    - field.field.paragraph.image_list.field_c_p_title
+    - field.field.paragraph.image_list.field_c_p_vertical_spacing
+    - field.field.paragraph.image_list.field_p_images
+    - paragraphs.paragraphs_type.image_list
   module:
     - media_library
     - text
-id: paragraph.logo_strip.default
+id: paragraph.image_list.default
 targetEntityType: paragraph
-bundle: logo_strip
+bundle: image_list
 mode: default
 content:
   field_c_p_background:
@@ -53,7 +53,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_p_logos:
+  field_p_images:
     type: media_library_widget
     weight: 2
     region: content

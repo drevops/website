@@ -1319,37 +1319,35 @@ function do_base_deploy_add_related_posts_block(): string {
 }
 
 /**
- * Puts the open-source logo strip on the homepage above the blog list.
+ * Puts an empty Image list on the homepage above the blog list.
+ *
+ * The component is placed without images so an author can fill it from the
+ * media library. It renders nothing until they do, so an empty band never
+ * reaches a visitor.
  */
-function do_base_deploy_add_homepage_logo_strip(): string {
+function do_base_deploy_add_homepage_image_list(): string {
   $node = _do_base_front_page_node();
 
   if (!$node instanceof NodeInterface) {
-    Helper::reporter()->skipped('The front page is not a node, so there is nothing to place the logo strip on.');
+    Helper::reporter()->skipped('The front page is not a node, so there is nothing to place the image list on.');
 
     return Helper::report();
   }
 
-  // The guard is that the strip is on the page, not merely that the paragraph
-  // exists. A run interrupted between saving the paragraph and saving the node
-  // leaves one behind that no page references, and that is exactly the state
-  // the next run has to finish rather than skip.
-  $paragraph = \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', _do_base_logo_strip_uuid());
+  // The guard is that the component is on the page, not merely that the
+  // paragraph exists. A run interrupted between saving the paragraph and
+  // saving the node leaves one behind that no page references, and that is
+  // exactly the state the next run has to finish rather than skip.
+  $paragraph = \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', _do_base_image_list_uuid());
 
   if ($paragraph instanceof ParagraphInterface && _do_base_node_references_paragraph($node, $paragraph)) {
-    Helper::reporter()->skipped('The homepage logo strip already exists.');
+    Helper::reporter()->skipped('The homepage image list already exists.');
 
     return Helper::report();
   }
 
   if (!$paragraph instanceof ParagraphInterface) {
-    $paragraph = _do_base_logo_strip_paragraph();
-  }
-
-  if (!$paragraph instanceof ParagraphInterface) {
-    Helper::reporter()->skipped('None of the logo files could be read, so the strip was not created.');
-
-    return Helper::report();
+    $paragraph = _do_base_image_list_paragraph();
   }
 
   $items = $node->get('field_c_n_components')->getValue();
@@ -1366,7 +1364,7 @@ function do_base_deploy_add_homepage_logo_strip(): string {
   $node->setNewRevision(FALSE);
   $node->save();
 
-  Helper::reporter()->created(sprintf('Placed the logo strip with %d logos at position %d on "%s".', $paragraph->get('field_p_logos')->count(), $delta, $node->getTitle()));
+  Helper::reporter()->created(sprintf('Placed the image list at position %d on "%s".', $delta, $node->getTitle()));
 
   return Helper::report();
 }
@@ -1441,9 +1439,9 @@ function _do_base_front_page_node(): ?NodeInterface {
  * Finds the position of the blog list among a node's components.
  *
  * Resolved by looking for the list rather than by a fixed delta, so an editor
- * reordering the page does not silently move the strip somewhere else. A page
- * with no blog list puts the strip last, which is still a sensible place for
- * it.
+ * reordering the page does not silently move the component placed above it. A
+ * page with no blog list puts that component last, which is still a sensible
+ * place for it.
  */
 function _do_base_blog_list_delta(NodeInterface $node): int {
   $field = $node->get('field_c_n_components');
@@ -1472,9 +1470,9 @@ function _do_base_blog_list_delta(NodeInterface $node): int {
 }
 
 /**
- * The fixed identity of the homepage logo strip, across every environment.
+ * The fixed identity of the homepage image list, across every environment.
  */
-function _do_base_logo_strip_uuid(): string {
+function _do_base_image_list_uuid(): string {
   return 'd4b0f9a2-3c17-4e6d-9f52-8a1c6b0e7d34';
 }
 
@@ -1492,34 +1490,16 @@ function _do_base_node_references_paragraph(NodeInterface $node, ParagraphInterf
 }
 
 /**
- * Builds the homepage logo strip, or NULL when no logo file could be read.
+ * Builds the homepage image list.
+ *
+ * No images are attached. The site ships none of its own, and inventing
+ * artwork for real organisations would misrepresent them, so the component is
+ * placed as an empty shell for an author to fill from the media library.
  */
-function _do_base_logo_strip_paragraph(): ?ParagraphInterface {
-  $logos = [];
-
-  foreach (_do_base_logo_strip_logos() as $logo) {
-    $media = _do_base_logo_media($logo['file'], $logo['uuid'], $logo['name']);
-
-    if ($media instanceof MediaInterface) {
-      $logos[] = ['target_id' => $media->id()];
-    }
-  }
-
-  if ($logos === []) {
-    return NULL;
-  }
-
+function _do_base_image_list_paragraph(): ParagraphInterface {
   $paragraph = Paragraph::create([
-    'type' => 'logo_strip',
-    'uuid' => _do_base_logo_strip_uuid(),
-    'field_c_p_content' => [
-      'value' => '<p class="text-align-center eyebrow">Open source</p>'
-        . '<h2 class="text-align-center"><strong>Tools we built for our own delivery, and gave away.</strong></h2>'
-        . '<p class="text-align-center ct-text-large">Every one of these came out of a real project, and every one of them is public. You can read the code, run it'
-        . ' yourself, and see how we work before you hire us.</p>',
-      'format' => 'civictheme_rich_text',
-    ],
-    'field_p_logos' => $logos,
+    'type' => 'image_list',
+    'uuid' => _do_base_image_list_uuid(),
     'field_c_p_theme' => 'light',
     // The blog list below already carries a tinted background, so this band is
     // left plain to keep the homepage alternating rather than running two
@@ -1530,83 +1510,6 @@ function _do_base_logo_strip_paragraph(): ?ParagraphInterface {
   $paragraph->save();
 
   return $paragraph;
-}
-
-/**
- * Lists the logos the homepage strip shows, in the order they appear.
- *
- * @return array<int, array<string, string>>
- *   One entry per logo, each with a file name, a fixed media UUID and the
- *   project it stands for.
- */
-function _do_base_logo_strip_logos(): array {
-  return [
-    ['file' => 'vortex.png', 'uuid' => '0a5e1c93-6b74-4a08-9d2f-31c7e5a4b016', 'name' => 'Vortex'],
-    ['file' => 'civictheme.png', 'uuid' => '1b6f2da4-7c85-4b19-8e3a-42d8f6b5c127', 'name' => 'CivicTheme'],
-    ['file' => 'publica.png', 'uuid' => '2c703eb5-8d96-4c2a-9f4b-53e907c6d238', 'name' => 'Publica'],
-    ['file' => 'behat-steps.png', 'uuid' => '3d814fc6-9ea7-4d3b-8a5c-64fa18d7e349', 'name' => 'behat-steps'],
-    ['file' => 'git-artifact.png', 'uuid' => '4e9250d7-af18-4e4c-9b6d-75ab29e8f45a', 'name' => 'git-artifact'],
-    ['file' => 'ci-runner.png', 'uuid' => '5fa361e8-b029-4f5d-8c7e-86bc3af9056b', 'name' => 'ci-runner'],
-    ['file' => 'migratr.png', 'uuid' => '60b472f9-c13a-4a6e-9d8f-97cd4b0a167c', 'name' => 'migratr'],
-    ['file' => 'site-check.png', 'uuid' => '71c5830a-d24b-4b7f-8e90-a8de5c1b278d', 'name' => 'site-check'],
-    ['file' => 'tui.png', 'uuid' => '82d6941b-e35c-4c80-9fa1-b9ef6d2c389e', 'name' => 'TUI'],
-  ];
-}
-
-/**
- * Loads or creates the media entity holding one logo.
- *
- * A missing file is a reason to leave that logo out rather than to stop the
- * deployment: a strip one logo short is a far smaller loss.
- */
-function _do_base_logo_media(string $file_name, string $media_uuid, string $name): ?MediaInterface {
-  $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-
-  $existing = $media_storage->loadByProperties(['uuid' => $media_uuid]);
-  $media = reset($existing);
-
-  if ($media instanceof MediaInterface) {
-    return $media;
-  }
-
-  $source = DRUPAL_ROOT . '/' . \Drupal::service('extension.list.module')->getPath('do_base') . '/assets/logos/' . $file_name;
-
-  if (!is_file($source)) {
-    return NULL;
-  }
-
-  $contents = file_get_contents($source);
-
-  // An unreadable file returns FALSE, which cast to a string would write an
-  // empty file and wrap it in a media entity that renders as a broken image.
-  if (!is_string($contents)) {
-    return NULL;
-  }
-
-  $directory = 'public://images/logos';
-
-  if (!\Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
-    return NULL;
-  }
-
-  $file = \Drupal::service('file.repository')->writeData($contents, $directory . '/' . $file_name, FileExists::Replace);
-
-  if (!$file instanceof FileInterface) {
-    return NULL;
-  }
-
-  $media = $media_storage->create([
-    'bundle' => 'civictheme_image',
-    'uuid' => $media_uuid,
-    // The library name says what the file is, while the alt text is read out
-    // in place of the image and so carries the project name alone.
-    'name' => sprintf('%s logo', $name),
-    'status' => 1,
-    'field_c_m_image' => ['target_id' => $file->id(), 'alt' => $name],
-  ]);
-  $media->save();
-
-  return $media;
 }
 
 /**

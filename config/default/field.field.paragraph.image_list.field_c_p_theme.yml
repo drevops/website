@@ -1,16 +1,16 @@
-uuid: 6b4c2d39-1f04-4614-99c1-98a680f09740
+uuid: dd314639-8cb9-4467-8968-664816f44a6c
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.paragraph.field_c_p_theme
-    - paragraphs.paragraphs_type.logo_strip
+    - paragraphs.paragraphs_type.image_list
   module:
     - options
-id: paragraph.logo_strip.field_c_p_theme
+id: paragraph.image_list.field_c_p_theme
 field_name: field_c_p_theme
 entity_type: paragraph
-bundle: logo_strip
+bundle: image_list
 label: Theme
 description: ''
 required: true

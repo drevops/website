@@ -1,0 +1,33 @@
+uuid: 205a19a3-0247-4316-a0da-14a78382c5b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.image_list.field_c_p_background
+    - field.field.paragraph.image_list.field_c_p_content
+    - field.field.paragraph.image_list.field_c_p_theme
+    - field.field.paragraph.image_list.field_c_p_title
+    - field.field.paragraph.image_list.field_c_p_vertical_spacing
+    - field.field.paragraph.image_list.field_p_images
+    - paragraphs.paragraphs_type.image_list
+  module:
+    - text
+id: paragraph.image_list.default
+targetEntityType: paragraph
+bundle: image_list
+mode: default
+content:
+  field_c_p_content:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_c_p_background: true
+  field_c_p_theme: true
+  field_c_p_title: true
+  field_c_p_vertical_spacing: true
+  field_p_images: true
+  search_api_excerpt: true
