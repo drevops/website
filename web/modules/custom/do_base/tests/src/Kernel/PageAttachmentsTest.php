@@ -97,9 +97,9 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   }
 
   /**
-   * Tests that the navigation toolbar's inline script is allowed by hash.
+   * Tests that exactly one script hash is allowed, with a fallback source.
    */
-  public function testNavigationScriptIsAllowedByHash(): void {
+  public function testInlineScriptIsAllowedByHash(): void {
     // Prepare.
     $this->setRoute('entity.node.canonical');
 
@@ -107,28 +107,31 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
     $attachments = $this->attach();
 
     // Assert.
-    $this->assertSame(
-      [DO_BASE_NAVIGATION_SCRIPT_HASH => [Csp::POLICY_UNSAFE_INLINE]],
-      $attachments['#attached']['csp_hash']['script-src-elem'],
-    );
+    $this->assertSame([[Csp::POLICY_UNSAFE_INLINE]], array_values($attachments['#attached']['csp_hash']['script-src-elem']));
   }
 
   /**
-   * Tests that the hash still matches the script core renders.
+   * Tests that the hash allowed is the one for the script core renders.
    *
    * A hash covers the exact bytes of the script, so a core release that edits
-   * it fails here. Recompute the constant from the template named beside it.
+   * it fails here. Recompute the value in _do_base_attach_csp_script_hashes()
+   * from the template this reads.
    */
-  public function testNavigationScriptHashMatchesTheTemplate(): void {
+  public function testAllowedHashMatchesTheTemplate(): void {
     // Prepare.
+    $this->setRoute('entity.node.canonical');
     $template = file_get_contents($this->root . '/core/modules/navigation/layouts/navigation.html.twig');
 
     // Act.
+    $attachments = $this->attach();
     $found = preg_match('#<script>(.*?)</script>#s', (string) $template, $matches);
 
     // Assert.
     $this->assertSame(1, $found, 'The navigation layout is expected to render one inline script.');
-    $this->assertSame(DO_BASE_NAVIGATION_SCRIPT_HASH, 'sha256-' . base64_encode(hash('sha256', $matches[1], TRUE)));
+    $this->assertSame(
+      'sha256-' . base64_encode(hash('sha256', $matches[1], TRUE)),
+      array_key_first($attachments['#attached']['csp_hash']['script-src-elem']),
+    );
   }
 
   /**
@@ -204,7 +207,7 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   /**
    * Tests that a page with no background of its own preloads nothing.
    */
-  public function testPageWithoutABackgroundPreloadsNothing(): void {
+  public function testPageWithoutBackgroundPreloadsNothing(): void {
     // Prepare.
     $this->setRoute('entity.node.canonical', ['node' => $this->createPage()]);
 

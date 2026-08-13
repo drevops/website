@@ -15,22 +15,6 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\media\MediaInterface;
 
 /**
- * Routes that render a node's banner.
- */
-const DO_BASE_BANNER_ROUTES = [
-  'entity.node.canonical',
-  'entity.node.revision',
-  'entity.node.latest_version',
-];
-
-/**
- * Hash of the inline script rendered by core's navigation toolbar.
- *
- * @see core/modules/navigation/layouts/navigation.html.twig
- */
-const DO_BASE_NAVIGATION_SCRIPT_HASH = 'sha256-CaN42Zi+a+oATitdYvGRVlyS6mCZIxrLFXhTbgp6HCI=';
-
-/**
  * Implements hook_mail_alter().
  */
 function do_base_mail_alter(array &$message): void {
@@ -133,9 +117,15 @@ function _do_base_banner_background_url(): ?string {
  *   TRUE when the route renders the node page itself.
  */
 function _do_base_route_renders_banner(): bool {
+  $routes = [
+    'entity.node.canonical',
+    'entity.node.revision',
+    'entity.node.latest_version',
+  ];
+
   $route_match = \Drupal::routeMatch();
 
-  if (in_array($route_match->getRouteName(), DO_BASE_BANNER_ROUTES, TRUE)) {
+  if (in_array($route_match->getRouteName(), $routes, TRUE)) {
     return TRUE;
   }
 
@@ -192,8 +182,11 @@ function _do_base_attach_csp_nonce(array &$attachments): void {
 function _do_base_attach_csp_script_hashes(array &$attachments): void {
   // Core's navigation toolbar sets the sidebar state before the first paint and
   // renders that script with no nonce, so a hash is the only source under which
-  // it still runs.
-  $attachments['#attached']['csp_hash']['script-src-elem'][DO_BASE_NAVIGATION_SCRIPT_HASH] = [Csp::POLICY_UNSAFE_INLINE];
+  // it still runs. PageAttachmentsTest recomputes this one from the template.
+  // @see core/modules/navigation/layouts/navigation.html.twig
+  $hash = 'sha256-CaN42Zi+a+oATitdYvGRVlyS6mCZIxrLFXhTbgp6HCI=';
+
+  $attachments['#attached']['csp_hash']['script-src-elem'][$hash] = [Csp::POLICY_UNSAFE_INLINE];
 }
 
 /**

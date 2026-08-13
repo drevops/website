@@ -11,20 +11,20 @@ use Drupal\Core\Hook\Order\OrderAfter;
 /**
  * Library info alter hooks for do_base module.
  */
-final class LibraryInfoAlterHook {
+final readonly class LibraryInfoAlterHook {
 
   /**
    * Library holding the stylesheets CKEditor 5 loads for the editing area.
    */
-  protected const string EDITOR_STYLESHEETS = 'internal.drupal.ckeditor5.stylesheets';
+  private const string EDITOR_STYLESHEETS = 'internal.drupal.ckeditor5.stylesheets';
 
   /**
    * Theme whose editor stylesheets the sub-theme rebuilds.
    */
-  protected const string BASE_THEME = 'civictheme';
+  private const string BASE_THEME = 'civictheme';
 
   public function __construct(
-    protected readonly ThemeExtensionList $themeList,
+    protected ThemeExtensionList $themeExtensionList,
   ) {
   }
 
@@ -39,11 +39,11 @@ final class LibraryInfoAlterHook {
       $libraries['highlight_js.custom']['dependencies'][] = 'do_base/highlight_js.gherkin';
     }
 
-    if ($extension === 'ckeditor5' && isset($libraries[static::EDITOR_STYLESHEETS]['css']['theme'])) {
+    if ($extension === 'ckeditor5' && isset($libraries[self::EDITOR_STYLESHEETS]['css']['theme'])) {
       // The base theme's stylesheets are merged into this list and .info.yml
       // cannot override them. Its build imports Google Fonts, which the policy
       // blocks, and a blocked @import fails the whole stylesheet.
-      $libraries[static::EDITOR_STYLESHEETS]['css']['theme'] = $this->withoutBaseTheme($libraries[static::EDITOR_STYLESHEETS]['css']['theme']);
+      $libraries[self::EDITOR_STYLESHEETS]['css']['theme'] = $this->withoutBaseTheme($libraries[self::EDITOR_STYLESHEETS]['css']['theme']);
     }
   }
 
@@ -59,11 +59,11 @@ final class LibraryInfoAlterHook {
    *   The stylesheets that are not files of the base theme.
    */
   protected function withoutBaseTheme(array $stylesheets): array {
-    if (!$this->themeList->exists(static::BASE_THEME)) {
+    if (!$this->themeExtensionList->exists(self::BASE_THEME)) {
       return $stylesheets;
     }
 
-    $base_theme_path = $this->themeList->getPath(static::BASE_THEME) . '/';
+    $base_theme_path = $this->themeExtensionList->getPath(self::BASE_THEME) . '/';
 
     return array_filter($stylesheets, static fn(string $path): bool => !str_starts_with(ltrim($path, '/'), $base_theme_path), ARRAY_FILTER_USE_KEY);
   }
