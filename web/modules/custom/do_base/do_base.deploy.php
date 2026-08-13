@@ -1334,6 +1334,15 @@ function do_base_deploy_add_homepage_image_list(): string {
     return Helper::report();
   }
 
+  // Only three of the site's bundles carry components, so a front page set to
+  // an event or an alert has nowhere to put this. Reading the field regardless
+  // would throw and take the whole deployment down with it.
+  if (!$node->hasField('field_c_n_components')) {
+    Helper::reporter()->skipped(sprintf('The front page "%s" has no components field, so there is nowhere to place the image list.', $node->getTitle()));
+
+    return Helper::report();
+  }
+
   // The guard is that the component is on the page, not merely that the
   // paragraph exists. A run interrupted between saving the paragraph and
   // saving the node leaves one behind that no page references, and that is
