@@ -30,14 +30,14 @@ function drevops_preprocess_paragraph__logo_strip(array &$variables): void {
 function _drevops_preprocess_paragraph__paragraph_field__logos(array &$variables): void {
   $variables['logos'] = [];
 
-  $media_items = civictheme_get_field_value($variables['paragraph'], 'field_p_logos', build: $variables) ?? [];
+  $entities = civictheme_get_field_value($variables['paragraph'], 'field_p_logos', build: $variables) ?? [];
 
-  foreach ($media_items as $media) {
-    if (!$media instanceof MediaInterface) {
+  foreach ($entities as $entity) {
+    if (!$entity instanceof MediaInterface) {
       continue;
     }
 
-    $image = civictheme_media_image_get_variables($media, 'logo');
+    $image = civictheme_media_image_get_variables($entity, 'logo');
 
     if (empty($image['url'])) {
       continue;
@@ -47,7 +47,7 @@ function _drevops_preprocess_paragraph__paragraph_field__logos(array &$variables
       'url' => $image['url'],
       // CivicTheme image media carry the alt text on the file field, and fall
       // back to the media name, which is what the library shows.
-      'alt' => $image['alt'] !== '' ? $image['alt'] : $media->label(),
+      'alt' => $image['alt'] !== '' ? $image['alt'] : $entity->label(),
     ];
   }
 }

@@ -1355,7 +1355,12 @@ function do_base_deploy_add_homepage_logo_strip(): string {
   $items = $node->get('field_c_n_components')->getValue();
   $delta = _do_base_blog_list_delta($node);
 
-  array_splice($items, $delta, 0, [['target_id' => $paragraph->id(), 'target_revision_id' => $paragraph->getRevisionId()]]);
+  $reference = [
+    'target_id' => $paragraph->id(),
+    'target_revision_id' => $paragraph->getRevisionId(),
+  ];
+
+  array_splice($items, $delta, 0, [$reference]);
 
   $node->set('field_c_n_components', $items);
   $node->setNewRevision(FALSE);
@@ -1441,14 +1446,15 @@ function _do_base_front_page_node(): ?NodeInterface {
  * it.
  */
 function _do_base_blog_list_delta(NodeInterface $node): int {
-  $items = $node->get('field_c_n_components');
+  $field = $node->get('field_c_n_components');
+  $values = $field->getValue();
 
-  // Walked as field items rather than as referenced entities: the value is
-  // spliced by delta, and referencedEntities() renumbers from zero once a
-  // reference no longer resolves.
-  foreach ($items as $delta => $item) {
-    $paragraph = $item->entity;
+  // The position is read from the raw values rather than taken from the loop
+  // over the referenced entities: the field is spliced by delta, and
+  // referencedEntities() renumbers from zero once a reference stops resolving.
+  $deltas = array_flip(array_column($values, 'target_id'));
 
+  foreach ($field->referencedEntities() as $paragraph) {
     if (!$paragraph instanceof ParagraphInterface || $paragraph->bundle() !== 'civictheme_automated_list') {
       continue;
     }
@@ -1458,11 +1464,11 @@ function _do_base_blog_list_delta(NodeInterface $node): int {
     }
 
     if ($paragraph->get('field_c_p_list_content_type')->getString() === 'blog') {
-      return $delta;
+      return (int) ($deltas[$paragraph->id()] ?? count($values));
     }
   }
 
-  return $items->count();
+  return count($values);
 }
 
 /**
@@ -1508,9 +1514,9 @@ function _do_base_logo_strip_paragraph(): ?ParagraphInterface {
     'uuid' => _do_base_logo_strip_uuid(),
     'field_c_p_content' => [
       'value' => '<p class="text-align-center eyebrow">Open source</p>'
-      . '<h2 class="text-align-center"><strong>Tools we built for our own delivery, and gave away.</strong></h2>'
-      . '<p class="text-align-center ct-text-large">Every one of these came out of a real project, and every one of them is public. You can read the code, run it'
-      . ' yourself, and see how we work before you hire us.</p>',
+        . '<h2 class="text-align-center"><strong>Tools we built for our own delivery, and gave away.</strong></h2>'
+        . '<p class="text-align-center ct-text-large">Every one of these came out of a real project, and every one of them is public. You can read the code, run it'
+        . ' yourself, and see how we work before you hire us.</p>',
       'format' => 'civictheme_rich_text',
     ],
     'field_p_logos' => $logos,
