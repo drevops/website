@@ -1,0 +1,29 @@
+uuid: 9390212b-5189-486a-ba79-1e80b2889845
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_p_logos
+    - media.type.civictheme_image
+    - paragraphs.paragraphs_type.logo_strip
+id: paragraph.logo_strip.field_p_logos
+field_name: field_p_logos
+entity_type: paragraph
+bundle: logo_strip
+label: Logos
+description: 'Images shown in the strip, in the order they are listed.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      civictheme_image: civictheme_image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

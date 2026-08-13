@@ -91,6 +91,7 @@ final class ComponentGenerator {
       'civictheme_webform',
       'divider',
       'from_library',
+      'logo_strip',
       'steps',
       'steps_item',
     ];
@@ -145,6 +146,7 @@ final class ComponentGenerator {
       'civictheme_webform' => $this->webform($index),
       'divider' => $this->divider($index),
       'from_library' => $this->fromLibrary(),
+      'logo_strip' => $this->logoStrip($index),
       'steps' => $this->steps($index),
       'steps_item' => $this->stepsItem($position),
       default => throw new \InvalidArgumentException(sprintf('Unsupported component bundle %s.', $bundle)),
@@ -696,6 +698,20 @@ final class ComponentGenerator {
    */
   protected function fromLibrary(): array {
     return ['field_reusable_paragraph' => ['target_id' => $this->libraryItem()->id()]];
+  }
+
+  /**
+   * Build a logo strip.
+   */
+  protected function logoStrip(int $index): array {
+    $logos = $this->generatedContentHelper::randomMediaItems('civictheme_image', 8);
+
+    return $this->chrome('logo_strip', $index) + [
+      'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
+      'field_c_p_content' => $this->richText(1),
+      'field_c_p_background' => CaseMatrix::bit($index, 0),
+      'field_p_logos' => array_map(static fn(MediaInterface $media): array => ['target_id' => $media->id()], $logos),
+    ];
   }
 
   /**

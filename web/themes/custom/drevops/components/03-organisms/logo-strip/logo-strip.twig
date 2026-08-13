@@ -1,0 +1,69 @@
+{#
+/**
+ * @file
+ * Logo strip component.
+ *
+ * Variables:
+ * - theme: [string] Theme: light, dark.
+ * - title: [string] Optional heading shown above the logos.
+ * - content: [string] Optional intro content shown above the logos.
+ * - logos: [array] Logo images:
+ *   - url: [string] Image URL.
+ *   - alt: [string] Image alt text.
+ * - vertical_spacing: [string] With top, bottom or both vertical spaces.
+ * - with_background: [boolean] Whether to display with a themed background.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ */
+#}
+
+{% set with_background_class = with_background ? 'ct-logo-strip--with-background' : '' %}
+{% set vertical_spacing_class = vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
+{% set modifier_class = '%s %s %s %s'|format(theme_class, with_background_class, vertical_spacing_class, modifier_class|default('')) %}
+
+{% if logos %}
+  <div class="ct-logo-strip {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="container">
+      {% if title or content %}
+        <div class="row">
+          <div class="col-xxs-12">
+            <div class="ct-logo-strip__header">
+              {% if title %}
+                {{ include('civictheme:heading', {
+                  content: title,
+                  level: 2,
+                  theme: theme,
+                  modifier_class: 'ct-logo-strip__title',
+                }, with_context: false) }}
+              {% endif %}
+              {% if content %}
+                <div class="ct-logo-strip__content">{{ content }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="row">
+        <div class="col-xxs-12">
+          {# Removing the bullets also removes the list semantics in Safari. #}
+          <ul class="ct-logo-strip__items" role="list">
+            {% for logo in logos %}
+              {% if logo.url is not empty %}
+                <li class="ct-logo-strip__item">
+                  {{ include('civictheme:image', {
+                    theme: theme|default('light'),
+                    url: logo.url,
+                    alt: logo.alt,
+                    modifier_class: 'ct-logo-strip__image',
+                  }, with_context: false) }}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

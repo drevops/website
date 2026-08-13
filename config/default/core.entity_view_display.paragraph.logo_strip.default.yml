@@ -1,0 +1,33 @@
+uuid: 3778bf18-d5e5-4f28-9254-f378caf13127
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.logo_strip.field_c_p_background
+    - field.field.paragraph.logo_strip.field_c_p_content
+    - field.field.paragraph.logo_strip.field_c_p_theme
+    - field.field.paragraph.logo_strip.field_c_p_title
+    - field.field.paragraph.logo_strip.field_c_p_vertical_spacing
+    - field.field.paragraph.logo_strip.field_p_logos
+    - paragraphs.paragraphs_type.logo_strip
+  module:
+    - text
+id: paragraph.logo_strip.default
+targetEntityType: paragraph
+bundle: logo_strip
+mode: default
+content:
+  field_c_p_content:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_c_p_background: true
+  field_c_p_theme: true
+  field_c_p_title: true
+  field_c_p_vertical_spacing: true
+  field_p_logos: true
+  search_api_excerpt: true

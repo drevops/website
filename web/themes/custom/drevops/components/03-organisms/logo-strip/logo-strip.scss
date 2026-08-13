@@ -1,0 +1,94 @@
+//
+// Logo strip component.
+//
+
+.ct-logo-strip {
+  $root: &;
+
+  #{$root}__header {
+    text-align: center;
+    margin-bottom: ct-spacing(5);
+    max-width: ct-particle(97.5);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  // The rich text arrives as bare markup, so it carries no typography or
+  // theme colours of its own.
+  #{$root}__content {
+    @include ct-content();
+  }
+
+  #{$root}__items {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: ct-spacing(3);
+    margin: 0;
+    padding: 0;
+
+    @include ct-breakpoint(m) {
+      gap: ct-spacing(4);
+    }
+  }
+
+  #{$root}__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // A logo set mixes wide wordmarks with square marks, so the box is fixed
+    // and the image is fitted inside it. Sizing on width alone would let a
+    // square mark stand several times taller than the wordmark beside it.
+    flex: 0 0 auto;
+    width: ct-particle(15);
+    height: ct-particle(5.5);
+
+    @include ct-breakpoint(s) {
+      width: ct-particle(16);
+      height: ct-particle(6);
+    }
+
+    @include ct-breakpoint(m) {
+      width: ct-particle(17);
+      height: ct-particle(6.25);
+    }
+
+    @include ct-breakpoint(l) {
+      width: ct-particle(18);
+      height: ct-particle(6.5);
+    }
+  }
+
+  #{$root}__image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  @include ct-component-theme($root) using($root, $theme) {
+    &#{$root}--with-background {
+      background-color: if($theme == 'light', $ct-logo-strip-light-background-color, $ct-logo-strip-dark-background-color);
+    }
+
+    #{$root}__content {
+      @include ct-content-theme($theme);
+    }
+
+    // Logos carry their own colours, which cannot be recoloured without
+    // misrepresenting them, so the dark theme puts a light plate behind each
+    // one rather than filtering the artwork.
+    @if $theme == 'dark' {
+      #{$root}__item {
+        background-color: $ct-logo-strip-dark-plate-background-color;
+        border-radius: ct-particle(0.5);
+        padding: ct-spacing(1);
+        box-sizing: content-box;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+uuid: b2b217b5-645b-498f-b3fa-aaf231054fbe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_content
+    - paragraphs.paragraphs_type.logo_strip
+  module:
+    - text
+id: paragraph.logo_strip.field_c_p_content
+field_name: field_c_p_content
+entity_type: paragraph
+bundle: logo_strip
+label: Content
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

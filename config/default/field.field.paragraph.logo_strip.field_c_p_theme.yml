@@ -1,0 +1,23 @@
+uuid: 6b4c2d39-1f04-4614-99c1-98a680f09740
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_theme
+    - paragraphs.paragraphs_type.logo_strip
+  module:
+    - options
+id: paragraph.logo_strip.field_c_p_theme
+field_name: field_c_p_theme
+entity_type: paragraph
+bundle: logo_strip
+label: Theme
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: light
+default_value_callback: ''
+settings: {  }
+field_type: list_string

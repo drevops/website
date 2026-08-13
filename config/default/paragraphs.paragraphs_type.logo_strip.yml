@@ -1,0 +1,10 @@
+uuid: bae27dab-9ca4-4f24-b0a4-c13bba5e4621
+langcode: en
+status: true
+dependencies: {  }
+id: logo_strip
+label: 'Logo strip'
+icon_uuid: null
+icon_default: null
+description: 'A row of logos rendered as a single band, wrapping to fit the screen.'
+behavior_plugins: {  }

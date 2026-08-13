@@ -1,0 +1,21 @@
+uuid: 391aaef2-eb31-4844-9f06-22c6ca7a698a
+langcode: en
+status: true
+dependencies: {  }
+name: logo
+label: 'Logo (320x160, WebP)'
+effects:
+  ec4af213-51b6-48af-a831-ac84100ead76:
+    uuid: ec4af213-51b6-48af-a831-ac84100ead76
+    id: image_scale
+    weight: 1
+    data:
+      width: 320
+      height: 160
+      upscale: false
+  296928d9-ad4a-4d41-b21d-b1d277c6e711:
+    uuid: 296928d9-ad4a-4d41-b21d-b1d277c6e711
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

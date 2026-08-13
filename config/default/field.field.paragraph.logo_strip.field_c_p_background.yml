@@ -1,0 +1,23 @@
+uuid: 244a0170-2c61-4fc6-9af0-5170cfa93f69
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_background
+    - paragraphs.paragraphs_type.logo_strip
+id: paragraph.logo_strip.field_c_p_background
+field_name: field_c_p_background
+entity_type: paragraph
+bundle: logo_strip
+label: Background
+description: 'Apply a themed background colour and provide horizontal spacing to the component.'
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
