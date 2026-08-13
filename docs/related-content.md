@@ -4,7 +4,7 @@ Excluding the site navigation, most pages on this site had exactly one inbound i
 
 ## An Automated list can follow the page's own topics
 
-The Automated list paragraph carries a **Use topics of the current page** checkbox (`field_c_p_list_topics_from_page`). With it on, the list ignores the Topics chosen on the paragraph and matches the topics of the node it is placed on instead, which turns the same component into a related-content list. Nothing new was built to do this: it is the Automated list, configured differently.
+The Automated list paragraph carries a **Use topics of the current page** checkbox (`field_c_p_list_topics_from_page`), under *Content* → *Filters*. With it on, the list ignores the Topics chosen on the paragraph and matches the topics of the node being viewed instead, which turns the same component into a related-content list. Nothing new was built to do this: it is the Automated list, configured differently.
 
 `drevops_civictheme_automated_list_view_alter()` in `web/themes/custom/drevops/includes/automated_list.inc` swaps the Topics contextual argument just before the view runs. CivicTheme fires that alter through the theme manager as well as the module handler, which is why this lives in the theme alongside the rest of the component's theming rather than in a module.
 
@@ -12,10 +12,24 @@ Points worth knowing before changing it:
 
 - **The page being viewed is already excluded.** The view's fourth contextual filter is `nid` with `not` set, and it takes its value from the route, so a related list never lists the post it sits on. `_civictheme_automated_list__update_view()` passes only three arguments, which is what leaves that one to its route default.
 - **The topics argument is position 1.** The arguments are ordered content type, topics, site sections. Reordering them in the view would silently point the swap at the wrong filter.
-- **A post with no topics gets `none`, not `all`.** Without that, an empty topic set would fall through to the view's `all` default and advertise the whole site as related.
-- **An empty result hides the heading.** `drevops_preprocess_paragraph__civictheme_automated_list()` clears the title when the list found nothing, so a post whose topics nothing else shares does not render a heading introducing empty space.
+- **A page with no topics gets `none`, not `all`.** Without that, an empty topic set would fall through to the view's `all` default and advertise the whole site as related.
+- **An empty result collapses the component.** `drevops_preprocess_paragraph__civictheme_automated_list()` clears the title, the rows and the vertical spacing when the list found nothing, so a page whose topics nothing else shares renders no heading and takes no height.
 
-`do_base_deploy_add_related_lists()` puts one of these lists on every existing blog post. It is skipped for a post that already has one, so it is safe to re-run.
+## One block, placed by path
+
+**Related posts** is a Component block holding a single Automated list with that option on. `block.block.drevops_related_posts` puts it in the `content_bottom` region of the `drevops` theme, above the Signup block, and one **Pages** visibility condition decides where it appears:
+
+```
+/blog/*
+/services/*
+```
+
+Points worth knowing before changing it:
+
+- **It has to be one condition.** Visibility conditions are ANDed, so a *Content type* condition for blog posts alongside a *Pages* condition for the service pages would match nothing. Both audiences are expressed as paths in the single condition.
+- **The condition matches the alias.** `RequestPath` resolves the current path to its alias before comparing, so `/node/12` is judged as `/blog/…` and reaches the same verdict as the aliased URL.
+- **`/services` is not `/services/*`.** The services landing page carries no topics; leaving it outside the pattern keeps the block off a page that has nothing to put under it. Every service detail page beneath it does carry topics.
+- **The block itself is content.** `do_base_deploy_add_related_posts_block()` creates it against the fixed UUID that `block.block.drevops_related_posts` names, and skips when that UUID is already present. Config import runs before deploy hooks, so on a site built from scratch the placement lands one step ahead of the block it points at and starts rendering once the hook has run.
 
 ## Topic pages
 

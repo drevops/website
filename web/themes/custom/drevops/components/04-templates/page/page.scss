@@ -5,6 +5,33 @@
 .ct-page {
   $root: &;
 
+  // Custom: Carry the sticky positioning on a rail of zero height rather than
+  // on the header itself. The rail reserves no space, so page content still
+  // starts at the top of the page and scrolls under the header, and anything
+  // rendered ahead of the header - alerts are injected there once they load -
+  // scrolls away before the header pins. A fixed header would instead park at
+  // its static position, which those alerts push down the page.
+  #{$root}__header {
+    &--sticky {
+      position: sticky;
+
+      // Administration chrome that reserves space at the top of the viewport
+      // publishes it through this variable, so the header pins below the
+      // administration top bar instead of underneath it.
+      top: var(--drupal-displace-offset-top, 0);
+      height: 0;
+      z-index: $ct-header-sticky-zindex;
+
+      // The mobile navigation flyout sits inside the header, so the rail's
+      // stacking context caps how high the flyout panel can rise. Lift the
+      // rail to the flyout tier while the flyout is open, so the panel keeps
+      // covering everything else the way a full-screen overlay should.
+      &:has([data-flyout-expanded]) {
+        z-index: $ct-flyout-zindex;
+      }
+    }
+  }
+
   @include ct-component-theme($root) using($root, $theme) {
     @include ct-component-property($root, $theme, background-color);
   }

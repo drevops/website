@@ -7,21 +7,6 @@
 
   border-bottom: solid ct-particle(0.125);
 
-  // Custom: Add sticky header support with fixed positioning.
-  &--sticky {
-    position: fixed;
-    width: 100%;
-    z-index: $ct-header-sticky-zindex;
-
-    // The mobile navigation flyout sits inside the header, so the header's
-    // stacking context caps how high the flyout panel can rise. Lift the
-    // header to the flyout tier while the flyout is open, so the panel keeps
-    // covering everything else the way a full-screen overlay should.
-    &:has([data-flyout-expanded]) {
-      z-index: $ct-flyout-zindex;
-    }
-  }
-
   &__top {
     padding-top: ct-spacing();
     padding-bottom: ct-spacing();

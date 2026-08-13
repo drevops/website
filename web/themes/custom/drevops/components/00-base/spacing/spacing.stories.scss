@@ -24,7 +24,7 @@
 
     $transparency: if($index % 2 == 0, 25%, 50%);
 
-    background-color: color.mix(#61daff, white, $transparency);
+    background-color: color.mix(#96e7f4, white, $transparency);
 
     &::before {
       content: 'spacing #{$name}';
