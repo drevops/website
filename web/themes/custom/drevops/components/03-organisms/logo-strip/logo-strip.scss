@@ -26,8 +26,13 @@
     align-items: center;
     justify-content: center;
     gap: ct-spacing(3);
-    margin: 0;
     padding: 0;
+
+    // Capped rather than left to fill the container: on the widest screens the
+    // first row would otherwise absorb almost every logo and strand the
+    // remainder on a row of their own.
+    max-width: ct-particle(137.5);
+    margin: 0 auto;
 
     @include ct-breakpoint(m) {
       gap: ct-spacing(4);
