@@ -1322,16 +1322,6 @@ function do_base_deploy_add_related_posts_block(): string {
  * Puts the open-source logo strip on the homepage above the blog list.
  */
 function do_base_deploy_add_homepage_logo_strip(): string {
-  $paragraph_uuid = 'd4b0f9a2-3c17-4e6d-9f52-8a1c6b0e7d34';
-
-  $existing = \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', $paragraph_uuid);
-
-  if ($existing !== NULL) {
-    Helper::reporter()->skipped('The homepage logo strip already exists.');
-
-    return Helper::report();
-  }
-
   $node = _do_base_front_page_node();
 
   if (!$node instanceof NodeInterface) {
@@ -1340,41 +1330,27 @@ function do_base_deploy_add_homepage_logo_strip(): string {
     return Helper::report();
   }
 
-  $logos = [];
+  // The guard is that the strip is on the page, not merely that the paragraph
+  // exists. A run interrupted between saving the paragraph and saving the node
+  // leaves one behind that no page references, and that is exactly the state
+  // the next run has to finish rather than skip.
+  $paragraph = \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', _do_base_logo_strip_uuid());
 
-  foreach (_do_base_logo_strip_logos() as $logo) {
-    $media = _do_base_logo_media($logo['file'], $logo['uuid'], $logo['name']);
-
-    if ($media instanceof MediaInterface) {
-      $logos[] = ['target_id' => $media->id()];
-    }
-  }
-
-  if ($logos === []) {
-    Helper::reporter()->skipped('None of the logo files could be read, so the strip was not created.');
+  if ($paragraph instanceof ParagraphInterface && _do_base_node_references_paragraph($node, $paragraph)) {
+    Helper::reporter()->skipped('The homepage logo strip already exists.');
 
     return Helper::report();
   }
 
-  $paragraph = Paragraph::create([
-    'type' => 'logo_strip',
-    'uuid' => $paragraph_uuid,
-    'field_c_p_content' => [
-      'value' => '<p class="text-align-center eyebrow">Open source</p>'
-      . '<h2 class="text-align-center"><strong>Tools we built for our own delivery, and gave away.</strong></h2>'
-      . '<p class="text-align-center ct-text-large">Every one of these came out of a real project, and every one of them is public. You can read the code, run it'
-      . ' yourself, and see how we work before you hire us.</p>',
-      'format' => 'civictheme_rich_text',
-    ],
-    'field_p_logos' => $logos,
-    'field_c_p_theme' => 'light',
-    // The blog list below already carries a tinted background, so this band is
-    // left plain to keep the homepage alternating rather than running two
-    // tinted sections together.
-    'field_c_p_background' => FALSE,
-    'field_c_p_vertical_spacing' => 'both',
-  ]);
-  $paragraph->save();
+  if (!$paragraph instanceof ParagraphInterface) {
+    $paragraph = _do_base_logo_strip_paragraph();
+  }
+
+  if (!$paragraph instanceof ParagraphInterface) {
+    Helper::reporter()->skipped('None of the logo files could be read, so the strip was not created.');
+
+    return Helper::report();
+  }
 
   $items = $node->get('field_c_n_components')->getValue();
   $delta = _do_base_blog_list_delta($node);
@@ -1385,7 +1361,7 @@ function do_base_deploy_add_homepage_logo_strip(): string {
   $node->setNewRevision(FALSE);
   $node->save();
 
-  Helper::reporter()->created(sprintf('Placed the logo strip with %d logos at position %d on "%s".', count($logos), $delta, $node->getTitle()));
+  Helper::reporter()->created(sprintf('Placed the logo strip with %d logos at position %d on "%s".', $paragraph->get('field_p_logos')->count(), $delta, $node->getTitle()));
 
   return Helper::report();
 }
@@ -1490,6 +1466,67 @@ function _do_base_blog_list_delta(NodeInterface $node): int {
 }
 
 /**
+ * The fixed identity of the homepage logo strip, across every environment.
+ */
+function _do_base_logo_strip_uuid(): string {
+  return 'd4b0f9a2-3c17-4e6d-9f52-8a1c6b0e7d34';
+}
+
+/**
+ * Tells whether a node's components already include a paragraph.
+ */
+function _do_base_node_references_paragraph(NodeInterface $node, ParagraphInterface $paragraph): bool {
+  foreach ($node->get('field_c_n_components')->getValue() as $item) {
+    if ((int) ($item['target_id'] ?? 0) === (int) $paragraph->id()) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Builds the homepage logo strip, or NULL when no logo file could be read.
+ */
+function _do_base_logo_strip_paragraph(): ?ParagraphInterface {
+  $logos = [];
+
+  foreach (_do_base_logo_strip_logos() as $logo) {
+    $media = _do_base_logo_media($logo['file'], $logo['uuid'], $logo['name']);
+
+    if ($media instanceof MediaInterface) {
+      $logos[] = ['target_id' => $media->id()];
+    }
+  }
+
+  if ($logos === []) {
+    return NULL;
+  }
+
+  $paragraph = Paragraph::create([
+    'type' => 'logo_strip',
+    'uuid' => _do_base_logo_strip_uuid(),
+    'field_c_p_content' => [
+      'value' => '<p class="text-align-center eyebrow">Open source</p>'
+      . '<h2 class="text-align-center"><strong>Tools we built for our own delivery, and gave away.</strong></h2>'
+      . '<p class="text-align-center ct-text-large">Every one of these came out of a real project, and every one of them is public. You can read the code, run it'
+      . ' yourself, and see how we work before you hire us.</p>',
+      'format' => 'civictheme_rich_text',
+    ],
+    'field_p_logos' => $logos,
+    'field_c_p_theme' => 'light',
+    // The blog list below already carries a tinted background, so this band is
+    // left plain to keep the homepage alternating rather than running two
+    // tinted sections together.
+    'field_c_p_background' => FALSE,
+    'field_c_p_vertical_spacing' => 'both',
+  ]);
+  $paragraph->save();
+
+  return $paragraph;
+}
+
+/**
  * Lists the logos the homepage strip shows, in the order they appear.
  *
  * @return array<int, array<string, string>>
@@ -1532,13 +1569,21 @@ function _do_base_logo_media(string $file_name, string $media_uuid, string $name
     return NULL;
   }
 
+  $contents = file_get_contents($source);
+
+  // An unreadable file returns FALSE, which cast to a string would write an
+  // empty file and wrap it in a media entity that renders as a broken image.
+  if (!is_string($contents)) {
+    return NULL;
+  }
+
   $directory = 'public://images/logos';
 
   if (!\Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY)) {
     return NULL;
   }
 
-  $file = \Drupal::service('file.repository')->writeData((string) file_get_contents($source), $directory . '/' . $file_name, FileExists::Replace);
+  $file = \Drupal::service('file.repository')->writeData($contents, $directory . '/' . $file_name, FileExists::Replace);
 
   if (!$file instanceof FileInterface) {
     return NULL;

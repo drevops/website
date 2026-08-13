@@ -702,9 +702,17 @@ final class ComponentGenerator {
 
   /**
    * Build a logo strip.
+   *
+   * @return array|null
+   *   Field values, or NULL when no image has been generated yet: a strip with
+   *   no logos renders nothing, and its logos field is required.
    */
-  protected function logoStrip(int $index): array {
+  protected function logoStrip(int $index): ?array {
     $logos = $this->generatedContentHelper::randomMediaItems('civictheme_image', 8);
+
+    if ($logos === []) {
+      return NULL;
+    }
 
     return $this->chrome('logo_strip', $index) + [
       'field_c_p_title' => $this->generatedContentHelper::staticSentence(4),
