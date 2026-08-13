@@ -15,6 +15,22 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\media\MediaInterface;
 
 /**
+ * Routes that render a node's banner.
+ */
+const DO_BASE_BANNER_ROUTES = [
+  'entity.node.canonical',
+  'entity.node.revision',
+  'entity.node.latest_version',
+];
+
+/**
+ * Hash of the inline script rendered by core's navigation toolbar.
+ *
+ * @see core/modules/navigation/layouts/navigation.html.twig
+ */
+const DO_BASE_NAVIGATION_SCRIPT_HASH = 'sha256-CaN42Zi+a+oATitdYvGRVlyS6mCZIxrLFXhTbgp6HCI=';
+
+/**
  * Implements hook_mail_alter().
  */
 function do_base_mail_alter(array &$message): void {
@@ -31,8 +47,12 @@ function do_base_mail_alter(array &$message): void {
  */
 function do_base_page_attachments(array &$attachments): void {
   _do_base_attach_preview_link_robots($attachments);
-  _do_base_attach_csp_nonce($attachments);
   _do_base_attach_banner_preload($attachments);
+
+  if (class_exists(Csp::class)) {
+    _do_base_attach_csp_nonce($attachments);
+    _do_base_attach_csp_script_hashes($attachments);
+  }
 }
 
 /**
@@ -42,6 +62,10 @@ function do_base_page_attachments(array &$attachments): void {
  * file until the stylesheet has been fetched and parsed.
  */
 function _do_base_attach_banner_preload(array &$attachments): void {
+  if (!_do_base_route_renders_banner()) {
+    return;
+  }
+
   $url = _do_base_banner_background_url();
 
   if ($url === NULL) {
@@ -99,6 +123,30 @@ function _do_base_banner_background_url(): ?string {
 }
 
 /**
+ * Checks whether the current route renders a node's banner.
+ *
+ * Every other route carrying a node parameter - the forms, the delete
+ * confirmation, the revision list - resolves the same background without ever
+ * drawing it.
+ *
+ * @return bool
+ *   TRUE when the route renders the node page itself.
+ */
+function _do_base_route_renders_banner(): bool {
+  $route_match = \Drupal::routeMatch();
+
+  if (in_array($route_match->getRouteName(), DO_BASE_BANNER_ROUTES, TRUE)) {
+    return TRUE;
+  }
+
+  $route = $route_match->getRouteObject();
+
+  // A preview link route is named after the entity type it was built for, so
+  // the option it carries is the only stable way to recognise one.
+  return $route !== NULL && $route->getOption('_preview_link_route') === TRUE;
+}
+
+/**
  * Keeps preview link pages out of search indexes.
  */
 function _do_base_attach_preview_link_robots(array &$attachments): void {
@@ -127,10 +175,6 @@ function _do_base_attach_preview_link_robots(array &$attachments): void {
  * Attaches a CSP nonce so core's inline scripts survive a strict policy.
  */
 function _do_base_attach_csp_nonce(array &$attachments): void {
-  if (!class_exists(Csp::class)) {
-    return;
-  }
-
   // The 'unsafe-inline' fallback is only used by browsers without CSP3 nonce
   // support; modern browsers ignore it once a nonce is present.
   $existing = $attachments['#attached']['csp_nonce']['script'] ?? [];
@@ -140,6 +184,16 @@ function _do_base_attach_csp_nonce(array &$attachments): void {
   if (!in_array('csp/nonce', $libraries, TRUE)) {
     $attachments['#attached']['library'][] = 'csp/nonce';
   }
+}
+
+/**
+ * Attaches hashes for the inline scripts that carry no nonce.
+ */
+function _do_base_attach_csp_script_hashes(array &$attachments): void {
+  // Core's navigation toolbar sets the sidebar state before the first paint and
+  // renders that script with no nonce, so a hash is the only source under which
+  // it still runs.
+  $attachments['#attached']['csp_hash']['script-src-elem'][DO_BASE_NAVIGATION_SCRIPT_HASH] = [Csp::POLICY_UNSAFE_INLINE];
 }
 
 /**
