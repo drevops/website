@@ -21,6 +21,7 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_webform
     - paragraphs.paragraphs_type.divider
     - paragraphs.paragraphs_type.from_library
+    - paragraphs.paragraphs_type.image_list
     - paragraphs.paragraphs_type.steps
   module:
     - entity_reference_revisions
