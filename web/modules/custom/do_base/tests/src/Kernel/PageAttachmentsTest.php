@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\do_base\Kernel;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\csp\Csp;
+use Drupal\do_base\Hook\PageAttachmentsHook;
+use Drupal\do_base\NavigationScriptHash;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
@@ -113,9 +116,9 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   /**
    * Tests that the hash allowed is the one for the script core renders.
    *
-   * A hash covers the exact bytes of the script, so a core release that edits
-   * it fails here. Recompute the value in _do_base_attach_csp_script_hashes()
-   * from the template this reads.
+   * The hashes are derived from the shipped template, so this asserts that the
+   * template core currently ships is still one the derivation can read. A core
+   * release that restructures it fails here rather than only logging a warning.
    */
   public function testAllowedHashMatchesTheTemplate(): void {
     // Prepare.
@@ -132,6 +135,32 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
       'sha256-' . base64_encode(hash('sha256', $matches[1], TRUE)),
       array_key_first($attachments['#attached']['csp_hash']['script-src-elem']),
     );
+  }
+
+  /**
+   * Tests that a site without the policy module gets no policy attachments.
+   */
+  public function testSiteWithoutThePolicyModuleGetsNoPolicySources(): void {
+    // Prepare.
+    $this->setRoute('entity.node.canonical', ['node' => $this->createPage($this->createImageMedia())]);
+    $modules = $this->createMock(ModuleHandlerInterface::class);
+    $modules->method('moduleExists')->willReturn(FALSE);
+
+    $hook = new PageAttachmentsHook(
+      $this->container->get('current_route_match'),
+      $this->container->get('entity_type.manager'),
+      $modules,
+      $this->container->get(NavigationScriptHash::class),
+    );
+
+    // Act.
+    $attachments = [];
+    $hook->attach($attachments);
+
+    // Assert.
+    $this->assertArrayHasKey('html_head_link', $attachments['#attached'], 'The rest of the hook is expected to run without the policy module.');
+    $this->assertArrayNotHasKey('csp_nonce', $attachments['#attached']);
+    $this->assertArrayNotHasKey('csp_hash', $attachments['#attached']);
   }
 
   /**
@@ -221,12 +250,21 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   /**
    * Runs the hook over an empty set of attachments.
    *
+   * The hook is taken from the container, so the wiring it is registered with
+   * is asserted alongside its behaviour.
+   *
    * @return array<string, array<string, mixed>>
    *   The attachments the hook has added to.
    */
   protected function attach(): array {
+    $hook = $this->container->get(PageAttachmentsHook::class);
+
+    if (!$hook instanceof PageAttachmentsHook) {
+      throw new \UnexpectedValueException('The hook is expected to be registered as a service.');
+    }
+
     $attachments = [];
-    do_base_page_attachments($attachments);
+    $hook->attach($attachments);
 
     return $attachments;
   }

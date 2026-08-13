@@ -66,9 +66,9 @@ Replacing a face means replacing the `woff2` files and the `unicode-range` value
 
 The banner paints its background from CSS, so the browser cannot discover the file until the stylesheet has been fetched and parsed. On the pages carrying one, that background is the largest contentful paint.
 
-`_do_base_attach_banner_preload()` emits a `rel="preload"` for it. The URL has to be the one the stylesheet asks for, or the file is fetched twice: the preload resolves the same image style, and skips the whole thing when the file has no derivative.
+`PageAttachmentsHook` emits a `rel="preload"` for it. The URL has to be the one the stylesheet asks for, or the file is fetched twice: the preload resolves the same image style, and skips the whole thing when the file has no derivative.
 
-It runs only on the routes `_do_base_route_renders_banner()` accepts, which are the pages that draw a banner: the canonical route, a revision, the latest version, and a preview link. The edit form, the delete confirmation and the revision list all carry a node parameter and resolve the same background without ever rendering it, and a preload the page does not use is a wasted request for a full-width derivative.
+It runs only on the routes listed in that hook's `BANNER_ROUTES`, plus any route carrying the `_preview_link_route` option, which are the pages that draw a banner: the canonical route, a revision, the latest version, and a preview link. The edit form, the delete confirmation and the revision list all carry a node parameter and resolve the same background without ever rendering it, and a preload the page does not use is a wasted request for a full-width derivative.
 
 ## Verifying a change
 
