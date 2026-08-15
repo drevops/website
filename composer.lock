@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b45596a0aa561746cfe871e498039db1",
+    "content-hash": "7008da7bd9e36d384ddaef430fb6cfb3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1497,16 +1497,16 @@
         },
         {
             "name": "drevops/vortex-tooling",
-            "version": "1.3.0",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/vortex-tooling.git",
-                "reference": "9fe0ca3b7a93cf223b179a49b5837900304cf522"
+                "reference": "9ab617248a8d4b0193e5ac2a5b8604ac478aed22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/9fe0ca3b7a93cf223b179a49b5837900304cf522",
-                "reference": "9fe0ca3b7a93cf223b179a49b5837900304cf522",
+                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/9ab617248a8d4b0193e5ac2a5b8604ac478aed22",
+                "reference": "9ab617248a8d4b0193e5ac2a5b8604ac478aed22",
                 "shasum": ""
             },
             "require": {
@@ -1548,7 +1548,7 @@
                 "issues": "https://github.com/drevops/vortex/issues",
                 "source": "https://github.com/drevops/vortex"
             },
-            "time": "2026-06-29T05:25:08+00:00"
+            "time": "2026-08-15T00:40:53+00:00"
         },
         {
             "name": "drupal/ai",
@@ -13963,16 +13963,16 @@
         },
         {
             "name": "drevops/behat-steps",
-            "version": "3.12.0",
+            "version": "3.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-steps.git",
-                "reference": "67a7598b8b2d0088abd74a6d414889271c93f7ea"
+                "reference": "ee9b9de3f80ca3b78437af0cae18f4781bb0881c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/67a7598b8b2d0088abd74a6d414889271c93f7ea",
-                "reference": "67a7598b8b2d0088abd74a6d414889271c93f7ea",
+                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/ee9b9de3f80ca3b78437af0cae18f4781bb0881c",
+                "reference": "ee9b9de3f80ca3b78437af0cae18f4781bb0881c",
                 "shasum": ""
             },
             "require": {
@@ -14056,7 +14056,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-07-09T06:02:35+00:00"
+            "time": "2026-08-13T09:36:26+00:00"
         },
         {
             "name": "drevops/phpcs-standard",
@@ -15181,16 +15181,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "70c804da7e9f61e9c60785827e7d360b9444ca24"
+                "reference": "6b4fd0485597d34903efd6a66a6516b659461d2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/70c804da7e9f61e9c60785827e7d360b9444ca24",
-                "reference": "70c804da7e9f61e9c60785827e7d360b9444ca24",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/6b4fd0485597d34903efd6a66a6516b659461d2c",
+                "reference": "6b4fd0485597d34903efd6a66a6516b659461d2c",
                 "shasum": ""
             },
             "require": {
@@ -15262,7 +15262,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/2.1.1"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/2.1.2"
             },
             "funding": [
                 {
@@ -15278,7 +15278,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-07-17T14:04:22+00:00"
+            "time": "2026-08-13T15:38:26+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -15394,20 +15394,20 @@
         },
         {
             "name": "palantirnet/drupal-rector",
-            "version": "0.21.2",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/palantirnet/drupal-rector.git",
-                "reference": "421665d1777df769292b47c51e297c73ed417d00"
+                "reference": "50bb5fb73668be1b27e9ab4c109c0066550e4a5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/palantirnet/drupal-rector/zipball/421665d1777df769292b47c51e297c73ed417d00",
-                "reference": "421665d1777df769292b47c51e297c73ed417d00",
+                "url": "https://api.github.com/repos/palantirnet/drupal-rector/zipball/50bb5fb73668be1b27e9ab4c109c0066550e4a5b",
+                "reference": "50bb5fb73668be1b27e9ab4c109c0066550e4a5b",
                 "shasum": ""
             },
             "require": {
-                "rector/rector": "^1 || ^2",
+                "rector/rector": "^2",
                 "webflo/drupal-finder": "^1.2"
             },
             "replace": {
@@ -15415,17 +15415,17 @@
                 "palantirnet/drupal8-rector": "*"
             },
             "require-dev": {
-                "cweagans/composer-patches": "^1.7.2",
-                "friendsofphp/php-cs-fixer": "^3.58",
+                "cweagans/composer-patches": "^2.0",
+                "friendsofphp/php-cs-fixer": "^3.95.1",
                 "php": "^8.2",
                 "phpstan/extension-installer": "^1.4.3",
-                "phpstan/phpstan": "^1.12 || ^2.0",
-                "phpstan/phpstan-deprecation-rules": "^1.2 || ^2.0",
-                "phpunit/phpunit": "^10.0",
-                "symfony/yaml": "^5 || ^6 || ^7",
-                "symplify/vendor-patches": "^11.0"
+                "phpstan/phpstan": "^2.1.54",
+                "phpstan/phpstan-deprecation-rules": "^2.0.4",
+                "phpunit/phpunit": "^12.5.24",
+                "symfony/yaml": "^5 || ^6 || ^7.4.8",
+                "symplify/vendor-patches": "^12.0.6"
             },
-            "type": "library",
+            "type": "rector-extension",
             "extra": {
                 "enable-patching": true
             },
@@ -15472,9 +15472,10 @@
                 "rector"
             ],
             "support": {
-                "source": "https://github.com/palantirnet/drupal-rector/tree/0.21.2"
+                "issues": "https://github.com/palantirnet/drupal-rector/issues",
+                "source": "https://github.com/palantirnet/drupal-rector/tree/1.1.2"
             },
-            "time": "2026-05-08T14:23:45+00:00"
+            "time": "2026-07-31T09:34:18+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -16790,16 +16791,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.6.1",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "b8e68f058bca43e01a2e1caa51ef022d6551ed95"
+                "reference": "03cd615cdd5648abb5f10ff3a684fdb976687190"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/b8e68f058bca43e01a2e1caa51ef022d6551ed95",
-                "reference": "b8e68f058bca43e01a2e1caa51ef022d6551ed95",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/03cd615cdd5648abb5f10ff3a684fdb976687190",
+                "reference": "03cd615cdd5648abb5f10ff3a684fdb976687190",
                 "shasum": ""
             },
             "require": {
@@ -16838,7 +16839,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.6.1"
+                "source": "https://github.com/rectorphp/rector/tree/2.6.2"
             },
             "funding": [
                 {
@@ -16846,7 +16847,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-03T17:30:34+00:00"
+            "time": "2026-08-12T06:23:05+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -17889,6 +17890,75 @@
             "time": "2026-07-31T10:42:43+00:00"
         },
         {
+            "name": "softcreatr/jsonpath",
+            "version": "0.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SoftCreatR/JSONPath.git",
+                "reference": "74f0b330a98135160db947ba7bc65216b64a0c86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SoftCreatR/JSONPath/zipball/74f0b330a98135160db947ba7bc65216b64a0c86",
+                "reference": "74f0b330a98135160db947ba7bc65216b64a0c86",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "8.1 - 8.4"
+            },
+            "replace": {
+                "flow/jsonpath": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.58",
+                "phpunit/phpunit": "10 - 12",
+                "squizlabs/php_codesniffer": "^3.10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Flow\\JSONPath\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Frank",
+                    "email": "stephen@flowsa.com",
+                    "homepage": "https://prismaticbytes.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Sascha Greuel",
+                    "email": "hello@1-2.dev",
+                    "homepage": "https://1-2.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "JSONPath implementation for parsing, searching and flattening arrays",
+            "support": {
+                "email": "hello@1-2.dev",
+                "forum": "https://github.com/SoftCreatR/JSONPath/discussions",
+                "issues": "https://github.com/SoftCreatR/JSONPath/issues",
+                "source": "https://github.com/SoftCreatR/JSONPath"
+            },
+            "funding": [
+                {
+                    "url": "https://ecologi.com/softcreatr?r=61212ab3fc69b8eb8a2014f4",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/softcreatr",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-03-22T00:28:17+00:00"
+        },
+        {
             "name": "squizlabs/php_codesniffer",
             "version": "4.0.4",
             "source": {
@@ -18629,7 +18699,7 @@
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.4.21"
+        "php": "8.4.23"
     },
     "plugin-api-version": "2.9.0"
 }
