@@ -13,7 +13,7 @@ parameters:
 
   tmpDir: .artifacts/phpstan
 
-  phpVersion: 80421
+  phpVersion: 80423
 
   paths:
     - web/modules/custom
