@@ -44,7 +44,7 @@ final class EntityPresaveHook {
     $old_slug = NULL;
 
     if (!$entity->isNew()) {
-      $original = $entity->original ?? NULL;
+      $original = $entity->getOriginal() ?? NULL;
       if ($original instanceof ParagraphInterface && $original->hasField('field_c_p_list_feed_slug')) {
         $old_slug = $original->get('field_c_p_list_feed_slug')->value;
       }
@@ -75,7 +75,7 @@ final class EntityPresaveHook {
     // Check if anything changed.
     if (!$entity->isNew() && $new_slug === $old_slug) {
       $old_internal = NULL;
-      $original = $entity->original ?? NULL;
+      $original = $entity->getOriginal() ?? NULL;
       if ($original instanceof ParagraphInterface) {
         $old_internal = '/' . $this->feedUrlBuilder->buildInternalPath($original);
       }
