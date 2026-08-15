@@ -39,7 +39,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    * Data provider for testing environment type detection.
    */
   public static function dataProviderEnvironmentTypeDetection(): \Iterator {
-    // By default, the default environment type is local.
+    // The default environment type is local.
     yield [[], self::ENVIRONMENT_LOCAL];
 
     // CI.
@@ -496,7 +496,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['skip_permissions_hardening'] = TRUE;
     $settings['trusted_host_patterns'] = [
       '^localhost$',
-      '^example-site\.docker\.amazee\.io$',
+      '^example\-site\.docker\.amazee\.io$',
       '^nginx$',
     ];
     $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
@@ -609,7 +609,8 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^localhost$',
       '^nginx\-php$',
       '^.+\.amazee\.io$',
-      '^example1\.com|example2/com$',
+      '^example1\.com$',
+      '^example2\/com$',
     ];
     $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
@@ -665,7 +666,8 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^localhost$',
       '^nginx\-php$',
       '^.+\.amazee\.io$',
-      '^example1\.com|example2/com$',
+      '^example1\.com$',
+      '^example2\/com$',
     ];
     $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
@@ -721,7 +723,8 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^localhost$',
       '^nginx\-php$',
       '^.+\.amazee\.io$',
-      '^example1\.com|example2/com$',
+      '^example1\.com$',
+      '^example2\/com$',
     ];
     $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
@@ -777,7 +780,8 @@ class EnvironmentSettingsTest extends SettingsTestCase {
       '^localhost$',
       '^nginx\-php$',
       '^.+\.amazee\.io$',
-      '^example1\.com|example2/com$',
+      '^example1\.com$',
+      '^example2\/com$',
     ];
     $settings['xmlsitemap_base_url'] = 'https://www.drevops.com';
     $this->assertSettings($settings);
