@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\do_base\FunctionalJavascript;
 
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Class ExampleTest.
@@ -14,6 +15,7 @@ use PHPUnit\Framework\Attributes\Group;
  * @package Drupal\do_base\Tests
  */
 #[Group('DoBase')]
+#[RunTestsInSeparateProcesses]
 class ExampleTest extends DoBaseFunctionalJavascriptTestBase {
 
   /**
@@ -22,7 +24,6 @@ class ExampleTest extends DoBaseFunctionalJavascriptTestBase {
   public function testPageLoad(): void {
     $this->drupalGet('<front>');
 
-    // Verify that the page loaded by checking for a page element.
     $result = $this->assertSession()->waitForElement('css', 'html');
     $this->assertNotNull($result, 'Page HTML element is present.');
 
@@ -35,7 +36,6 @@ class ExampleTest extends DoBaseFunctionalJavascriptTestBase {
   public function testJavascriptExecution(): void {
     $this->drupalGet('<front>');
 
-    // Execute JavaScript and verify the result.
     $result = $this->getSession()->evaluateScript('1 + 1');
     $this->assertEquals(2, $result);
 
