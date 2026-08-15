@@ -1,39 +1,65 @@
 #!/usr/bin/env bash
+##
+# Enable development modules.
+#
+# This script is called during site provisioning via the provision script.
+#
+# Development modules are enabled here rather than in the example script so that
+# they remain available after the example script is adjusted or removed.
 
 set -eu
 [ "${VORTEX_DEBUG-}" = "1" ] && set -x
 
+# Skip content generation.
+DRUPAL_GENERATED_CONTENT_SKIP="${DRUPAL_GENERATED_CONTENT_SKIP:-0}"
+
 # ------------------------------------------------------------------------------
 
+# @formatter:off
 info() { printf "   ==> %s\n" "${1}"; }
-task() { printf "     > %s\n" "${1}"; }
 note() { printf "       %s\n" "${1}"; }
+task() { printf "     > %s\n" "${1}"; }
+pass() { printf "     < %s\n" "${1}"; }
+fail() { printf "     ! %s\n" "${1}"; exit "${2:-1}"; }
+# @formatter:on
 
 drush() { ./vendor/bin/drush -y "$@"; }
 
-info "Started enabling development modules."
+# ------------------------------------------------------------------------------
 
-environment="$(drush php:eval "print \Drupal\core\Site\Settings::get('environment');")"
+info "Started development modules operations."
+
+environment="$(drush php:eval "print \Drupal\Core\Site\Settings::get('environment');")"
 note "Environment: ${environment}"
 
-# Perform operations based on the current environment.
-if echo "${environment}" | grep -q -e dev -e stage -e local; then
-  drush pm:enable devel
+if ! echo "${environment}" | grep -qxF -e local -e ci -e dev -e stage; then
+  note "Skipped installing development modules in production environment."
+  exit 0
 fi
 
-# Component validation only runs where development dependencies are installed.
-# Hosting environments build with "--no-dev", so the module code is absent
-# there and enabling it would fail.
-if echo "${environment}" | grep -q -e local -e ci; then
-  drush pm:enable sdc_devel
-fi
+task "Installing Single Directory Component development tools."
+drush pm:install sdc_devel || true
+pass "Installed Single Directory Component development tools."
 
-# Scenarios tagged "@testmode" restrict lists to test content, so the module
-# has to be enabled wherever the test suite runs. It is excluded from the
-# exported configuration, which is why it is enabled here rather than shipped
-# as installed.
-if echo "${environment}" | grep -q -e local -e ci; then
-  drush pm:enable testmode
-fi
+task "Installing Devel module."
+drush pm:install devel || true
+pass "Installed Devel module."
 
-info "Finished enabling development modules."
+# Scenarios tagged "@testmode" restrict lists to test content, so the module has
+# to be installed wherever the test suite runs. It is excluded from the exported
+# configuration, which is why it is installed here rather than shipped as
+# installed.
+task "Installing Testmode module."
+drush pm:install testmode || true
+pass "Installed Testmode module."
+
+task "Installing Generated content module."
+if [ "${DRUPAL_GENERATED_CONTENT_SKIP}" = "1" ]; then
+  note "Content generation skipped. DRUPAL_GENERATED_CONTENT_SKIP is set to 1."
+  drush pm:install generated_content
+else
+  GENERATED_CONTENT_CREATE=1 drush pm:install generated_content
+fi
+pass "Installed Generated content module."
+
+info "Finished development modules operations."
