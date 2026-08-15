@@ -5,7 +5,7 @@ Feature: XML sitemap
   I want published pages to be listed in the XML sitemap
   So that search engines can discover and index the site
 
-  @api @drush
+  @api
   Scenario: Sitemap is served as a well-formed sitemap document
     Given I run drush "xmlsitemap:regenerate"
     And I am an anonymous user
