@@ -12,12 +12,14 @@ use Drupal\field\Entity\FieldStorageConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use Drupal\do_feed\Hook\EntityDeleteHook;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for EntityDeleteHook alias cleanup.
  */
 #[CoversClass(EntityDeleteHook::class)]
 #[Group('do_feed')]
+#[RunTestsInSeparateProcesses]
 class EntityDeleteHookTest extends KernelTestBase {
 
   /**

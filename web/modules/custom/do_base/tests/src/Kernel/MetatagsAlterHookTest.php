@@ -18,6 +18,7 @@ use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the image and text resolved for a page's share card.
@@ -27,6 +28,7 @@ use PHPUnit\Framework\Attributes\Group;
  * lives in the Behat feature.
  */
 #[Group('do_base')]
+#[RunTestsInSeparateProcesses]
 class MetatagsAlterHookTest extends DoBaseKernelTestBase {
 
   /**
