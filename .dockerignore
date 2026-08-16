@@ -48,22 +48,6 @@ web/themes/**/storybook-static
 # Database cache key files written into the workspace by the CI workflow.
 db_cache_*
 
-# Database dumps left in the project root. Anchored so that they do not match
-# 'scripts/sanitize.sql', which the sanitisation step reads at runtime.
-/*.dump
-/*.mysql
-/*.sql
-/*.sql.gz
-
-# Key material. Nothing tracked matches these; they exist so that a key copied
-# into the working tree does not reach the image. 'auth.json' is deliberately
-# absent - the CLI image copies it for Composer authentication.
-*.key
-*.p12
-*.pem
-*.pfx
-id_rsa*
-
 # Local override files.
 docker-compose.override.yml
 .env.local
