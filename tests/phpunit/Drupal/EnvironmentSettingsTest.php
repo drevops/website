@@ -508,19 +508,19 @@ class EnvironmentSettingsTest extends SettingsTestCase {
    */
   public function testEnvironmentLocalContainerMultipleUrls(): void {
     $this->setEnvVars([
-      'LOCALDEV_URL' => 'https://example-site.docker.amazee.io, http://alias.docker.amazee.io , ',
+      'LOCALDEV_URL' => 'https://example-site.docker.amazee.io , http://second-site.docker.amazee.io,',
     ]);
 
     $this->requireSettingsFile();
 
-    $settings['trusted_host_patterns'] = [
-      '^localhost$',
-      '^example\-site\.docker\.amazee\.io$',
-      '^alias\.docker\.amazee\.io$',
-      '^nginx$',
-    ];
-
-    $this->assertSettingsContains($settings);
+    $this->assertSettingsContains([
+      'trusted_host_patterns' => [
+        '^localhost$',
+        '^example\-site\.docker\.amazee\.io$',
+        '^second\-site\.docker\.amazee\.io$',
+        '^nginx$',
+      ],
+    ]);
   }
 
   /**
