@@ -16,6 +16,7 @@ use Drupal\Tests\user\Traits\UserCreationTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
@@ -24,6 +25,7 @@ use Psr\Log\LoggerInterface;
  */
 #[CoversClass(RegenerateImageAltText::class)]
 #[Group('do_ai_alt_text')]
+#[RunTestsInSeparateProcesses]
 class RegenerateImageAltTextTest extends KernelTestBase {
 
   use ImageMediaCreationTrait;

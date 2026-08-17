@@ -1,0 +1,89 @@
+# GitHub Actions configuration file.
+#
+# Security checks run in their own workflow so that a failing audit is
+# distinguishable from a failing linter and can be re-run on its own.
+name: Security audit
+
+on:
+  push:
+    # Pushes to the following branches will trigger the workflow.
+    branches:
+      - production
+      - main
+      - master
+      - develop
+      - release/**
+      - hotfix/**
+      - project/**
+    # Pushes of tags will also trigger the workflow.
+    tags:
+      - '*'
+  # Pull requests to the following branches will trigger the workflow.
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - production
+      - main
+      - master
+      - develop
+      - release/**
+      - hotfix/**
+      - feature/**
+      - bugfix/**
+      - project/**
+
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+# Workaround for the Actions runner creating /root/.docker/config.json
+# with permissions that prevent the container from reading it.
+# https://github.com/actions/runner/issues/863
+env:
+  DOCKER_CONFIG: /tmp/.docker
+
+permissions:
+  contents: read
+
+jobs:
+
+  audit:
+    runs-on: ubuntu-latest
+
+    container:
+      # https://hub.docker.com/r/drevops/ci-runner
+      image: drevops/ci-runner:26.8.0@sha256:80be478cfff66d81fa804ccc707dbeae478655d8b850f1ae06824c194bd6528e
+      env:
+        TZ: ${{ vars.TZ || 'UTC' }}
+        TERM: xterm-256color
+        VORTEX_DEBUG: ${{ vars.VORTEX_DEBUG }}
+
+    steps:
+      - name: Preserve $HOME set in the container
+        run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
+
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Fix Git ownership permissions
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Load environment variables from .env
+        run: t=$(mktemp) && export -p >"${t}" && set -a && . ./.env && set +a && . "${t}" && env >> "$GITHUB_ENV"
+
+      - name: Audit Composer packages
+        if: ${{ !cancelled() }}
+        run: composer audit --locked
+        continue-on-error: ${{ vars.VORTEX_CI_COMPOSER_AUDIT_IGNORE_FAILURE == '1' }}
+
+      - name: Scan for committed secrets with Gitleaks
+        if: ${{ !cancelled() }}
+        run: docker run --rm -v "${PWD}":/repo -w /repo ghcr.io/gitleaks/gitleaks:v8.30.1 dir . --no-banner
+        continue-on-error: ${{ vars.VORTEX_CI_GITLEAKS_IGNORE_FAILURE == '1' }}

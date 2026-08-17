@@ -6,6 +6,7 @@ namespace Drupal\Tests\do_base\Kernel;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Class ExampleTest.
@@ -15,6 +16,7 @@ use PHPUnit\Framework\Attributes\Group;
  * @package Drupal\do_base\Tests
  */
 #[Group('DoBase')]
+#[RunTestsInSeparateProcesses]
 class ExampleTest extends DoBaseKernelTestBase {
 
   /**
@@ -28,7 +30,7 @@ class ExampleTest extends DoBaseKernelTestBase {
       $this->expectExceptionMessage($expectExceptionMessage);
     }
 
-    // Replace below with a call to your class method.
+    // Replace the line below with a call to the method under test.
     $actual = $a + $b;
 
     $this->assertEquals($expected, $actual);
@@ -46,14 +48,14 @@ class ExampleTest extends DoBaseKernelTestBase {
    * Tests subtraction.
    */
   #[DataProvider('dataProviderSubtract')]
-  #[Group('kernel:subtraction')]
+  #[Group('subtraction')]
   public function testSubtract(int $a, int $b, int $expected, string|null $expectExceptionMessage = NULL): void {
     if ($expectExceptionMessage) {
       $this->expectException(\Exception::class);
       $this->expectExceptionMessage($expectExceptionMessage);
     }
 
-    // Replace below with a call to your class method.
+    // Replace the line below with a call to the method under test.
     $actual = $a - $b;
 
     $this->assertEquals($expected, $actual);
@@ -71,25 +73,25 @@ class ExampleTest extends DoBaseKernelTestBase {
   /**
    * Tests multiplication.
    */
-  #[DataProvider('dataProviderMultiplication')]
+  #[DataProvider('dataProviderMultiply')]
   #[Group('multiplication')]
   #[Group('skipped')]
-  public function testMultiplication(int $a, int $b, int $expected, string|null $expectExceptionMessage = NULL): void {
+  public function testMultiply(int $a, int $b, int $expected, string|null $expectExceptionMessage = NULL): void {
     if ($expectExceptionMessage) {
       $this->expectException(\Exception::class);
       $this->expectExceptionMessage($expectExceptionMessage);
     }
 
-    // Replace below with a call to your class method.
+    // Replace the line below with a call to the method under test.
     $actual = $a * $b;
 
     $this->assertEquals($expected, $actual);
   }
 
   /**
-   * Data provider for testMultiplication().
+   * Data provider for testMultiply().
    */
-  public static function dataProviderMultiplication(): \Iterator {
+  public static function dataProviderMultiply(): \Iterator {
     yield [0, 0, 0];
     yield [1, 1, 1];
     yield [2, 1, 2];

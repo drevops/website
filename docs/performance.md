@@ -12,10 +12,11 @@ An image style does two things here: it caps the pixel dimensions, and it conver
 | `banner_featured` | The banner featured image: cropped to 1090x818 around the focal point, converted to WebP |
 | `civictheme_*` | Cards, campaigns and slides: cropped by the CivicTheme sizes, converted to WebP |
 | `divider` | The divider graphic: scaled to fit within 1090x480, converted to WebP |
+| `image_list` | An image in the image list: scaled to fit within 320x160, converted to WebP |
 | `wide` | An image placed in content and rendered as a figure |
 | `social_share` | Share cards, deliberately **not** converted, because some social crawlers still handle WebP badly |
 
-CivicTheme resolves several of these with no image style at all, which yields the URL of the original upload. Three preprocessors here re-resolve them: `_drevops_banner_apply_image_styles()` for the two banner images, `drevops_preprocess_paragraph__divider()` for the divider, and `drevops_preprocess_media__civictheme_image()` for the figure. The banner one covers the block field and the node field, because the node's value wins when both are set.
+CivicTheme resolves several of these with no image style at all, which yields the URL of the original upload. Four preprocessors here re-resolve them: `_drevops_banner_apply_image_styles()` for the two banner images, `drevops_preprocess_paragraph__divider()` for the divider, `_drevops_preprocess_paragraph__paragraph_field__images()` for the image list, and `drevops_preprocess_media__civictheme_image()` for the figure. The banner one covers the block field and the node field, because the node's value wins when both are set.
 
 The featured image sits in a box 40% of the viewport wide and no more than 600px tall, filled with `object-fit: cover`. Its ratio moves with the viewport and with how tall the banner's own content makes it, so the browser trims a different part of the image on every screen. A focal point crop puts the subject at the centre of the derivative, which is the part `cover` keeps whichever way it trims.
 
@@ -52,6 +53,10 @@ Checking the markup is not enough to catch this, because the markup is correct. 
 
 Lexend and Rubik ship in `assets/fonts/` and are declared in `components/00-base/fonts/fonts.scss`. Nothing is fetched from `fonts.googleapis.com`, which is why the CSP no longer allows it.
 
+The editing area needs its own arrangement to hold that line. CKEditor 5 merges the base theme's `ckeditor5-stylesheets` into this theme's list, `.info.yml` has no override for that key, and CivicTheme's build of the editor stylesheet opens with two `@import` statements pointing at Google Fonts. `LibraryInfoAlterHook` drops the base theme's files from that list; `dist/styles.editor.css` is this theme's build of the same partials, with the self-hosted faces in place of the imports, and contributes every selector the base theme's copy did.
+
+Leaving those imports in place cost more than a blocked request. A stylesheet whose `@import` is blocked fires `error` rather than `load`, so an Ajax response that attached the editor stylesheets reported the aggregate as unloadable and abandoned the commands queued behind it.
+
 They are declared by hand rather than through CivicTheme's `$ct-fonts` map, because the generator that map feeds emits one `@font-face` per weight and supports neither the variable weight ranges these faces ship as nor the `unicode-range` and `font-display` descriptors a self-hosted face needs. The map still names the families, with an empty `types` list so it emits nothing.
 
 Only the Latin subsets are preloaded, by `_drevops_attach_font_preloads()`. The extended subsets are needed by a small minority of pages, and a preload the page does not use is a wasted request.
@@ -62,7 +67,9 @@ Replacing a face means replacing the `woff2` files and the `unicode-range` value
 
 The banner paints its background from CSS, so the browser cannot discover the file until the stylesheet has been fetched and parsed. On the pages carrying one, that background is the largest contentful paint.
 
-`_do_base_attach_banner_preload()` emits a `rel="preload"` for it. The URL has to be the one the stylesheet asks for, or the file is fetched twice: the preload resolves the same image style, and skips the whole thing when the file has no derivative.
+`PageAttachmentsHook` emits a `rel="preload"` for it. The URL has to be the one the stylesheet asks for, or the file is fetched twice: the preload resolves the same image style, and skips the whole thing when the file has no derivative.
+
+It runs only on the routes listed in that hook's `BANNER_ROUTES`, plus any route carrying the `_preview_link_route` option, which are the pages that draw a banner: the canonical route, a revision, the latest version, and a preview link. The edit form, the delete confirmation and the revision list all carry a node parameter and resolve the same background without ever rendering it, and a preload the page does not use is a wasted request for a full-width derivative.
 
 ## Verifying a change
 

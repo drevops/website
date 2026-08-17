@@ -7,138 +7,16 @@
 
 declare(strict_types=1);
 
-use Drupal\csp\Csp;
-use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\file\FileInterface;
-use Drupal\image\Entity\ImageStyle;
-use Drupal\media\MediaInterface;
 
 /**
  * Implements hook_mail_alter().
  */
 function do_base_mail_alter(array &$message): void {
-  // Allow to stop any mail send out through settings. Note if email
-  // functionality needs to be tested, this code should be removed and
-  // replaced with a dev mail system.
+  // The 'suspend_mail_send' setting stops all outgoing mail. Remove this and
+  // use a development mail system when email sending needs to be tested.
   if (Settings::get('suspend_mail_send')) {
     $message['send'] = FALSE;
-  }
-}
-
-/**
- * Implements hook_page_attachments().
- */
-function do_base_page_attachments(array &$attachments): void {
-  _do_base_attach_preview_link_robots($attachments);
-  _do_base_attach_csp_nonce($attachments);
-  _do_base_attach_banner_preload($attachments);
-}
-
-/**
- * Preloads the banner background image.
- *
- * The banner paints its background from CSS, so the browser cannot discover the
- * file until the stylesheet has been fetched and parsed.
- */
-function _do_base_attach_banner_preload(array &$attachments): void {
-  $url = _do_base_banner_background_url();
-
-  if ($url === NULL) {
-    return;
-  }
-
-  $attachments['#attached']['html_head_link'][] = [
-    [
-      'rel' => 'preload',
-      'href' => $url,
-      'as' => 'image',
-      'fetchpriority' => 'high',
-    ],
-  ];
-}
-
-/**
- * Resolves the styled URL of the current node's banner background.
- *
- * @return string|null
- *   The URL, or NULL when there is no node, no background, or the file cannot
- *   be processed into a derivative.
- */
-function _do_base_banner_background_url(): ?string {
-  $route_match = \Drupal::routeMatch();
-  $node = $route_match->getParameter('node_revision') ?: $route_match->getParameter('node');
-
-  if (!$node instanceof FieldableEntityInterface || !$node->hasField('field_c_n_banner_background')) {
-    return NULL;
-  }
-
-  $media = $node->get('field_c_n_banner_background')->entity;
-  if (!$media instanceof MediaInterface) {
-    return NULL;
-  }
-
-  $source_field = $media->getSource()->getConfiguration()['source_field'] ?? NULL;
-  if (empty($source_field) || !$media->hasField($source_field)) {
-    return NULL;
-  }
-
-  $file = $media->get($source_field)->entity;
-  if (!$file instanceof FileInterface) {
-    return NULL;
-  }
-
-  $style = ImageStyle::load('banner_background');
-  // A vector has no derivative, so the stylesheet requests the original and a
-  // preload of anything else would fetch the file twice.
-  if (!$style instanceof ImageStyle || !$style->supportsUri($file->getFileUri())) {
-    return NULL;
-  }
-
-  return $style->buildUrl($file->getFileUri());
-}
-
-/**
- * Keeps preview link pages out of search indexes.
- */
-function _do_base_attach_preview_link_robots(array &$attachments): void {
-  $route = \Drupal::routeMatch()->getRouteObject();
-
-  if ($route === NULL || $route->getOption('_preview_link_route') !== TRUE) {
-    return;
-  }
-
-  // A preview link renders unpublished content to anyone holding the token,
-  // and the URL is meant to be pasted into mail and chat clients that follow
-  // links, so the page must never reach a search index.
-  $attachments['#attached']['html_head'][] = [
-    [
-      '#tag' => 'meta',
-      '#attributes' => [
-        'name' => 'robots',
-        'content' => 'noindex, nofollow',
-      ],
-    ],
-    'do_base_preview_link_robots',
-  ];
-}
-
-/**
- * Attaches a CSP nonce so core's inline scripts survive a strict policy.
- */
-function _do_base_attach_csp_nonce(array &$attachments): void {
-  if (!class_exists(Csp::class)) {
-    return;
-  }
-
-  // The 'unsafe-inline' fallback is only used by browsers without CSP3 nonce
-  // support; modern browsers ignore it once a nonce is present.
-  $existing = $attachments['#attached']['csp_nonce']['script'] ?? [];
-  $attachments['#attached']['csp_nonce']['script'] = array_values(array_unique(array_merge($existing, [Csp::POLICY_UNSAFE_INLINE])));
-
-  $libraries = $attachments['#attached']['library'] ?? [];
-  if (!in_array('csp/nonce', $libraries, TRUE)) {
-    $attachments['#attached']['library'][] = 'csp/nonce';
   }
 }
 

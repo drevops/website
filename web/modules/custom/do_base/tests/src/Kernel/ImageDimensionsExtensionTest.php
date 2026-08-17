@@ -10,11 +10,13 @@ use Drupal\do_base\Twig\ImageDimensionsExtension;
 use Drupal\image\Entity\ImageStyle;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the dimensions resolved for a rendered image.
  */
 #[Group('do_base')]
+#[RunTestsInSeparateProcesses]
 class ImageDimensionsExtensionTest extends DoBaseKernelTestBase {
 
   /**

@@ -1,0 +1,57 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/modules/sdc/src/metadata.schema.json
+name: Image list
+status: stable
+description: A row of images rendered as a single band, wrapping to fit the screen.
+props:
+  type: object
+  properties:
+    theme:
+      type: string
+      title: Theme
+      description: Theme variation (light or dark).
+      enum:
+        - light
+        - dark
+      default: light
+    images:
+      type: array
+      title: Images
+      description: Images rendered in order.
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+            title: URL
+            description: Image URL.
+          alt:
+            type: string
+            title: Alt text
+            description: Image alt text.
+    vertical_spacing:
+      type: string
+      title: Vertical spacing
+      description: Controls vertical spacing (top, bottom, or both).
+      enum:
+        - top
+        - bottom
+        - both
+    with_background:
+      type: boolean
+      title: With background
+      description: Whether to display with a themed background.
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Additional HTML attributes
+      description: Additional HTML attributes to add to the component.
+    modifier_class:
+      type: string
+      title: Additional CSS classes
+      description: Additional CSS classes to add to the component.
+slots:
+  title:
+    title: Title
+    description: Optional heading shown above the images.
+  content:
+    title: Content
+    description: Optional intro content shown above the images.

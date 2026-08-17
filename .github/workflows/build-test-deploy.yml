@@ -66,7 +66,7 @@ env:
   DOCKER_CONFIG: /tmp/.docker
 
 permissions:
-  contents: read # Minimal default for all jobs; jobs that need more override below.
+  contents: read
 
 jobs:
 
@@ -76,7 +76,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.6.0@sha256:190027056cac7b7ce28c29a1e5494779ebadc4ee8e95d468b75bc56e7be5aabd
+      image: drevops/ci-runner:26.8.0@sha256:80be478cfff66d81fa804ccc707dbeae478655d8b850f1ae06824c194bd6528e
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -89,8 +89,8 @@ jobs:
       - name: Preserve $HOME set in the container
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
-      - name: Check out code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
@@ -116,17 +116,13 @@ jobs:
       - name: Lint Dockerfiles with Hadolint
         run: |
           find .docker \( -name 'Dockerfile' -o -name '*.dockerfile' \) | while read -r file; do
-            echo "Linting ${file}" && cat "${file}" | docker run --rm -i hadolint/hadolint
+            echo "Linting ${file}" && cat "${file}" | docker run --rm -i hadolint/hadolint:v2.15.1
           done
         continue-on-error: ${{ vars.VORTEX_CI_HADOLINT_IGNORE_FAILURE == '1' }}
 
       - name: Lint Docker Compose files with DCLint
         run: docker run --rm -v "${PWD}":/app zavoloklom/dclint:3.1.0 .
         continue-on-error: ${{ vars.VORTEX_CI_DCLINT_IGNORE_FAILURE == '1' }}
-
-      - name: Scan for committed secrets with Gitleaks
-        run: docker run --rm -v "${PWD}":/repo -w /repo ghcr.io/gitleaks/gitleaks:v8.30.1 dir . --no-banner
-        continue-on-error: ${{ vars.VORTEX_CI_GITLEAKS_IGNORE_FAILURE == '1' }}
 
       - name: Build stack
         run: docker compose up --no-deps --detach cli
@@ -137,10 +133,6 @@ jobs:
             if [ -n \"\${PACKAGE_TOKEN:-}\" ]; then composer config --global --auth github-oauth.github.com \"\${PACKAGE_TOKEN}\"; fi && \
             COMPOSER_MEMORY_LIMIT=-1 composer --ansi install --prefer-dist"
           docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli bash -c "yarn install --frozen-lockfile"
-
-      - name: Audit Composer packages
-        run: docker compose exec -T cli composer audit
-        continue-on-error: ${{ vars.VORTEX_CI_COMPOSER_AUDIT_IGNORE_FAILURE == '1' }}
 
       - name: Validate Composer configuration is normalized
         run: docker compose exec -T cli composer normalize --dry-run
@@ -181,7 +173,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.6.0@sha256:190027056cac7b7ce28c29a1e5494779ebadc4ee8e95d468b75bc56e7be5aabd
+      image: drevops/ci-runner:26.8.0@sha256:80be478cfff66d81fa804ccc707dbeae478655d8b850f1ae06824c194bd6528e
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -201,11 +193,23 @@ jobs:
         VORTEX_CI_DB_CACHE_BRANCH: "develop"
 
     steps:
+      # Frees disk space by removing preinstalled toolchains unused by this project. Steps run in a container, so the host is reached via the Docker socket.
+      - name: Free up disk space on the runner
+        if: ${{ vars.CI_FREE_DISK_SPACE == '1' }}
+        run: |
+          set -- /host/usr/local/.ghcup /host/usr/share/swift /host/usr/local/share/powershell /host/usr/share/dotnet /host/opt/hostedtoolcache/CodeQL
+          # set -- "$@" /host/usr/local/lib/android # Removes about 10GB more, but takes about 50s. Uncomment to enable.
+          job_image=$(docker inspect --format '{{.Config.Image}}' "${HOSTNAME}" 2>/dev/null || echo alpine:3)
+          docker run --rm -v /:/host "${job_image}" rm -rf "$@" || true
+
+      - name: Report disk usage
+        run: df -h
+
       - name: Preserve $HOME set in the container
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
-      - name: Check out code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           # Do not keep SSH credentials after checkout to allow adding custom SSH keys.
           persist-credentials: false
@@ -289,9 +293,9 @@ jobs:
     if: ${{ !inputs.deploy_target && github.event_name != 'schedule' && (github.event_name == 'push' || !startsWith(github.head_ref, 'project/')) }}
 
     permissions:
-      contents: read # Check out the repository.
-      checks: write # Publish test results to the Checks tab.
-      pull-requests: write # Comment on the pull request.
+      contents: read
+      checks: write
+      pull-requests: write
 
     strategy:
       # A matrix to run multiple jobs in parallel.
@@ -301,7 +305,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.6.0@sha256:190027056cac7b7ce28c29a1e5494779ebadc4ee8e95d468b75bc56e7be5aabd
+      image: drevops/ci-runner:26.8.0@sha256:80be478cfff66d81fa804ccc707dbeae478655d8b850f1ae06824c194bd6528e
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -322,11 +326,23 @@ jobs:
         VORTEX_CI_DB_CACHE_BRANCH: "develop"
 
     steps:
+      # Frees disk space by removing preinstalled toolchains unused by this project. Steps run in a container, so the host is reached via the Docker socket.
+      - name: Free up disk space on the runner
+        if: ${{ vars.CI_FREE_DISK_SPACE == '1' }}
+        run: |
+          set -- /host/usr/local/.ghcup /host/usr/share/swift /host/usr/local/share/powershell /host/usr/share/dotnet /host/opt/hostedtoolcache/CodeQL
+          # set -- "$@" /host/usr/local/lib/android # Removes about 10GB more, but takes about 50s. Uncomment to enable.
+          job_image=$(docker inspect --format '{{.Config.Image}}' "${HOSTNAME}" 2>/dev/null || echo alpine:3)
+          docker run --rm -v /:/host "${job_image}" rm -rf "$@" || true
+
+      - name: Report disk usage
+        run: df -h
+
       - name: Preserve $HOME set in the container
         run: echo HOME=/root >> "$GITHUB_ENV" # https://github.com/actions/runner/issues/863
 
-      - name: Check out code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
@@ -373,7 +389,7 @@ jobs:
         run: ./vendor/bin/vortex-login-container-registry
 
       - name: Build stack
-        run: docker compose up --detach && docker builder prune --all --force
+        run: docker compose up --detach && docker builder prune --all --force && docker image prune --force
 
       - name: Export built codebase
         if: ${{ matrix.instance == 0 && !startsWith(github.head_ref || github.ref_name, 'deps/') && contains(env.VORTEX_DEPLOY_TYPES, 'artifact') }}
@@ -391,9 +407,12 @@ jobs:
 
       - name: Provision site
         run: |
+          # Database dumps are removed from the runner once they are inside the
+          # container to avoid holding two copies for the rest of the job.
           if [ -f .data/db.sql ]; then
             docker compose exec cli mkdir -p .data
             docker compose cp -L .data/db.sql cli:/app/.data/db.sql
+            rm -f .data/db.sql
           fi
           docker compose exec $(env | cut -f1 -d= | sed 's/^/-e /') -T cli ./vendor/bin/vortex-provision
         timeout-minutes: 30
@@ -544,9 +563,13 @@ jobs:
     needs: [build, lint]
     if: ${{ !cancelled() && (inputs.deploy_target || (success() && github.event_name != 'schedule' && !startsWith(github.head_ref || github.ref_name, 'deps/') && (github.event_name == 'push' || !startsWith(github.head_ref, 'project/')))) }}
 
+    permissions:
+      contents: read
+      pull-requests: read
+
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.6.0@sha256:190027056cac7b7ce28c29a1e5494779ebadc4ee8e95d468b75bc56e7be5aabd
+      image: drevops/ci-runner:26.8.0@sha256:80be478cfff66d81fa804ccc707dbeae478655d8b850f1ae06824c194bd6528e
       env:
         TZ: ${{ vars.TZ || 'UTC' }}
         TERM: xterm-256color
@@ -573,7 +596,7 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Checkout code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           # Fetch all history for git repository.
           fetch-depth: 0

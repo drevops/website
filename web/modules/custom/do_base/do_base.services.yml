@@ -1,4 +1,9 @@
 services:
+  logger.channel.do_base:
+    parent: logger.channel_base
+    arguments: ['do_base']
+  Drupal\do_base\NavigationScriptHash:
+    arguments: ['@extension.list.module', '@cache.default', '@logger.channel.do_base', '%app.root%']
   Drupal\do_base\Hook\AutomatedListPagerHook:
     arguments: ['@request_stack', '@pager.manager']
   do_base.twig.icon_assets:

@@ -43,26 +43,24 @@
 
   Drupal.behaviors.doBaseRecaptchaV3Guard = {
     attach: function attachGuard(context) {
-      once('recaptcha-v3-guard', '.recaptcha-v3-token', context).forEach(
-        function processToken(tokenInput) {
-          const form = tokenInput.closest('form');
-          if (!form) {
-            return;
-          }
+      once('recaptcha-v3-guard', '.recaptcha-v3-token', context).forEach(function processToken(tokenInput) {
+        const form = tokenInput.closest('form');
+        if (!form) {
+          return;
+        }
 
-          const submits = form.querySelectorAll('[type="submit"]');
-          if (!submits.length) {
-            return;
-          }
+        const submits = form.querySelectorAll('[type="submit"]');
+        if (!submits.length) {
+          return;
+        }
 
-          // Disable submit buttons until the token is ready.
-          submits.forEach(function disableBtn(btn) {
-            btn.disabled = true;
-          });
+        // Disable submit buttons until the token is ready.
+        submits.forEach(function disableBtn(btn) {
+          btn.disabled = true;
+        });
 
-          watchToken(tokenInput, submits);
-        },
-      );
+        watchToken(tokenInput, submits);
+      });
     },
   };
 })(Drupal, once);

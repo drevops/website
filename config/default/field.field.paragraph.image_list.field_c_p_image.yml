@@ -1,0 +1,29 @@
+uuid: db8e25b6-c863-4aff-a287-c3b794427eb2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_c_p_image
+    - media.type.civictheme_image
+    - paragraphs.paragraphs_type.image_list
+id: paragraph.image_list.field_c_p_image
+field_name: field_c_p_image
+entity_type: paragraph
+bundle: image_list
+label: Images
+description: 'Images shown in the list, in the order they are listed.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      civictheme_image: civictheme_image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

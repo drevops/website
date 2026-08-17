@@ -8,6 +8,7 @@ use Drupal\Tests\content_moderation\Traits\ContentModerationTestTrait;
 use Drupal\node\NodeInterface;
 use Drupal\preview_link\Entity\PreviewLinkInterface;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests that a preview link shows unpublished content to its recipient only.
@@ -17,6 +18,7 @@ use PHPUnit\Framework\Attributes\Group;
  * the whole contract.
  */
 #[Group('do_base')]
+#[RunTestsInSeparateProcesses]
 class PreviewLinkTest extends DoBaseFunctionalTestBase {
 
   use ContentModerationTestTrait;

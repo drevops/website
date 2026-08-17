@@ -1,0 +1,80 @@
+{#
+/**
+ * @file
+ * Image list component.
+ *
+ * Variables:
+ * - theme: [string] Theme: light, dark.
+ * - title: [string] Optional heading shown above the images.
+ * - content: [string] Optional intro content shown above the images.
+ * - images: [array] Images:
+ *   - url: [string] Image URL.
+ *   - alt: [string] Image alt text.
+ * - vertical_spacing: [string] With top, bottom or both vertical spaces.
+ * - with_background: [boolean] Whether to display with a themed background.
+ * - attributes: [Drupal\Core\Template\Attribute] Additional attributes.
+ * - modifier_class: [string] Additional classes.
+ */
+#}
+
+{% set with_background_class = with_background ? 'ct-image-list--with-background' : '' %}
+{% set vertical_spacing_class = vertical_spacing in ['top', 'bottom', 'both'] ? 'ct-vertical-spacing-inset--%s'|format(vertical_spacing) : '' %}
+{% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
+{% set modifier_class = '%s %s %s %s'|format(theme_class, with_background_class, vertical_spacing_class, modifier_class|default('')) %}
+
+{% if images %}
+  <div class="ct-image-list {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
+    <div class="container">
+      {% if title or content %}
+        <div class="row">
+          <div class="col-xxs-12">
+            <div class="ct-image-list__header">
+              {% if title %}
+                {{ include('civictheme:heading', {
+                  content: title,
+                  level: 2,
+                  theme: theme,
+                  modifier_class: 'ct-image-list__title',
+                }, with_context: false) }}
+              {% endif %}
+              {% if content %}
+                <div class="ct-image-list__content">{{ content }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="row">
+        <div class="col-xxs-12">
+          {% set image_items = [] %}
+
+          {% for image in images %}
+            {% if image.url is not empty %}
+              {% set image_item %}
+                {{ include('civictheme:image', {
+                  theme: theme|default('light'),
+                  url: image.url,
+                  alt: image.alt|default(''),
+                  modifier_class: 'ct-image-list__image',
+                }, with_context: false) }}
+              {% endset %}
+              {% set image_items = image_items|merge([image_item]) %}
+            {% endif %}
+          {% endfor %}
+
+          {# The list markup, its flex layout and its responsive gaps all come
+             from the base component. The role is restated because removing the
+             bullets also removes the list semantics in Safari. #}
+          {{ include('civictheme:item-list', {
+            items: image_items,
+            direction: 'horizontal',
+            size: 'large',
+            modifier_class: 'ct-image-list__items',
+            attributes: create_attribute({role: 'list'}),
+          }, with_context: false) }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
