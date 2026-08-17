@@ -38,11 +38,11 @@ if ! echo "${environment}" | grep -qxF -e local -e ci -e dev -e stage; then
 fi
 
 task "Installing Single Directory Component development tools."
-drush pm:install sdc_devel || true
+drush pm:install sdc_devel
 pass "Installed Single Directory Component development tools."
 
 task "Installing Devel module."
-drush pm:install devel || true
+drush pm:install devel
 pass "Installed Devel module."
 
 # Scenarios tagged "@testmode" restrict lists to test content, so the module has
@@ -50,7 +50,7 @@ pass "Installed Devel module."
 # configuration, which is why it is installed here rather than shipped as
 # installed.
 task "Installing Testmode module."
-drush pm:install testmode || true
+drush pm:install testmode
 pass "Installed Testmode module."
 
 task "Installing Generated content module."
