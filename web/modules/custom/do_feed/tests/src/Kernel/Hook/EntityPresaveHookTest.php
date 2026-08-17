@@ -12,12 +12,14 @@ use Drupal\field\Entity\FieldStorageConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use Drupal\do_feed\Hook\EntityPresaveHook;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for EntityPresaveHook alias lifecycle.
  */
 #[CoversClass(EntityPresaveHook::class)]
 #[Group('do_feed')]
+#[RunTestsInSeparateProcesses]
 class EntityPresaveHookTest extends KernelTestBase {
 
   /**

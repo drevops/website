@@ -10,12 +10,14 @@ use Drupal\KernelTests\KernelTestBase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for FeedSettingsForm.
  */
 #[CoversClass(FeedSettingsForm::class)]
 #[Group('do_feed')]
+#[RunTestsInSeparateProcesses]
 class FeedSettingsFormTest extends KernelTestBase {
 
   /**

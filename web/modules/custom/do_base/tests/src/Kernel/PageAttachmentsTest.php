@@ -22,6 +22,7 @@ use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
@@ -32,6 +33,7 @@ use Symfony\Component\Routing\Route;
  * it recognises is reachable without a rendered response.
  */
 #[Group('do_base')]
+#[RunTestsInSeparateProcesses]
 class PageAttachmentsTest extends DoBaseKernelTestBase {
 
   /**

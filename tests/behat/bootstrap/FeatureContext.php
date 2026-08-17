@@ -11,6 +11,7 @@ use DrevOps\BehatSteps\AccessibilityTrait;
 use DrevOps\BehatSteps\CookieTrait;
 use DrevOps\BehatSteps\DateTrait;
 use DrevOps\BehatSteps\Drupal\BlockTrait;
+use DrevOps\BehatSteps\Drupal\CacheTrait;
 use DrevOps\BehatSteps\Drupal\ContentBlockTrait;
 use DrevOps\BehatSteps\Drupal\ContentTrait;
 use DrevOps\BehatSteps\Drupal\DraggableviewsTrait;
@@ -22,6 +23,7 @@ use DrevOps\BehatSteps\Drupal\MenuTrait;
 use DrevOps\BehatSteps\MetatagTrait;
 use DrevOps\BehatSteps\Drupal\OverrideTrait;
 use DrevOps\BehatSteps\Drupal\ParagraphsTrait;
+use DrevOps\BehatSteps\Drupal\RedirectTrait;
 use DrevOps\BehatSteps\Drupal\SearchApiTrait;
 use DrevOps\BehatSteps\Drupal\TaxonomyTrait;
 use DrevOps\BehatSteps\Drupal\TestmodeTrait;
@@ -30,13 +32,17 @@ use DrevOps\BehatSteps\Drupal\WatchdogTrait;
 use DrevOps\BehatSteps\ElementTrait;
 use DrevOps\BehatSteps\FieldTrait;
 use DrevOps\BehatSteps\FileDownloadTrait;
+use DrevOps\BehatSteps\IframeTrait;
 use DrevOps\BehatSteps\JavascriptTrait;
+use DrevOps\BehatSteps\JsonTrait;
 use DrevOps\BehatSteps\KeyboardTrait;
 use DrevOps\BehatSteps\LinkTrait;
 use DrevOps\BehatSteps\PathTrait;
 use DrevOps\BehatSteps\ResponseTrait;
 use DrevOps\BehatSteps\ResponsiveTrait;
+use DrevOps\BehatSteps\RestTrait;
 use DrevOps\BehatSteps\WaitTrait;
+use DrevOps\BehatSteps\XmlTrait;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Drupal\DrupalExtension\Context\DrupalContext;
@@ -50,6 +56,7 @@ class FeatureContext extends DrupalContext {
 
   use AccessibilityTrait;
   use BlockTrait;
+  use CacheTrait;
   use ContentBlockTrait;
   use ContentTrait;
   use CookieTrait;
@@ -61,7 +68,9 @@ class FeatureContext extends DrupalContext {
   use FieldTrait;
   use FileDownloadTrait;
   use FileTrait;
+  use IframeTrait;
   use JavascriptTrait;
+  use JsonTrait;
   use KeyboardTrait;
   use LinkTrait;
   use MediaTrait;
@@ -70,14 +79,17 @@ class FeatureContext extends DrupalContext {
   use OverrideTrait;
   use ParagraphsTrait;
   use PathTrait;
+  use RedirectTrait;
   use ResponseTrait;
   use ResponsiveTrait;
+  use RestTrait;
   use SearchApiTrait;
   use TaxonomyTrait;
   use TestmodeTrait;
   use UserTrait;
   use WaitTrait;
   use WatchdogTrait;
+  use XmlTrait;
 
   /**
    * Set an explicit path alias for a node, bypassing pathauto.
@@ -154,52 +166,6 @@ class FeatureContext extends DrupalContext {
   }
 
   /**
-   * Assert that an element paints on top of another element.
-   *
-   * Compares the computed z-index of two elements that both establish a
-   * root-level stacking context. A descendant cannot escape its ancestor's
-   * stacking context, so this also settles the order of any popup opened
-   * inside either element.
-   *
-   * @code
-   * Then the element ".top-bar" should stack above the element ".ct-header"
-   * @endcode
-   *
-   * @javascript
-   */
-  #[Then('the element :selector should stack above the element :other_selector')]
-  public function elementAssertStacksAbove(string $selector, string $other_selector): void {
-    $above = $this->elementZindex($selector);
-    $below = $this->elementZindex($other_selector);
-
-    if ($above <= $below) {
-      throw new \RuntimeException(sprintf('Expected element "%s" to stack above element "%s", but their z-index values are %d and %d.', $selector, $other_selector, $above, $below));
-    }
-  }
-
-  /**
-   * Assert that an element sits flush against the top of the viewport.
-   *
-   * The behat-steps "at the top of the viewport" step accepts any offset
-   * between zero and the viewport height, so it passes for an element that
-   * merely happens to be on screen. A sticky element has to be flush.
-   *
-   * @code
-   * Then the element ".ct-header" should be pinned to the top of the viewport
-   * @endcode
-   *
-   * @javascript
-   */
-  #[Then('the element :selector should be pinned to the top of the viewport')]
-  public function elementAssertPinnedToViewportTop(string $selector): void {
-    $offset = (int) round((float) $this->elementExecuteJs($selector, 'return {{ELEMENT}}.getBoundingClientRect().top;'));
-
-    if ($offset !== 0) {
-      throw new \RuntimeException(sprintf('Expected element "%s" to be pinned to the top of the viewport, but it is %dpx from it.', $selector, $offset));
-    }
-  }
-
-  /**
    * Assert that an element resolves to a computed style value.
    *
    * Asserting on markup alone cannot tell whether a rule reached the element:
@@ -221,31 +187,6 @@ JS;
     if ($actual !== $value) {
       throw new \RuntimeException(sprintf('Expected element "%s" to have a computed "%s" of "%s", but it is "%s".', $selector, $property, $value, $actual));
     }
-  }
-
-  /**
-   * Get the computed z-index of an element.
-   *
-   * @param string $selector
-   *   The CSS selector.
-   *
-   * @return int
-   *   The computed z-index.
-   */
-  protected function elementZindex(string $selector): int {
-    $script = <<<JS
-      return window.getComputedStyle({{ELEMENT}}).zIndex;
-JS;
-    $z_index = (string) $this->elementExecuteJs($selector, $script);
-
-    // An element without a stacking order of its own cannot be compared, and
-    // silently treating it as zero would assert something that was never
-    // styled.
-    if (!is_numeric($z_index)) {
-      throw new \RuntimeException(sprintf('Expected element "%s" to have a numeric z-index, but it is "%s".', $selector, $z_index));
-    }
-
-    return (int) $z_index;
   }
 
 }

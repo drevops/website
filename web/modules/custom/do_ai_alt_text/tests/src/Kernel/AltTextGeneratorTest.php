@@ -15,12 +15,14 @@ use Drupal\Tests\do_ai_alt_text\Traits\ImageMediaCreationTrait;
 use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for AltTextGenerator against real entities.
  */
 #[CoversClass(AltTextGenerator::class)]
 #[Group('do_ai_alt_text')]
+#[RunTestsInSeparateProcesses]
 class AltTextGeneratorTest extends KernelTestBase {
 
   use AiProviderStubTrait;

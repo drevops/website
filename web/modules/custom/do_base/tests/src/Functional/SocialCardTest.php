@@ -15,6 +15,7 @@ use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the image and text a page carries when it is shared.
@@ -24,6 +25,7 @@ use PHPUnit\Framework\Attributes\Group;
  * shared most. A card that silently loses its image is the failure this covers.
  */
 #[Group('do_base')]
+#[RunTestsInSeparateProcesses]
 class SocialCardTest extends DoBaseFunctionalTestBase {
 
   /**

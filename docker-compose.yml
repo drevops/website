@@ -20,6 +20,8 @@ x-environment: &default-environment
   TZ: ${TZ:-UTC}
   # Pass-through 'CI' variable used to identify the CI environment.
   CI: ${CI:-}
+  # Pass-through 'ENVIRONMENT_TYPE' to override the auto-detected environment type.
+  ENVIRONMENT_TYPE: ${ENVIRONMENT_TYPE:-}
   # Pass-through 'XDEBUG_ENABLE' to enable XDebug with "ahoy debug" or "XDEBUG_ENABLE=true docker compose up -d".
   XDEBUG_ENABLE: ${XDEBUG_ENABLE:-}
   # Local development URL.
@@ -95,7 +97,7 @@ services:
         VORTEX_FRONTEND_BUILD_SKIP: ${VORTEX_FRONTEND_BUILD_SKIP:-}
       secrets:
         - package_token
-    image: &cli-image ${COMPOSE_PROJECT_NAME:-example_site}
+    image: &cli-image ${COMPOSE_PROJECT_NAME:-example-site}
     environment:
       <<: *default-environment
     <<: *default-volumes

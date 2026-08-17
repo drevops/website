@@ -15,12 +15,14 @@ use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\do_content_api\Hook\ModerationPolicyHook;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for ModerationPolicyHook.
  */
 #[CoversClass(ModerationPolicyHook::class)]
 #[Group('do_content_api')]
+#[RunTestsInSeparateProcesses]
 class ModerationPolicyHookTest extends KernelTestBase {
 
   use ContentModerationTestTrait;
