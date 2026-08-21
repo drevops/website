@@ -665,6 +665,145 @@ class SwitchableSettingsTest extends SettingsTestCase {
   }
 
   /**
+   * Test Reroute Email config.
+   */
+  #[DataProvider('dataProviderRerouteEmail')]
+  public function testRerouteEmail(string $env, array $vars, array $expected_present, array $expected_absent = []): void {
+    $this->setEnvVars($vars + ['ENVIRONMENT_TYPE' => $env]);
+
+    $this->requireSettingsFile();
+
+    $this->assertConfigContains($expected_present);
+    $this->assertConfigNotContains($expected_absent);
+  }
+
+  /**
+   * Data provider for testRerouteEmail().
+   */
+  public static function dataProviderRerouteEmail(): \Iterator {
+    // Local: disabled by default.
+    yield [
+      self::ENVIRONMENT_LOCAL,
+      [],
+      [
+        'reroute_email.settings' => ['enable' => FALSE, 'address' => 'webmaster@drevops.com', 'allowed' => '*@drevops.com'],
+      ],
+    ];
+
+    // CI: disabled by default.
+    yield [
+      self::ENVIRONMENT_CI,
+      [],
+      [
+        'reroute_email.settings' => ['enable' => FALSE, 'address' => 'webmaster@drevops.com', 'allowed' => '*@drevops.com'],
+      ],
+    ];
+
+    // Dev: enabled by default.
+    yield [
+      self::ENVIRONMENT_DEV,
+      [],
+      [
+        'reroute_email.settings' => ['enable' => TRUE, 'address' => 'webmaster@drevops.com', 'allowed' => '*@drevops.com'],
+      ],
+    ];
+
+    // SUT: enabled by default.
+    yield [
+      self::ENVIRONMENT_SUT,
+      [],
+      [
+        'reroute_email.settings' => ['enable' => TRUE, 'address' => 'webmaster@drevops.com', 'allowed' => '*@drevops.com'],
+      ],
+    ];
+
+    // Stage: disabled by default.
+    yield [
+      self::ENVIRONMENT_STAGE,
+      [],
+      [
+        'reroute_email.settings' => ['enable' => FALSE, 'address' => 'webmaster@drevops.com', 'allowed' => '*@drevops.com'],
+      ],
+    ];
+
+    // Prod: disabled by default.
+    yield [
+      self::ENVIRONMENT_PROD,
+      [],
+      [
+        'reroute_email.settings' => ['enable' => FALSE, 'address' => 'webmaster@drevops.com', 'allowed' => '*@drevops.com'],
+      ],
+    ];
+
+    // Dev with DRUPAL_REROUTE_EMAIL_DISABLED: forced off.
+    yield [
+      self::ENVIRONMENT_DEV,
+      [
+        'DRUPAL_REROUTE_EMAIL_DISABLED' => 1,
+      ],
+      [
+        'reroute_email.settings' => ['enable' => FALSE],
+      ],
+    ];
+
+    // SUT with DRUPAL_REROUTE_EMAIL_DISABLED: forced off.
+    yield [
+      self::ENVIRONMENT_SUT,
+      [
+        'DRUPAL_REROUTE_EMAIL_DISABLED' => 1,
+      ],
+      [
+        'reroute_email.settings' => ['enable' => FALSE],
+      ],
+    ];
+
+    // Custom address and allowed list.
+    yield [
+      self::ENVIRONMENT_DEV,
+      [
+        'DRUPAL_REROUTE_EMAIL_ADDRESS' => 'dev@example.com',
+        'DRUPAL_REROUTE_EMAIL_ALLOWED' => '*@example.com',
+      ],
+      [
+        'reroute_email.settings' => ['enable' => TRUE, 'address' => 'dev@example.com', 'allowed' => '*@example.com'],
+      ],
+    ];
+
+    // DRUPAL_REROUTE_EMAIL_DISABLED with empty value: not disabled.
+    yield [
+      self::ENVIRONMENT_DEV,
+      [
+        'DRUPAL_REROUTE_EMAIL_DISABLED' => '',
+      ],
+      [
+        'reroute_email.settings' => ['enable' => TRUE],
+      ],
+    ];
+
+    // DRUPAL_REROUTE_EMAIL_DISABLED with 0: not disabled.
+    yield [
+      self::ENVIRONMENT_DEV,
+      [
+        'DRUPAL_REROUTE_EMAIL_DISABLED' => 0,
+      ],
+      [
+        'reroute_email.settings' => ['enable' => TRUE],
+      ],
+    ];
+
+    // DRUPAL_REROUTE_EMAIL_DISABLED with string '1': disabled.
+    yield [
+      self::ENVIRONMENT_DEV,
+      [
+        'DRUPAL_REROUTE_EMAIL_DISABLED' => '1',
+      ],
+      [
+        'reroute_email.settings' => ['enable' => FALSE],
+      ],
+    ];
+  }
+
+  /**
    * Test Stage File Proxy config.
    */
   #[DataProvider('dataProviderStageFileProxy')]
@@ -786,6 +925,77 @@ class SwitchableSettingsTest extends SettingsTestCase {
         'stage_file_proxy.settings' => ['hotlink' => FALSE, 'origin' => 'https://drupal_shield_user:drupal_shield_pass@example.com/'],
       ],
       [],
+    ];
+  }
+
+  /**
+   * Test mail collector config.
+   */
+  #[DataProvider('dataProviderMailCollector')]
+  public function testMailCollector(string $env, array $expected_present, array $expected_absent = []): void {
+    $this->setEnvVars(['ENVIRONMENT_TYPE' => $env]);
+
+    $this->requireSettingsFile();
+
+    $this->assertConfigContains($expected_present);
+    $this->assertConfigNotContains($expected_absent);
+  }
+
+  /**
+   * Data provider for testMailCollector().
+   */
+  public static function dataProviderMailCollector(): \Iterator {
+    // CI: messages are collected instead of being handed to the transport.
+    yield [
+      self::ENVIRONMENT_CI,
+      [
+        'system.mail' => ['interface' => ['default' => 'test_mail_collector']],
+      ],
+    ];
+
+    // Local: the mail catcher of the local stack receives the message.
+    yield [
+      self::ENVIRONMENT_LOCAL,
+      [],
+      [
+        'system.mail' => ['interface' => ['default' => 'test_mail_collector']],
+      ],
+    ];
+
+    // Dev: rerouted, then delivered to the rerouting address.
+    yield [
+      self::ENVIRONMENT_DEV,
+      [],
+      [
+        'system.mail' => ['interface' => ['default' => 'test_mail_collector']],
+      ],
+    ];
+
+    // SUT: a custom environment is rerouted, not collected.
+    yield [
+      self::ENVIRONMENT_SUT,
+      [],
+      [
+        'system.mail' => ['interface' => ['default' => 'test_mail_collector']],
+      ],
+    ];
+
+    // Stage: delivered to the original recipients.
+    yield [
+      self::ENVIRONMENT_STAGE,
+      [],
+      [
+        'system.mail' => ['interface' => ['default' => 'test_mail_collector']],
+      ],
+    ];
+
+    // Prod: delivered to the original recipients.
+    yield [
+      self::ENVIRONMENT_PROD,
+      [],
+      [
+        'system.mail' => ['interface' => ['default' => 'test_mail_collector']],
+      ],
     ];
   }
 

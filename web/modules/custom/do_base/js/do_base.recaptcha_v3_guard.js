@@ -1,8 +1,10 @@
 /**
  * @file
  * Prevents form submission until the reCAPTCHA v3 token is populated.
- * @param {Object}   Drupal  - The Drupal object.
- * @param {Function} once    - The once function.
+ * @param {object} Drupal
+ * - The Drupal object.
+ * @param {function(string, string, (Document|Element)=): Element[]} once
+ * - The once function.
  */
 
 (function doBaseRecaptchaV3Guard(Drupal, once) {

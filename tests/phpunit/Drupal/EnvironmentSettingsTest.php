@@ -260,6 +260,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = TRUE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -335,6 +338,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 1800;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = TRUE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     // Verify settings overrides.
@@ -420,6 +426,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = FALSE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -475,6 +484,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = FALSE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -545,6 +557,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['robotstxt.settings']['content'] = "User-agent: *\nDisallow: /";
     $config['shield.settings']['shield_enable'] = FALSE;
     $config['system.logging']['error_level'] = 'all';
+    $config['system.mail']['interface']['default'] = 'test_mail_collector';
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['csp.settings']['enforce']['directives']['upgrade-insecure-requests'] = FALSE;
     $config['purge_control.settings']['disable_purge'] = TRUE;
@@ -552,6 +565,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['seckit.settings']['seckit_xss']['csp']['checkbox'] = FALSE;
     $config['seckit.settings']['seckit_xss']['csp']['upgrade-req'] = FALSE;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = FALSE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -571,7 +587,6 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $settings['maintenance_theme'] = 'claro';
     $settings['skip_permissions_hardening'] = TRUE;
     $settings['config_sync_directory'] = '../config/default';
-    $settings['suspend_mail_send'] = TRUE;
     $settings['trusted_host_patterns'] = [
       '^localhost$',
     ];
@@ -605,6 +620,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = TRUE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -662,6 +680,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = TRUE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -719,6 +740,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = FALSE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
@@ -776,6 +800,9 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['system.performance']['css']['preprocess'] = TRUE;
     $config['system.performance']['js']['preprocess'] = TRUE;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
+    $config['reroute_email.settings']['enable'] = FALSE;
+    $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
+    $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
