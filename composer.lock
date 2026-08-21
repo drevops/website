@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96c1f62b70f0256f80af2e85f7d36432",
+    "content-hash": "6c479d5ccc7031533bd6aad79d3e62a3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5173,6 +5173,81 @@
             "homepage": "https://www.drupal.org/project/redis",
             "support": {
                 "source": "https://git.drupalcode.org/project/redis"
+            }
+        },
+        {
+            "name": "drupal/reroute_email",
+            "version": "2.3.0-rc2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/reroute_email.git",
+                "reference": "2.3.0-rc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/reroute_email-2.3.0-rc2.zip",
+                "reference": "2.3.0-rc2",
+                "shasum": "ba990ebfcc62395c818775519ac4080a6eb2f544"
+            },
+            "require": {
+                "drupal/core": "^10.2 || ^11"
+            },
+            "require-dev": {
+                "drupal/symfony_mailer": "^1.4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.3.0-rc2",
+                    "datestamp": "1730150435",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Khalid Baheyeldin",
+                    "homepage": "https://www.drupal.org/u/kbahey"
+                },
+                {
+                    "name": "Devaraj Johnson",
+                    "homepage": "https://www.drupal.org/u/devaraj-johnson"
+                },
+                {
+                    "name": "Randy Fay",
+                    "homepage": "https://www.drupal.org/u/rfay"
+                },
+                {
+                    "name": "Bohdan Artemchuk",
+                    "homepage": "https://www.drupal.org/u/bohart"
+                },
+                {
+                    "name": "Pravin Gaikwad",
+                    "homepage": "https://www.drupal.org/u/rajeshreeputra"
+                },
+                {
+                    "name": "rajeshreeputra",
+                    "homepage": "https://www.drupal.org/user/3418561"
+                },
+                {
+                    "name": "rfay",
+                    "homepage": "https://www.drupal.org/user/30906"
+                },
+                {
+                    "name": "wafaa",
+                    "homepage": "https://www.drupal.org/user/50133"
+                }
+            ],
+            "description": "Reroutes emails send from the site to a predefined email. Useful for test sites.",
+            "homepage": "https://www.drupal.org/project/reroute_email",
+            "support": {
+                "source": "https://git.drupalcode.org/project/reroute_email"
             }
         },
         {
@@ -13867,42 +13942,43 @@
         },
         {
             "name": "drevops/behat-screenshot",
-            "version": "2.4.2",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-screenshot.git",
-                "reference": "5ccafdfaf16860d0d1db07dbfcdb71413fdde3a0"
+                "reference": "a5cd389379749615e2b25a3edb2e66ac6fc71d42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-screenshot/zipball/5ccafdfaf16860d0d1db07dbfcdb71413fdde3a0",
-                "reference": "5ccafdfaf16860d0d1db07dbfcdb71413fdde3a0",
+                "url": "https://api.github.com/repos/drevops/behat-screenshot/zipball/a5cd389379749615e2b25a3edb2e66ac6fc71d42",
+                "reference": "a5cd389379749615e2b25a3edb2e66ac6fc71d42",
                 "shasum": ""
             },
             "require": {
-                "behat/behat": "^3.13.0",
-                "friends-of-behat/mink-extension": "^2.7",
+                "behat/behat": "^3.32.0",
+                "behat/mink": "^1.13",
+                "friends-of-behat/mink-extension": "^2.7.5",
                 "php": ">=8.2",
                 "symfony/finder": "^6.4 || ^7.0",
-                "symfony/http-client": "^6.0 || ^7.0"
+                "symfony/http-client": "^6.4 || ^7.0"
             },
             "require-dev": {
-                "behat/mink-browserkit-driver": "^2.2",
-                "dantleech/gherkin-lint": "^0.2.3",
-                "dealerdirect/phpcodesniffer-composer-installer": "^1",
-                "dmore/behat-chrome-extension": "^1.4",
-                "drevops/behat-phpserver": "^2.0",
-                "drevops/phpcs-standard": "^0.7.0",
-                "drupal/coder": "^9.0",
-                "dvdoug/behat-code-coverage": "^5.3",
-                "ergebnis/composer-normalize": "^2.44",
-                "lullabot/mink-selenium2-driver": "^1.7",
-                "lullabot/php-webdriver": "^2.0.4",
-                "php-mock/php-mock-phpunit": "^2.13",
-                "phpstan/phpstan": "^2",
-                "phpunit/phpunit": "^11",
-                "rector/rector": "^2",
-                "symfony/process": "^6.4 || ^7.0"
+                "behat/mink-browserkit-driver": "^2.3",
+                "dantleech/gherkin-lint": "^0.2.4",
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.2.1",
+                "dmore/behat-chrome-extension": "^1.4.1",
+                "dmore/chrome-mink-driver": "^2.10",
+                "drevops/behat-phpserver": "^2.3",
+                "drevops/phpcs-standard": "^0.7",
+                "drupal/coder": "^9.0.1",
+                "dvdoug/behat-code-coverage": "^5.3.7",
+                "ergebnis/composer-normalize": "^2.52.0",
+                "lullabot/mink-selenium2-driver": "^1.7.4",
+                "lullabot/php-webdriver": "^2.0.7",
+                "phpstan/phpstan": "^2.2.8",
+                "phpunit/phpunit": "^11.5.56",
+                "rector/rector": "^2.6.2",
+                "symfony/process": "^7.4.13"
             },
             "suggest": {
                 "ext-gd": "Required to generate animated GIF screenshots (the animation option)."
@@ -13926,9 +14002,10 @@
                 }
             ],
             "description": "Behat extension and step definitions to create HTML and image screenshots on demand or when tests fail",
+            "homepage": "https://github.com/drevops/behat-screenshot",
             "support": {
                 "issues": "https://github.com/drevops/behat-screenshot/issues",
-                "source": "https://github.com/drevops/behat-screenshot/tree/2.4.2"
+                "source": "https://github.com/drevops/behat-screenshot"
             },
             "funding": [
                 {
@@ -13940,53 +14017,53 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-07-10T01:59:31+00:00"
+            "time": "2026-08-18T00:06:58+00:00"
         },
         {
             "name": "drevops/behat-steps",
-            "version": "3.13.0",
+            "version": "3.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-steps.git",
-                "reference": "ee9b9de3f80ca3b78437af0cae18f4781bb0881c"
+                "reference": "a4517e3fe01f9a3ecb5ece79f31da2c685dab293"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/ee9b9de3f80ca3b78437af0cae18f4781bb0881c",
-                "reference": "ee9b9de3f80ca3b78437af0cae18f4781bb0881c",
+                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/a4517e3fe01f9a3ecb5ece79f31da2c685dab293",
+                "reference": "a4517e3fe01f9a3ecb5ece79f31da2c685dab293",
                 "shasum": ""
             },
             "require": {
-                "behat/behat": "^3.14",
-                "behat/mink": ">=1.11",
+                "behat/behat": "^3.32.0",
+                "behat/mink": ">=1.13.0",
                 "php": ">=8.2"
             },
             "conflict": {
                 "drupal/drupal-extension": "<6"
             },
             "require-dev": {
-                "alexskrypnyk/phpunit-helpers": "^0.15.0",
+                "alexskrypnyk/phpunit-helpers": "^0.16.0",
                 "cweagans/composer-patches": "^2.0",
-                "dantleech/gherkin-lint": "^0.2.3",
-                "dealerdirect/phpcodesniffer-composer-installer": "^1",
-                "dmore/behat-chrome-extension": "^1.4",
-                "drevops/behat-phpserver": "^2.1.1",
-                "drevops/behat-screenshot": "^2.1",
+                "dantleech/gherkin-lint": "^0.2.4",
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.2.1",
+                "dmore/behat-chrome-extension": "^1.4.1",
+                "drevops/behat-phpserver": "^2.3.0",
+                "drevops/behat-screenshot": "^2.6.0",
                 "drevops/phpcs-standard": "^0.7",
-                "drupal/coder": "^8.3.28",
-                "drupal/drupal-extension": "^6.0",
+                "drupal/coder": "^8.3.31",
+                "drupal/drupal-extension": "^6.1.0",
                 "dvdoug/behat-code-coverage": "^5.3.2.1",
-                "ergebnis/composer-normalize": "^2.47",
-                "justinrainbow/json-schema": "^6.0",
+                "ergebnis/composer-normalize": "^2.52.0",
+                "justinrainbow/json-schema": "^6.10.0",
                 "lullabot/mink-selenium2-driver": "^1.7.4",
-                "mglaman/phpstan-drupal": "^2.0.0",
+                "mglaman/phpstan-drupal": "^2.1.2",
                 "php-parallel-lint/php-parallel-lint": "^1.4",
                 "phpcompatibility/php-compatibility": "^9.3.5",
-                "phpspec/prophecy-phpunit": "^2.3",
+                "phpspec/prophecy-phpunit": "^2.5.0",
                 "phpstan/extension-installer": "^1.4.3",
-                "phpstan/phpstan": "^2.0.0",
-                "phpunit/phpunit": "^11",
-                "rector/rector": "^2.0",
+                "phpstan/phpstan": "^2.2.8",
+                "phpunit/phpunit": "^11.5.56",
+                "rector/rector": "^2.6.3",
                 "softcreatr/jsonpath": "^0.10 || ^1.0"
             },
             "suggest": {
@@ -14037,20 +14114,20 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-08-13T09:36:26+00:00"
+            "time": "2026-08-19T23:59:02+00:00"
         },
         {
             "name": "drevops/phpcs-standard",
-            "version": "0.7.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/phpcs-standard.git",
-                "reference": "caee870e84a5c1e41e2047f1c89c98740fa3a2c1"
+                "reference": "de45a237ec5fffe048ec5643c59e32a3c18fab29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/phpcs-standard/zipball/caee870e84a5c1e41e2047f1c89c98740fa3a2c1",
-                "reference": "caee870e84a5c1e41e2047f1c89c98740fa3a2c1",
+                "url": "https://api.github.com/repos/drevops/phpcs-standard/zipball/de45a237ec5fffe048ec5643c59e32a3c18fab29",
+                "reference": "de45a237ec5fffe048ec5643c59e32a3c18fab29",
                 "shasum": ""
             },
             "require": {
@@ -14116,7 +14193,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-03-12T23:43:14+00:00"
+            "time": "2026-03-17T12:43:57+00:00"
         },
         {
             "name": "drupal/coder",
@@ -18670,6 +18747,7 @@
         "drupal/drupal-driver": 15,
         "drupal/entity_clone": 10,
         "drupal/entity_usage": 10,
+        "drupal/reroute_email": 5,
         "drupal/webform": 10,
         "phpcompatibility/php-compatibility": 15
     },
