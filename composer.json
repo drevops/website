@@ -88,7 +88,7 @@
         "phpstan/phpstan": "^2.2.10",
         "phpunit/phpunit": "^11.5.56",
         "pyrech/composer-changelogs": "^2.2",
-        "rector/rector": "^2.6.5",
+        "rector/rector": "^2.6.2",
         "softcreatr/jsonpath": "^0.10 || ^1.0",
         "vincentlanglet/twig-cs-fixer": "^4.1.0"
     },

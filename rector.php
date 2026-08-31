@@ -16,8 +16,6 @@
 
 declare(strict_types=1);
 
-use Composer\InstalledVersions;
-use Composer\Semver\Semver;
 use DrupalFinder\DrupalFinderComposerRuntime;
 use DrupalRector\Set\DrupalSetProvider;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
@@ -99,28 +97,11 @@ return RectorConfig::configure()
   )
   // Drupal-specific deprecation fixes. The provider binds each set to a
   // `drupal/core` version and only the sets the installed core satisfies are
-  // selected, so the set list tracks core upgrades without changing this
-  // configuration. Rector no longer resolves set providers itself, so the
-  // constraint each set carries is matched here. The "breaking" group stays
-  // out, matching the provider's own separation of it.
-  ->withSets((function (): array {
-    $core_version = InstalledVersions::getPrettyVersion('drupal/core');
-    $sets = [];
-
-    foreach ((new DrupalSetProvider())->provide() as $set) {
-      if ($set->getGroupName() !== 'drupal') {
-        continue;
-      }
-
-      [, $version] = explode(' ', $set->getName());
-
-      if (Semver::satisfies($core_version, '^' . $version)) {
-        $sets[] = $set->getSetFilePath();
-      }
-    }
-
-    return $sets;
-  })())
+  // loaded, so the set tracks core upgrades without changing this
+  // configuration. Both calls are required: the provider supplies the sets,
+  // `withComposerBased()` enables the group.
+  ->withSetProviders(DrupalSetProvider::class)
+  ->withComposerBased(drupal: TRUE)
   // Additional rules.
   ->withRules([
     DeclareStrictTypesRector::class,
