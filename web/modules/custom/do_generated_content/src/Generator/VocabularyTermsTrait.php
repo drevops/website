@@ -34,9 +34,7 @@ trait VocabularyTermsTrait {
    *   The terms, in storage order.
    */
   protected function vocabularyTerms(string $vid): array {
-    if (!isset($this->vocabularyTermsCache[$vid])) {
-      $this->vocabularyTermsCache[$vid] = array_values($this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties(['vid' => $vid]));
-    }
+    $this->vocabularyTermsCache[$vid] ??= array_values($this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties(['vid' => $vid]));
 
     return $this->vocabularyTermsCache[$vid];
   }

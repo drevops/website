@@ -8,7 +8,7 @@
 # @see https://hub.docker.com/r/uselagoon/php-8.4-cli-drupal/tags
 # @see https://github.com/uselagoon/lagoon-images/tree/main/images/php-cli-drupal
 
-FROM uselagoon/php-8.4-cli-drupal:26.8.0
+FROM uselagoon/php-8.4-cli-drupal:26.8.1
 
 # Add missing variables.
 # @todo Remove once https://github.com/uselagoon/lagoon/issues/3121 is resolved.
@@ -93,9 +93,10 @@ RUN mkdir -p -m 2775 "/app/${WEBROOT}/${DRUPAL_PUBLIC_FILES}" "/app/${WEBROOT}/$
 
 RUN if [ "${VORTEX_FRONTEND_BUILD_SKIP}" != "1" ]; then \
       theme_path="/app/${WEBROOT}/themes/custom/${DRUPAL_THEME}"; \
-      npm --prefix "${theme_path}" ci --no-progress && \
-      npm --prefix "${theme_path}" run build && \
-      npm cache clean --force; \
+      export npm_config_cache=/tmp/npm-cache; \
+      npm --prefix="${theme_path}" ci --no-progress --no-audit --no-fund && \
+      npm --prefix="${theme_path}" run build && \
+      rm -rf /tmp/npm-cache; \
     fi
 
 WORKDIR /app

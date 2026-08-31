@@ -1,11 +1,14 @@
+# check=skip=SecretsUsedInArgOrEnv
 # Database container.
+#
+# The check skipped above is BuildKit's twin of DL3064, ignored inline below.
 #
 # @see https://hub.docker.com/r/uselagoon/mysql-8.4/tags
 # @see https://github.com/uselagoon/lagoon-images/tree/main/images/mysql
 #
 # The ARG value will be updated with a value passed from docker-compose.yml
 
-ARG IMAGE=uselagoon/mysql-8.4:26.8.0
+ARG IMAGE=uselagoon/mysql-8.4:26.8.1
 FROM ${IMAGE}
 
 # hadolint ignore=DL3066 # named account provided by the base image
