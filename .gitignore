@@ -58,3 +58,7 @@ web/themes/**/build
 /docker-compose.override.yml
 /.env.local
 /.ahoy.local.yml
+
+# Checksum record written by the Vortex installer. It describes one machine's
+# install rather than the project, so it stays out of version control.
+/.vortex-manifest.json
