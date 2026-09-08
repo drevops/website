@@ -17,6 +17,17 @@ Feature: XML sitemap
     And the XML element "//*[local-name()='url']/*[local-name()='loc']" should exist
 
   @api
+  Scenario: Sitemap stylesheet sorts without jQuery
+    Given I am an anonymous user
+    When I go to "/sitemap.xsl"
+    Then the response status code should be 200
+    # jQuery 4 has no jQuery.trim(), which the bundled tablesorter calls, so
+    # loading either script breaks sorting on this page.
+    And the response should not contain "core/assets/vendor/jquery/jquery.js"
+    And the response should not contain "jquery.tablesorter.min.js"
+    And the response should contain "xmlsitemap.xsl.js"
+
+  @api
   Scenario: Sitemap lists the front page and published pages only
     Given the following "civictheme_page" content:
       | title                        | moderation_state |
