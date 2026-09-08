@@ -217,7 +217,10 @@
                 "Add a Navigation integration submodule - https://www.drupal.org/project/environment_indicator/issues/3457688": "patches/environment-indicator-navigation.patch"
             },
             "drupal/seckit": {
-                "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252": "https://www.drupal.org/files/issues/2025-05-07/3219252-9.patch"
+                "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252": "https://www.drupal.org/files/issues/2025-05-28/3219252-10.patch"
+            },
+            "drupal/xmlsitemap": {
+                "Sort broken in Drupal 11 / jQuery 4 - https://www.drupal.org/project/xmlsitemap/issues/3562043": "patches/xmlsitemap-sort-jquery4-3562043.patch"
             },
             "palantirnet/drupal-rector": {
                 "Improve error handling for incorrect test namespaces - https://www.drupal.org/project/rector/issues/3540378": "patches/3540378-rector-skip-webform-cards-tests.patch"
