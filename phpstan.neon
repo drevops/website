@@ -11,8 +11,6 @@ parameters:
 
   level: 7
 
-  tmpDir: .artifacts/phpstan
-
   phpVersion: 80423
 
   paths:
