@@ -1,5 +1,5 @@
 {
-    "_hash": "e5579542845110495a4e1fe8e7404268b5126985681b2d74a9ac057b90ab118f",
+    "_hash": "44b98e7f10d65ea563e28f02629ceac6a79598fe518da73a7b61fb19722c5cdb",
     "patches": {
         "drupal/civictheme": [
             {
@@ -41,8 +41,20 @@
             {
                 "package": "drupal/seckit",
                 "description": "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252",
-                "url": "https://www.drupal.org/files/issues/2025-05-07/3219252-9.patch",
-                "sha256": "c6fd4c7575655a964045258cab48928ebc2efee89f0ad13d2775acff5b33751f",
+                "url": "https://www.drupal.org/files/issues/2025-05-28/3219252-10.patch",
+                "sha256": "92f6d7b758b539fb45d3a9485040c3d5cd84219cf7d66858008e2d684fd48176",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ],
+        "drupal/xmlsitemap": [
+            {
+                "package": "drupal/xmlsitemap",
+                "description": "Sort broken in Drupal 11 / jQuery 4 - https://www.drupal.org/project/xmlsitemap/issues/3562043",
+                "url": "patches/xmlsitemap-sort-jquery4-3562043.patch",
+                "sha256": "f89135335c125af7d2e8b81aecaaa11baa3849f8f047ed7ea435b4fb4ccb2849",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"

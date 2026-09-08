@@ -18,3 +18,12 @@ Feature: Seckit
     And the response header "From-Origin" should contain the value "same"
     And the response header "Referrer-Policy" should contain the value "strict-origin-when-cross-origin"
     And the response header "X-Content-Type-Options" should contain the value "nosniff"
+
+  @api
+  Scenario: Clickjacking protection script is served from a versioned URL
+    Given I am an anonymous user
+    When I go to the homepage
+    Then the response status code should be 200
+    # An unversioned URL lets a stale script survive in browser and CDN caches,
+    # leaving the clickjacking stylesheet applied and the page blank.
+    And the response should contain "seckit.document_write.js?v="
