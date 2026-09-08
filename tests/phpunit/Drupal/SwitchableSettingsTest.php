@@ -717,12 +717,12 @@ class SwitchableSettingsTest extends SettingsTestCase {
       ],
     ];
 
-    // Stage: disabled by default.
+    // Stage: enabled by default.
     yield [
       self::ENVIRONMENT_STAGE,
       [],
       [
-        'reroute_email.settings' => ['enable' => FALSE, 'address' => 'webmaster@drevops.com', 'allowed' => '*@drevops.com'],
+        'reroute_email.settings' => ['enable' => TRUE, 'address' => 'webmaster@drevops.com', 'allowed' => '*@drevops.com'],
       ],
     ];
 
@@ -749,6 +749,17 @@ class SwitchableSettingsTest extends SettingsTestCase {
     // SUT with DRUPAL_REROUTE_EMAIL_DISABLED: forced off.
     yield [
       self::ENVIRONMENT_SUT,
+      [
+        'DRUPAL_REROUTE_EMAIL_DISABLED' => 1,
+      ],
+      [
+        'reroute_email.settings' => ['enable' => FALSE],
+      ],
+    ];
+
+    // Stage with DRUPAL_REROUTE_EMAIL_DISABLED: forced off.
+    yield [
+      self::ENVIRONMENT_STAGE,
       [
         'DRUPAL_REROUTE_EMAIL_DISABLED' => 1,
       ],
@@ -980,7 +991,7 @@ class SwitchableSettingsTest extends SettingsTestCase {
       ],
     ];
 
-    // Stage: delivered to the original recipients.
+    // Stage: rerouted, then delivered to the rerouting address.
     yield [
       self::ENVIRONMENT_STAGE,
       [],
