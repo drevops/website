@@ -45,3 +45,7 @@ ahoy drush xmlsitemap:rebuild
 ## Related configuration
 
 `composer.json` patches `seckit` because its JS/CSS/noscript protection breaks `sitemap.xml`. That patch applies to the route rather than to any particular sitemap module, so it is required regardless of which module serves the route.
+
+`composer.json` also patches `xmlsitemap` itself, with the merge request from [issue 3562043](https://www.drupal.org/project/xmlsitemap/issues/3562043). Drupal 11 ships jQuery 4, which no longer provides `jQuery.trim()`, and the tablesorter plugin bundled with the module still calls it, so sorting on the styled page throws before any click handler is bound. The patch drops jQuery and tablesorter from `xsl/xmlsitemap.xsl` and rewrites `xsl/xmlsitemap.xsl.js` as vanilla JavaScript. That merge request is unmerged, so the diff is stored at `patches/xmlsitemap-sort-jquery4-3562043.patch` rather than referenced by URL, which would let the applied code change without a commit.
+
+The styled page is for humans - search engines read the raw XML and never execute XSLT or JavaScript. Chrome [disables XSLT by default](https://developer.chrome.com/docs/web-platform/deprecating-xslt) in version 158 on 17 November 2026, keeps it reachable to sites covered by an origin trial or an enterprise policy until version 176 on 17 August 2027, and other engines have signalled the same direction. Once it is gone the browser shows the plain XML tree, and neither the stylesheet nor this patch has any effect.

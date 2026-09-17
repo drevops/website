@@ -1,0 +1,289 @@
+diff --git a/xsl/xmlsitemap.xsl b/xsl/xmlsitemap.xsl
+index 8613f9cb687ddd8ed21ed54309e32b3888dd8460..10000f968ddf407fb335f4dc6d65cbb2521b7e69 100644
+--- a/xsl/xmlsitemap.xsl
++++ b/xsl/xmlsitemap.xsl
+@@ -33,8 +33,6 @@
+     <html>
+       <head>
+         <title>Sitemap file</title>
+-        <script type="text/javascript" src="[jquery]"></script>
+-        <script type="text/javascript" src="[jquery-tablesort]"></script>
+         <script type="text/javascript" src="[xsl-js]"></script>
+         <link href="[xsl-css]" type="text/css" rel="stylesheet"/>
+       </head>
+diff --git a/xsl/xmlsitemap.xsl.js b/xsl/xmlsitemap.xsl.js
+index 7c890649b966dc59703a637e817a9f4939bded71..b64945c3d3d403774077cc38e4898d783fb9775b 100644
+--- a/xsl/xmlsitemap.xsl.js
++++ b/xsl/xmlsitemap.xsl.js
+@@ -1,58 +1,221 @@
+ /**
+  * @file
+- * JavaScript file for XML Sitemap.
++ * Vanilla JavaScript table sorting for XML Sitemap.
++ *
++ * Replaces the jQuery Tablesorter dependency for compatibility with jQuery 4+.
+  */
+ 
+-(function ($) {
+-
++(function () {
+   'use strict';
+ 
+-  $.tablesorter.addParser({
+-    // Set a unique id.
+-    id: 'changefreq',
+-    is: function (s) {
+-      return false;
+-    },
+-    format: function (s) {
+-      switch (s) {
+-        case 'always':
+-          return 0;
+-
+-        case 'hourly':
+-          return 1;
+-
+-        case 'daily':
+-          return 2;
+-
+-        case 'weekly':
+-          return 3;
+-
+-        case 'monthly':
+-          return 4;
+-
+-        case 'yearly':
+-          return 5;
+-
+-        default:
+-          return 6;
+-      }
+-    },
+-    type: 'numeric'
+-  });
+-
+-  $(document).ready(function () {
+-    // Set some location variables.
+-    var h1 = $('h1');
+-    h1.text(h1.text() + ': ' + location);
+-    document.title = h1.text();
+-
+-    $('table').tablesorter({
+-      sortList: [[0, 0]],
+-      headers: {
+-        2: {sorter: 'changefreq'}
+-      },
+-      widgets: ['zebra']
++  /**
++   * Parses changefreq values for sorting.
++   *
++   * @param {string} value - The changefreq string value.
++   * @returns {number} - Numeric value for sorting.
++   */
++  function parseChangefreq(value) {
++    const frequencies = {
++      always: 0,
++      hourly: 1,
++      daily: 2,
++      weekly: 3,
++      monthly: 4,
++      yearly: 5,
++      never: 6,
++    };
++    return frequencies[value] !== undefined ? frequencies[value] : 7;
++  }
++
++  /**
++   * Parses ISO 8601 date strings for sorting.
++   *
++   * @param {string} value - The date string.
++   * @returns {number} - Timestamp for sorting.
++   */
++  function parseDate(value) {
++    if (!value) return 0;
++    const date = new Date(value);
++    return isNaN(date.getTime()) ? 0 : date.getTime();
++  }
++
++  /**
++   * Gets the sort value for a cell based on column type.
++   *
++   * @param {HTMLTableCellElement} cell - The table cell.
++   * @param {string} type - The column type (text, number, date, changefreq).
++   * @returns {*} - The value to use for sorting.
++   */
++  function getSortValue(cell, type) {
++    const text = cell.textContent.trim();
++
++    switch (type) {
++      case 'changefreq':
++        return parseChangefreq(text);
++      case 'date':
++        return parseDate(text);
++      case 'number':
++        return parseFloat(text) || 0;
++      default:
++        return text.toLowerCase();
++    }
++  }
++
++  /**
++   * Applies zebra striping to table rows.
++   *
++   * @param {HTMLTableElement} table - The table element.
++   */
++  function applyZebraStriping(table) {
++    const rows = table.querySelectorAll('tbody tr');
++    rows.forEach((row, index) => {
++      row.classList.remove('odd', 'even');
++      row.classList.add(index % 2 === 0 ? 'even' : 'odd');
++    });
++  }
++
++  /**
++   * Sorts a table by the specified column.
++   *
++   * @param {HTMLTableElement} table - The table element.
++   * @param {number} columnIndex - The column index to sort by.
++   * @param {string} type - The column type.
++   * @param {boolean} ascending - Sort direction.
++   */
++  function sortTable(table, columnIndex, type, ascending) {
++    const tbody = table.querySelector('tbody');
++    const rows = Array.from(tbody.querySelectorAll('tr'));
++
++    rows.sort((a, b) => {
++      const cellA = a.cells[columnIndex];
++      const cellB = b.cells[columnIndex];
++
++      if (!cellA || !cellB) return 0;
++
++      const valueA = getSortValue(cellA, type);
++      const valueB = getSortValue(cellB, type);
++
++      let comparison = 0;
++      if (valueA < valueB) comparison = -1;
++      else if (valueA > valueB) comparison = 1;
++
++      return ascending ? comparison : -comparison;
++    });
++
++    // Re-append rows in sorted order.
++    rows.forEach((row) => tbody.appendChild(row));
++
++    // Re-apply zebra striping.
++    applyZebraStriping(table);
++  }
++
++  /**
++   * Updates header classes to reflect sort state.
++   *
++   * @param {NodeList} headers - All sortable header cells.
++   * @param {HTMLTableCellElement} activeHeader - The currently sorted header.
++   * @param {boolean} ascending - Sort direction.
++   */
++  function updateHeaderClasses(headers, activeHeader, ascending) {
++    headers.forEach((header) => {
++      header.classList.remove('headerSortUp', 'headerSortDown');
+     });
+-  });
++    activeHeader.classList.add(ascending ? 'headerSortUp' : 'headerSortDown');
++  }
++
++  /**
++   * Initializes table sorting functionality.
++   *
++   * @param {HTMLTableElement} table - The table element.
++   * @param {Object} config - Configuration object.
++   */
++  function initTableSorter(table, config) {
++    const headers = table.querySelectorAll('thead th');
++    const sortState = {};
++
++    headers.forEach((header, index) => {
++      // Add sortable class for cursor styling.
++      header.classList.add('header');
++
++      // Determine column type.
++      const type = config.columnTypes && config.columnTypes[index]
++        ? config.columnTypes[index]
++        : 'text';
++
++      // Initialize sort state.
++      sortState[index] = true; // true = ascending.
++
++      // Add click handler.
++      header.addEventListener('click', () => {
++        const ascending = !sortState[index];
++        sortState[index] = ascending;
++        sortTable(table, index, type, ascending);
++        updateHeaderClasses(headers, header, ascending);
++      });
++    });
++
++    // Apply initial sort if specified.
++    if (config.initialSort !== undefined) {
++      const [colIndex, direction] = config.initialSort;
++      const ascending = direction === 0;
++      sortState[colIndex] = ascending;
++      sortTable(table, colIndex, config.columnTypes[colIndex] || 'text', ascending);
++      updateHeaderClasses(headers, headers[colIndex], ascending);
++    }
++
++    // Apply initial zebra striping.
++    applyZebraStriping(table);
++  }
++
++  let isReady = false;
++
++  /**
++   * Main initialization on DOM ready.
++   */
++  function ready() {
++    if (isReady) return;
++    isReady = true;
++
++    // Set location in title.
++    const h1 = document.querySelector('h1');
++    if (h1) {
++      h1.textContent = h1.textContent + ': ' + window.location;
++      document.title = h1.textContent;
++    }
++
++    const table = document.querySelector('table.tablesorter');
++    if (!table) return;
++
++    let config;
++
++    if (table.classList.contains('siteindex')) {
++      // Sitemap index table configuration.
++      config = {
++        columnTypes: {
++          0: 'text', // Sitemap URL.
++          1: 'date', // Last modification date.
++        },
++        initialSort: [0, 0], // Sort by URL ascending.
++      };
++    } else {
++      // Sitemap table configuration.
++      config = {
++        columnTypes: {
++          0: 'text',       // URL location.
++          1: 'date',       // Last modification date.
++          2: 'changefreq', // Change frequency.
++          3: 'number',     // Priority.
++        },
++        initialSort: [0, 0], // Sort by URL ascending.
++      };
++    }
++
++    initTableSorter(table, config);
++
++    document.removeEventListener('DOMContentLoaded', ready);
++    window.removeEventListener('load', ready);
++  }
+ 
+-})(jQuery);
++  document.addEventListener('DOMContentLoaded', ready);
++  window.addEventListener('load', ready);
++})();

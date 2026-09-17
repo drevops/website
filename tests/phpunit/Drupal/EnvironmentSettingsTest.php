@@ -266,7 +266,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
     $settings['environment'] = self::ENVIRONMENT_SUT;
@@ -345,7 +345,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     // Verify settings overrides.
     $settings['auto_create_htaccess'] = FALSE;
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['config_sync_directory'] = 'custom_config';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -432,7 +432,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -490,7 +490,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -571,7 +571,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['disable_captcha'] = TRUE;
     $settings['entity_update_batch_size'] = 50;
@@ -647,7 +647,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['auto_create_htaccess'] = FALSE;
     $settings['cache_prefix']['default'] = 'test_project_test_branch';
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['config_sync_directory'] = '../config/default';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -707,7 +707,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['auto_create_htaccess'] = FALSE;
     $settings['cache_prefix']['default'] = 'test_project_develop';
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['config_sync_directory'] = '../config/default';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -760,14 +760,14 @@ class EnvironmentSettingsTest extends SettingsTestCase {
     $config['shield.settings']['shield_enable'] = TRUE;
     $config['system.performance']['cache']['page']['max_age'] = 900;
     $config['testmode.settings']['views_node'] = ['content', 'civictheme_automated_list'];
-    $config['reroute_email.settings']['enable'] = FALSE;
+    $config['reroute_email.settings']['enable'] = TRUE;
     $config['reroute_email.settings']['address'] = 'webmaster@drevops.com';
     $config['reroute_email.settings']['allowed'] = '*@drevops.com';
     $this->assertConfig($config);
 
     $settings['auto_create_htaccess'] = FALSE;
     $settings['cache_prefix']['default'] = 'test_project_master';
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['config_sync_directory'] = '../config/default';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
@@ -827,7 +827,7 @@ class EnvironmentSettingsTest extends SettingsTestCase {
 
     $settings['auto_create_htaccess'] = FALSE;
     $settings['cache_prefix']['default'] = 'test_project_production';
-    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'sdc_devel', 'testmode'];
+    $settings['config_exclude_modules'] = ['devel', 'do_generated_content', 'generated_content', 'purge_control', 'reroute_email', 'sdc_devel', 'testmode'];
     $settings['config_sync_directory'] = '../config/default';
     $settings['container_yamls'][0] = $this->app_root . '/' . $this->site_path . '/services.yml';
     $settings['entity_update_batch_size'] = 50;
