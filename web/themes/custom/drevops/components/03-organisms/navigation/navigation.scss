@@ -404,6 +404,16 @@
             padding: 1em;
           }
         }
+
+        // Custom: The container below 'l' is too narrow for the primary menu
+        // at full padding, so the top-level links tighten to stay on 1 row.
+        .ct-menu__item--level-0 > .ct-menu__item__link {
+          padding-inline: 0.75em;
+
+          @include ct-breakpoint(l) {
+            padding-inline: 1em;
+          }
+        }
       }
     }
 
