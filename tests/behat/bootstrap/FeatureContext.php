@@ -316,7 +316,8 @@ JS;
 JS;
     $color = trim((string) $this->elementExecuteJs($selector, $script));
 
-    // Computed colours carry alpha as 'rgba(r, g, b, a)' or as 'color(... / a)'.
+    // Computed colours carry alpha as 'rgba(r, g, b, a)' or as
+    // 'color(... / a)'.
     $alpha = 1.0;
 
     if ($color === 'transparent') {
