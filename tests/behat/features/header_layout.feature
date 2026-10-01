@@ -44,14 +44,15 @@ Feature: Site header layout
       | 1440  | 900    |
 
   @javascript
-  Scenario: Site visitor sees an opaque header over the page on a phone
+  Scenario: Site visitor sees a near-opaque header over the page on a phone
     When I set the viewport to "600" by "900"
     And I visit "/"
-    Then the element ".ct-header__middle" should have an opaque background
+    Then the element ".ct-header__middle" should have a background opacity of "0.92"
     And the element ".ct-header__middle" should have the computed style "backdrop-filter" of "none"
 
   @javascript
   Scenario: Site visitor sees a frosted header over the page on a desktop
     When I set the viewport to "1440" by "900"
     And I visit "/"
-    Then the element ".ct-header__middle" should have the computed style "backdrop-filter" of "blur(8px)"
+    Then the element ".ct-header__middle" should have a background opacity of "0.8"
+    And the element ".ct-header__middle" should have the computed style "backdrop-filter" of "blur(8px)"

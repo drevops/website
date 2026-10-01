@@ -301,16 +301,16 @@ JS;
   }
 
   /**
-   * Assert that an element paints a fully opaque background colour.
+   * Assert the opacity of an element's background colour.
    *
    * @code
-   * Then the element ".ct-header__middle" should have an opaque background
+   * Then the element ".ct-header__middle" should have a background opacity of "0.92"
    * @endcode
    *
    * @javascript
    */
-  #[Then('the element :selector should have an opaque background')]
-  public function elementAssertOpaqueBackground(string $selector): void {
+  #[Then('the element :selector should have a background opacity of :opacity')]
+  public function elementAssertBackgroundOpacity(string $selector, string $opacity): void {
     $script = <<<JS
       return window.getComputedStyle({{ELEMENT}}).getPropertyValue('background-color');
 JS;
@@ -326,8 +326,8 @@ JS;
       $alpha = $matches[2] === '%' ? (float) $matches[1] / 100 : (float) $matches[1];
     }
 
-    if ($alpha < 1) {
-      throw new \RuntimeException(sprintf('Expected element "%s" to have an opaque background, but its background colour is "%s".', $selector, $color));
+    if (abs($alpha - (float) $opacity) > 0.005) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to have a background opacity of %s, but its background colour is "%s".', $selector, $opacity, $color));
     }
   }
 

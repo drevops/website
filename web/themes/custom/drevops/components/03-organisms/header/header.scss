@@ -87,8 +87,8 @@
 
       #{$root}__middle {
         // Custom: A backdrop filter below the breakpoint would trap the fixed
-        // mobile navigation drawer, so the header stays opaque there instead.
-        background-color: ct-component-var($root, $theme, background-color);
+        // mobile navigation drawer, so the header stays near-opaque there.
+        background-color: color-mix(in srgb, ct-component-var($root, $theme, background-color) 92%, transparent);
 
         @include ct-breakpoint($ct-mobile-navigation-breakpoint) {
           background-color: color-mix(in srgb, ct-component-var($root, $theme, background-color) 80%, transparent);
