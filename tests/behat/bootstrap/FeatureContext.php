@@ -207,4 +207,128 @@ JS;
     }
   }
 
+  /**
+   * Assert that an image renders at the aspect ratio of its source.
+   *
+   * A box whose ratio differs from the source either stretches the image or,
+   * for a vector, letterboxes the artwork away from the box edges.
+   *
+   * @code
+   * Then the image ".ct-header__logo .ct-logo__image--desktop" should be rendered at its natural aspect ratio
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the image :selector should be rendered at its natural aspect ratio')]
+  public function imageAssertNaturalAspectRatio(string $selector): void {
+    $script = <<<JS
+      var box = {{ELEMENT}}.getBoundingClientRect();
+      return [box.width, box.height, {{ELEMENT}}.naturalWidth, {{ELEMENT}}.naturalHeight];
+JS;
+    [$width, $height, $natural_width, $natural_height] = $this->elementExecuteJs($selector, $script);
+
+    if ($width <= 0 || $height <= 0) {
+      throw new \RuntimeException(sprintf('The image "%s" is not displayed.', $selector));
+    }
+
+    if ($natural_width <= 0 || $natural_height <= 0) {
+      throw new \RuntimeException(sprintf('The image "%s" has not loaded.', $selector));
+    }
+
+    $ratio = $width / $height;
+    $natural_ratio = $natural_width / $natural_height;
+
+    if (abs($ratio - $natural_ratio) / $natural_ratio > 0.02) {
+      throw new \RuntimeException(sprintf('Expected image "%s" to render at its natural aspect ratio of %.2f, but its %dx%d box has a ratio of %.2f.', $selector, $natural_ratio, $width, $height, $ratio));
+    }
+  }
+
+  /**
+   * Assert that an element starts at the left edge of another element.
+   *
+   * @code
+   * Then the element ".ct-header__logo img" should start at the left edge of the element ".ct-header__middle .container"
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the element :selector should start at the left edge of the element :reference')]
+  public function elementAssertStartsAtLeftEdge(string $selector, string $reference): void {
+    $reference_js = json_encode($reference, JSON_UNESCAPED_SLASHES);
+    $script = <<<JS
+      var reference = document.querySelector({$reference_js});
+      if (!reference) {
+        throw new Error('Element with selector ' + {$reference_js} + ' not found.');
+      }
+      return [{{ELEMENT}}.getBoundingClientRect().left, reference.getBoundingClientRect().left];
+JS;
+    [$left, $reference_left] = $this->elementExecuteJs($selector, $script);
+
+    if (abs($left - $reference_left) > 1) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to start at the left edge of "%s" (x=%d), but it starts at x=%d.', $selector, $reference, $reference_left, $left));
+    }
+  }
+
+  /**
+   * Assert that the displayed child elements of an element share 1 row.
+   *
+   * @code
+   * Then the child elements of ".ct-header .ct-navigation__menu" should be on a single row
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the child elements of :selector should be on a single row')]
+  public function elementAssertChildrenOnSingleRow(string $selector): void {
+    $script = <<<JS
+      return Array.prototype.filter.call({{ELEMENT}}.children, function (child) {
+        return child.getBoundingClientRect().height > 0;
+      }).map(function (child) {
+        return Math.round(child.getBoundingClientRect().top);
+      });
+JS;
+    $tops = $this->elementExecuteJs($selector, $script);
+
+    if (empty($tops)) {
+      throw new \RuntimeException(sprintf('The element "%s" has no displayed child elements.', $selector));
+    }
+
+    $rows = array_unique($tops);
+
+    if (count($rows) > 1) {
+      throw new \RuntimeException(sprintf('Expected the child elements of "%s" to be on a single row, but they start at %d heights: %s.', $selector, count($rows), implode(', ', $rows)));
+    }
+  }
+
+  /**
+   * Assert that an element paints a fully opaque background colour.
+   *
+   * @code
+   * Then the element ".ct-header__middle" should have an opaque background
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the element :selector should have an opaque background')]
+  public function elementAssertOpaqueBackground(string $selector): void {
+    $script = <<<JS
+      return window.getComputedStyle({{ELEMENT}}).getPropertyValue('background-color');
+JS;
+    $color = trim((string) $this->elementExecuteJs($selector, $script));
+
+    // Computed colours carry alpha as 'rgba(r, g, b, a)' or as 'color(... / a)'.
+    $alpha = 1.0;
+
+    if ($color === 'transparent') {
+      $alpha = 0.0;
+    }
+    elseif (preg_match('/\/\s*([\d.]+)(%?)\s*\)$/', $color, $matches) || preg_match('/^rgba\(.*,\s*([\d.]+)(%?)\s*\)$/', $color, $matches)) {
+      $alpha = $matches[2] === '%' ? (float) $matches[1] / 100 : (float) $matches[1];
+    }
+
+    if ($alpha < 1) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to have an opaque background, but its background colour is "%s".', $selector, $color));
+    }
+  }
+
 }
