@@ -272,6 +272,10 @@ JS;
   /**
    * Assert that the displayed child elements of an element share 1 row.
    *
+   * Children on 1 row can sit at different heights under cross-axis
+   * alignment, so the check looks for a horizontal band that crosses every
+   * child rather than for a shared top edge.
+   *
    * @code
    * Then the child elements of ".ct-header .ct-navigation__menu" should be on a single row
    * @endcode
@@ -284,19 +288,23 @@ JS;
       return Array.prototype.filter.call({{ELEMENT}}.children, function (child) {
         return child.getBoundingClientRect().height > 0;
       }).map(function (child) {
-        return Math.round(child.getBoundingClientRect().top);
+        var box = child.getBoundingClientRect();
+        return [box.top, box.bottom];
       });
 JS;
-    $tops = $this->elementExecuteJs($selector, $script);
+    $boxes = $this->elementExecuteJs($selector, $script);
+    $tops = array_column($boxes, 0);
+    $bottoms = array_column($boxes, 1);
 
-    if (empty($tops)) {
+    if ($tops === [] || $bottoms === []) {
       throw new \RuntimeException(sprintf('The element "%s" has no displayed child elements.', $selector));
     }
 
-    $rows = array_unique($tops);
+    $max_top = max($tops);
+    $min_bottom = min($bottoms);
 
-    if (count($rows) > 1) {
-      throw new \RuntimeException(sprintf('Expected the child elements of "%s" to be on a single row, but they start at %d heights: %s.', $selector, count($rows), implode(', ', $rows)));
+    if ($max_top >= $min_bottom) {
+      throw new \RuntimeException(sprintf('Expected the child elements of "%s" to be on a single row, but a child starts at y=%d, at or below the bottom of another child at y=%d.', $selector, $max_top, $min_bottom));
     }
   }
 
