@@ -1575,8 +1575,16 @@ function do_base_deploy_move_policy_links_to_footer_menu(): string {
     return Helper::report();
   }
 
-  // Sync mode deletes every link not listed, so the menu holds only these.
-  Helper::menu()->createTree('civictheme-footer', $tree, mode: Menu::MODE_SYNC);
+  // Update mode re-points links that already carry these titles and leaves
+  // every other link in the menu alone.
+  Helper::menu()->createTree('civictheme-footer', $tree, mode: Menu::MODE_UPDATE);
+
+  $home = Helper::menu()->findItem('civictheme-footer', ['title' => 'Home', 'link.uri' => 'route:<front>']);
+
+  if ($home instanceof MenuLinkContentInterface) {
+    $home->delete();
+    Helper::reporter()->deleted('Deleted the "Home" link from the footer menu.');
+  }
 
   $block = $repository->loadEntityByUuid('block_content', 'd7098a8c-3ba3-48f7-bc0c-5787ebaa0427');
 
