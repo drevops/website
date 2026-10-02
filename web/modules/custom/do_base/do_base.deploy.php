@@ -1579,9 +1579,11 @@ function do_base_deploy_move_policy_links_to_footer_menu(): string {
   // every other link in the menu alone.
   Helper::menu()->createTree('civictheme-footer', $tree, mode: Menu::MODE_UPDATE);
 
-  $home = Helper::menu()->findItem('civictheme-footer', ['title' => 'Home', 'link.uri' => 'route:<front>']);
+  // The UUID identifies the "Home" link CivicTheme provisions, so a "Home"
+  // link an editor adds is left alone.
+  $home = $repository->loadEntityByUuid('menu_link_content', '6892c0fd-a675-4872-a6fd-757fffa33f1e');
 
-  if ($home instanceof MenuLinkContentInterface) {
+  if ($home instanceof MenuLinkContentInterface && $home->getMenuName() === 'civictheme-footer') {
     $home->delete();
     Helper::reporter()->deleted('Deleted the "Home" link from the footer menu.');
   }
