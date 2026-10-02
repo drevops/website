@@ -208,7 +208,8 @@
         },
         "patches": {
             "drupal/civictheme": {
-                "Remove Shortcut from theme dependency": "patches/civictheme-remove-shortcut-mr19.diff"
+                "Remove Shortcut from theme dependency": "patches/civictheme-remove-shortcut-mr19.diff",
+                "Duplicate main elements when 3col layout used in the Node display - https://www.drupal.org/project/civictheme/issues/3467058": "patches/civictheme-single-main-landmark.patch"
             },
             "drupal/cloudflare": {
                 "Skip the Cloudflare API call in the zone-name update hook and use a static zone name": "patches/cloudflare-static-zone-name-update-hook.patch"
