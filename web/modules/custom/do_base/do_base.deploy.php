@@ -9,17 +9,14 @@
 
 declare(strict_types=1);
 
-use Drupal\block_content\BlockContentInterface;
 use Drupal\civictheme\CivicthemeColorManager;
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\drupal_helpers\Helper;
-use Drupal\drupal_helpers\Helpers\Menu;
 use Drupal\drupal_helpers\Report\Reporter;
 use Drupal\entity_usage\RecreateTrackingDataForFieldQueuer;
 use Drupal\file\FileInterface;
@@ -1546,189 +1543,13 @@ function _do_base_is_related_list(ParagraphInterface $paragraph): bool {
 }
 
 /**
- * Moves the policy links from the copyright block into the footer menu.
+ * Adds the policy links to the footer menu.
  */
-function do_base_deploy_move_policy_links_to_footer_menu(): string {
-  $pages = [
-    'Privacy policy' => 'ac67f4c4-f4a5-486e-b368-5eb0a4ccd617',
-    'Responsible AI policy' => '3b586d60-9a97-4506-9f44-7f469f41f0cf',
-  ];
-
-  $repository = \Drupal::service('entity.repository');
-  $tree = [];
-  $linked_uuids = [];
-
-  foreach ($pages as $title => $uuid) {
-    $node = $repository->loadEntityByUuid('node', $uuid);
-
-    if (!$node instanceof NodeInterface) {
-      Helper::reporter()->skipped(sprintf('The "%s" page does not exist, so the footer menu does not link to it.', $title), severity: Reporter::SEVERITY_WARNING);
-
-      continue;
-    }
-
-    $tree[$title] = 'entity:node/' . $node->id();
-    $linked_uuids[] = $uuid;
-  }
-
-  if ($tree === []) {
-    return Helper::report();
-  }
-
-  // Update mode re-points links that already carry these titles and leaves
-  // every other link in the menu alone.
-  Helper::menu()->createTree('civictheme-footer', $tree, mode: Menu::MODE_UPDATE);
-
-  // The UUID identifies the "Home" link CivicTheme provisions, so a "Home"
-  // link an editor adds is left alone.
-  $home = $repository->loadEntityByUuid('menu_link_content', '6892c0fd-a675-4872-a6fd-757fffa33f1e');
-
-  if ($home instanceof MenuLinkContentInterface && $home->getMenuName() === 'civictheme-footer') {
-    $home->delete();
-    Helper::reporter()->deleted('Deleted the "Home" link from the footer menu.');
-  }
-
-  $block = $repository->loadEntityByUuid('block_content', 'd7098a8c-3ba3-48f7-bc0c-5787ebaa0427');
-
-  if (!$block instanceof BlockContentInterface) {
-    Helper::reporter()->skipped('The copyright block does not exist, so there are no policy links to remove from it.');
-
-    return Helper::report();
-  }
-
-  if (_do_base_strip_block_node_links($block, $linked_uuids)) {
-    Helper::reporter()->updated('Removed the policy links from the copyright block.');
-  }
-  else {
-    Helper::reporter()->skipped('The copyright block holds no policy links to remove.');
-  }
+function do_base_deploy_add_footer_menu_links(): string {
+  Helper::menu()->createTree('civictheme-footer', [
+    'Privacy policy' => '<front>',
+    'Responsible AI policy' => '<front>',
+  ]);
 
   return Helper::report();
-}
-
-/**
- * Removes the links to the given nodes from a component block's content.
- *
- * @param \Drupal\block_content\BlockContentInterface $block
- *   The block to edit.
- * @param string[] $uuids
- *   UUIDs of the nodes whose links are removed.
- *
- * @return bool
- *   TRUE when a link was removed and the block saved, FALSE otherwise.
- */
-function _do_base_strip_block_node_links(BlockContentInterface $block, array $uuids): bool {
-  if (!$block->hasField('field_c_b_components')) {
-    return FALSE;
-  }
-
-  // The referenced revisions load detached from the field, so the edited
-  // paragraphs are written back to it below.
-  $paragraphs = $block->get('field_c_b_components')->referencedEntities();
-  $changed = FALSE;
-
-  foreach ($paragraphs as $paragraph) {
-    if (!$paragraph instanceof ParagraphInterface || !$paragraph->hasField('field_c_p_content')) {
-      continue;
-    }
-
-    $content = $paragraph->get('field_c_p_content');
-    $html = (string) $content->value;
-    $stripped = _do_base_strip_node_links($html, $uuids);
-
-    if ($stripped === $html) {
-      continue;
-    }
-
-    $paragraph->set('field_c_p_content', ['value' => $stripped, 'format' => $content->format]);
-    $changed = TRUE;
-  }
-
-  if (!$changed) {
-    return FALSE;
-  }
-
-  $block->set('field_c_b_components', $paragraphs);
-
-  // Saving the block as a new revision also creates new paragraph revisions,
-  // so the previous footer copy stays restorable.
-  $block->setNewRevision();
-  $block->setRevisionLogMessage('Moved the policy links into the footer menu.');
-  $block->save();
-
-  return TRUE;
-}
-
-/**
- * Removes the links to the given nodes from markup.
- *
- * Also removes the line break beside each link, and any paragraph left empty.
- *
- * @param string $html
- *   The markup to strip.
- * @param string[] $uuids
- *   UUIDs of the nodes whose links are removed.
- *
- * @return string
- *   The markup without the links, or the input unchanged when it has none.
- */
-function _do_base_strip_node_links(string $html, array $uuids): string {
-  if ($uuids === []) {
-    return $html;
-  }
-
-  $document = Html::load($html);
-  $removed = FALSE;
-
-  // Copied, because the live list shifts as links are removed from it.
-  foreach (iterator_to_array($document->getElementsByTagName('a')) as $link) {
-    $parent = $link->parentNode;
-
-    if (!$parent instanceof \DOMNode || !in_array($link->getAttribute('data-entity-uuid'), $uuids, TRUE)) {
-      continue;
-    }
-
-    $break = _do_base_adjacent_break($link, TRUE) ?? _do_base_adjacent_break($link, FALSE);
-    $break?->parentNode?->removeChild($break);
-    $parent->removeChild($link);
-    $removed = TRUE;
-
-    if (_do_base_is_empty_paragraph($parent)) {
-      $parent->parentNode?->removeChild($parent);
-    }
-  }
-
-  return $removed ? Html::serialize($document) : $html;
-}
-
-/**
- * Tells whether a node is a paragraph holding nothing but whitespace.
- */
-function _do_base_is_empty_paragraph(\DOMNode $node): bool {
-  if (!$node instanceof \DOMElement || $node->nodeName !== 'p' || $node->getElementsByTagName('*')->length > 0) {
-    return FALSE;
-  }
-
-  return trim(str_replace("\u{00A0}", ' ', $node->textContent)) === '';
-}
-
-/**
- * Finds the line break beside a node, skipping whitespace between them.
- *
- * @param \DOMNode $node
- *   The node to look beside.
- * @param bool $forward
- *   TRUE to look after the node, FALSE to look before it.
- *
- * @return \DOMElement|null
- *   The line break, or NULL when the nearest sibling is something else.
- */
-function _do_base_adjacent_break(\DOMNode $node, bool $forward): ?\DOMElement {
-  $sibling = $forward ? $node->nextSibling : $node->previousSibling;
-
-  while ($sibling instanceof \DOMText && trim($sibling->textContent) === '') {
-    $sibling = $forward ? $sibling->nextSibling : $sibling->previousSibling;
-  }
-
-  return $sibling instanceof \DOMElement && $sibling->nodeName === 'br' ? $sibling : NULL;
 }

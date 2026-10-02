@@ -10,7 +10,7 @@ dependencies:
     - drevops
 id: drevops_footer_menu_1
 theme: drevops
-region: footer_middle_1
+region: footer_middle_5
 weight: 0
 provider: null
 plugin: 'menu_block:civictheme-footer'
