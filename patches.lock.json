@@ -1,5 +1,5 @@
 {
-    "_hash": "44b98e7f10d65ea563e28f02629ceac6a79598fe518da73a7b61fb19722c5cdb",
+    "_hash": "2c708e02a4580778ceb5abf2b5923a9daa60e21f52135cda41b15d210179bef8",
     "patches": {
         "drupal/civictheme": [
             {
@@ -7,6 +7,16 @@
                 "description": "Remove Shortcut from theme dependency",
                 "url": "patches/civictheme-remove-shortcut-mr19.diff",
                 "sha256": "afa85d791d2da959be363553ddc7778d19b56e827feab15b06233ef236396821",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            },
+            {
+                "package": "drupal/civictheme",
+                "description": "Duplicate main elements when 3col layout used in the Node display - https://www.drupal.org/project/civictheme/issues/3467058",
+                "url": "patches/civictheme-single-main-landmark.patch",
+                "sha256": "667073f5b73fb96a8cc6b25d26dd573199d7d0e831ffa38c9f8e321bfbd85bf7",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"
