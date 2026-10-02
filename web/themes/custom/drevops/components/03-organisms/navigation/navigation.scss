@@ -176,6 +176,36 @@
     }
   }
 
+  // Custom: Footer variant. Links use small body text in the footer's colour
+  // instead of the label style '.ct-link' applies.
+  &#{$root}--footer {
+    #{$root}__items {
+      #{$root}__menu {
+        .ct-menu__item__link {
+          @include ct-typography('text-small');
+
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+    }
+
+    @include ct-component-theme($root) using($root, $theme) {
+      #{$root}__items {
+        #{$root}__menu {
+          .ct-menu__item__link:is(:hover, :focus-visible) {
+            @if $theme == 'light' {
+              color: var(--ct-link-light-hover-color);
+            }
+            @else {
+              color: var(--ct-link-dark-hover-color);
+            }
+          }
+        }
+      }
+    }
+  }
+
   // None variant specific styles
   &#{$root}--none {
     #{$root}__items {

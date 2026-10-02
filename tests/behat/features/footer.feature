@@ -27,3 +27,12 @@ Feature: Site footer menu
     When I go to the homepage
     Then I should see "[TEST] Footer link" in the ".ct-footer__middle .ct-navigation" element
     And the element ".ct-footer__middle .ct-navigation__items" with the attribute "aria-label" and the value "Footer" should exist
+
+  @javascript
+  Scenario: Site visitor sees the footer menu links as small body text
+    When I set the viewport to "1440" by "900"
+    And I visit "/"
+    Then the element ".ct-footer__middle .ct-menu__item__link" should have the computed style "font-size" of "14px"
+    And the element ".ct-footer__middle .ct-menu__item__link" should have the computed style "font-weight" of "400"
+    And the element ".ct-footer__middle .ct-menu__item__link" should have the computed style "text-decoration-line" of "none"
+    And the element ".ct-footer__middle .ct-menu__item__link" should have the computed style "color" of "rgb(239, 246, 255)"
