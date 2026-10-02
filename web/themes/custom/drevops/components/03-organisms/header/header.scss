@@ -28,6 +28,12 @@
   &__middle {
     padding-top: ct-spacing(2);
     padding-bottom: ct-spacing(2);
+
+    // Custom: Keep the logo and the menu trigger on 1 row below 'xs', where
+    // grid columns otherwise stack.
+    .row--no-wrap {
+      flex-wrap: nowrap;
+    }
   }
 
   &__content-middle2 {
@@ -80,9 +86,12 @@
       }
 
       #{$root}__middle {
-        background-color: color-mix(in srgb, ct-component-var($root, $theme, background-color) 80%, transparent);
+        // Custom: A backdrop filter below the breakpoint would trap the fixed
+        // mobile navigation drawer, so the header stays near-opaque there.
+        background-color: color-mix(in srgb, ct-component-var($root, $theme, background-color) 92%, transparent);
 
         @include ct-breakpoint($ct-mobile-navigation-breakpoint) {
+          background-color: color-mix(in srgb, ct-component-var($root, $theme, background-color) 80%, transparent);
           backdrop-filter: blur(0.5rem);
         }
       }

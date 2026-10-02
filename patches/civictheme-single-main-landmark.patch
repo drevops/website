@@ -1,0 +1,20 @@
+diff --git a/templates/layout/layout--three-columns.html.twig b/templates/layout/layout--three-columns.html.twig
+index 095567c3c80f84a4889890a2f7c3d424b18f1db9..35f8eea51eb58a39f922f7d8f61e7916964850b8 100644
+--- a/templates/layout/layout--three-columns.html.twig
++++ b/templates/layout/layout--three-columns.html.twig
+@@ -45,7 +45,7 @@
+ {% set modifier_class = modifier_class|trim %}
+ 
+ {% if content %}
+-  <main class="ct-layout {{ modifier_class -}}" role="main" data-layout-builder-layout="true" {% if attributes is not empty %}{{- attributes -}}{% endif %}>
++  <div class="ct-layout {{ modifier_class -}}" data-layout-builder-layout="true" {% if attributes is not empty %}{{- attributes -}}{% endif %}>
+     {% block content_top_block %}
+       {% if content.content_top is not empty %}
+         {{- content.content_top -}}
+@@ -99,5 +99,5 @@
+         {{- content.content_bottom -}}
+       {% endif %}
+     {% endblock %}
+-  </main>
++  </div>
+ {% endif %}

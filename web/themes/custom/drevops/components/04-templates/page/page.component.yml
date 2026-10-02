@@ -152,6 +152,9 @@ slots:
   footer_middle_4:
     title: Footer middle 4
     description: Footer middle section 4 content.
+  footer_middle_5:
+    title: Footer middle 5
+    description: Footer middle section 5 content, spanning the full width.
   footer_bottom_1:
     title: Footer bottom 1
     description: Footer bottom section 1 content.

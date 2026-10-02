@@ -24,6 +24,7 @@ require_once __DIR__ . '/includes/blog.inc';
 require_once __DIR__ . '/includes/project.inc';
 require_once __DIR__ . '/includes/cards.inc';
 require_once __DIR__ . '/includes/sidebar_navigation.inc';
+require_once __DIR__ . '/includes/footer_navigation.inc';
 require_once __DIR__ . '/includes/content_moderation.inc';
 require_once __DIR__ . '/includes/admin_navigation.inc';
 require_once __DIR__ . '/includes/error_page.inc';

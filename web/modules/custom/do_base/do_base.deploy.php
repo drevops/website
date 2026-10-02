@@ -1541,3 +1541,15 @@ function _do_base_is_related_list(ParagraphInterface $paragraph): bool {
 
   return (bool) $paragraph->get('field_c_p_list_topics_from_page')->value;
 }
+
+/**
+ * Adds the policy links to the footer menu.
+ */
+function do_base_deploy_add_footer_menu_links(): string {
+  Helper::menu()->createTree('civictheme-footer', [
+    'Privacy policy' => '<front>',
+    'Responsible AI policy' => '<front>',
+  ]);
+
+  return Helper::report();
+}

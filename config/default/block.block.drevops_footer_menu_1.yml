@@ -1,6 +1,6 @@
 uuid: 8a7bf8ec-1cb8-4dcf-89ba-4a0a01b5ef49
 langcode: en
-status: false
+status: true
 dependencies:
   config:
     - system.menu.civictheme-footer
@@ -10,7 +10,7 @@ dependencies:
     - drevops
 id: drevops_footer_menu_1
 theme: drevops
-region: footer_middle_1
+region: footer_middle_5
 weight: 0
 provider: null
 plugin: 'menu_block:civictheme-footer'
