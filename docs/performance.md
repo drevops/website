@@ -32,6 +32,8 @@ The image component accepts both, but nothing that includes it passes them: the 
 
 That function works from the source file and the style's own transform rather than measuring the derivative, so the numbers are right even on the request that generates that derivative for the first time. Vectors have no raster size, so their ratio is read from the `viewBox`; only the ratio matters, since CSS decides the rendered size.
 
+That holds only where CSS leaves one dimension free to follow the ratio. The logo is capped by `max-height` alone, so without the `width: auto` in `assets/sass/_logo.scss` its box keeps the attribute's full intrinsic width, and the SVG centres itself in a box far wider than the artwork. A component that sizes an image by one dimension needs the other set to `auto` the same way.
+
 Components are included from Twig rather than rendered through a render element, so there is no preprocess step and no `#pre_render` to hook. A Twig function called from the template is the only interception point.
 
 ## Overriding a CivicTheme component

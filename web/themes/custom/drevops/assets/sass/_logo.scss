@@ -1,0 +1,9 @@
+//
+// Logo.
+//
+
+// Overrides the intrinsic width attribute the image component sets, so the
+// logo width follows its capped height.
+.ct-logo__image {
+  width: auto;
+}
