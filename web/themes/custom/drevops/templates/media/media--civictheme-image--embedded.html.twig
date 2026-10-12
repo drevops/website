@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Image media embedded in rich text.
+ *
+ * The figure renders the image field through the view display's formatter, so
+ * the display configuration decides the image style and any link around it.
+ */
+#}
+{% include 'civictheme:figure' with {
+  image: content.field_c_m_image,
+} %}
