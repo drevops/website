@@ -40,7 +40,9 @@ Change them at `/admin/config/media/photoswipe`, then export the configuration.
 
 The PhotoSwipe JavaScript library is not on Packagist. `composer.json` declares it as a `package` repository pinned to the version the module expects, which Composer installs into `web/libraries/photoswipe`. That directory is not committed. Updating the library means changing the version in the repository entry and the `require` constraint together. The status report shows the installed version as "Photoswipe plugin".
 
-The library is served from this origin, so the [content security policy](csp.md) needs no change. Keep the module's `enable_cdn` option off: it loads the library from cdnjs, which the policy does not allow for stylesheets.
+The library is served from this origin, so the [content security policy](csp.md) needs no change. Keep the module's `enable_cdn` option off, so the lightbox does not depend on a third-party host.
+
+Enabling the module still adds a scheme-less `cdnjs.cloudflare.com` to the policy's script and style sources. The `csp` module collects the external hosts of every library an enabled extension declares, and that includes PhotoSwipe's unused CDN library. The policy already allows `https://cdnjs.cloudflare.com`, so on the HTTPS site it admits nothing new.
 
 On macOS, extracting the library archive reports a conflict, because it holds 2 file names that differ only by case. Composer then falls back to its own extractor and the install completes.
 
