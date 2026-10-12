@@ -113,8 +113,8 @@
             "type": "package",
             "package": {
                 "name": "npm-asset/photoswipe",
-                "version": "5.4.4",
                 "type": "drupal-library",
+                "version": "5.4.4",
                 "dist": {
                     "type": "zip",
                     "url": "https://github.com/dimsemenov/PhotoSwipe/archive/v5.4.4.zip"
