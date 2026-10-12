@@ -159,7 +159,13 @@ class SecurityTxtTest extends TestCase {
 
     $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/i', $value, 'The "Expires" field must be an RFC 3339 date and time.');
 
-    return new \DateTimeImmutable($value);
+    $expires = new \DateTimeImmutable($value);
+
+    // PHP normalizes an impossible date or time, such as September 31, to
+    // the next valid one, so the parsed value must match the input.
+    $this->assertSame(strtoupper(substr($value, 0, 19)), $expires->format('Y-m-d\TH:i:s'), 'The "Expires" field must be a valid calendar date and time.');
+
+    return $expires;
   }
 
 }
