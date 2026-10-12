@@ -40,6 +40,7 @@
         "drupal/moderated_content_bulk_publish": "^2.0.53",
         "drupal/navigation_extra_tools": "^1.3.2",
         "drupal/pathauto": "^1.15",
+        "drupal/photoswipe": "^5.0.11",
         "drupal/preview_link": "^2.2.3",
         "drupal/purge": "^3.7",
         "drupal/purge_control": "^2.1",
@@ -62,6 +63,7 @@
         "drupal/webform": "^6.3.1@beta",
         "drupal/xmlsitemap": "^2.0",
         "drush/drush": "^13.8.0",
+        "npm-asset/photoswipe": "^5.4.4",
         "symfony/http-client": "^6.4.47",
         "webflo/drupal-finder": "^1.3.1"
     },
@@ -106,6 +108,18 @@
         {
             "type": "vcs",
             "url": "git@github.com:drevops/test-private-package.git"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "npm-asset/photoswipe",
+                "type": "drupal-library",
+                "version": "5.4.4",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/dimsemenov/PhotoSwipe/archive/v5.4.4.zip"
+                }
+            }
         }
     ],
     "minimum-stability": "stable",

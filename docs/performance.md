@@ -24,6 +24,8 @@ The featured image sits in a box 40% of the viewport wide and no more than 600px
 
 When adding an image style that renders photographic content, copy the `image_convert` effect from `image.style.large.yml`. A style with only a crop effect ships whatever format was uploaded.
 
+Images placed in content are the exception to the figure preprocessor. Their figure renders the formatter of the `embedded` media display, which applies `wide` and links the image to its original upload, requested only when a visitor opens the zoom lightbox. See [Image zoom](image-zoom.md).
+
 ## Images carry their own dimensions
 
 Without `width` and `height` a browser cannot reserve space for an image, so every image on the page moves the content under it as it arrives.

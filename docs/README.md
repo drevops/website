@@ -13,4 +13,5 @@ applies to this project. For **how** to perform operations, see
 - [Releasing](releasing.md) - Release process and versioning
 - [Sitemap](sitemap.md) - XML sitemap module, coverage and generation
 - [SEO](seo.md) - Meta tags, social share cards and structured data
+- [Image zoom](image-zoom.md) - Zoomable lightbox for images placed in content
 - [FAQs](faqs.md) - Project-specific FAQs
