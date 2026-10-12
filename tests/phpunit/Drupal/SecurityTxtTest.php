@@ -90,7 +90,7 @@ class SecurityTxtTest extends TestCase {
   /**
    * Test that the expiry date is less than a year away.
    */
-  public function testExpiresIsLessThanAYearAway(): void {
+  public function testExpiresIsLessThanOneYearAway(): void {
     $expires = $this->expires();
     $year_away = new \DateTimeImmutable('+1 year');
 
