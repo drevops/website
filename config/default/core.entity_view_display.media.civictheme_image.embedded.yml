@@ -7,10 +7,11 @@ dependencies:
     - field.field.media.civictheme_image.field_c_m_caption
     - field.field.media.civictheme_image.field_c_m_image
     - field.field.media.civictheme_image.field_c_m_media_tags
+    - image.style.wide
     - media.type.civictheme_image
   module:
-    - image
     - layout_builder
+    - photoswipe
 third_party_settings:
   layout_builder:
     enabled: false
@@ -30,12 +31,17 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-  thumbnail:
-    type: image
+  field_c_m_image:
+    type: photoswipe_field_formatter
     label: hidden
     settings:
-      image_link: ''
-      image_style: ''
+      photoswipe_thumbnail_style_first: ''
+      photoswipe_thumbnail_style: wide
+      photoswipe_image_style: ''
+      photoswipe_reference_image_field: ''
+      photoswipe_view_mode: embedded
+      photoswipe_remove_gallery_wrapper_class: false
+      photoswipe_show_download_button: false
       image_loading:
         attribute: lazy
     third_party_settings: {  }
@@ -44,9 +50,9 @@ content:
 hidden:
   content_moderation_control: true
   created: true
-  field_c_m_image: true
   field_c_m_media_tags: true
   langcode: true
   name: true
   search_api_excerpt: true
+  thumbnail: true
   uid: true

@@ -1,0 +1,30 @@
+//
+// CivicTheme Figure component styles.
+//
+
+.ct-figure {
+  $root: &;
+
+  margin: 0;
+  display: block;
+
+  @include ct-reset-margins();
+
+  // An image passed through the slot is not built by this component, so it
+  // carries the image component class but not the element class.
+  #{$root}__image,
+  .ct-image {
+    border-radius: var(--ct-figure-border-radius);
+    object-fit: contain;
+  }
+
+  #{$root}__caption {
+    @include ct-typography('label-extra-small');
+  }
+
+  @include ct-component-theme($root) using($root, $theme) {
+    #{$root}__caption {
+      @include ct-component-property($root, $theme, caption, color);
+    }
+  }
+}
