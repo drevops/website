@@ -110,6 +110,7 @@ The `docs/` directory contains **what** applies to this project:
 - `docs/csp.md` - The content security policy, its nonce and its derived script hash
 - `docs/related-content.md` - Related-content lists and topic pages
 - `docs/performance.md` - Image styles, self-hosted fonts and layout stability
+- `docs/image-zoom.md` - Zoomable lightbox for images placed in content
 - `docs/preview-links.md` - sharing unpublished content by link
 - `docs/faqs.md` - Project-specific FAQs
 
