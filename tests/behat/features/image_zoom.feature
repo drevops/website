@@ -38,7 +38,8 @@ Feature: Image zoom
   Scenario: Clicking an image embedded in content opens its original in a zoomable lightbox
     Given I am an anonymous user
     When I visit the "civictheme_page" content page with the title "[TEST] Page Image zoom"
-    And I click on the element "article figure.ct-figure a.photoswipe img"
+    Then the element "article figure.ct-figure a.photoswipe img" should have the CSS property "cursor" with the value "zoom-in"
+    When I click on the element "article figure.ct-figure a.photoswipe img"
     And I wait for 1 second
     Then I should see a ".pswp.pswp--open.pswp--zoom-allowed" element
     And the element ".pswp__img" with the attribute "src" and the value containing "/sites/default/files/do_test/image-large.png" should exist

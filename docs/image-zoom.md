@@ -2,7 +2,7 @@
 
 Images placed in content open in a lightbox where a visitor can zoom in to read the detail. The page loads each image through an image style, and the lightbox fetches the original file only when a visitor opens it.
 
-The [PhotoSwipe](https://www.drupal.org/project/photoswipe) module provides the formatter, the lightbox and the zoom. This site adds configuration and 2 small theme overrides, and no custom JavaScript.
+The [PhotoSwipe](https://www.drupal.org/project/photoswipe) module provides the formatter, the lightbox and the zoom. This site adds configuration, 2 small theme overrides and a cursor style, and no custom JavaScript.
 
 ## Where it is enabled
 
@@ -26,6 +26,8 @@ CivicTheme renders image media into `civictheme:figure` from preprocess variable
 - `components/02-molecules/figure` replaces `civictheme:figure` to accept that slot and falls back to CivicTheme's own image when the slot is empty. Its stylesheet is a copy of CivicTheme's, as [Overriding a CivicTheme component](performance.md#overriding-a-civictheme-component) requires, with the image rule also matching `.ct-image`, because a slotted image does not carry the `ct-figure__image` class.
 
 CivicTheme's field template prints no wrapper, so the formatter's `photoswipe-gallery` class never reaches the page. The module's `prepare-galleries.js` wraps each image in a fallback gallery element on page load, so every image opens on its own.
+
+`assets/sass/_photoswipe.scss` gives every PhotoSwipe link a zoom-in cursor, so the image reads as zoomable rather than as a link to another page.
 
 ## Lightbox settings
 
