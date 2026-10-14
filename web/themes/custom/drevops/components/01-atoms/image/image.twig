@@ -22,8 +22,8 @@
 {# Handle Drupal edge case where empty alt may be passed as literal '""' string #}
 {% set alt = (alt == '""') ? '' : (alt|default('')) %}
 
-{% if url is not empty %}
-  {% if width is empty or height is empty %}
+{% if url %}
+  {% if not width or not height %}
     {% set resolved = do_image_dimensions(url) %}
     {% set width = width|default(resolved.width|default(null)) %}
     {% set height = height|default(resolved.height|default(null)) %}
@@ -33,8 +33,8 @@
     class="ct-image {{ modifier_class -}}"
     src="{{ url }}"
     alt="{{ alt }}"
-    {% if width is not empty %}width="{{ width }}"{% endif %}
-    {% if height is not empty %}height="{{ height }}"{% endif %}
+    {% if width %}width="{{ width }}"{% endif %}
+    {% if height %}height="{{ height }}"{% endif %}
     {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}
   />
 {% endif %}

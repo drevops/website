@@ -21,9 +21,9 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
 
-{% if url is not empty %}
+{% if url %}
   <figure class="ct-figure {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
-    {% if image is not empty %}
+    {% if image %}
       {{ image }}
     {% else %}
       {% include 'civictheme:image' with {
@@ -36,7 +36,7 @@
       } only %}
     {% endif %}
 
-    {% if caption is not empty %}
+    {% if caption %}
       <figcaption class="ct-figure__caption">
         {% include 'civictheme:icon' with {
           symbol: 'image',

@@ -22,7 +22,7 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s'|format(theme_class, vertical_spacing_class, modifier_class|default('')) %}
 
-{% if rows is defined and rows is not empty %}
+{% if rows is defined and rows %}
   <div class="ct-at-a-glance {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     <div class="container">
       <div class="row">
