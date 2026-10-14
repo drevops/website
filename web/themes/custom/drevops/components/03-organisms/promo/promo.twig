@@ -37,7 +37,7 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s'|format(theme_class, with_background_class, vertical_spacing_class, modifier_class|default('')) %}
 
-{% set is_contained = is_contained is defined ? is_contained : true %}
+{% set is_contained = is_contained is not null ? is_contained : true %}
 
 {% if title or content %}
   <div class="ct-promo {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
@@ -89,8 +89,8 @@
                       size: 'large',
                       text: link.text,
                       url: link.url,
-                      is_new_window: link.is_new_window is defined ? link.is_new_window : false,
-                      is_external: link.is_external is defined ? link.is_external : false,
+                      is_new_window: link.is_new_window is not null ? link.is_new_window : false,
+                      is_external: link.is_external is not null ? link.is_external : false,
                       modifier_class: 'ct-promo__button',
                     }, with_context: false) }}
                   </div>

@@ -41,7 +41,7 @@
                 text: link.text,
                 url: link.url,
                 theme: theme,
-                is_external: link.is_external|default(false),
+                is_external: link.is_external is not null ? link.is_external : false,
               }, with_context: false) }}
             {% endset %}
             {% set items = items|merge([item]) %}
