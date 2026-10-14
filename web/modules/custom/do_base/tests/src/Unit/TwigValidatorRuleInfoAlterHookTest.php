@@ -6,9 +6,11 @@ namespace Drupal\Tests\do_base\Unit;
 
 use Drupal\do_base\Hook\TwigValidatorRuleInfoAlterHook;
 use Drupal\do_base\Twig\ImageDimensionsExtension;
+use Drupal\sdc_devel\Plugin\TwigValidatorRule\TwigValidatorRuleFunction;
 use Drupal\sdc_devel\TwigValidatorRulePluginBase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use Twig\Node\Expression\FunctionExpression;
 
 /**
  * Tests the Twig validator rule definitions this site alters.
@@ -34,7 +36,7 @@ class TwigValidatorRuleInfoAlterHookTest extends DoBaseUnitTestBase {
     $definitions = ['function' => ['id' => 'function', 'rule_on_name' => $rule_on_name]];
 
     // Act.
-    (new TwigValidatorRuleInfoAlterHook())->alter($definitions);
+    new TwigValidatorRuleInfoAlterHook()->alter($definitions);
 
     // Assert.
     $this->assertSame($expected, $definitions['function']['rule_on_name'][TwigValidatorRulePluginBase::RULE_NAME_ALLOW]);
@@ -66,14 +68,14 @@ class TwigValidatorRuleInfoAlterHookTest extends DoBaseUnitTestBase {
     $definitions = [
       'function' => [
         'id' => 'function',
-        'twig_node_type' => 'Twig\Node\Expression\FunctionExpression',
+        'twig_node_type' => FunctionExpression::class,
         'rule_on_name' => [
           TwigValidatorRulePluginBase::RULE_NAME_IGNORE => ['render_var'],
           TwigValidatorRulePluginBase::RULE_NAME_WARN => ['source' => 'Bad architecture.'],
           TwigValidatorRulePluginBase::RULE_NAME_FORBID => ['url' => 'Keep components sandboxed.'],
           TwigValidatorRulePluginBase::RULE_NAME_ALLOW => ['include'],
         ],
-        'class' => 'Drupal\sdc_devel\Plugin\TwigValidatorRule\TwigValidatorRuleFunction',
+        'class' => TwigValidatorRuleFunction::class,
         'provider' => 'sdc_devel',
       ],
       'filter' => [
@@ -85,7 +87,7 @@ class TwigValidatorRuleInfoAlterHookTest extends DoBaseUnitTestBase {
     $expected['function']['rule_on_name'][TwigValidatorRulePluginBase::RULE_NAME_ALLOW][] = ImageDimensionsExtension::FUNCTION_NAME;
 
     // Act.
-    (new TwigValidatorRuleInfoAlterHook())->alter($definitions);
+    new TwigValidatorRuleInfoAlterHook()->alter($definitions);
 
     // Assert.
     $this->assertSame($expected, $definitions);
@@ -103,7 +105,7 @@ class TwigValidatorRuleInfoAlterHookTest extends DoBaseUnitTestBase {
     $expected = $definitions;
 
     // Act.
-    (new TwigValidatorRuleInfoAlterHook())->alter($definitions);
+    new TwigValidatorRuleInfoAlterHook()->alter($definitions);
 
     // Assert.
     $this->assertSame($expected, $definitions);
