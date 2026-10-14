@@ -26,21 +26,21 @@
     {% if image %}
       {{ image }}
     {% else %}
-      {% include 'civictheme:image' with {
+      {{ include('civictheme:image', {
         theme: theme,
         url: url,
         alt: alt,
         width: width,
         height: height,
         modifier_class: 'ct-figure__image',
-      } only %}
+      }, with_context: false) }}
     {% endif %}
 
     {% if caption %}
       <figcaption class="ct-figure__caption">
-        {% include 'civictheme:icon' with {
+        {{ include('civictheme:icon', {
           symbol: 'image',
-        } only %}
+        }, with_context: false) }}
         {{ caption }}
       </figcaption>
     {% endif %}

@@ -18,7 +18,7 @@
 {% set modifier_class = 'ct-mobile-navigation-trigger %s'|format(modifier_class|default('')) %}
 {% set trigger_attributes = create_attribute(attributes is defined and attributes is not null ? attributes.toArray() : {}) %}
 
-{% include 'civictheme:button' with {
+{{ include('civictheme:button', {
   theme: theme,
   kind: 'button',
   icon: icon|default('bars'),
@@ -27,4 +27,4 @@
   text: text,
   modifier_class: modifier_class,
   attributes: trigger_attributes.setAttribute('data-flyout-open-trigger', '').setAttribute('data-flyout-target', '.ct-mobile-navigation').setAttribute('aria-expanded', 'false'),
-} only %}
+}, with_context: false) }}

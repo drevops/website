@@ -61,20 +61,20 @@
                   {% if title %}
                     {# The utility class carries the type scale, which would
                        otherwise come from the heading element itself. #}
-                    {% include 'civictheme:heading' with {
+                    {{ include('civictheme:heading', {
                       content: title,
                       level: 2,
                       theme: theme,
                       modifier_class: 'ct-promo__title ct-heading-4',
-                    } only %}
+                    }, with_context: false) }}
                   {% endif %}
 
                   {% if content %}
-                    {% include 'civictheme:paragraph' with {
+                    {{ include('civictheme:paragraph', {
                       theme: theme,
                       content: content,
                       modifier_class: 'ct-promo__content',
-                    } only %}
+                    }, with_context: false) }}
                   {% endif %}
                 </div>
               {% endblock %}
@@ -82,7 +82,7 @@
               {% block content_right_block %}
                 {% if link %}
                   <div class="ct-promo__links">
-                    {% include 'civictheme:button' with {
+                    {{ include('civictheme:button', {
                       theme: theme,
                       type: 'secondary',
                       kind: 'link',
@@ -92,7 +92,7 @@
                       is_new_window: link.is_new_window is defined ? link.is_new_window : false,
                       is_external: link.is_external is defined ? link.is_external : false,
                       modifier_class: 'ct-promo__button',
-                    } only %}
+                    }, with_context: false) }}
                   </div>
                 {% endif %}
               {% endblock %}
