@@ -1,0 +1,7 @@
+services:
+  Drupal\do_package\Hook\PackageAccessHook:
+    arguments: ['@current_user']
+  do_package.route_subscriber:
+    class: Drupal\do_package\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,4 @@
+access package media:
+  title: 'Access package media'
+  description: 'Required to view, download, create, edit or delete private packages. Other media permissions apply to packages only alongside this one.'
+  restrict access: true
