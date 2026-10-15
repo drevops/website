@@ -55,7 +55,7 @@ class PackageFileTest extends PackageKernelTestBase {
       $this->createPackage($file);
     }
     else {
-      $this->container->get('file.usage')->add($file, 'editor', 'node', 1);
+      $this->container->get('file.usage')->add($file, 'editor', 'node', '1');
     }
 
     // Act.
