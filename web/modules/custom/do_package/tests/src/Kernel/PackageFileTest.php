@@ -136,20 +136,32 @@ class PackageFileTest extends PackageKernelTestBase {
   }
 
   /**
-   * Tests that deleting media of another bundle keeps its file.
+   * Tests that media of another bundle keeps its files.
    */
   public function testOtherBundleUnaffected(): void {
     // Prepare.
     $document_type = $this->createMediaType('file', ['id' => 'document', 'label' => 'Document']);
-    $file = $this->createFile('public://documents/test.txt');
-    $document = Media::create(['bundle' => 'document', 'name' => '[TEST] Document', $this->sourceFieldName($document_type) => $file->id(), 'uid' => 1]);
+    $document_field = $this->sourceFieldName($document_type);
+    $original = $this->createFile('public://documents/original.txt');
+    $replacement = $this->createFile('public://documents/replacement.txt');
+    $document = Media::create(['bundle' => 'document', 'name' => '[TEST] Document', $document_field => $original->id(), 'uid' => 1]);
     $document->save();
+    $first_revision_id = $document->getRevisionId();
+    $storage = $this->container->get('entity_type.manager')->getStorage('media');
+    $this->assertInstanceOf(RevisionableStorageInterface::class, $storage);
 
     // Act.
+    $document->setNewRevision();
+    $document->save();
+    $document->set($document_field, $replacement->id());
+    $document->setNewRevision(FALSE);
+    $document->save();
+    $storage->deleteRevision($first_revision_id);
     $document->delete();
 
     // Assert.
-    $this->assertFileKept($file);
+    $this->assertFileKept($original);
+    $this->assertFileKept($replacement);
   }
 
   /**
