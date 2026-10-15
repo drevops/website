@@ -8,6 +8,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\do_package\Hook\PackageAccessHook;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\KernelTests\KernelTestBase;
@@ -99,7 +100,9 @@ class PackageAccessTest extends KernelTestBase {
 
     $package_type = $this->createMediaType('file', ['id' => PackageAccessHook::BUNDLE, 'label' => 'Package']);
     $package_field = $this->sourceFieldName($package_type);
-    $package_type->getSource()->getSourceFieldDefinition($package_type)->getFieldStorageDefinition()->setSetting('uri_scheme', 'private')->save();
+    $package_storage = FieldStorageConfig::loadByName('media', $package_field);
+    $this->assertInstanceOf(FieldStorageConfig::class, $package_storage);
+    $package_storage->setSetting('uri_scheme', 'private')->save();
 
     $document_type = $this->createMediaType('file', ['id' => 'document', 'label' => 'Document']);
     $document_field = $this->sourceFieldName($document_type);

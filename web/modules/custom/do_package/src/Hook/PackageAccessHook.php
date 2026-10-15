@@ -30,10 +30,10 @@ final class PackageAccessHook {
   /**
    * Media tables a listing query can select from as its base table.
    */
-  protected const array BASE_TABLES = ['media', 'media_field_data'];
+  public const array BASE_TABLES = ['media', 'media_field_data'];
 
   public function __construct(
-    protected AccountInterface $currentUser,
+    protected AccountInterface $account,
   ) {}
 
   /**
@@ -70,7 +70,7 @@ final class PackageAccessHook {
     }
 
     $account = $query->getMetaData('account');
-    $account = $account instanceof AccountInterface ? $account : $this->currentUser;
+    $account = $account instanceof AccountInterface ? $account : $this->account;
 
     if ($account->hasPermission(self::PERMISSION)) {
       return;
