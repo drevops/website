@@ -37,9 +37,9 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s %s %s'|format(theme_class, with_background_class, vertical_spacing_class, modifier_class|default('')) %}
 
-{% set is_contained = is_contained is defined ? is_contained : true %}
+{% set is_contained = is_contained is not null ? is_contained : true %}
 
-{% if title is not empty or content is not empty %}
+{% if title or content %}
   <div class="ct-promo {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
     {% if is_contained %}
     <div class="container">
@@ -47,7 +47,7 @@
         <div class="col-xxs-12">
           {% endif %}
           {% block content_top_block %}
-            {% if content_top is not empty %}
+            {% if content_top %}
               <div class="ct-promo__content-top">
                 {{ content_top }}
               </div>
@@ -61,20 +61,20 @@
                   {% if title %}
                     {# The utility class carries the type scale, which would
                        otherwise come from the heading element itself. #}
-                    {% include 'civictheme:heading' with {
+                    {{ include('civictheme:heading', {
                       content: title,
                       level: 2,
                       theme: theme,
                       modifier_class: 'ct-promo__title ct-heading-4',
-                    } only %}
+                    }, with_context: false) }}
                   {% endif %}
 
-                  {% if content is not empty %}
-                    {% include 'civictheme:paragraph' with {
+                  {% if content %}
+                    {{ include('civictheme:paragraph', {
                       theme: theme,
                       content: content,
                       modifier_class: 'ct-promo__content',
-                    } only %}
+                    }, with_context: false) }}
                   {% endif %}
                 </div>
               {% endblock %}
@@ -82,17 +82,17 @@
               {% block content_right_block %}
                 {% if link %}
                   <div class="ct-promo__links">
-                    {% include 'civictheme:button' with {
+                    {{ include('civictheme:button', {
                       theme: theme,
                       type: 'secondary',
                       kind: 'link',
                       size: 'large',
                       text: link.text,
                       url: link.url,
-                      is_new_window: link.is_new_window is defined ? link.is_new_window : false,
-                      is_external: link.is_external is defined ? link.is_external : false,
+                      is_new_window: link.is_new_window is not null ? link.is_new_window : false,
+                      is_external: link.is_external is not null ? link.is_external : false,
                       modifier_class: 'ct-promo__button',
-                    } only %}
+                    }, with_context: false) }}
                   </div>
                 {% endif %}
               {% endblock %}
@@ -100,7 +100,7 @@
           {% endblock %}
 
           {% block content_bottom_block %}
-            {% if content_bottom is not empty %}
+            {% if content_bottom %}
               <div class="ct-promo__content-bottom">
                 {{ content_bottom }}
               </div>

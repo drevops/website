@@ -21,6 +21,11 @@ use Twig\TwigFunction;
 final class ImageDimensionsExtension extends AbstractExtension {
 
   /**
+   * Name of the Twig function that resolves image dimensions.
+   */
+  public const string FUNCTION_NAME = 'do_image_dimensions';
+
+  /**
    * Dimensions already resolved this request, keyed by path.
    *
    * @var array<string, array<string, int>>
@@ -39,7 +44,7 @@ final class ImageDimensionsExtension extends AbstractExtension {
    */
   public function getFunctions(): array {
     return [
-      new TwigFunction('do_image_dimensions', [$this, 'dimensions']),
+      new TwigFunction(self::FUNCTION_NAME, [$this, 'dimensions']),
     ];
   }
 
