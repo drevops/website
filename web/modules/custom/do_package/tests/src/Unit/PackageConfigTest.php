@@ -69,6 +69,20 @@ class PackageConfigTest extends UnitTestCase {
   }
 
   /**
+   * Tests that package files are uploaded into the package directory.
+   *
+   * File listings hide this directory from accounts without package access.
+   */
+  public function testFileDirectory(): void {
+    // Act.
+    $storage = $this->loadConfig('field.storage.media.' . self::SOURCE_FIELD . '.yml');
+    $field = $this->loadConfig('field.field.media.' . PackageAccessHook::BUNDLE . '.' . self::SOURCE_FIELD . '.yml');
+
+    // Assert.
+    $this->assertStringStartsWith(PackageAccessHook::DIRECTORY, $storage['settings']['uri_scheme'] . '://' . $field['settings']['file_directory'] . '/');
+  }
+
+  /**
    * Tests that a package requires a zip or 7z file.
    */
   public function testFileField(): void {

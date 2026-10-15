@@ -131,16 +131,73 @@ class PackageAccessHookTest extends UnitTestCase {
   }
 
   /**
+   * Tests that access-checked file queries exclude package files.
+   */
+  #[DataProvider('dataProviderQueryFileAccessAlter')]
+  public function testQueryFileAccessAlter(array $tables, ?bool $metadata_permission, bool $current_user_permission, ?string $expected_alias): void {
+    // Prepare.
+    $query = $this->createMock(SelectInterface::class);
+    $query->method('getMetaData')->with('account')->willReturn($metadata_permission === NULL ? NULL : $this->createAccount($metadata_permission));
+    $query->method('getTables')->willReturn($tables);
+    $query->method('escapeLike')->willReturnArgument(0);
+
+    if ($expected_alias === NULL) {
+      $query->expects($this->never())->method('condition');
+    }
+    else {
+      $query->expects($this->once())->method('condition')->with($expected_alias . '.uri', PackageAccessHook::DIRECTORY . '%', 'NOT LIKE');
+    }
+
+    $hook = new PackageAccessHook($this->createAccount($current_user_permission));
+
+    // Act.
+    $hook->queryFileAccessAlter($query);
+  }
+
+  /**
+   * Data provider for testQueryFileAccessAlter().
+   */
+  public static function dataProviderQueryFileAccessAlter(): \Iterator {
+    $entity_query = ['base_table' => ['table' => 'file_managed', 'join type' => NULL]];
+    $views_query = ['file_managed' => ['table' => 'file_managed', 'join type' => NULL]];
+
+    yield 'entity query without permission' => [$entity_query, NULL, FALSE, 'base_table'];
+    yield 'views query without permission' => [$views_query, NULL, FALSE, 'file_managed'];
+    yield 'entity query with permission' => [$entity_query, NULL, TRUE, NULL];
+    yield 'query account with permission' => [$entity_query, TRUE, FALSE, NULL];
+    yield 'query account without permission' => [$entity_query, FALSE, TRUE, 'base_table'];
+    yield 'files joined to another base table' => [
+      [
+        'media_field_data' => ['table' => 'media_field_data', 'join type' => NULL],
+        'file_managed' => ['table' => 'file_managed', 'join type' => 'LEFT'],
+      ],
+      NULL,
+      FALSE,
+      NULL,
+    ];
+    yield 'no tables' => [[], NULL, FALSE, NULL];
+  }
+
+  /**
    * Tests that a query other than a select is left untouched.
    */
-  public function testQueryMediaAccessAlterIgnoresNonSelect(): void {
+  #[DataProvider('dataProviderQueryAlterIgnoresNonSelect')]
+  public function testQueryAlterIgnoresNonSelect(string $method): void {
     // Prepare.
     $query = $this->createMock(AlterableInterface::class);
     $query->expects($this->never())->method('getMetaData');
     $hook = new PackageAccessHook($this->createAccount(FALSE));
 
     // Act.
-    $hook->queryMediaAccessAlter($query);
+    $hook->{$method}($query);
+  }
+
+  /**
+   * Data provider for testQueryAlterIgnoresNonSelect().
+   */
+  public static function dataProviderQueryAlterIgnoresNonSelect(): \Iterator {
+    yield 'media query' => ['queryMediaAccessAlter'];
+    yield 'file query' => ['queryFileAccessAlter'];
   }
 
   /**

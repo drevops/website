@@ -4,19 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\do_package\Kernel;
 
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\do_package\Hook\PackageAccessHook;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\media\Entity\Media;
 use Drupal\media\MediaInterface;
-use Drupal\media\MediaTypeInterface;
-use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
-use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -30,23 +23,7 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 #[CoversClass(PackageAccessHook::class)]
 #[Group('do_package')]
 #[RunTestsInSeparateProcesses]
-class PackageAccessTest extends KernelTestBase {
-
-  use MediaTypeCreationTrait;
-  use UserCreationTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'system',
-    'user',
-    'field',
-    'file',
-    'image',
-    'media',
-    'do_package',
-  ];
+class PackageAccessTest extends PackageKernelTestBase {
 
   /**
    * Accounts keyed by the audience they stand for.
@@ -71,16 +48,9 @@ class PackageAccessTest extends KernelTestBase {
   protected MediaInterface $document;
 
   /**
-   * {@inheritdoc}
+   * The public file the document holds.
    */
-  protected function setUpFilesystem(): void {
-    parent::setUpFilesystem();
-
-    // The private stream wrapper is registered only when this setting exists
-    // as the container is built.
-    mkdir($this->siteDirectory . '/private', 0775);
-    $this->setSetting('file_private_path', $this->siteDirectory . '/private');
-  }
+  protected FileInterface $documentFile;
 
   /**
    * {@inheritdoc}
@@ -88,30 +58,14 @@ class PackageAccessTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    $this->installEntitySchema('user');
-    $this->installEntitySchema('file');
-    $this->installEntitySchema('media');
-    $this->installSchema('file', ['file_usage']);
-    $this->installConfig(['field', 'system', 'user', 'image', 'media']);
-
-    // Reserve uid 1; the superuser bypasses permission checks, so every
-    // audience below must be a regular account.
-    $this->createUser();
-
-    $package_type = $this->createMediaType('file', ['id' => PackageAccessHook::BUNDLE, 'label' => 'Package']);
-    $package_field = $this->sourceFieldName($package_type);
-    $package_storage = FieldStorageConfig::loadByName('media', $package_field);
-    $this->assertInstanceOf(FieldStorageConfig::class, $package_storage);
-    $package_storage->setSetting('uri_scheme', 'private')->save();
-
     $document_type = $this->createMediaType('file', ['id' => 'document', 'label' => 'Document']);
     $document_field = $this->sourceFieldName($document_type);
 
-    $this->packageFile = $this->createFile('private://packages/test.zip');
-    $this->package = Media::create(['bundle' => PackageAccessHook::BUNDLE, 'name' => '[TEST] Package', $package_field => $this->packageFile->id(), 'uid' => 1]);
-    $this->package->save();
+    $this->packageFile = $this->createFile(PackageAccessHook::DIRECTORY . 'test.zip');
+    $this->package = $this->createPackage($this->packageFile);
 
-    $this->document = Media::create(['bundle' => 'document', 'name' => '[TEST] Document', $document_field => $this->createFile('public://documents/test.txt')->id(), 'uid' => 1]);
+    $this->documentFile = $this->createFile('public://documents/test.txt');
+    $this->document = Media::create(['bundle' => 'document', 'name' => '[TEST] Document', $document_field => $this->documentFile->id(), 'uid' => 1]);
     $this->document->save();
 
     $anonymous_role = Role::load(RoleInterface::ANONYMOUS_ID);
@@ -268,6 +222,33 @@ class PackageAccessTest extends KernelTestBase {
   }
 
   /**
+   * Tests which files an entity query returns to each audience.
+   */
+  #[DataProvider('dataProviderFileEntityQuery')]
+  public function testFileEntityQuery(string $audience, bool $access_check, bool $expected_package_file): void {
+    // Prepare.
+    $this->setCurrentUser($this->accounts[$audience]);
+
+    // Act.
+    $ids = $this->container->get('entity_type.manager')->getStorage('file')->getQuery()->accessCheck($access_check)->execute();
+
+    // Assert.
+    $this->assertContains((string) $this->documentFile->id(), $ids);
+    $this->assertSame($expected_package_file, in_array((string) $this->packageFile->id(), $ids, TRUE));
+  }
+
+  /**
+   * Data provider for testFileEntityQuery().
+   */
+  public static function dataProviderFileEntityQuery(): \Iterator {
+    yield 'site administrator' => ['site_administrator', TRUE, TRUE];
+    yield 'content api service' => ['content_api', TRUE, TRUE];
+    yield 'content author' => ['content_author', TRUE, FALSE];
+    yield 'anonymous' => ['anonymous', TRUE, FALSE];
+    yield 'content author without access checks' => ['content_author', FALSE, TRUE];
+  }
+
+  /**
    * Creates a regular account holding the given permissions.
    */
   protected function createAccount(array $permissions): AccountInterface {
@@ -275,28 +256,6 @@ class PackageAccessTest extends KernelTestBase {
     $this->assertInstanceOf(AccountInterface::class, $account);
 
     return $account;
-  }
-
-  /**
-   * Creates a permanent file entity with content at the given URI.
-   */
-  protected function createFile(string $uri): FileInterface {
-    $directory = dirname($uri);
-    $this->container->get('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
-    file_put_contents($uri, '[TEST] content');
-
-    $file = File::create(['uri' => $uri, 'uid' => 1]);
-    $file->setPermanent();
-    $file->save();
-
-    return $file;
-  }
-
-  /**
-   * Returns the name of a media type's source field.
-   */
-  protected function sourceFieldName(MediaTypeInterface $media_type): string {
-    return $media_type->getSource()->getSourceFieldDefinition($media_type)->getName();
   }
 
 }
