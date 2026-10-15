@@ -95,6 +95,33 @@ Feature: Private packages
     Then the response status code should be 403
 
   @api
+  Scenario Outline: Package files appear in the files overview only for roles with package access
+    Given the following managed files:
+      | path          | uri                                | status |
+      | response.json | public://behat-files-overview.json | 1      |
+    And I am logged in as a user with the "<role>" role
+    When I go to "/admin/content/files"
+    Then I should see the text "behat-files-overview.json"
+    And I should <visibility> the text "behat-package.zip"
+
+    Examples:
+      | role                          | visibility |
+      | civictheme_content_author     | not see    |
+      | civictheme_content_approver   | not see    |
+      | civictheme_site_administrator | see        |
+
+  @api
+  Scenario: Site administrator deletes a package together with its file
+    Given I am logged in as a user with the "civictheme_site_administrator" role
+    When I visit the media "package" delete page with the name "[TEST] Package"
+    And I press "Delete"
+    Then I should see the text "The media item [TEST] Package has been deleted."
+    When I go to "/admin/content/files"
+    Then I should not see the text "behat-package.zip"
+    When I go to "/system/files/packages/behat-package.zip"
+    Then the response status code should be 404
+
+  @api
   Scenario Outline: Site administrator uploads a <extension> package to private storage
     Given the following media "package" do not exist:
       | name                                |
