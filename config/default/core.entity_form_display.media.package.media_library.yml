@@ -1,0 +1,29 @@
+uuid: 24f1708d-fa01-4a6e-94a6-9e4cf7e6cfb8
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.package.field_do_m_package
+    - media.type.package
+id: media.package.media_library
+targetEntityType: media
+bundle: package
+mode: media_library
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_do_m_package: true
+  langcode: true
+  moderation_state: true
+  path: true
+  status: true
+  uid: true

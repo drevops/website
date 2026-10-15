@@ -15,6 +15,7 @@ dependencies:
     - media.type.civictheme_image
     - media.type.civictheme_remote_video
     - media.type.civictheme_video
+    - media.type.package
     - node.type.blog
     - node.type.civictheme_alert
     - node.type.civictheme_event
@@ -30,6 +31,7 @@ dependencies:
     - coffee
     - content_moderation
     - contextual
+    - do_package
     - environment_indicator
     - file
     - filter
@@ -65,6 +67,7 @@ permissions:
   - 'access media overview'
   - 'access navigation'
   - 'access own webform configuration'
+  - 'access package media'
   - 'access site in maintenance mode'
   - 'access site reports'
   - 'access taxonomy overview'
@@ -110,6 +113,7 @@ permissions:
   - 'create civictheme_social_links block content'
   - 'create civictheme_video media'
   - 'create media'
+  - 'create package media'
   - 'create paragraph library item'
   - 'create project content'
   - 'create terms in civictheme_media_tags'
@@ -138,6 +142,7 @@ permissions:
   - 'delete any civictheme_social_links block content revisions'
   - 'delete any civictheme_video media'
   - 'delete any media'
+  - 'delete any package media'
   - 'delete any project content'
   - 'delete any webform'
   - 'delete any webform submission'
@@ -156,6 +161,7 @@ permissions:
   - 'delete own civictheme_page content'
   - 'delete own civictheme_remote_video media'
   - 'delete own civictheme_video media'
+  - 'delete own package media'
   - 'delete own project content'
   - 'delete own webform'
   - 'delete own webform submission'
@@ -177,6 +183,7 @@ permissions:
   - 'edit any civictheme_search block content'
   - 'edit any civictheme_social_links block content'
   - 'edit any civictheme_video media'
+  - 'edit any package media'
   - 'edit any project content'
   - 'edit any webform'
   - 'edit any webform submission'
@@ -190,6 +197,7 @@ permissions:
   - 'edit own civictheme_page content'
   - 'edit own civictheme_remote_video media'
   - 'edit own civictheme_video media'
+  - 'edit own package media'
   - 'edit own project content'
   - 'edit own webform'
   - 'edit own webform submission'
