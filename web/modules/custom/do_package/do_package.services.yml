@@ -1,0 +1,9 @@
+services:
+  Drupal\do_package\Hook\PackageAccessHook:
+    arguments: ['@current_user']
+  Drupal\do_package\Hook\PackageFileHook:
+    arguments: ['@entity_type.manager', '@file.usage']
+  do_package.route_subscriber:
+    class: Drupal\do_package\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

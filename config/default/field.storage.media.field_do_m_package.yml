@@ -1,0 +1,23 @@
+uuid: e4e7b207-5cba-4973-af89-f85859f1ffef
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - media
+id: media.field_do_m_package
+field_name: field_do_m_package
+entity_type: media
+type: file
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: private
+module: file
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -14,6 +14,7 @@ dependencies:
   module:
     - content_moderation
     - do_content_api
+    - do_package
     - filter
     - key_auth
     - media
@@ -29,6 +30,7 @@ is_admin: false
 permissions:
   - 'access content'
   - 'access content overview'
+  - 'access package media'
   - 'administer nodes'
   - 'administer redirects'
   - 'create blog content'
