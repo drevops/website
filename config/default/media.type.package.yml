@@ -1,0 +1,16 @@
+uuid: 4676e078-d0a1-4eb3-85b5-a914dc8366bc
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - do_package
+id: package
+label: Package
+description: 'A private zip or 7z archive. Only roles granted access to packages can see or download it.'
+source: file
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_do_m_package
+field_map: {  }

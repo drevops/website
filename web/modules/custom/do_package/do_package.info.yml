@@ -1,0 +1,8 @@
+name: DrevOps Website Package
+type: module
+description: 'Private package media: restricts package media and its files to roles granted access.'
+core_version_requirement: ^11
+package: website
+dependencies:
+  - drupal:file
+  - drupal:media

@@ -1,0 +1,27 @@
+uuid: 9a2124bf-1754-4e47-b38d-7be41b811ae6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_do_m_package
+    - media.type.package
+  module:
+    - file
+id: media.package.field_do_m_package
+field_name: field_do_m_package
+entity_type: media
+bundle: package
+label: File
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: 'packages/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'zip 7z'
+  max_filesize: ''
+  description_field: false
+field_type: file

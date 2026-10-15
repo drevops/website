@@ -35,4 +35,27 @@ trait ExportedConfigTrait {
     return array_map(static fn(string $file): string => substr(basename($file, '.yml'), strlen($config_prefix) + 1), $files);
   }
 
+  /**
+   * Lists the IDs of every exported role holding a permission, sorted.
+   *
+   * A role flagged 'is_admin' holds every permission without listing any, so
+   * it counts as granted here. Reading only the explicit list would let a new
+   * administrative role pick a permission up unnoticed.
+   */
+  protected function loadRolesWithPermission(string $permission): array {
+    $granted = [];
+
+    foreach ($this->loadBundleNames('user.role') as $role_id) {
+      $role = $this->loadConfig('user.role.' . $role_id . '.yml');
+
+      if (($role['is_admin'] ?? FALSE) === TRUE || in_array($permission, $role['permissions'] ?? [], TRUE)) {
+        $granted[] = $role_id;
+      }
+    }
+
+    sort($granted);
+
+    return $granted;
+  }
+
 }

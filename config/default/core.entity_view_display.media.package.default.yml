@@ -1,0 +1,29 @@
+uuid: d8042ee9-3b5c-46cf-8c03-bdf5cc5f4996
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.package.field_do_m_package
+    - media.type.package
+  module:
+    - file
+id: media.package.default
+targetEntityType: media
+bundle: package
+mode: default
+content:
+  field_do_m_package:
+    type: file_default
+    label: visually_hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

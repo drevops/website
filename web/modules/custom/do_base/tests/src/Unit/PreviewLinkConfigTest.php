@@ -112,25 +112,11 @@ class PreviewLinkConfigTest extends UnitTestCase {
    * later untested, so every exported role is weighed against the allowlist
    * instead. A recipient needs no permission at all, so a site-wide role
    * holding one of these would hand link creation to every visitor.
-   *
-   * A role flagged 'is_admin' holds every permission without listing any, so
-   * it counts as granted here. Reading only the explicit list would let a new
-   * administrative role pick both permissions up unnoticed.
    */
   #[DataProvider('dataProviderPermissionIsConfinedToItsRoles')]
   public function testPermissionIsConfinedToItsRoles(string $permission, array $expected): void {
     // Act.
-    $granted = [];
-
-    foreach ($this->loadBundleNames('user.role') as $role_id) {
-      $role = $this->loadConfig('user.role.' . $role_id . '.yml');
-
-      if (($role['is_admin'] ?? FALSE) === TRUE || in_array($permission, $role['permissions'] ?? [], TRUE)) {
-        $granted[] = $role_id;
-      }
-    }
-
-    sort($granted);
+    $granted = $this->loadRolesWithPermission($permission);
 
     // Assert.
     $this->assertSame($expected, $granted);

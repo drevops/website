@@ -38,6 +38,8 @@ That holds only where CSS leaves one dimension free to follow the ratio. The log
 
 Components are included from Twig rather than rendered through a render element, so there is no preprocess step and no `#pre_render` to hook. A Twig function called from the template is the only interception point.
 
+`ahoy lint-sdc` validates component templates with `sdc_devel`, which reports any Twig function missing from its allow list as unknown. `TwigValidatorRuleInfoAlterHook` in `do_base` adds this one; a function added for another component needs the same.
+
 ## Overriding a CivicTheme component
 
 Drupal matches components by name within an extension, so a same-named component in this theme is a new component rather than an override. The `replaces:` key in the `.component.yml` is what makes it an override:

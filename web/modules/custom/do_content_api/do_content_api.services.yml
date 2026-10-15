@@ -1,6 +1,8 @@
 services:
   do_content_api.route_subscriber:
     class: Drupal\do_content_api\Routing\RouteSubscriber
+    arguments:
+      - '@authentication_collector'
     tags:
       - { name: event_subscriber }
   Drupal\do_content_api\Hook\EntityCreateAccessHook:

@@ -21,26 +21,26 @@
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
 
-{% if url is not empty %}
+{% if url %}
   <figure class="ct-figure {{ modifier_class -}}" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
-    {% if image is not empty %}
+    {% if image %}
       {{ image }}
     {% else %}
-      {% include 'civictheme:image' with {
+      {{ include('civictheme:image', {
         theme: theme,
         url: url,
         alt: alt,
         width: width,
         height: height,
         modifier_class: 'ct-figure__image',
-      } only %}
+      }, with_context: false) }}
     {% endif %}
 
-    {% if caption is not empty %}
+    {% if caption %}
       <figcaption class="ct-figure__caption">
-        {% include 'civictheme:icon' with {
+        {{ include('civictheme:icon', {
           symbol: 'image',
-        } only %}
+        }, with_context: false) }}
         {{ caption }}
       </figcaption>
     {% endif %}

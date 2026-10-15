@@ -27,6 +27,7 @@ class ServiceRolePermissionsTest extends UnitTestCase {
   protected const array EXPECTED_PERMISSIONS = [
     'access content',
     'access content overview',
+    'access package media',
     'administer nodes',
     'administer redirects',
     'create blog content',

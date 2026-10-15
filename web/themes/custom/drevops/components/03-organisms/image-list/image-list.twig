@@ -50,7 +50,7 @@
           {% set image_items = [] %}
 
           {% for image in images %}
-            {% if image.url is not empty %}
+            {% if image.url %}
               {% set image_item %}
                 {{ include('civictheme:image', {
                   theme: theme|default('light'),
