@@ -187,7 +187,7 @@ Feature: Homepage
   Scenario: View homepage content
     Given I am on the homepage
     Then I should see "[TEST] Welcome Message"
-    And I should see the text "About Us" in the region "navigation"
+    And I should see the text "About Us" in the region "header_middle_3"
 ```
 
 ### Content type testing process
