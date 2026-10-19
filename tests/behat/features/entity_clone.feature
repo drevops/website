@@ -8,28 +8,26 @@ Feature: Entity Clone permissions for Content Author role
   I want to be able to clone content entities
   So that I can efficiently create similar content items
 
-  @api
   Scenario: Check that Content Author role has entity clone permissions
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the role "administrator"
     When I visit "/admin/people/permissions/civictheme_content_author"
-    Then I should see the text "Entity Clone"
+    Then I should see "Entity Clone"
     And the "Clone all Paragraph entities." checkbox should be checked
     And the "Clone all Content entities." checkbox should be checked
     And the "Clone all Taxonomy term entities." checkbox should be checked
 
-  @api
   Scenario: Content Author can clone CivicTheme Page content
-    Given I am logged in as a user with the "Content Author" role
-    And the following "civictheme_page" content:
+    Given I am logged in as a user with the role "Content Author"
+    And the following "civictheme_page" content exists:
       | title                      | field_c_n_summary     | status |
       | Test CivicTheme Clone Page | Test page for cloning | 1      |
     When I go to "admin/content"
     Then I should see the link "Test CivicTheme Clone Page"
 
-    When I click "Test CivicTheme Clone Page"
-    Then I should see the link "Clone" in the "page_actions" region
+    When I follow "Test CivicTheme Clone Page"
+    Then I should see the link "Clone" in the region "page_actions"
 
-    When I click "Clone" in the "page_actions" region
+    When I follow the link "Clone" in the region "page_actions"
     Then I should see "Clone Content"
 
     When I press "Clone"

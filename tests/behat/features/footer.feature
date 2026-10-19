@@ -5,7 +5,6 @@ Feature: Site footer menu
   I want the site's policies linked from the footer of every page
   So that I can find them wherever I am on the site
 
-  @api
   Scenario: Site visitor sees the policy links in the footer menu
     Given I am an anonymous user
     When I go to the homepage

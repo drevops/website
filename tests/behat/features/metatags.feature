@@ -5,9 +5,8 @@ Feature: Page content metatags
   I want to ensure that the default metatags are present for all pages
   In order to improve SEO and social sharing
 
-  @api
   Scenario: CivicTheme page content type contains default metatags
-    Given the following civictheme_page content:
+    Given the following civictheme_page content exists:
       | title              | status | field_c_n_summary                           |
       | Test Metatags Page | 1      | This is a test summary for metatags testing |
     When I visit the "civictheme_page" content page with the title "Test Metatags Page"
@@ -15,9 +14,8 @@ Feature: Page content metatags
     And the response should contain "<meta name=\"description\" content=\"This is a test summary for metatags testing\""
     And the response should contain "<link rel=\"canonical\" href=\""
 
-  @api
   Scenario: Page without a thumbnail is shared with the site-wide card image
-    Given the following civictheme_page content:
+    Given the following civictheme_page content exists:
       | title                   | status | field_c_n_summary                      |
       | [TEST] Social Card Page | 1      | [TEST] A summary shown on a share card |
     When I visit the "civictheme_page" content page with the title "[TEST] Social Card Page"
@@ -38,22 +36,20 @@ Feature: Page content metatags
     And the response should contain "<meta name=\"twitter:description\" content=\"[TEST] A summary shown on a share card\""
     And the response should contain "<meta name=\"twitter:image\" content=\""
 
-  @api
   Scenario: Page with a thumbnail is shared with that image, sized for the card
-    Given the following managed files:
+    Given the following managed files exist:
       | path      | uri                        | status |
       | image.jpg | public://do_test/image.jpg | 1      |
-    And the following media "civictheme_image" exist:
+    And the following "civictheme_image" media exist:
       | name                     | field_c_m_image |
       | [TEST] Social Card Image | image.jpg       |
-    And the following civictheme_page content:
+    And the following civictheme_page content exists:
       | title                             | status | field_c_n_thumbnail      |
       | [TEST] Social Card Thumbnail Page | 1      | [TEST] Social Card Image |
     When I visit the "civictheme_page" content page with the title "[TEST] Social Card Thumbnail Page"
     Then the response should contain "/styles/social_share/"
     And the response should not contain "/modules/custom/do_base/assets/social-share.jpg"
 
-  @api
   Scenario: Front page is shared with a complete card
     Given I am an anonymous user
     When I am on the homepage
@@ -62,9 +58,8 @@ Feature: Page content metatags
     And the response should contain "<meta name=\"twitter:card\" content=\"summary_large_image\""
     And the response should contain "<meta name=\"twitter:image\" content=\""
 
-  @api
   Scenario: Page carries breadcrumb structured data
-    Given the following civictheme_page content:
+    Given the following civictheme_page content exists:
       | title                    | status |
       | [TEST] Breadcrumb Page   | 1      |
     When I visit the "civictheme_page" content page with the title "[TEST] Breadcrumb Page"
@@ -72,9 +67,9 @@ Feature: Page content metatags
     And the response should contain "\"@type\": \"BreadcrumbList\""
     And the response should contain "\"@type\": \"ListItem\""
 
-  @api @blog
+  @blog
   Scenario: Blog post is marked up as an article for search engines
-    Given the following blog content:
+    Given the following blog content exists:
       | title                   | status | field_c_n_summary        | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Social Card Post | 1      | [TEST] A summary of post | large                 | inherit                | normal                      | both                       |
     When I visit the "blog" content page with the title "[TEST] Social Card Post"

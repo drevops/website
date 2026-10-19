@@ -5,7 +5,6 @@ Feature: Contact form
   I want to ensure that the contact form is accessible
   In order to be able to contact the site owner
 
-  @api
   Scenario: Anonymous user can use the Contact link and Contact form.
     Given I am an anonymous user
     When I go to "/contact"
@@ -16,7 +15,6 @@ Feature: Contact form
     And I should see "Message"
     And I should see the button "Send message"
 
-  @api
   Scenario: Anonymous user can fill and submit the contact form
     Given I am an anonymous user
     When I go to "/contact"
@@ -33,14 +31,14 @@ Feature: Contact form
     # Then I should see the text "Your message has been sent."
     And I save screenshot
 
-  @api @javascript
+  @javascript
   Scenario: Anonymous user gets validation errors on contact form
     Given I am an anonymous user
     When I go to "/contact"
-    And browser validation for the form ".webform-submission-contact-form" is disabled
+    Given the browser validation for the form ".webform-submission-contact-form" is disabled
     Then I should see the heading Contact
     When I press "Send message"
-    Then I should see the text "Name field is required."
-    And I should see the text "Email field is required."
-    And I should see the text "Message field is required."
+    Then I should see "Name field is required."
+    And I should see "Email field is required."
+    And I should see "Message field is required."
     And I save screenshot
