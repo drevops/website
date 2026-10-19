@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b69daaa78c941adf7dd9902cb776a031",
+    "content-hash": "916bfe5debde0d54d3662d827de5eff7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -15243,56 +15243,65 @@
         },
         {
             "name": "drevops/behat-steps",
-            "version": "3.14.4",
+            "version": "4.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/behat-steps.git",
-                "reference": "ba326559c5d36ab8ce121c41a979d42c11e0e94b"
+                "reference": "2eebd4c6879a18ca06643ccebce16af05cba8ad3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/ba326559c5d36ab8ce121c41a979d42c11e0e94b",
-                "reference": "ba326559c5d36ab8ce121c41a979d42c11e0e94b",
+                "url": "https://api.github.com/repos/drevops/behat-steps/zipball/2eebd4c6879a18ca06643ccebce16af05cba8ad3",
+                "reference": "2eebd4c6879a18ca06643ccebce16af05cba8ad3",
                 "shasum": ""
             },
             "require": {
-                "behat/behat": "^3.33.0",
+                "behat/behat": "^3.33.0 || ^4.0",
                 "behat/mink": ">=1.13.0",
-                "php": ">=8.2"
+                "behat/mink-browserkit-driver": "^2.3.0",
+                "friends-of-behat/mink-extension": "^2.7.5 || ^3.0@alpha",
+                "php": ">=8.3",
+                "symfony/browser-kit": "^6.4 || ^7 || ^8",
+                "symfony/config": "^6.4.3 || ^7 || ^8",
+                "symfony/dependency-injection": "^6.4 || ^7 || ^8",
+                "symfony/event-dispatcher": "^6.4 || ^7 || ^8",
+                "symfony/filesystem": "^6.4 || ^7 || ^8",
+                "symfony/http-client": "^6.4 || ^7 || ^8",
+                "symfony/mime": "^6.4 || ^7 || ^8",
+                "symfony/process": "^6.4 || ^7 || ^8",
+                "symfony/yaml": "^6.4 || ^7 || ^8"
             },
             "conflict": {
-                "behat/behat": ">=4",
-                "drupal/core": ">=12",
-                "drupal/drupal-extension": "<6"
+                "drupal/drupal-driver": "*",
+                "drupal/drupal-extension": "*"
             },
             "require-dev": {
-                "alexskrypnyk/phpunit-helpers": "^0.16.0",
+                "alexskrypnyk/phpunit-helpers": "^1.2.0",
                 "cweagans/composer-patches": "^2.0",
                 "dantleech/gherkin-lint": "^0.2.4",
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.2.1",
-                "dmore/behat-chrome-extension": "^1.4.1",
-                "drevops/behat-phpserver": "^2.4.0",
-                "drevops/behat-screenshot": "^2.6.0",
-                "drevops/phpcs-standard": "^0.7",
-                "drupal/coder": "^8.3.31",
-                "drupal/drupal-extension": "^6.1.0",
-                "dvdoug/behat-code-coverage": "^5.3.2.1",
+                "dmore/behat-chrome-extension": "^1.5.0",
+                "drevops/behat-phpserver": "^3.0.0",
+                "drevops/behat-screenshot": "^3.0.0",
+                "drevops/phpcs-standard": "^1.1.0",
+                "drupal/coder": "^9.0.1",
+                "dvdoug/behat-code-coverage": "^5.3.7",
                 "ergebnis/composer-normalize": "^2.54.0",
-                "justinrainbow/json-schema": "^6.13.1",
+                "justinrainbow/json-schema": "^6.6.1",
                 "lullabot/mink-selenium2-driver": "^1.7.4",
                 "mglaman/phpstan-drupal": "^2.2.2",
+                "nikic/php-parser": "^5.9.0",
                 "php-parallel-lint/php-parallel-lint": "^1.4",
-                "phpcompatibility/php-compatibility": "^9.3.5",
+                "phpcompatibility/php-compatibility": "^10.0.0-alpha2@alpha",
                 "phpspec/prophecy-phpunit": "^2.5.0",
                 "phpstan/extension-installer": "^1.4.3",
-                "phpstan/phpstan": "^2.2.16",
-                "phpunit/phpunit": "^11.5.56",
-                "rector/rector": "^2.6.7",
+                "phpstan/phpstan": "^2.3.1",
+                "phpunit/phpunit": "^12.5.40",
+                "rector/rector": "^2.7.0",
                 "softcreatr/jsonpath": "^0.10 || ^1.0"
             },
             "suggest": {
                 "dmore/behat-chrome-extension": "JavaScript driver for @javascript scenarios: drives headless Chrome directly over the Chrome DevTools Protocol (selenium-less). Interchangeable with lullabot/mink-selenium2-driver - install one.",
-                "drupal/drupal-extension": "Required by all Drupal step traits (src/Drupal/*), which build on the Drupal Extension RawDrupalContext and Drupal driver.",
                 "justinrainbow/json-schema": "Required by JsonTrait for JSON Schema validation steps ('the response should match the JSON schema ...').",
                 "lullabot/mink-selenium2-driver": "JavaScript driver for @javascript scenarios: drives a Selenium/WebDriver server. Interchangeable with dmore/behat-chrome-extension - install one.",
                 "softcreatr/jsonpath": "Required by JsonTrait for JSON path assertion steps ('the JSON path ... should ...')."
@@ -15318,6 +15327,7 @@
             "description": "Collection of steps for Behat",
             "homepage": "https://github.com/drevops/behat-steps",
             "support": {
+                "docs": "https://behat-steps.drevops.com",
                 "issues": "https://github.com/drevops/behat-steps/issues",
                 "source": "https://github.com/drevops/behat-steps"
             },
@@ -15331,7 +15341,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-10-02T10:18:30+00:00"
+            "time": "2026-10-19T06:35:32+00:00"
         },
         {
             "name": "drevops/phpcs-standard",
@@ -15462,290 +15472,6 @@
                 "source": "https://www.drupal.org/project/coder"
             },
             "time": "2026-06-21T08:51:40+00:00"
-        },
-        {
-            "name": "drupal/drupal-driver",
-            "version": "v3.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "c7dee2dc75ab878174bf2217a923b2242e3aa8dd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/c7dee2dc75ab878174bf2217a923b2242e3aa8dd",
-                "reference": "c7dee2dc75ab878174bf2217a923b2242e3aa8dd",
-                "shasum": ""
-            },
-            "require": {
-                "drupal/core-utility": "^10 || ^11",
-                "php": "^8.2",
-                "symfony/dependency-injection": "^6.4 || ^7",
-                "symfony/process": "^6.4 || ^7"
-            },
-            "require-dev": {
-                "behat/mink": "^1.11",
-                "composer/installers": "^2.1",
-                "drevops/phpcs-standard": "^0.7.0",
-                "drupal/address": "^2.0.4",
-                "drupal/coder": "~8.3.0",
-                "drupal/color_field": "^3.0",
-                "drupal/commerce": "^3.0",
-                "drupal/core-composer-scaffold": "^11.2",
-                "drupal/core-recommended": "^11.2",
-                "drupal/date_recur": "^3.6",
-                "drupal/driver_field_test": "*",
-                "drupal/mailsystem": "^4.4",
-                "drupal/name": "^1.2",
-                "drupal/smart_date": "^4.2",
-                "drupal/supported_image": "^1",
-                "drupal/time_field": "^2.2.1",
-                "ergebnis/composer-normalize": "^2.50",
-                "mglaman/phpstan-drupal": "^2.0",
-                "mikey179/vfsstream": "^1.6.11",
-                "palantirnet/drupal-rector": "^0.21.1",
-                "php-parallel-lint/php-parallel-lint": "^1.0",
-                "phpspec/prophecy-phpunit": "^2",
-                "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "^2.0",
-                "phpunit/phpunit": "^10.5.19 || ^11.5.3",
-                "rector/rector": "^1 || ^2"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0.x-dev"
-                },
-                "drupal-scaffold": {
-                    "locations": {
-                        "web-root": "drupal/"
-                    },
-                    "file-mapping": {
-                        "[project-root]/.gitattributes": false
-                    }
-                },
-                "installer-paths": {
-                    "drupal/core": [
-                        "type:drupal-core"
-                    ],
-                    "drupal/modules/{$name}": [
-                        "type:drupal-module"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Drupal\\Driver": "src/",
-                    "Drupal\\Tests\\Driver": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Jonathan Hedstrom",
-                    "email": "jhedstrom@gmail.com"
-                },
-                {
-                    "name": "Alex Skrypnyk",
-                    "email": "alex@drevops.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A collection of reusable Drupal drivers",
-            "homepage": "http://github.com/jhedstrom/DrupalDriver",
-            "keywords": [
-                "drupal",
-                "test",
-                "web"
-            ],
-            "support": {
-                "issues": "https://github.com/jhedstrom/DrupalDriver/issues",
-                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v3.3.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/jhedstrom",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-07-28T09:27:22+00:00"
-        },
-        {
-            "name": "drupal/drupal-extension",
-            "version": "v6.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jhedstrom/drupalextension.git",
-                "reference": "773601d6488b77527fe91d2a29d676a2f6d220ae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/773601d6488b77527fe91d2a29d676a2f6d220ae",
-                "reference": "773601d6488b77527fe91d2a29d676a2f6d220ae",
-                "shasum": ""
-            },
-            "require": {
-                "behat/behat": "^3.22",
-                "behat/gherkin": "^4.13",
-                "behat/mink": "^1.12",
-                "behat/mink-browserkit-driver": "^2.1.0",
-                "drupal/drupal-driver": "^3.2",
-                "friends-of-behat/mink-extension": "^2.7.1",
-                "lullabot/mink-selenium2-driver": "^1.7.4",
-                "php": ">=8.2",
-                "symfony/css-selector": "^6.4.3 || ^7",
-                "symfony/dom-crawler": "^6.4.3 || ^7",
-                "symfony/http-client": "^6.4.3 || ^7",
-                "webflo/drupal-finder": "^1.3.1"
-            },
-            "conflict": {
-                "drupal/drupal-driver": "<3"
-            },
-            "require-dev": {
-                "composer/installers": "^2.3",
-                "dantleech/gherkin-lint": "^0.2.3",
-                "dflydev/dot-access-data": "^3.0.3",
-                "drevops/behat-phpserver": "^2.3",
-                "drevops/behat-screenshot": "^2.2",
-                "drevops/phpcs-standard": "^0.7.0",
-                "drupal/coder": "^8.3.27",
-                "drupal/color_field": "^3.0",
-                "drupal/core": "^11",
-                "drupal/core-composer-scaffold": "^11",
-                "drush/drush": "^12.5.2 || ^13.7",
-                "dvdoug/behat-code-coverage": "^5.3.7",
-                "ergebnis/composer-normalize": "^2.50",
-                "grasmash/yaml-cli": "^3.2.1",
-                "guzzlehttp/guzzle": "^7.8.2",
-                "guzzlehttp/promises": "^2.0.3",
-                "guzzlehttp/psr7": "^2.6.3",
-                "justinrainbow/json-schema": "^5.3",
-                "league/container": "^4.2",
-                "masterminds/html5": "^2.8",
-                "php-parallel-lint/php-parallel-lint": "^1.4",
-                "phpstan/phpstan": "^2.1",
-                "phpunit/php-code-coverage": "^11.0 || ^12.0",
-                "phpunit/phpunit": "^10.5 || ^11.0",
-                "rector/rector": "^2.0",
-                "symfony/browser-kit": "^6.4.3 || ^7",
-                "symfony/config": "^6.4.3 || ^7",
-                "symfony/console": "^6.4.3 || ^7",
-                "symfony/dependency-injection": "^6.4.3 || ^7",
-                "symfony/event-dispatcher": "^6.4.3 || ^7",
-                "symfony/event-dispatcher-contracts": "^3.4.2",
-                "symfony/filesystem": "^6.4.3 || ^7",
-                "symfony/http-kernel": "^6.4.3 || ^7",
-                "symfony/mime": "^6.4.3 || ^7",
-                "symfony/routing": "^6.4.3 || ^7",
-                "symfony/translation-contracts": "^3.4.2",
-                "symfony/var-dumper": "^6.4.3 || ^7",
-                "symfony/var-exporter": "^6.4.3 || ^7",
-                "symfony/yaml": "^6.4.3 || ^7",
-                "webmozart/assert": "^2"
-            },
-            "type": "behat-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "6.0.x-dev"
-                },
-                "drupal-scaffold": {
-                    "locations": {
-                        "web-root": "build/web"
-                    },
-                    "file-mapping": {
-                        "[web-root]/.htaccess": false,
-                        "[web-root]/README.md": false,
-                        "[web-root]/.csslintrc": false,
-                        "[web-root]/README.txt": false,
-                        "[web-root]/robots.txt": false,
-                        "[web-root]/update.php": false,
-                        "[web-root]/web.config": false,
-                        "[web-root]/INSTALL.txt": false,
-                        "[web-root]/.editorconfig": false,
-                        "[web-root]/.eslintignore": false,
-                        "[web-root]/.eslintrc.json": false,
-                        "[web-root]/.gitattributes": false,
-                        "[web-root]/.ht.router.php": false,
-                        "[project-root]/.editorconfig": false,
-                        "[web-root]/example.gitignore": false,
-                        "[project-root]/.gitattributes": false,
-                        "[web-root]/sites/example.sites.php": false,
-                        "[web-root]/sites/example.settings.local.php": false
-                    }
-                },
-                "installer-paths": {
-                    "build/web/core": [
-                        "type:drupal-core"
-                    ],
-                    "build/recipes/{$name}": [
-                        "type:drupal-recipe"
-                    ],
-                    "build/web/libraries/{$name}": [
-                        "type:drupal-library"
-                    ],
-                    "build/web/themes/contrib/{$name}": [
-                        "type:drupal-theme"
-                    ],
-                    "build/web/modules/contrib/{$name}": [
-                        "type:drupal-module"
-                    ],
-                    "build/web/profiles/contrib/{$name}": [
-                        "type:drupal-profile"
-                    ],
-                    "build/drush/Commands/contrib/{$name}": [
-                        "type:drupal-drush"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Drupal\\Exception": "src/",
-                    "Drupal\\MinkExtension": "src/",
-                    "Drupal\\DrupalExtension": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Jonathan Hedstrom",
-                    "email": "jhedstrom@gmail.com",
-                    "role": "author"
-                },
-                {
-                    "name": "Melissa Anderson",
-                    "homepage": "https://github.com/eliza411",
-                    "role": "author"
-                },
-                {
-                    "name": "Alex Skrypnyk",
-                    "email": "alex@drevops.com",
-                    "role": "maintainer"
-                }
-            ],
-            "description": "Drupal extension for Behat",
-            "homepage": "http://drupal.org/project/drupalextension",
-            "keywords": [
-                "drupal",
-                "test",
-                "web"
-            ],
-            "support": {
-                "issues": "https://github.com/jhedstrom/drupalextension/issues",
-                "source": "https://github.com/jhedstrom/drupalextension/tree/v6.1.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/jhedstrom",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-06-22T05:17:21+00:00"
         },
         {
             "name": "ergebnis/composer-normalize",
@@ -19599,27 +19325,25 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v7.4.17",
+            "version": "v8.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "6b037d62595666cf65de867073c9a1f00184be0c"
+                "reference": "94f70e1b2e5b7b8f8618871fd9eaad3e39e9f03d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/6b037d62595666cf65de867073c9a1f00184be0c",
-                "reference": "6b037d62595666cf65de867073c9a1f00184be0c",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/94f70e1b2e5b7b8f8618871fd9eaad3e39e9f03d",
+                "reference": "94f70e1b2e5b7b8f8618871fd9eaad3e39e9f03d",
                 "shasum": ""
             },
             "require": {
-                "masterminds/html5": "^2.6",
-                "php": ">=8.2",
-                "symfony/deprecation-contracts": "^2.5|^3",
-                "symfony/polyfill-ctype": "~1.8",
-                "symfony/polyfill-mbstring": "~1.0"
+                "php": ">=8.4.1",
+                "symfony/polyfill-ctype": "^1.8",
+                "symfony/polyfill-mbstring": "^1.0"
             },
             "require-dev": {
-                "symfony/css-selector": "^6.4|^7.0|^8.0"
+                "symfony/css-selector": "^7.4|^8.0"
             },
             "type": "library",
             "autoload": {
@@ -19647,7 +19371,7 @@
             "description": "Eases DOM navigation for HTML and XML documents",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dom-crawler/tree/v7.4.17"
+                "source": "https://github.com/symfony/dom-crawler/tree/v8.1.5"
             },
             "funding": [
                 {
@@ -19667,7 +19391,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-21T17:40:08+00:00"
+            "time": "2026-08-21T17:47:34+00:00"
         },
         {
             "name": "symfony/translation",
@@ -19966,9 +19690,9 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "drevops/behat-steps": 5,
         "drupal/cloudflare": 10,
         "drupal/config_update": 15,
-        "drupal/drupal-driver": 15,
         "drupal/entity_clone": 10,
         "drupal/entity_usage": 10,
         "drupal/reroute_email": 5,
