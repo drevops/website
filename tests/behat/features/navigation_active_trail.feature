@@ -13,23 +13,21 @@ Feature: Navigation active trail
   # via the always-present primary navigation.
 
   Background:
-    Given the following "civictheme_page" content:
+    Given the following "civictheme_page" content exists:
       | title                   | status |
       | [TEST] Navtrail Section | 1      |
       | [TEST] Navtrail Article | 1      |
-    And the "civictheme_page" content "[TEST] Navtrail Section" has the path alias "/test-navtrail-section"
-    And the "civictheme_page" content "[TEST] Navtrail Article" has the path alias "/test-navtrail-section/test-navtrail-article"
-    And the following menu links exist in the menu "Primary Navigation":
+    When the path alias of the "civictheme_page" content with the title "[TEST] Navtrail Section" is set to "/test-navtrail-section"
+    And the path alias of the "civictheme_page" content with the title "[TEST] Navtrail Article" is set to "/test-navtrail-section/test-navtrail-article"
+    Given the following menu links exist in the menu "Primary Navigation":
       | title                   | enabled | uri                             |
       | [TEST] Navtrail Section | 1       | internal:/test-navtrail-section |
 
-  @api
   Scenario: Section parent is highlighted when viewing a nested child page
     Given I am an anonymous user
     When I go to "/test-navtrail-section/test-navtrail-article"
     Then I should see "[TEST] Navtrail Section" in the ".ct-primary-navigation .ct-menu__item--active-trail" element
 
-  @api
   Scenario: Section parent is not highlighted on an unrelated page
     Given I am an anonymous user
     When I go to the homepage

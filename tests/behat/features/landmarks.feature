@@ -9,16 +9,14 @@ Feature: Page landmarks
   # Scenarios for those displays assert the inner layout is present, so they
   # cannot pass on a page that never rendered it.
 
-  @api
   Scenario: Site visitor sees 1 main landmark on the homepage
     Given I am an anonymous user
     When I go to the homepage
     Then I should see a "[data-layout-builder-layout]" element
     And I should see 1 "main, [role=main]" element
 
-  @api
   Scenario: Site visitor sees 1 main landmark on a page
-    Given the following "civictheme_page" content:
+    Given the following "civictheme_page" content exists:
       | title                 | moderation_state | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Landmarks page | published        | large                 | inherit                | normal                      | both                       |
     And I am an anonymous user
@@ -26,9 +24,8 @@ Feature: Page landmarks
     Then I should see a "[data-layout-builder-layout]" element
     And I should see 1 "main, [role=main]" element
 
-  @api
   Scenario: Site visitor sees 1 main landmark on a blog post
-    Given the following "blog" content:
+    Given the following "blog" content exists:
       | title                 | moderation_state | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Landmarks post | published        | large                 | inherit                | normal                      | both                       |
     And I am an anonymous user
@@ -36,9 +33,8 @@ Feature: Page landmarks
     Then I should see a "[data-layout-builder-layout]" element
     And I should see 1 "main, [role=main]" element
 
-  @api
   Scenario: Site visitor sees 1 main landmark on a project
-    Given the following "project" content:
+    Given the following "project" content exists:
       | title                    | moderation_state | field_do_n_year | field_do_n_status | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Landmarks project | published        | 2025            | completed         | large                 | inherit                | normal                      | both                       |
     And I am an anonymous user
@@ -46,9 +42,8 @@ Feature: Page landmarks
     Then I should see a "[data-layout-builder-layout]" element
     And I should see 1 "main, [role=main]" element
 
-  @api
   Scenario: Site visitor sees 1 main landmark on an event
-    Given the following "civictheme_event" content:
+    Given the following "civictheme_event" content exists:
       | title                  | moderation_state | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Landmarks event | published        | large                 | inherit                | normal                      | both                       |
     And I am an anonymous user
@@ -56,27 +51,23 @@ Feature: Page landmarks
     Then I should see a "[data-layout-builder-layout]" element
     And I should see 1 "main, [role=main]" element
 
-  @api
   Scenario: Site visitor sees 1 main landmark on the login page
     Given I am an anonymous user
     When I go to "/user/login"
     Then I should see 1 "main, [role=main]" element
 
-  @api
   Scenario: Site visitor sees 1 main landmark on the page not found page
     Given I am an anonymous user
     When I go to "/test-landmarks-page-that-does-not-exist"
     Then the response status code should be 404
     And I should see 1 "main, [role=main]" element
 
-  @api
   Scenario: Site visitor sees 1 main landmark on the access denied page
     Given I am an anonymous user
     When I go to "/admin"
     Then the response status code should be 403
     And I should see 1 "main, [role=main]" element
 
-  @api
   Scenario: The skip link points to a single focusable target
     Given I am an anonymous user
     When I go to the homepage
@@ -84,7 +75,7 @@ Feature: Page landmarks
     And I should see 1 "#main-content" element
     And the element "#main-content" with the attribute "tabindex" and the value "-1" should exist
 
-  @api @javascript
+  @javascript
   Scenario: The skip link moves keyboard focus to the main content
     Given I am an anonymous user
     When I go to the homepage

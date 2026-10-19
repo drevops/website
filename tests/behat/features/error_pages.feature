@@ -10,7 +10,6 @@ Feature: Built-in error pages
   # theme wraps that sentence in a dark, full-width content band, the same way
   # every other band on the site is painted over the light page.
 
-  @api
   Scenario: Access denied renders in the site design
     Given I am an anonymous user
     When I visit "/admin"
@@ -18,27 +17,23 @@ Feature: Built-in error pages
     And I should see a ".ct-page.ct-theme-light" element
     And I should see "You are not authorized to access this page." in the ".ct-layout__main .ct-basic-content.ct-theme-dark.ct-basic-content--with-background" element
 
-  @api
   Scenario: The Access denied message band spans the full width of the page
     Given I am an anonymous user
     When I visit "/admin"
     Then I should see a ".ct-layout__inner.container-fluid" element
     And I should not see a ".ct-layout__inner.container" element
 
-  @api
   Scenario: Access denied offers a way back to the site
     Given I am an anonymous user
     When I visit "/admin"
     Then I should see "Return to homepage" in the ".ct-layout__main .ct-button--primary" element
     And the element ".ct-layout__main .ct-button--primary" with the attribute "href" and the value "/" should exist
 
-  @api
   Scenario: Access denied does not offer a menu of pages the visitor cannot reach
     Given I am an anonymous user
     When I visit "/admin"
     Then I should not see a ".ct-layout__sidebar_top_left" element
 
-  @api
   Scenario: Page not found renders in the site design
     Given I am an anonymous user
     When I visit "/test-page-that-does-not-exist"
@@ -54,7 +49,6 @@ Feature: Built-in error pages
   # The error page treatment hides the sidebars and releases the layout from
   # its container. Both are page-level changes, so a page that is not an error
   # page is the place to catch them leaking.
-  @api
   Scenario: Pages that are not error pages keep their sidebar and contained layout
     Given I am an anonymous user
     When I go to "/about-us"

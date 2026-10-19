@@ -9,9 +9,8 @@ Feature: Search API
   I want to ensure that the search functionality is accessible
   In order to be able to search for content on the site
 
-  @api
   Scenario: User searches for Page content
-    Given the following civictheme_page content:
+    Given the following civictheme_page content exists:
       | title                                     | status | field_c_n_summary                   |
       | [TEST] Search result 1 firstuniquestring  | 1      | Summary 1 firstuniquestringsummary  |
       | [TEST] Search result 2 seconduniquestring | 1      | Summary 2 seconduniquestringsummary |
@@ -83,7 +82,7 @@ Feature: Search API
     And I index "civictheme_page" "[TEST] Search result 4 forthuniquestring" for search
 
     And I go to the homepage
-    And I click "Search"
+    When I follow "Search"
     And I wait for 2 seconds
     Then I should see "Search" in the ".ct-heading" element
     And I should not see a ".ct-side-navigation" element
