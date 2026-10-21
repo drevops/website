@@ -56,7 +56,7 @@
         "drupal/search_api": "^1.42",
         "drupal/search_api_solr": "^4.4.0",
         "drupal/seckit": "^2.0.3",
-        "drupal/shield": "^1.8",
+        "drupal/shield": "^1.10",
         "drupal/stage_file_proxy": "^4.0.0",
         "drupal/subrequests": "^3.0.12",
         "drupal/testmode": "^2.8.0",
