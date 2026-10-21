@@ -41,6 +41,6 @@ error:
     304
     401
     403
-  impersonate_account: ''
+  impersonate_account: admin
 logging:
   level: 6

@@ -21,7 +21,7 @@ To scan a rich-text or link field you add:
    ahoy drush cex
    ```
 
-`linkchecker.settings` keeps the module defaults except for 3 settings. The defaults mean:
+`linkchecker.settings` keeps the module defaults except for 2 settings. The defaults mean:
 
 - Links to `example.com`, `example.net` and `example.org` are skipped.
 - Unpublished content is scanned too.
@@ -29,13 +29,12 @@ To scan a rich-text or link field you add:
 - Answers of `200`, `206`, `302`, `304`, `401` and `403` count as working.
 - The automatic actions stay off: content stays published after a `404`, and links stay as written after a `301`.
 
-The 3 settings that differ:
+The 2 settings that differ:
 
 | Setting | Value | Effect |
 |---|---|---|
 | `check.interval` | `86400` | Each link is checked again 1 day after its last check |
 | `check_links_types` | `0` | Internal links are checked as well as external ones |
-| `error.impersonate_account` | Empty | Keeps user 1's account name, which the module seeds on install, out of the repository. Only the automatic actions read it. |
 
 ## When the checks run
 
