@@ -6,7 +6,12 @@ dependencies:
     - field.storage.paragraph.field_c_p_content
     - paragraphs.paragraphs_type.civictheme_promo
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: 3zwIUoPBVtyH-keb3wUxonPsIXcMkzxEQxp7onu2A2I
 id: paragraph.civictheme_promo.field_c_p_content

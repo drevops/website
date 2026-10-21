@@ -7,6 +7,11 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_social_icon
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 _core:
   default_config_hash: b0rF3Yo4-zyUOSn3aRa11vNd6slXhkpDGc5UETTV8Gc
 id: paragraph.civictheme_social_icon.field_c_p_link
@@ -20,6 +25,6 @@ translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  link_type: 16
   title: 2
+  link_type: 16
 field_type: link

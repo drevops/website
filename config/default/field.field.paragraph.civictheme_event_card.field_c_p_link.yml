@@ -7,6 +7,11 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_event_card
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 _core:
   default_config_hash: 8I5XubU7XCq1bqnzUdeyt9tR7wF74ib8piaEtoBpk_w
 id: paragraph.civictheme_event_card.field_c_p_link

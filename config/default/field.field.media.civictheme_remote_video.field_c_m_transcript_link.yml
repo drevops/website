@@ -7,6 +7,11 @@ dependencies:
     - media.type.civictheme_remote_video
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 _core:
   default_config_hash: nBwNM-BaKlntaTL3mwBfPqAdL_Uc9gJhmbe3OYBf0Pk
 id: media.civictheme_remote_video.field_c_m_transcript_link
@@ -20,6 +25,6 @@ translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  link_type: 17
   title: 0
+  link_type: 17
 field_type: link

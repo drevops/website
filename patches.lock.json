@@ -1,5 +1,5 @@
 {
-    "_hash": "2c708e02a4580778ceb5abf2b5923a9daa60e21f52135cda41b15d210179bef8",
+    "_hash": "0433a80fd2deb57787d75833699b04d84d283104f920e33fcdea84c500cade86",
     "patches": {
         "drupal/civictheme": [
             {
@@ -41,6 +41,18 @@
                 "description": "Add a Navigation integration submodule - https://www.drupal.org/project/environment_indicator/issues/3457688",
                 "url": "patches/environment-indicator-navigation.patch",
                 "sha256": "3dc73539c124b5fc12b324d6ac9900be395f8765c17f3ced7281d9c8d3fcf2b5",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ],
+        "drupal/linkchecker": [
+            {
+                "package": "drupal/linkchecker",
+                "description": "Make linkchecker service compatible with Guzzle7 - https://www.drupal.org/project/linkchecker/issues/3396666",
+                "url": "patches/linkchecker-guzzle7-connect-exception.patch",
+                "sha256": "7bd15c702ec7c44089d37de5d8508fbdbcfeb1358daa5ed6e1d1041ab49a3463",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"

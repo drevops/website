@@ -6,7 +6,12 @@ dependencies:
     - block_content.type.basic
     - field.storage.block_content.body
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: j00Gfs9AFqwK4x9RIsISLbPO7vA12psPR4s60wOIwQo
 id: block_content.basic.body

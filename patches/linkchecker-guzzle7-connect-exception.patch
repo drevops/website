@@ -1,0 +1,37 @@
+diff --git a/src/LinkCheckerService.php b/src/LinkCheckerService.php
+index ff47b9092131e713cae841c5b8d568db6f57ce30..7b16a3b6a04d2612c5218f17504bcb762d3df5fa 100644
+--- a/src/LinkCheckerService.php
++++ b/src/LinkCheckerService.php
+@@ -14,7 +14,7 @@ use Drupal\linkchecker\Event\BuildHeader;
+ use Drupal\linkchecker\Event\LinkcheckerEvents;
+ use Drupal\linkchecker\Plugin\LinkStatusHandlerManager;
+ use GuzzleHttp\Client;
+-use GuzzleHttp\Exception\RequestException;
++use GuzzleHttp\Exception\TransferException;
+ use Psr\Http\Message\ResponseInterface;
+ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+ 
+@@ -201,7 +201,7 @@ class LinkCheckerService {
+         }
+         $this->statusHandling($response, $link);
+       },
+-      function (RequestException $e) use ($link) {
++      function (TransferException $e) use ($link) {
+         $this->exceptionHandling($e, $link);
+       }
+     );
+@@ -356,12 +356,12 @@ class LinkCheckerService {
+   /**
+    * Exception handling.
+    *
+-   * @param \GuzzleHttp\Exception\RequestException $e
++   * @param \GuzzleHttp\Exception\TransferException $e
+    *   An object containing the Exception.
+    * @param \Drupal\linkchecker\LinkCheckerLinkInterface $link
+    *   The link.
+    */
+-  protected function exceptionHandling(RequestException $e, LinkCheckerLinkInterface $link) {
++  protected function exceptionHandling(TransferException $e, LinkCheckerLinkInterface $link) {
+     $link->setStatusCode('502');
+     $link->setErrorMessage($e->getMessage());
+     $link->setFailCount($link->getFailCount() + 1);

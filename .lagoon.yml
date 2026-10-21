@@ -96,9 +96,10 @@ environments:
   # Branch name that represents production environment.
   main:
     cronjobs:
+      # Cron generates absolute URLs, so it needs the canonical host.
       - name: drush cron
         schedule: '*/15 * * * *'
-        command: drush cron --root=/app
+        command: drush cron --root=/app --uri=https://www.drevops.com
         service: cli
     routes:
       - nginx-php:
@@ -113,9 +114,10 @@ environments:
   # Branch name that represents development environment.
   develop:
     cronjobs:
+      # Cron generates absolute URLs, so it needs the canonical host.
       - name: drush cron
         schedule: '*/15 * * * *'
-        command: drush cron --root=/app
+        command: drush cron --root=/app --uri=https://dev.drevops.com
         service: cli
     routes:
       - nginx-php:
