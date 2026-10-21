@@ -8,7 +8,9 @@
 declare(strict_types=1);
 
 use Behat\Step\Then;
+use Behat\Step\When;
 use DrevOps\BehatSteps\DrupalContext;
+use Drupal\linkchecker\LinkCheckerLinkInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -211,6 +213,42 @@ JS;
 
     if (abs($alpha - (float) $opacity) > 0.005) {
       throw new \RuntimeException(sprintf('Expected element "%s" to have a background opacity of %s, but its background colour is "%s".', $selector, $opacity, $color));
+    }
+  }
+
+  /**
+   * Check the recorded links whose URL contains a value.
+   *
+   * The module's Drush command and cron check every link that is due, so this
+   * step limits the requests to the links a scenario created.
+   *
+   * @code
+   * When the link checker checks the links containing "do-test-unreachable"
+   * @endcode
+   */
+  #[When('the link checker checks the links containing :partial_url')]
+  public function linkcheckerCheckLinks(string $partial_url): void {
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
+    $storage = \Drupal::entityTypeManager()->getStorage('linkcheckerlink');
+
+    $ids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('url', $partial_url, 'CONTAINS')
+      ->execute();
+
+    if (empty($ids)) {
+      throw new \RuntimeException(sprintf('No recorded link has a URL containing "%s".', $partial_url));
+    }
+
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
+    $checker = \Drupal::service('linkchecker.checker');
+
+    foreach ($storage->loadMultiple($ids) as $link) {
+      if (!$link instanceof LinkCheckerLinkInterface) {
+        continue;
+      }
+
+      $checker->check($link)->wait();
     }
   }
 
