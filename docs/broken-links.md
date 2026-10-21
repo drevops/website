@@ -53,7 +53,7 @@ The module stores each internal link as an absolute URL on the host of the reque
 | `main` | `https://www.drevops.com` |
 | `develop` | `https://dev.drevops.com` |
 
-[XML sitemap](sitemap.md) sets the same host for the same reason.
+On `develop`, Shield answers every internal link with `401`, which counts as working, so only the production report shows broken internal links. [XML sitemap](sitemap.md) sets the same host for the same reason.
 
 ## The patch for unreachable hosts
 
