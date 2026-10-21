@@ -6,7 +6,12 @@ dependencies:
     - field.storage.node.field_c_n_body
     - node.type.civictheme_event
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: 8Z3aMl1YojGlnn1aq478lVZ5_5mfNzB1t4NU6AIH-_g
 id: node.civictheme_event.field_c_n_body

@@ -7,6 +7,11 @@ dependencies:
     - field.storage.block_content.field_c_b_link
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 _core:
   default_config_hash: taVGMed88Cb96YFqdNwTNgo8A3s2DuQxOsaXTel9nhE
 id: block_content.civictheme_search.field_c_b_link

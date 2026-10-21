@@ -7,6 +7,11 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_promo_card
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 _core:
   default_config_hash: ZO79mF60FmGDAZM7cPjYb0vtgB_d4IDrxSoxfdKwxNA
 id: paragraph.civictheme_promo_card.field_c_p_link
