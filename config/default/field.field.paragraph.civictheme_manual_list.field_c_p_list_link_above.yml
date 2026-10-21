@@ -7,6 +7,11 @@ dependencies:
     - paragraphs.paragraphs_type.civictheme_manual_list
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 _core:
   default_config_hash: d3m0W0H9OstiFV6kE5U7CzAFEtDjKyWgHCDavFSsHvo
 id: paragraph.civictheme_manual_list.field_c_p_list_link_above

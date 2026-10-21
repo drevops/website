@@ -5,10 +5,9 @@ Feature: XML sitemap
   I want published pages to be listed in the XML sitemap
   So that search engines can discover and index the site
 
-  @api
   Scenario: Sitemap is served as a well-formed sitemap document
-    Given I run drush "xmlsitemap:regenerate"
-    And I am an anonymous user
+    When I run the drush command "xmlsitemap:regenerate"
+    Given I am an anonymous user
     When I go to "/sitemap.xml"
     Then the response status code should be 200
     And the response should be in XML format
@@ -16,7 +15,6 @@ Feature: XML sitemap
     And the XML element "//*[local-name()='urlset']" should exist
     And the XML element "//*[local-name()='url']/*[local-name()='loc']" should exist
 
-  @api
   Scenario: Sitemap stylesheet sorts without jQuery
     Given I am an anonymous user
     When I go to "/sitemap.xsl"
@@ -27,17 +25,16 @@ Feature: XML sitemap
     And the response should not contain "jquery.tablesorter.min.js"
     And the response should contain "xmlsitemap.xsl.js"
 
-  @api
   Scenario: Sitemap lists the front page and published pages only
-    Given the following "civictheme_page" content:
+    Given the following "civictheme_page" content exists:
       | title                        | moderation_state |
       | [TEST] Sitemap Indexed Page  | published        |
       | [TEST] Sitemap Excluded Page | draft            |
-    And I run drush "xmlsitemap:rebuild" "--yes"
-    And I am an anonymous user
+    When I run the drush command "xmlsitemap:rebuild" with the arguments "--yes"
+    Given I am an anonymous user
     When I go to "sitemap.xml"
     Then the response status code should be 200
-    And the response header "content-type" should contain the value "xml"
+    And the response header "content-type" should contain "xml"
     And the response should contain "<urlset"
     # The front page is the only entry carrying an explicit priority, because
     # every other link uses the 0.5 default that the sitemap format omits. The
@@ -46,10 +43,9 @@ Feature: XML sitemap
     And the response should contain "sitemap-indexed-page"
     And the response should not contain "sitemap-excluded-page"
 
-  @api
   Scenario: Sitemap lists URLs on the canonical host
-    Given I run drush "xmlsitemap:rebuild" "--yes"
-    And I am an anonymous user
+    When I run the drush command "xmlsitemap:rebuild" with the arguments "--yes"
+    Given I am an anonymous user
     When I go to "sitemap.xml"
     Then the response status code should be 200
     # Cron regenerates the sitemap with no request to take a host from, so the
@@ -58,14 +54,14 @@ Feature: XML sitemap
     And the response should contain "<loc>https://www.drevops.com/"
     And the response should not contain "<loc>https://drevops.com/"
 
-  @api @blog
+  @blog
   Scenario: Sitemap lists published blog posts only
-    Given the following "blog" content:
+    Given the following "blog" content exists:
       | title                        | moderation_state | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Sitemap Indexed Post  | published        | large                 | inherit                | normal                      | both                       |
       | [TEST] Sitemap Excluded Post | draft            | large                 | inherit                | normal                      | both                       |
-    And I run drush "xmlsitemap:rebuild" "--yes"
-    And I am an anonymous user
+    When I run the drush command "xmlsitemap:rebuild" with the arguments "--yes"
+    Given I am an anonymous user
     When I go to "sitemap.xml"
     Then the response status code should be 200
     # Asserting the full alias covers both sitemap inclusion and the bundle's
@@ -73,14 +69,14 @@ Feature: XML sitemap
     And the response should contain "blog/test-sitemap-indexed-post"
     And the response should not contain "sitemap-excluded-post"
 
-  @api @project
+  @project
   Scenario: Sitemap lists published projects only
-    Given the following "project" content:
+    Given the following "project" content exists:
       | title                           | moderation_state | field_do_n_year | field_do_n_status | field_c_n_banner_type | field_c_n_banner_theme | field_c_n_banner_blend_mode | field_c_n_vertical_spacing |
       | [TEST] Sitemap Indexed Project  | published        | 2025            | completed         | large                 | inherit                | normal                      | both                       |
       | [TEST] Sitemap Excluded Project | draft            | 2025            | completed         | large                 | inherit                | normal                      | both                       |
-    And I run drush "xmlsitemap:rebuild" "--yes"
-    And I am an anonymous user
+    When I run the drush command "xmlsitemap:rebuild" with the arguments "--yes"
+    Given I am an anonymous user
     When I go to "sitemap.xml"
     Then the response status code should be 200
     And the response should contain "work/test-sitemap-indexed-project"

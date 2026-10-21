@@ -7,6 +7,11 @@ dependencies:
     - node.type.project
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: node.project.field_do_n_live_url
 field_name: field_do_n_live_url
 entity_type: node

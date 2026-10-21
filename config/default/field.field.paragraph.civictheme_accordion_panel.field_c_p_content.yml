@@ -6,7 +6,12 @@ dependencies:
     - field.storage.paragraph.field_c_p_content
     - paragraphs.paragraphs_type.civictheme_accordion_panel
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: eZW9mGbcMYrOK5afBumqYMvnGTASuqV_vcUuutg4mH8
 id: paragraph.civictheme_accordion_panel.field_c_p_content

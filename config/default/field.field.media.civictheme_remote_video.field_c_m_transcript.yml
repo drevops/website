@@ -6,7 +6,12 @@ dependencies:
     - field.storage.media.field_c_m_transcript
     - media.type.civictheme_remote_video
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: vwWeIq_mPJhnKaefLdcGKvqbsvddU-HSPOPfEt6htM8
 id: media.civictheme_remote_video.field_c_m_transcript

@@ -7,140 +7,16 @@
 
 declare(strict_types=1);
 
-use DrevOps\BehatSteps\AccessibilityTrait;
-use DrevOps\BehatSteps\CommandTrait;
-use DrevOps\BehatSteps\CookieTrait;
-use DrevOps\BehatSteps\DateTrait;
-use DrevOps\BehatSteps\DiagnosticsTrait;
-use DrevOps\BehatSteps\Drupal\BigPipeTrait;
-use DrevOps\BehatSteps\Drupal\BlockTrait;
-use DrevOps\BehatSteps\Drupal\CacheTrait;
-use DrevOps\BehatSteps\Drupal\ConfigTrait;
-use DrevOps\BehatSteps\Drupal\ContentBlockTrait;
-use DrevOps\BehatSteps\Drupal\ContentTrait;
-use DrevOps\BehatSteps\Drupal\DraggableviewsTrait;
-use DrevOps\BehatSteps\Drupal\EckTrait;
-use DrevOps\BehatSteps\Drupal\EmailTrait;
-use DrevOps\BehatSteps\Drupal\FileTrait;
-use DrevOps\BehatSteps\Drupal\MediaTrait;
-use DrevOps\BehatSteps\Drupal\MenuTrait;
-use DrevOps\BehatSteps\Drupal\ModuleTrait;
-use DrevOps\BehatSteps\MetatagTrait;
-use DrevOps\BehatSteps\Drupal\OverrideTrait;
-use DrevOps\BehatSteps\Drupal\ParagraphsTrait;
-use DrevOps\BehatSteps\Drupal\QueueTrait;
-use DrevOps\BehatSteps\Drupal\RedirectTrait;
-use DrevOps\BehatSteps\Drupal\SearchApiTrait;
-use DrevOps\BehatSteps\Drupal\StateTrait;
-use DrevOps\BehatSteps\Drupal\TaxonomyTrait;
-use DrevOps\BehatSteps\Drupal\TestmodeTrait;
-use DrevOps\BehatSteps\Drupal\UserTrait;
-use DrevOps\BehatSteps\Drupal\WatchdogTrait;
-use DrevOps\BehatSteps\ElementTrait;
-use DrevOps\BehatSteps\FieldTrait;
-use DrevOps\BehatSteps\FileDownloadTrait;
-use DrevOps\BehatSteps\IframeTrait;
-use DrevOps\BehatSteps\JavascriptTrait;
-use DrevOps\BehatSteps\JsonTrait;
-use DrevOps\BehatSteps\KeyboardTrait;
-use DrevOps\BehatSteps\LinkTrait;
-use DrevOps\BehatSteps\ModalTrait;
-use DrevOps\BehatSteps\PathTrait;
-use DrevOps\BehatSteps\ResponseTrait;
-use DrevOps\BehatSteps\ResponsiveTrait;
-use DrevOps\BehatSteps\RestTrait;
-use DrevOps\BehatSteps\TableTrait;
-use DrevOps\BehatSteps\WaitTrait;
-use DrevOps\BehatSteps\XmlTrait;
-use Behat\Step\Given;
 use Behat\Step\Then;
-use Drupal\DrupalExtension\Context\DrupalContext;
+use Behat\Step\When;
+use DrevOps\BehatSteps\DrupalContext;
+use Drupal\linkchecker\LinkCheckerLinkInterface;
 use Drupal\node\NodeInterface;
-use Drupal\pathauto\PathautoState;
 
 /**
  * Defines application features from the specific context.
  */
 class FeatureContext extends DrupalContext {
-
-  use AccessibilityTrait;
-  use BigPipeTrait;
-  use BlockTrait;
-  use CacheTrait;
-  use CommandTrait;
-  use ConfigTrait;
-  use ContentBlockTrait;
-  use ContentTrait;
-  use CookieTrait;
-  use DateTrait;
-  use DiagnosticsTrait;
-  use DraggableviewsTrait;
-  use EckTrait;
-  use ElementTrait;
-  use EmailTrait;
-  use FieldTrait;
-  use FileDownloadTrait;
-  use FileTrait;
-  use IframeTrait;
-  use JavascriptTrait;
-  use JsonTrait;
-  use KeyboardTrait;
-  use LinkTrait;
-  use MediaTrait;
-  use MenuTrait;
-  use MetatagTrait;
-  use ModalTrait;
-  use ModuleTrait;
-  use OverrideTrait;
-  use ParagraphsTrait;
-  use PathTrait;
-  use QueueTrait;
-  use RedirectTrait;
-  use ResponseTrait;
-  use ResponsiveTrait;
-  use RestTrait;
-  use SearchApiTrait;
-  use StateTrait;
-  use TableTrait;
-  use TaxonomyTrait;
-  use TestmodeTrait;
-  use UserTrait;
-  use WaitTrait;
-  use WatchdogTrait;
-  use XmlTrait;
-
-  /**
-   * Set an explicit path alias for a node, bypassing pathauto.
-   *
-   * Pathauto regenerates the alias from the configured pattern on save, so a
-   * nested alias cannot be created through the standard content steps. Skipping
-   * pathauto for this node preserves the explicit alias.
-   *
-   * @code
-   * Given the "civictheme_page" content "[TEST] Article" has the path alias "/section/article"
-   * @endcode
-   */
-  #[Given('the :content_type content :title has the path alias :alias')]
-  public function contentSetPathAlias(string $content_type, string $title, string $alias): void {
-    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
-    $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
-      'type' => $content_type,
-      'title' => $title,
-    ]);
-
-    if (count($nodes) !== 1) {
-      throw new \RuntimeException(sprintf('Expected exactly one "%s" content item with the title "%s", but found %d.', $content_type, $title, count($nodes)));
-    }
-
-    $node = reset($nodes);
-
-    if (!$node instanceof NodeInterface) {
-      throw new \RuntimeException(sprintf('The "%s" content with the title "%s" is not a node.', $content_type, $title));
-    }
-
-    $node->set('path', ['alias' => $alias, 'pathauto' => PathautoState::SKIP]);
-    $node->save();
-  }
 
   /**
    * Assert that a content item is published.
@@ -337,6 +213,42 @@ JS;
 
     if (abs($alpha - (float) $opacity) > 0.005) {
       throw new \RuntimeException(sprintf('Expected element "%s" to have a background opacity of %s, but its background colour is "%s".', $selector, $opacity, $color));
+    }
+  }
+
+  /**
+   * Check the recorded links whose URL contains a value.
+   *
+   * The module's Drush command and cron check every link that is due, so this
+   * step limits the requests to the links a scenario created.
+   *
+   * @code
+   * When the link checker checks the links containing "do-test-unreachable"
+   * @endcode
+   */
+  #[When('the link checker checks the links containing :partial_url')]
+  public function linkcheckerCheckLinks(string $partial_url): void {
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
+    $storage = \Drupal::entityTypeManager()->getStorage('linkcheckerlink');
+
+    $ids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('url', $partial_url, 'CONTAINS')
+      ->execute();
+
+    if (empty($ids)) {
+      throw new \RuntimeException(sprintf('No recorded link has a URL containing "%s".', $partial_url));
+    }
+
+    // @phpstan-ignore globalDrupalDependencyInjection.useDependencyInjection
+    $checker = \Drupal::service('linkchecker.checker');
+
+    foreach ($storage->loadMultiple($ids) as $link) {
+      if (!$link instanceof LinkCheckerLinkInterface) {
+        continue;
+      }
+
+      $checker->check($link)->wait();
     }
   }
 

@@ -2,23 +2,23 @@
 Feature: Divider render
 
   Background:
-    Given the following managed files:
+    Given the following managed files exist:
       | path      | uri                        | status |
       | image.jpg | public://do_test/image.jpg | 1      |
 
-    And the following media "civictheme_image" exist:
+    And the following "civictheme_image" media exist:
       | name            | field_c_m_image |
       | [TEST] DO Image | image.jpg       |
 
-    And the following "civictheme_page" content:
+    And the following "civictheme_page" content exists:
       | title                      | status |
       | [TEST] Page Divider test 1 | 1      |
       | [TEST] Page Divider test 2 | 1      |
 
-  @api @javascript
+  @javascript
   Scenario: CivicTheme page content type page can be viewed by anonymous with Divider light with vertical spacing and left image
     Given I am an anonymous user
-    And the following fields for the paragraph "divider" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Divider test 1":
+    And the following fields for the "divider" paragraph exist in the field "field_c_n_components" within the "civictheme_page" "node" entity with the value "[TEST] Page Divider test 1" in the field "title":
       | field_p_alignment          | left            |
       | field_p_size               | large           |
       | field_c_p_theme            | light           |
@@ -34,10 +34,10 @@ Feature: Divider render
     And I should see an "article .ct-divider.size--large" element
     And save screenshot
 
-  @api @javascript
+  @javascript
   Scenario: CivicTheme page content type page can be viewed by anonymous with Divider dark with vertical spacing and right image
     Given I am an anonymous user
-    And the following fields for the paragraph "divider" exist in the field "field_c_n_components" within the "civictheme_page" "node" identified by the field "title" and the value "[TEST] Page Divider test 2":
+    And the following fields for the "divider" paragraph exist in the field "field_c_n_components" within the "civictheme_page" "node" entity with the value "[TEST] Page Divider test 2" in the field "title":
       | field_p_alignment          | right           |
       | field_p_size               | large           |
       | field_c_p_theme            | dark            |

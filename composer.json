@@ -18,8 +18,8 @@
         "drupal/components": "^3.2",
         "drupal/config_split": "^2.0.2",
         "drupal/config_update": "^2@alpha",
-        "drupal/core-composer-scaffold": "~11.4.10",
-        "drupal/core-recommended": "~11.4.10",
+        "drupal/core-composer-scaffold": "~11.4.11",
+        "drupal/core-recommended": "~11.4.11",
         "drupal/csp": "^2.2.4",
         "drupal/devel": "^5.5.0",
         "drupal/diff": "^2.1.1",
@@ -35,6 +35,7 @@
         "drupal/highlight_js": "^1.3",
         "drupal/key_auth": "^2.2.4",
         "drupal/lagoon_logs": "^3.0.1",
+        "drupal/linkchecker": "^2.1.0",
         "drupal/menu_trail_by_path": "^2.2",
         "drupal/metatag": "^2.2",
         "drupal/moderated_content_bulk_publish": "^2.0.53",
@@ -55,7 +56,7 @@
         "drupal/search_api": "^1.42",
         "drupal/search_api_solr": "^4.4.0",
         "drupal/seckit": "^2.0.3",
-        "drupal/shield": "^1.8",
+        "drupal/shield": "^1.10",
         "drupal/stage_file_proxy": "^4.0.0",
         "drupal/subrequests": "^3.0.12",
         "drupal/testmode": "^2.8.0",
@@ -64,20 +65,19 @@
         "drupal/xmlsitemap": "^2.0",
         "drush/drush": "^13.8.0",
         "npm-asset/photoswipe": "^5.4.4",
-        "symfony/http-client": "^6.4.48",
+        "symfony/http-client": "^7.4.21",
         "webflo/drupal-finder": "^1.3.1"
     },
     "require-dev": {
-        "behat/behat": "^3.34.0",
+        "behat/behat": "^4.0.0",
         "dantleech/gherkin-lint": "^0.2.4",
-        "drevops/behat-format-progress-fail": "^1.5.1",
-        "drevops/behat-screenshot": "^2.6.0",
-        "drevops/behat-steps": "^3.14.4",
+        "drevops/behat-screenshot": "^3.0.0",
+        "drevops/behat-steps": "^4.0@rc",
         "drevops/phpcs-standard": "^1.1.0",
         "drupal/coder": "^9.0.1",
-        "drupal/drupal-driver": "^3.3.1@alpha",
-        "drupal/drupal-extension": "^6.1",
         "ergebnis/composer-normalize": "^2.54.0",
+        "friends-of-behat/mink-extension": "^3.0@alpha",
+        "lullabot/mink-selenium2-driver": "^1.7.4",
         "mglaman/phpstan-drupal": "^2.2.2",
         "mikey179/vfsstream": "^1.6.12",
         "palantirnet/drupal-rector": "^1.1.3",
@@ -230,6 +230,9 @@
             },
             "drupal/environment_indicator": {
                 "Add a Navigation integration submodule - https://www.drupal.org/project/environment_indicator/issues/3457688": "patches/environment-indicator-navigation.patch"
+            },
+            "drupal/linkchecker": {
+                "Make linkchecker service compatible with Guzzle7 - https://www.drupal.org/project/linkchecker/issues/3396666": "patches/linkchecker-guzzle7-connect-exception.patch"
             },
             "drupal/seckit": {
                 "Breaks sitemap.xml when JS +CSS + Noscript protection is enabled - https://www.drupal.org/project/seckit/issues/3219252": "https://www.drupal.org/files/issues/2025-05-28/3219252-10.patch"
