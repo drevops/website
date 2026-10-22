@@ -17,6 +17,14 @@
     "rangeStrategy": "bump",
     "timezone": "Australia/Melbourne",
     "configMigration": true,
+    "internalChecksFilter": "strict",
+    "minimumReleaseAgeBehaviour": "timestamp-optional",
+    "logLevelRemap": [
+        {
+            "matchMessage": "/Some .+ did not have a releaseTimestamp, but as we're running with minimumReleaseAgeBehaviour=timestamp-optional, proceeding/",
+            "newLogLevel": "info"
+        }
+    ],
     "enabledManagers": [
         "composer",
         "npm",
@@ -93,9 +101,12 @@
                 "!drupal/core-project-message",
                 "!drupal/core-recommended",
                 "!drupal/core-dev"
-            ]
+            ],
+            "minimumReleaseAge": "14 days",
+            "automerge": false
         },
         {
+            "description": "Drupal core has no 'minimumReleaseAge', so its security releases are proposed on the next daily run.",
             "groupName": "PHP - Drupal core - Minor and patch",
             "groupSlug": "php-drupal-core-minor-patch",
             "matchFileNames": [
@@ -116,7 +127,8 @@
                 "drupal/core-project-message",
                 "drupal/core-recommended",
                 "drupal/core-dev"
-            ]
+            ],
+            "automerge": false
         },
         {
             "groupName": "JavaScript - Non-root packages - Skipped to update manually",
@@ -125,6 +137,7 @@
                 "npm"
             ],
             "matchFileNames": [
+                "**/package.json",
                 "!package.json"
             ],
             "enabled": false,
@@ -164,13 +177,16 @@
             ],
             "matchPackageNames": [
                 "/.*/"
-            ]
+            ],
+            "minimumReleaseAge": "14 days",
+            "automerge": false
         },
         {
             "groupName": "Container images - All - Major, minor and patch",
             "groupSlug": "container-images-all-major-minor-patch",
             "matchFileNames": [
                 ".docker/**",
+                "docker-compose.yml",
                 ".circleci/**",
                 ".github/workflows/**"
             ],
@@ -181,7 +197,38 @@
                 "dockerfile",
                 "docker-compose",
                 "custom.regex"
-            ]
+            ],
+            "minimumReleaseAge": "14 days",
+            "automerge": false
+        },
+        {
+            "description": "npm packages that CI runs at a pinned version through 'npx'.",
+            "groupName": "CI tools - All - Major, minor and patch",
+            "groupSlug": "ci-tools-all-major-minor-patch",
+            "matchManagers": [
+                "custom.regex"
+            ],
+            "matchDatasources": [
+                "npm"
+            ],
+            "schedule": [
+                "before 3am"
+            ],
+            "minimumReleaseAge": "14 days",
+            "automerge": false
+        },
+        {
+            "description": "Renovate publishes several releases a day, so the image that runs Renovate in CircleCI is proposed weekly in a group of its own.",
+            "groupName": "CI tools - Renovate - Major, minor and patch",
+            "groupSlug": "ci-tools-renovate-major-minor-patch",
+            "matchFileNames": [
+                ".circleci/update-dependencies.yml"
+            ],
+            "schedule": [
+                "before 3am on Sunday"
+            ],
+            "minimumReleaseAge": "14 days",
+            "automerge": false
         },
         {
             "groupName": "GitHub Actions - All - Major, minor and patch",
@@ -193,6 +240,7 @@
                 "github-actions"
             ],
             "pinDigests": true,
+            "minimumReleaseAge": "14 days",
             "automerge": true
         }
     ],
@@ -219,6 +267,31 @@
             ],
             "datasourceTemplate": "docker",
             "versioningTemplate": "docker"
+        },
+        {
+            "customType": "regex",
+            "managerFilePatterns": [
+                "/^\\.circleci/config\\.yml$/",
+                "/^\\.github/workflows/.+\\.yml$/"
+            ],
+            "matchStrings": [
+                "npx --yes (?<depName>@?[a-z0-9][a-z0-9._\\-]*(?:/[a-z0-9._\\-]+)?)@(?<currentValue>[0-9][\\w.\\-]*)"
+            ],
+            "datasourceTemplate": "npm",
+            "versioningTemplate": "npm"
+        },
+        {
+            "description": "The image is looked up as the 'renovate' npm package, which records the release dates that 'minimumReleaseAge' needs.",
+            "customType": "regex",
+            "managerFilePatterns": [
+                "/^\\.circleci/update-dependencies\\.yml$/"
+            ],
+            "matchStrings": [
+                "image:\\s*[\"']?(?<depName>renovate/renovate):(?<currentValue>\\d+\\.\\d+\\.\\d+)(?:-[a-z]+)?[\"']?\\s"
+            ],
+            "packageNameTemplate": "renovate",
+            "datasourceTemplate": "npm",
+            "versioningTemplate": "npm"
         }
     ]
 }
