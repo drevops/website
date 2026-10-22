@@ -8,7 +8,7 @@
         "composer/installers": "^2.3",
         "cweagans/composer-patches": "^2.0",
         "drevops/test-private-package": "^1.0",
-        "drevops/vortex-tooling": "~1.4.0",
+        "drevops/vortex-tooling": "~1.5.1",
         "drupal/ai_image_alt_text": "^1.0.3",
         "drupal/ai_provider_openai": "^1.2.5",
         "drupal/civictheme": "~1.13.0",
@@ -150,7 +150,7 @@
         "bump-after-update": true,
         "discard-changes": true,
         "platform": {
-            "php": "8.4.23"
+            "php": "8.4.27"
         },
         "policy": {
             "advisories": {
