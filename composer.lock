@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eb6ec2755efd6d177517fa500280f668",
+    "content-hash": "d120e59ec3ed66e4f2a62ad2589d1b58",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1495,22 +1495,24 @@
         },
         {
             "name": "drevops/vortex-tooling",
-            "version": "1.4.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drevops/vortex-tooling.git",
-                "reference": "9ab617248a8d4b0193e5ac2a5b8604ac478aed22"
+                "reference": "4cded4c6c4fc64fabb9e0635a210400be05e0ced"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/9ab617248a8d4b0193e5ac2a5b8604ac478aed22",
-                "reference": "9ab617248a8d4b0193e5ac2a5b8604ac478aed22",
+                "url": "https://api.github.com/repos/drevops/vortex-tooling/zipball/4cded4c6c4fc64fabb9e0635a210400be05e0ced",
+                "reference": "4cded4c6c4fc64fabb9e0635a210400be05e0ced",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2"
             },
             "bin": [
+                "src/vortex-check-worktree-changes",
+                "src/vortex-convert-audit-sarif",
                 "src/vortex-deploy",
                 "src/vortex-doctor",
                 "src/vortex-export-db",
@@ -1524,6 +1526,7 @@
                 "src/vortex-provision",
                 "src/vortex-push-db-image",
                 "src/vortex-reset",
+                "src/vortex-storybook",
                 "src/vortex-task",
                 "src/vortex-update"
             ],
@@ -1546,7 +1549,7 @@
                 "issues": "https://github.com/drevops/vortex/issues",
                 "source": "https://github.com/drevops/vortex"
             },
-            "time": "2026-08-15T00:40:53+00:00"
+            "time": "2026-10-21T16:18:11+00:00"
         },
         {
             "name": "drupal/ai",
@@ -3763,6 +3766,81 @@
             "support": {
                 "source": "https://git.drupal.org/project/environment_indicator.git",
                 "issues": "https://www.drupal.org/project/issues/environment_indicator"
+            }
+        },
+        {
+            "name": "drupal/fast_404",
+            "version": "3.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/fast_404.git",
+                "reference": "8.x-3.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/fast_404-8.x-3.7.zip",
+                "reference": "8.x-3.7",
+                "shasum": "21917b8747514f38486643e82b5f98b25994fb05"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/redirect": "^1.3.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.7",
+                    "datestamp": "1768426066",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "adammalone",
+                    "homepage": "https://www.drupal.org/user/1295980"
+                },
+                {
+                    "name": "gg4",
+                    "homepage": "https://www.drupal.org/user/360002"
+                },
+                {
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
+                },
+                {
+                    "name": "kristen pol",
+                    "homepage": "https://www.drupal.org/user/8389"
+                },
+                {
+                    "name": "naveenvalecha",
+                    "homepage": "https://www.drupal.org/user/2665733"
+                },
+                {
+                    "name": "neetu morwani",
+                    "homepage": "https://www.drupal.org/user/2632025"
+                },
+                {
+                    "name": "soyarma",
+                    "homepage": "https://www.drupal.org/user/286273"
+                }
+            ],
+            "description": "Speed up the generation of 404 pages and route 404 display to a static page.",
+            "homepage": "https://www.drupal.org/project/fast_404",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/fast_404",
+                "issues": "https://www.drupal.org/project/issues/fast_404"
             }
         },
         {
@@ -19728,7 +19806,7 @@
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.4.23"
+        "php": "8.4.27"
     },
     "plugin-api-version": "2.9.0"
 }
