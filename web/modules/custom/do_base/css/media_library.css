@@ -1,0 +1,15 @@
+/**
+ * @file
+ * Media library card fixes for the Gin admin theme.
+ */
+
+/* Claro's minimum height adds to Gin's square padding, so every card renders
+   portrait. */
+.media-library-item.media-library-item--grid .media-library-item__preview {
+  min-height: 0;
+}
+
+/* Cropping an SVG to fill the card cuts off icon artwork. */
+.media-library-item .media-library-item__preview .field img[src$='.svg'] {
+  object-fit: contain;
+}
