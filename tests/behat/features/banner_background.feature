@@ -34,6 +34,13 @@ Feature: Banner background
     # A vector has no derivative, so there is nothing for the preload to fetch.
     And the response should not contain "rel=\"preload\" href=\"/sites/default/files/do_test/image.svg\""
 
+  Scenario: A page without a background of its own shows the sitewide aurora background
+    Given the following civictheme_page content exists:
+      | title                      | status |
+      | [TEST] Banner default page | 1      |
+    When I visit the "civictheme_page" content page with the title "[TEST] Banner default page"
+    Then the element ".ct-banner__inner" with the attribute "style" and a value containing "/sites/default/files/icons/banner-aurora.svg" should exist
+
   @blog
   Scenario: A blog post accepts an SVG background
     Given the following "civictheme_icon" media exist:
