@@ -1,7 +1,7 @@
 @p1 @civictheme @drevops @banner
 Feature: Banner background
 
-  As a site editor
+  As a content editor
   I want to set a raster image or an SVG as the banner background
   So that pages can carry photographic and vector artwork behind their title
 
