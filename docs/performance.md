@@ -2,7 +2,7 @@
 
 This document describes what the site does to keep pages light and stable while they load. Meta tags and structured data are covered in [SEO](seo.md).
 
-## Images always go through an image style
+## Raster images always go through an image style
 
 An image style does two things here: it caps the pixel dimensions, and it converts to WebP. Both matter, because the source files are large brand renders and a 4K PNG hero is several megabytes.
 
@@ -87,7 +87,7 @@ It runs only on the routes listed in that hook's `BANNER_ROUTES`, plus any route
 ahoy test-kernel -- --filter=ImageDimensionsExtensionTest
 ```
 
-For the rendered end, check that a page's images carry `width` and `height`, that no request goes to `fonts.googleapis.com`, and that image URLs contain `/styles/`. Lighthouse under mobile emulation is the quickest way to see the three metrics these affect: largest contentful paint, cumulative layout shift, and total byte weight.
+For the rendered end, check that a page's images carry `width` and `height`, that no request goes to `fonts.googleapis.com`, and that raster image URLs contain `/styles/`. Lighthouse under mobile emulation is the quickest way to see the three metrics these affect: largest contentful paint, cumulative layout shift, and total byte weight.
 
 ## Related
 
