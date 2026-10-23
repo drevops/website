@@ -25,7 +25,9 @@ content:
     weight: 3
     region: content
     settings:
-      media_types: {  }
+      media_types:
+        - civictheme_image
+        - civictheme_icon
     third_party_settings: {  }
   field_c_b_banner_blend_mode:
     type: options_select

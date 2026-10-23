@@ -42,6 +42,11 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   protected const string MEDIA_TYPE = 'civictheme_image';
 
   /**
+   * Machine name of the media type holding SVG banner backgrounds.
+   */
+  protected const string ICON_MEDIA_TYPE = 'civictheme_icon';
+
+  /**
    * Image style the banner paints its background with.
    */
   protected const string IMAGE_STYLE = 'banner_background';
@@ -83,6 +88,7 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
 
     NodeType::create(['type' => 'page', 'name' => 'Page'])->save();
     $this->createImageMediaType();
+    $this->createIconMediaType();
     $this->createBannerBackgroundField();
   }
 
@@ -250,6 +256,22 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   }
 
   /**
+   * Tests that an SVG background preloads nothing.
+   *
+   * An SVG has no image style derivative, so the banner draws the original.
+   */
+  public function testSvgBackgroundPreloadsNothing(): void {
+    // Prepare.
+    $this->setRoute('entity.node.canonical', ['node' => $this->createPage($this->createIconMedia())]);
+
+    // Act.
+    $attachments = $this->attach();
+
+    // Assert.
+    $this->assertArrayNotHasKey('html_head_link', $attachments['#attached']);
+  }
+
+  /**
    * Runs the hook over an empty set of attachments.
    *
    * The hook is taken from the container, so the wiring it is registered with
@@ -351,6 +373,27 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   }
 
   /**
+   * Creates a media item wrapping an SVG file.
+   */
+  protected function createIconMedia(): MediaInterface {
+    $uri = 'public://' . $this->randomMachineName() . '.svg';
+    file_put_contents($uri, '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect width="16" height="16"/></svg>');
+
+    $file = File::create(['uri' => $uri]);
+    $file->setPermanent();
+    $file->save();
+
+    $media = Media::create([
+      'bundle' => static::ICON_MEDIA_TYPE,
+      'name' => '[TEST] Banner Background SVG',
+      'field_c_m_icon' => ['target_id' => $file->id()],
+    ]);
+    $media->save();
+
+    return $media;
+  }
+
+  /**
    * Creates the media type banner backgrounds live in.
    */
   protected function createImageMediaType(): void {
@@ -379,6 +422,34 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   }
 
   /**
+   * Creates the media type SVG banner backgrounds live in.
+   */
+  protected function createIconMediaType(): void {
+    $media_type = MediaType::create([
+      'id' => static::ICON_MEDIA_TYPE,
+      'label' => 'Icon',
+      'source' => 'file',
+    ]);
+    $media_type->save();
+
+    FieldStorageConfig::create([
+      'entity_type' => 'media',
+      'field_name' => 'field_c_m_icon',
+      'type' => 'file',
+    ])->save();
+
+    FieldConfig::create([
+      'entity_type' => 'media',
+      'bundle' => static::ICON_MEDIA_TYPE,
+      'field_name' => 'field_c_m_icon',
+      'label' => 'File',
+      'settings' => ['file_extensions' => 'svg'],
+    ])->save();
+
+    $media_type->set('source_configuration', ['source_field' => 'field_c_m_icon'])->save();
+  }
+
+  /**
    * Adds the banner background field pages carry.
    */
   protected function createBannerBackgroundField(): void {
@@ -396,7 +467,7 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
       'label' => 'Banner background',
       'settings' => [
         'handler' => 'default:media',
-        'handler_settings' => ['target_bundles' => [static::MEDIA_TYPE => static::MEDIA_TYPE]],
+        'handler_settings' => ['target_bundles' => [static::ICON_MEDIA_TYPE => static::ICON_MEDIA_TYPE, static::MEDIA_TYPE => static::MEDIA_TYPE]],
       ],
     ])->save();
   }

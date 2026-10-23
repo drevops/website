@@ -5,6 +5,7 @@ dependencies:
   config:
     - block_content.type.civictheme_banner
     - field.storage.block_content.field_c_b_background_image
+    - media.type.civictheme_icon
     - media.type.civictheme_image
 _core:
   default_config_hash: YKPIvbg84iW_498TWmLnqEMqp3vjG1IFGVnqU-cp3MM
@@ -13,7 +14,7 @@ field_name: field_c_b_background_image
 entity_type: block_content
 bundle: civictheme_banner
 label: 'Background image'
-description: 'Default background image for the banner.'
+description: 'Default background image or SVG for the banner. Add an SVG as Icon media.'
 required: false
 translatable: false
 default_value: {  }
@@ -22,6 +23,7 @@ settings:
   handler: 'default:media'
   handler_settings:
     target_bundles:
+      civictheme_icon: civictheme_icon
       civictheme_image: civictheme_image
     sort:
       field: _none
