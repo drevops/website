@@ -33,12 +33,18 @@ final class SvgDimensions {
 
     $markup = file_get_contents($path, FALSE, NULL, 0, self::READ_LENGTH);
 
-    if ($markup === FALSE || preg_match('~viewBox\s*=\s*["\']\s*[\d.+-]+[,\s]+[\d.+-]+[,\s]+([\d.]+)[,\s]+([\d.]+)~i', $markup, $matches) !== 1) {
+    if ($markup === FALSE || preg_match('~viewBox\s*=\s*(["\'])(.*?)\1~is', $markup, $matches) !== 1) {
       return [];
     }
 
-    $width = (int) round((float) $matches[1]);
-    $height = (int) round((float) $matches[2]);
+    $values = preg_split('~[\s,]+~', trim($matches[2]), -1, PREG_SPLIT_NO_EMPTY);
+
+    if ($values === FALSE || count($values) !== 4 || count(array_filter($values, is_numeric(...))) !== 4) {
+      return [];
+    }
+
+    $width = (int) round((float) $values[2]);
+    $height = (int) round((float) $values[3]);
 
     if ($width <= 0 || $height <= 0) {
       return [];

@@ -47,6 +47,9 @@ class SvgDimensionsTest extends DoBaseKernelTestBase {
     yield 'a viewBox' => ['<svg viewBox="0 0 1600 700"/>', ['width' => 1600, 'height' => 700]];
     yield 'a comma separated viewBox' => ['<svg viewBox="0,0,120,60"/>', ['width' => 120, 'height' => 60]];
     yield 'a fractional viewBox' => ["<svg viewBox='0 0 99.6 50.4'/>", ['width' => 100, 'height' => 50]];
+    yield 'an exponent in the viewBox' => ['<svg viewBox="0 0 200 1e2"/>', ['width' => 200, 'height' => 100]];
+    yield 'a viewBox with 3 values' => ['<svg viewBox="0 0 200"/>', []];
+    yield 'a viewBox with a word in it' => ['<svg viewBox="0 0 wide 100"/>', []];
     yield 'no viewBox' => ['<svg width="16" height="16"/>', []];
     yield 'a zero size viewBox' => ['<svg viewBox="0 0 0 10"/>', []];
     yield 'not an SVG' => ['plain text', []];
