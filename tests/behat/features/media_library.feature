@@ -18,6 +18,11 @@ Feature: Media library
     When I go to "/admin/content/media-grid"
     Then the element ".media-library-item img" with the attribute "src" and a value containing "/sites/default/files/do_test/library-image.svg" should exist
 
+  Scenario: An SVG thumbnail in the media table is sized by the thumbnail style
+    When I go to "/admin/content/media"
+    Then the element "table img[src$='/do_test/library-image.svg']" with the attribute "width" and the value "100" should exist
+    And the element "table img[src$='/do_test/library-image.svg']" with the attribute "height" and the value "25" should exist
+
   @javascript
   Scenario: Media library cards are square
     When I go to "/admin/content/media-grid"

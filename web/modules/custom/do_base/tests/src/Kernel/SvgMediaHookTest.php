@@ -140,6 +140,42 @@ class SvgMediaHookTest extends DoBaseKernelTestBase {
   }
 
   /**
+   * Tests that an SVG rendered without its style is sized by the style.
+   *
+   * @param string $viewbox
+   *   The 'viewBox' the SVG declares, or an empty string for none.
+   * @param string|null $expected
+   *   The expected width and height attributes, or NULL for none.
+   */
+  #[DataProvider('dataProviderSvgSize')]
+  public function testSvgSize(string $viewbox, ?string $expected): void {
+    // Prepare.
+    $file = $this->createSourceFile('svg', $viewbox);
+    $build = $this->createMedia($file)->get('thumbnail')->view(['type' => 'image', 'settings' => ['image_style' => 'thumbnail']]);
+
+    // Act.
+    $markup = (string) $this->container->get('renderer')->renderInIsolation($build);
+
+    // Assert.
+    if ($expected === NULL) {
+      $this->assertStringNotContainsString('width=', $markup);
+    }
+    else {
+      $this->assertStringContainsString($expected, $markup);
+    }
+  }
+
+  /**
+   * Data provider for testSvgSize.
+   */
+  public static function dataProviderSvgSize(): \Iterator {
+    yield 'a wide SVG scales to the style width' => ['0 0 1600 700', 'width="100" height="44"'];
+    yield 'a square SVG scales to the style box' => ['0 0 588 588', 'width="100" height="100"'];
+    yield 'a small SVG is not upscaled' => ['0 0 16 16', 'width="16" height="16"'];
+    yield 'an SVG without a viewBox gets no size' => ['', NULL];
+  }
+
+  /**
    * Creates a media item around a file.
    */
   protected function createMedia(FileInterface $file): MediaInterface {
@@ -155,10 +191,16 @@ class SvgMediaHookTest extends DoBaseKernelTestBase {
 
   /**
    * Creates a file with the given extension.
+   *
+   * @param string $extension
+   *   Extension of the file.
+   * @param string $viewbox
+   *   The 'viewBox' an SVG declares, or an empty string for none.
    */
-  protected function createSourceFile(string $extension): FileInterface {
+  protected function createSourceFile(string $extension, string $viewbox = '0 0 16 16'): FileInterface {
     $uri = 'public://' . $this->randomMachineName() . '.' . $extension;
-    file_put_contents($uri, $extension === 'svg' ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"/>' : 'test');
+    $attribute = $viewbox === '' ? '' : ' viewBox="' . $viewbox . '"';
+    file_put_contents($uri, $extension === 'svg' ? '<svg xmlns="http://www.w3.org/2000/svg"' . $attribute . '/>' : 'test');
 
     $file = File::create(['uri' => $uri]);
     $file->setPermanent();
