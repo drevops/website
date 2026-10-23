@@ -7,11 +7,13 @@ namespace Drupal\Tests\do_base\Kernel;
 use Drupal\do_base\SvgDimensions;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests reading the dimensions an SVG declares.
  */
 #[Group('do_base')]
+#[RunTestsInSeparateProcesses]
 class SvgDimensionsTest extends DoBaseKernelTestBase {
 
   /**
