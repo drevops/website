@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Image\ImageFactory;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
+use Drupal\do_base\SvgDimensions;
 use Drupal\image\ImageStyleInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -163,27 +164,7 @@ final class ImageDimensionsExtension extends AbstractExtension {
       return [];
     }
 
-    if (!is_file($file) || !is_readable($file)) {
-      return [];
-    }
-
-    $markup = file_get_contents($file, FALSE, NULL, 0, 2048);
-    if ($markup === FALSE) {
-      return [];
-    }
-
-    if (preg_match('~viewBox\s*=\s*["\']\s*[\d.+-]+[,\s]+[\d.+-]+[,\s]+([\d.]+)[,\s]+([\d.]+)~i', $markup, $matches) !== 1) {
-      return [];
-    }
-
-    $width = (int) round((float) $matches[1]);
-    $height = (int) round((float) $matches[2]);
-
-    if ($width <= 0 || $height <= 0) {
-      return [];
-    }
-
-    return ['width' => $width, 'height' => $height];
+    return SvgDimensions::read($file);
   }
 
 }

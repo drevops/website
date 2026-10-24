@@ -2,7 +2,7 @@
 
 This document describes what the site does to keep pages light and stable while they load. Meta tags and structured data are covered in [SEO](seo.md).
 
-## Images always go through an image style
+## Raster images always go through an image style
 
 An image style does two things here: it caps the pixel dimensions, and it converts to WebP. Both matter, because the source files are large brand renders and a 4K PNG hero is several megabytes.
 
@@ -17,6 +17,10 @@ An image style does two things here: it caps the pixel dimensions, and it conver
 | `social_share` | Share cards, deliberately **not** converted, because some social crawlers still handle WebP badly |
 
 CivicTheme resolves several of these with no image style at all, which yields the URL of the original upload. Four preprocessors here re-resolve them: `_drevops_banner_apply_image_styles()` for the two banner images, `drevops_preprocess_paragraph__divider()` for the divider, `_drevops_preprocess_paragraph__paragraph_field__images()` for the image list, and `drevops_preprocess_media__civictheme_image()` for the figure. The banner one covers the block field and the node field, because the node's value wins when both are set.
+
+The banner background also accepts an SVG. The node and block background fields reference `civictheme_icon` media as well as `civictheme_image`. Add an SVG as Icon media: the `image_focal_point` widget on `civictheme_image` runs core's image validator, and GD rejects every SVG. An SVG has no derivative, so `civictheme_media_image_get_variables()` returns the original file. `background-size: cover` scales it to the banner, and the preload in [The banner background is preloaded](#the-banner-background-is-preloaded) skips it. The sitewide banner block defaults to `assets/banner-aurora.svg` from `do_base`, which `do_base_deploy_set_banner_background()` sets.
+
+The media library shows each SVG's own artwork. The file source gives every item the same placeholder thumbnail, so `SvgMediaHook` points an SVG's thumbnail at the SVG itself. It also renders any SVG image without its image style, because GD can't rasterise one and core would otherwise render nothing. The style's transform still sizes the SVG from its `viewBox`, so a `thumbnail` column shows a 100px icon instead of the full-size artwork.
 
 The featured image sits in a box 40% of the viewport wide and no more than 600px tall, filled with `object-fit: cover`. Its ratio moves with the viewport and with how tall the banner's own content makes it, so the browser trims a different part of the image on every screen. A focal point crop puts the subject at the centre of the derivative, which is the part `cover` keeps whichever way it trims.
 
@@ -83,7 +87,7 @@ It runs only on the routes listed in that hook's `BANNER_ROUTES`, plus any route
 ahoy test-kernel -- --filter=ImageDimensionsExtensionTest
 ```
 
-For the rendered end, check that a page's images carry `width` and `height`, that no request goes to `fonts.googleapis.com`, and that image URLs contain `/styles/`. Lighthouse under mobile emulation is the quickest way to see the three metrics these affect: largest contentful paint, cumulative layout shift, and total byte weight.
+For the rendered end, check that a page's images carry `width` and `height`, that no request goes to `fonts.googleapis.com`, and that raster image URLs contain `/styles/`. Lighthouse under mobile emulation is the quickest way to see the three metrics these affect: largest contentful paint, cumulative layout shift, and total byte weight.
 
 ## Related
 

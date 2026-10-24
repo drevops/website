@@ -187,6 +187,48 @@ class LibraryInfoAlterHookTest extends DoBaseUnitTestBase {
   }
 
   /**
+   * Tests that the media library card fixes load with the admin theme's own.
+   */
+  public function testMediaLibraryFixesLoadWithTheAdminTheme(): void {
+    // Prepare.
+    $libraries = ['media_library' => ['css' => ['theme' => ['dist/css/components/media_library.css' => []]]]];
+
+    // Act.
+    $this->hook()->alter($libraries, 'gin');
+
+    // Assert.
+    $this->assertSame(['do_base/media_library'], $libraries['media_library']['dependencies']);
+  }
+
+  /**
+   * Tests that libraries holding no media library styles are left alone.
+   *
+   * @param array<string, mixed> $libraries
+   *   The library definitions as the extension declares them.
+   * @param string $extension
+   *   The extension declaring the libraries.
+   */
+  #[DataProvider('dataProviderLibrariesWithoutMediaLibraryStylesAreLeftAlone')]
+  public function testLibrariesWithoutMediaLibraryStylesAreLeftAlone(array $libraries, string $extension): void {
+    // Prepare.
+    $expected = $libraries;
+
+    // Act.
+    $this->hook()->alter($libraries, $extension);
+
+    // Assert.
+    $this->assertSame($expected, $libraries);
+  }
+
+  /**
+   * Data provider for testLibrariesWithoutMediaLibraryStylesAreLeftAlone.
+   */
+  public static function dataProviderLibrariesWithoutMediaLibraryStylesAreLeftAlone(): \Iterator {
+    yield 'the admin theme without the library' => [['edit_form' => ['css' => []]], 'gin'];
+    yield 'another extension with a library of that name' => [['media_library' => ['css' => []]], 'claro'];
+  }
+
+  /**
    * Builds the hook under test.
    *
    * @param bool $base_theme_exists
