@@ -11,10 +11,10 @@ PHP has no visibility keywords for procedural functions, so this project marks i
 
 ```php
 // Public: the deploy registry finds and runs this by name.
-function do_base_deploy_migrate_blog_posts(?array &$sandbox = NULL): ?string { ... }
+function do_base_deploy_set_banner_background(): string { ... }
 
 // Private: only the hook above calls it.
-function _do_base_blog_migrate_node(NodeInterface $node): void { ... }
+function _do_base_asset_media(string $uuid, string $filename, string $bundle, string $directory, string $name, array $source_values = []): ?MediaInterface { ... }
 ```
 
 Beyond signalling intent, the underscore keeps helpers clear of the naming patterns Drupal and Drush scan for, so a helper can never be mistaken for a hook and run on its own.
@@ -43,14 +43,14 @@ Points worth knowing before you write one:
 
 - Type the parameter `?array &$sandbox = NULL` to match the nullable reference `Helper::entity()` takes. Typing it `array` makes PHPStan reject the call.
 - The helper returns `NULL` while batching and a summary string once finished. Return its result straight from the hook.
-- Lower the batch size from the default of 50 when each item is expensive. The blog migration uses 10 because every article rewrites rows in more than forty field tables.
+- Lower the batch size from the default of 50 when each item is expensive, such as a node that rewrites rows in dozens of field tables.
 - `batchQuery()` runs the query **once** and stashes the IDs in the sandbox, so the callback must not depend on the query still matching the item it is handed.
 
 ### One batched operation per hook
 
 The sandbox uses fixed keys (`items`, `total`, `current`), so a single hook cannot run two batched operations. Split multi-step work into separate hooks instead of trying to share a sandbox.
 
-Deploy hooks run in alphabetical order within a module, so name them so they run in the order you need. The blog work is two hooks for this reason: `do_base_deploy_migrate_blog_posts` then `do_base_deploy_repoint_blog_lists`.
+Deploy hooks run in alphabetical order within a module, so name them so they run in the order you need.
 
 ### Prefer per-item atomicity over one large transaction
 

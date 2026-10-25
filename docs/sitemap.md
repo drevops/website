@@ -34,8 +34,6 @@ Cron regenerates the sitemap, and cron has no request to take a host from, so `x
 
 Links are indexed and the sitemap files regenerated on cron. The generated files are written to the public files directory (`public://xmlsitemap/`), not held in the database, so that directory must be writable and shared across all web containers. **If production sitemaps ever go stale, check this first.**
 
-`do_base_deploy_rebuild_xmlsitemap()` rebuilds the sitemap during `drush deploy`. A freshly installed `xmlsitemap` has an empty link table, so without it a deployment would serve a near-empty `/sitemap.xml` until the next cron run.
-
 To rebuild by hand:
 
 ```bash
