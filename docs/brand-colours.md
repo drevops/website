@@ -85,7 +85,7 @@ ahoy drush cim -y
 ahoy drush cr
 ```
 
-`ThemeColorSubscriber` purges the stylesheet when the colour config is saved, and `do_base_deploy_refresh_theme_colors()` purges it on every deploy, so an import is enough. For the SCSS side:
+`ThemeColorSubscriber` purges the stylesheet when the color config is saved, so an import is enough. For the SCSS side:
 
 ```bash
 ahoy cli npm run build --prefix web/themes/custom/drevops

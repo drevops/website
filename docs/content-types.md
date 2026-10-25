@@ -148,7 +148,7 @@ Take the union of both bundles' field definitions, so a field attached to the so
 
 No entity hooks fire, so anything derived from the bundle has to be repaired explicitly in the same hook:
 
-- **XML sitemap.** The `xmlsitemap` table records each link's bundle in its `subtype` column. `do_base_deploy_rebuild_xmlsitemap()` would correct it, but deploy hooks run once per environment and will not re-run, so update the rows directly.
+- **XML sitemap.** The `xmlsitemap` table records each link's bundle in its `subtype` column. A full sitemap rebuild corrects it, but no deployment step runs one, so update the rows directly.
 - **Search index.** Mark the migrated items updated on every index that has the `entity:node` datasource, otherwise the indexed documents keep describing the nodes under the old bundle.
 - **Caches.** Invalidate the `node:<nid>` tags along with `node_list` and the `node_list:<bundle>` tags for both the old and new bundle, and reset the entity storage cache.
 

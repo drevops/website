@@ -36,7 +36,7 @@ Retrieve (or regenerate) the key as an administrator at `/user/<uid>/key-auth` f
 The feature ships as configuration, so it is enabled by a normal deployment:
 
 1. Importing configuration enables `jsonapi` (with writes allowed), `key_auth`, `subrequests`, and the `do_content_api` module, and creates the `do_content_api` service role.
-1. The `drush deploy` step runs a deploy hook that creates the `do_content_api_service` account, and the API key is generated automatically. Later runs reconcile an existing service account back to exactly the `do_content_api` role, leave a deliberately blocked account blocked, and refuse to touch an unrelated account that happens to share the username.
+1. The `do_content_api_service` account holds the `do_content_api` role. The account is content, so each environment gets it with the production database.
 1. Retrieve the key at `/user/<uid>/key-auth` and give it to the client.
 
 No keys are committed to the repository; each environment issues its own.
