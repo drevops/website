@@ -61,7 +61,7 @@ A search result shows roughly 60 characters of the title and 155 of the descript
 
 Nothing trims a tag at render time. A description cut by a rule rather than by an author breaks mid-sentence and reads worse than a description written to fit, and the tag it produces is nobody's wording. Pages that need a shorter or a different one carry it explicitly in `field_n_metatags`.
 
-Those titles carry qualifiers the visible heading does not need: a page headed `GovCMS` is titled `GovCMS Development and Migration`, because the heading has a whole page for context and a search result has one line. They use `[site:name]` rather than a literal brand, matching the `node` default they replace.
+A title set in `field_n_metatags` can carry qualifiers the visible heading does not need: a page headed `GovCMS` is titled `GovCMS Development and Migration`, because the heading has a whole page for context and a search result has one line. Use `[site:name]` rather than a literal brand, matching the `node` default the override replaces.
 
 A page without its own tags falls back to `[node:field_c_n_summary:value]`, which is as long as the summary an editor wrote. Check a new page's rendered description against 155 characters, and set a description in its `field_n_metatags` when the summary runs over.
 
