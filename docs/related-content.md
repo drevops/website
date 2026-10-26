@@ -29,14 +29,14 @@ Points worth knowing before changing it:
 - **It has to be one condition.** Visibility conditions are ANDed, so a *Content type* condition for blog posts alongside a *Pages* condition for the service pages would match nothing. Both audiences are expressed as paths in the single condition.
 - **The condition matches the alias.** `RequestPath` resolves the current path to its alias before comparing, so `/node/12` is judged as `/blog/…` and reaches the same verdict as the aliased URL.
 - **`/services` is not `/services/*`.** The services landing page carries no topics; leaving it outside the pattern keeps the block off a page that has nothing to put under it. Every service detail page beneath it does carry topics.
-- **The block itself is content.** `do_base_deploy_add_related_posts_block()` creates it against the fixed UUID that `block.block.drevops_related_posts` names, and skips when that UUID is already present. Config import runs before deploy hooks, so on a site built from scratch the placement lands one step ahead of the block it points at and starts rendering once the hook has run.
+- **The block itself is content.** `block.block.drevops_related_posts` points at the block by a fixed UUID, and the block lives in the database. A site built from configuration alone gets the placement, and it renders nothing until a block with that UUID exists.
 
 ## Topic pages
 
 Topic terms are the second, stable inbound link: unlike a pager page, a topic page does not change what it points at as content is added.
 
 - `pathauto.pattern.civictheme_topics` puts them at `/topics/<name>`.
-- `do_base_deploy_alias_topic_terms()` hands every existing topic back to that pattern. Topics created programmatically carry `PathautoState::SKIP`, which is why most of them had no alias at all and a bulk generate would not give them one.
+- Topics created programmatically carry `PathautoState::SKIP`, so they get no alias and a bulk generate skips them. Save such a term with `path` set to `['pathauto' => PathautoState::CREATE]` to hand it back to the pattern.
 - The topic tags at the foot of a post link to these pages. `_drevops_node_add_topic_tags()` reads the referenced terms rather than their labels so each tag gets a `url`, which is what the `civictheme:tag` component turns into a link.
 - `views.view.taxonomy_term` renders term pages as a CivicTheme promo-card grid with a full pager, rather than core's teaser list. This is the shared term view, so it applies to every vocabulary - acceptable because no other vocabulary's terms are linked from the site.
 - Topic pages are listed in the XML sitemap.

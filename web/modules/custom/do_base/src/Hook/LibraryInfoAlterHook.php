@@ -39,6 +39,10 @@ final readonly class LibraryInfoAlterHook {
       $libraries['highlight_js.custom']['dependencies'][] = 'do_base/highlight_js.gherkin';
     }
 
+    if ($extension === 'gin' && isset($libraries['media_library'])) {
+      $libraries['media_library']['dependencies'][] = 'do_base/media_library';
+    }
+
     if ($extension === 'ckeditor5' && isset($libraries[self::EDITOR_STYLESHEETS]['css']['theme'])) {
       // The base theme's stylesheets are merged into this list and .info.yml
       // cannot override them. Its build imports Google Fonts, which the policy
