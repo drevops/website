@@ -28,7 +28,7 @@ Feature: Site header layout
     When I set the viewport to "600" by "900"
     And I visit "/"
     Then the child elements of ".ct-header__middle .row" should be on a single row
-    And the element ".ct-header__middle .row" should have the computed style "flex-wrap" of "nowrap"
+    And the element ".ct-header__middle .row" should have the CSS property "flex-wrap" with the value "nowrap"
 
   @javascript
   Scenario Outline: Site visitor sees the primary menu on a single row at <width>px
@@ -48,11 +48,11 @@ Feature: Site header layout
     When I set the viewport to "600" by "900"
     And I visit "/"
     Then the element ".ct-header__middle" should have a background opacity of "0.92"
-    And the element ".ct-header__middle" should have the computed style "backdrop-filter" of "none"
+    And the element ".ct-header__middle" should have the CSS property "backdrop-filter" with the value "none"
 
   @javascript
   Scenario: Site visitor sees a frosted header over the page on a desktop
     When I set the viewport to "1440" by "900"
     And I visit "/"
     Then the element ".ct-header__middle" should have a background opacity of "0.8"
-    And the element ".ct-header__middle" should have the computed style "backdrop-filter" of "blur(8px)"
+    And the element ".ct-header__middle" should have the CSS property "backdrop-filter" with the value "blur(8px)"
