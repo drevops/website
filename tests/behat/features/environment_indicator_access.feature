@@ -9,7 +9,7 @@ Feature: Environment indicator access for site administrator
     Given I am logged in as a user with the role "civictheme_site_administrator"
     When I visit "/"
     Then the element "body" with the attribute "style" and a value containing "--environment-indicator-navigation-color" should exist
-    And the element ".admin-toolbar" should have the computed style "border-inline-start-width" of "8px"
+    And the element ".admin-toolbar" should have the CSS property "border-inline-start-width" with the value "8px"
 
   @javascript
   Scenario: Site administrator no longer sees the full width indicator strip
@@ -22,4 +22,4 @@ Feature: Environment indicator access for site administrator
     Given I am logged in as a user with the role "civictheme_content_author"
     When I visit "/"
     Then I should see an "#admin-toolbar" element
-    And the element ".admin-toolbar" should have the computed style "border-inline-start-width" of "0px"
+    And the element ".admin-toolbar" should have the CSS property "border-inline-start-width" with the value "0px"
