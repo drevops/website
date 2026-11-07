@@ -29,6 +29,11 @@ class ImageStyleConfigTest extends UnitTestCase {
   protected const FEATURED_STYLE = 'banner_featured';
 
   /**
+   * Machine name of the style behind the card banner's featured image.
+   */
+  protected const CARD_STYLE = 'banner_card';
+
+  /**
    * Machine name of the style behind the divider graphic.
    */
   protected const DIVIDER_STYLE = 'divider';
@@ -68,6 +73,25 @@ class ImageStyleConfigTest extends UnitTestCase {
     $this->assertSame('focal_point', $effect['data']['crop_type']);
     $this->assertGreaterThan(0, $effect['data']['width']);
     $this->assertGreaterThan(0, $effect['data']['height']);
+  }
+
+  /**
+   * Tests that the card image is scaled whole and never cropped.
+   *
+   * The card banner shows the image at its own ratio, so a crop effect cuts
+   * off part of a designed graphic.
+   */
+  public function testCardImageScalesWithoutCrop(): void {
+    // Act.
+    $effect = $this->effect(static::CARD_STYLE, 'image_scale');
+    $effect_ids = array_column($this->loadConfig('image.style.' . static::CARD_STYLE . '.yml')['effects'], 'id');
+
+    // Assert.
+    $this->assertNotNull($effect, 'The card style does not scale.');
+    $this->assertSame(960, $effect['data']['width']);
+    $this->assertSame(960, $effect['data']['height']);
+    $this->assertFalse($effect['data']['upscale']);
+    $this->assertSame(['image_scale', 'image_convert'], $effect_ids, 'The card style applies an effect other than scale and convert.');
   }
 
   /**

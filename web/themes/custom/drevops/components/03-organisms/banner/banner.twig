@@ -21,7 +21,7 @@
  *   Each property contains:
  *   - url: [string] Image source URL.
  *   - alt: [string] Image alt text.
- * - type: [string] Banner type: default, large, intro.
+ * - type: [string] Banner type: default, large, intro, card.
  * - with_offset: [boolean] Whether to add top offset.
  *
  * Slots:
@@ -53,7 +53,7 @@
 {% set is_decorative_class = is_decorative ? 'ct-banner--decorative' : '' %}
 {% set theme_class = 'ct-theme-%s'|format(theme|default('light')) %}
 {# Custom: Add type and with_offset support. #}
-{% set type = type in ['default', 'large', 'intro'] ? type : 'default' %}
+{% set type = type in ['default', 'large', 'intro', 'card'] ? type : 'default' %}
 {% set type_class = 'ct-banner-type--%s'|format(type) %}
 {% set with_offset_class = with_offset ? 'ct-banner--with-offset' : '' %}
 {% set modifier_class = '%s %s %s %s %s'|format(theme_class, is_decorative_class, type_class, with_offset_class, modifier_class|default('')) %}
@@ -62,6 +62,10 @@
 {% if type == 'intro' %}
   {% set featured_image = null %}
 {% endif %}
+
+{# Custom: The card type places the image in its own column, so the text rows span their column. #}
+{% set is_card = type == 'card' and featured_image %}
+{% set column_class = featured_image and not is_card ? 'col-xxs-12 col-m-6' : 'col-xxs-12' %}
 
 {% if content_top1 or content_top2 or content_top3 or site_section or title or content_middle or content or content_below or content_bottom %}
   <div class="ct-banner {{ modifier_class -}}" id="main-content" tabindex="-1" {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}>
@@ -75,6 +79,12 @@
         {% endif %}
 
         <div class="container">
+
+          {# Custom: Open the text column of the card layout. #}
+          {% if is_card %}
+            <div class="row ct-banner__card-layout">
+              <div class="col-xxs-12 col-m-7">
+          {% endif %}
 
           {% if content_top1 %}
             <div class="row">
@@ -93,7 +103,7 @@
               {% block breadcrumb_block %}
                 {# Custom: Hide breadcrumb for intro type and use include() instead of {% include only %}. #}
                 {% if breadcrumb and type != 'intro' %}
-                  <div class="{% if featured_image %}col-xxs-12 col-m-6{% else %}col-xxs-12{% endif %}">
+                  <div class="{{ column_class }}">
                     {{ include('civictheme:breadcrumb', {
                       theme: theme,
                       links: breadcrumb.links,
@@ -149,7 +159,7 @@
           {% if title %}
             <div class="row">
               {%- block title_block %}
-                <div class="{% if featured_image %}col-xxs-12 col-m-6{% else %}col-xxs-12{% endif %}">
+                <div class="{{ column_class }}">
                   {# Custom: Use include() instead of {% include only %}. #}
                   {{ include('civictheme:heading', {
                     theme: theme,
@@ -165,7 +175,7 @@
           {% if content_middle %}
             <div class="row">
               {%- block content_middle_block %}
-                <div class="{% if featured_image %}col-xxs-12 col-m-6{% else %}col-xxs-12{% endif %}">
+                <div class="{{ column_class }}">
                   <div class="ct-banner__content-middle">
                     {{- content_middle -}}
                   </div>
@@ -177,7 +187,7 @@
           {% if content %}
             <div class="row">
               {%- block content_block %}
-                <div class="{% if featured_image %}col-xxs-12 col-m-6{% else %}col-xxs-12{% endif %}">
+                <div class="{{ column_class }}">
                   <div class="ct-banner__content">
                     {{- content -}}
                   </div>
@@ -186,11 +196,27 @@
             </div>
           {% endif %}
 
+          {# Custom: Close the text column and render the image whole in the card column. #}
+          {% if is_card %}
+              </div>
+              <div class="col-xxs-12 col-m-5">
+                <div class="ct-banner__card">
+                  {{ include('civictheme:image', {
+                    theme: theme,
+                    url: featured_image.url,
+                    alt: featured_image.alt,
+                    modifier_class: 'ct-banner__card-image',
+                  }, with_context: false) }}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
         </div>
       </div>
 
       {% block featured_image_block %}
-        {% if featured_image %}
+        {% if featured_image and not is_card %}
           <div class="ct-banner__featured-image__wrapper">
             {# Custom: Use include() instead of {% include only %}. #}
             {{ include('civictheme:image', {
