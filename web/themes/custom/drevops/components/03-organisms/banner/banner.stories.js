@@ -18,7 +18,7 @@ const meta = {
     // Custom: Add type control for banner type variants.
     type: {
       control: { type: 'radio' },
-      options: ['default', 'large', 'intro'],
+      options: ['default', 'large', 'intro', 'card'],
     },
     content_top1: {
       control: { type: 'text' },

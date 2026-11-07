@@ -71,7 +71,7 @@ props:
     type:
       type: string
       title: Type
-      description: 'Banner type: default, large or intro. Any other value, including the ''inherit'' sentinel supplied by the banner type field, falls back to ''default''.'
+      description: 'Banner type: default, large, intro or card. Any other value, including the ''inherit'' sentinel supplied by the banner type field, falls back to ''default''.'
     with_offset:
       type: boolean
       title: With offset

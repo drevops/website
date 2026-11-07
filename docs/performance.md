@@ -10,6 +10,7 @@ An image style does two things here: it caps the pixel dimensions, and it conver
 |---|---|
 | `banner_background` | The banner background: scaled to 1920 wide, converted to WebP |
 | `banner_featured` | The banner featured image: cropped to 1090x818 around the focal point, converted to WebP |
+| `banner_card` | The featured image of a `card` banner: scaled to fit within 960x960 at its own ratio, converted to WebP |
 | `civictheme_*` | Cards, campaigns and slides: cropped by the CivicTheme sizes, converted to WebP |
 | `divider` | The divider graphic: scaled to fit within 1090x480, converted to WebP |
 | `image_list` | An image in the image list: scaled to fit within 320x160, converted to WebP |
@@ -23,6 +24,8 @@ The banner background also accepts an SVG. The node and block background fields 
 The media library shows each SVG's own artwork. The file source gives every item the same placeholder thumbnail, so `SvgMediaHook` points an SVG's thumbnail at the SVG itself. It also renders any SVG image without its image style, because GD can't rasterise one and core would otherwise render nothing. The style's transform still sizes the SVG from its `viewBox`, so a `thumbnail` column shows a 100px icon instead of the full-size artwork.
 
 The featured image sits in a box 40% of the viewport wide and no more than 600px tall, filled with `object-fit: cover`. Its ratio moves with the viewport and with how tall the banner's own content makes it, so the browser trims a different part of the image on every screen. A focal point crop puts the subject at the centre of the derivative, which is the part `cover` keeps whichever way it trims.
+
+The `card` banner type shows the whole featured image, for graphics with a logo or code near an edge. It draws the image as a rounded card in the second grid column, at the image's own ratio. On mobile, the card sits below the intro text. `_drevops_banner_apply_image_styles()` resolves this image through `banner_card`, which only scales, so the focal point has no effect. The node's banner type picks the style, or the banner block's type when the node says `inherit`.
 
 `drevops_preprocess_media__civictheme_image()` also clears the width and height CivicTheme measured on the source file, because they describe a different image once a style has resized it.
 

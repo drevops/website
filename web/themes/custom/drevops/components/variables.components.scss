@@ -76,6 +76,8 @@ $ct-banner-featured-image-width: 40% !default;
 $ct-banner-featured-image-clip-path: polygon(13% 10%, 100% 0, 100% 100%, 0% 100%) !default;
 $ct-banner-offset: ct-particle(11);
 $ct-banner-offset-xxs: ct-particle(10);
+$ct-banner-card-border-radius: ct-particle(1.5) !default;
+$ct-banner-card-shadow: 0 ct-spacing(2) ct-spacing(4) rgba(0, 0, 0, 35%) !default;
 $ct-banner-light-background-color: ct-color-light('background') !default;
 $ct-banner-light-featured-image-shadow-color: ct-color-light('background-light') !default;
 $ct-banner-dark-background-color: ct-color-dark('background') !default;
