@@ -25,6 +25,9 @@ settings:
     -
       value: intro
       label: Intro
+    -
+      value: card
+      label: Card
   allowed_values_function: ''
 module: options
 locked: false

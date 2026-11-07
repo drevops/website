@@ -1,0 +1,21 @@
+uuid: 84a658dc-3ff4-4ca7-bee6-4781699efdcd
+langcode: en
+status: true
+dependencies: {  }
+name: banner_card
+label: 'Banner card image (960x960, WebP)'
+effects:
+  9e508967-b86e-4d08-8da6-606be20210b4:
+    uuid: 9e508967-b86e-4d08-8da6-606be20210b4
+    id: image_scale
+    weight: 1
+    data:
+      width: 960
+      height: 960
+      upscale: false
+  81bb8dba-cc27-4aeb-b5fd-bdfa2cefe3de:
+    uuid: 81bb8dba-cc27-4aeb-b5fd-bdfa2cefe3de
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp
