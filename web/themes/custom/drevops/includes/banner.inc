@@ -34,7 +34,8 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
   $route_match = \Drupal::routeMatch();
   $node = $route_match->getParameter('node_revision') ?: $route_match->getParameter('node');
   if (!empty($node)) {
-    $type = civictheme_get_field_value($node, 'field_c_n_banner_type', TRUE, CivicthemeConstants::INHERIT);
+    $node_type = civictheme_get_field_value($node, 'field_c_n_banner_type', TRUE, CivicthemeConstants::INHERIT);
+    $type = $node_type === CivicthemeConstants::INHERIT ? $type : $node_type;
   }
 
   $variables['type'] = $type;
@@ -52,7 +53,7 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
     $variables['title'] = Markup::create($variables['title']);
   }
 
-  _drevops_banner_apply_image_styles($variables, $block, $node);
+  _drevops_banner_apply_image_styles($variables, $block, $node, $type);
 }
 
 /**
@@ -61,9 +62,12 @@ function _drevops_preprocess_block__civictheme_banner(array &$variables): void {
  * CivicTheme resolves both of them with no style, which yields the URL of the
  * original upload.
  *
+ * The 'card' type shows the featured image whole at its own ratio, so it uses
+ * a style that scales without cropping.
+ *
  * @see civictheme_media_image_get_variables()
  */
-function _drevops_banner_apply_image_styles(array &$variables, FieldableEntityInterface $block, mixed $node): void {
+function _drevops_banner_apply_image_styles(array &$variables, FieldableEntityInterface $block, mixed $node, string $type): void {
   $background = $node instanceof FieldableEntityInterface ? civictheme_get_field_value($node, 'field_c_n_banner_background', TRUE) : NULL;
   $background = $background ?: civictheme_get_field_value($block, 'field_c_b_background_image', TRUE, build: $variables);
 
@@ -74,9 +78,14 @@ function _drevops_banner_apply_image_styles(array &$variables, FieldableEntityIn
   $featured = $node instanceof FieldableEntityInterface ? civictheme_get_field_value($node, 'field_c_n_banner_featured_image', TRUE, build: $variables) : NULL;
   $featured = $featured ?: civictheme_get_field_value($block, 'field_c_b_featured_image', TRUE, build: $variables);
 
-  if ($featured instanceof MediaInterface) {
-    $variables['featured_image'] = civictheme_media_image_get_variables($featured, 'banner_featured');
+  if (!$featured instanceof MediaInterface) {
+    return;
   }
+
+  // Style names stay literal arguments, so ImageStyleConfigTest can scan them.
+  $variables['featured_image'] = $type === 'card'
+    ? civictheme_media_image_get_variables($featured, 'banner_card')
+    : civictheme_media_image_get_variables($featured, 'banner_featured');
 }
 
 /**

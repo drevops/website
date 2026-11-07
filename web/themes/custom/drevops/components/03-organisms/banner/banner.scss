@@ -168,4 +168,29 @@
       @include ct-typography('display-large');
     }
   }
+
+  // Custom: Add card banner type with the featured image shown whole in the grid.
+  &.ct-banner-type--card {
+    #{$root}__card-layout {
+      @include ct-breakpoint($ct-grid-responsive-breakpoint) {
+        align-items: center;
+      }
+    }
+
+    #{$root}__card {
+      margin-top: ct-spacing(4);
+
+      @include ct-breakpoint($ct-grid-responsive-breakpoint) {
+        margin-top: 0;
+      }
+    }
+
+    #{$root}__card-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: $ct-banner-card-border-radius;
+      box-shadow: $ct-banner-card-shadow;
+    }
+  }
 }
