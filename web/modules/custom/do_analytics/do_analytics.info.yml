@@ -1,0 +1,9 @@
+name: DrevOps Website Analytics
+type: module
+description: Sends component-level interaction events to Google Analytics.
+core_version_requirement: ^11
+package: website
+dependencies:
+  - drupal:block
+  - drupal:node
+  - paragraphs:paragraphs

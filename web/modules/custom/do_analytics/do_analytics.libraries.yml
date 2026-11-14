@@ -1,0 +1,7 @@
+tracker:
+  js:
+    js/do_analytics.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
