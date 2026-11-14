@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Then;
 use Behat\Step\When;
 use DrevOps\BehatSteps\DrupalContext;
@@ -190,6 +191,95 @@ JS;
     if (abs($alpha - (float) $opacity) > 0.005) {
       throw new \RuntimeException(sprintf('Expected element "%s" to have a background opacity of %s, but its background colour is "%s".', $selector, $opacity, $color));
     }
+  }
+
+  /**
+   * Stop clicked links from leaving the page.
+   *
+   * The page must stay loaded for the events a click sends to be read back.
+   *
+   * @code
+   * When I disable link navigation
+   * @endcode
+   *
+   * @javascript
+   */
+  #[When('I disable link navigation')]
+  public function analyticsDisableLinkNavigation(): void {
+    $this->getSession()->executeScript("document.addEventListener('click', function (event) { if (event.target.closest('a[href]')) { event.preventDefault(); } });");
+  }
+
+  /**
+   * Assert that an analytics event was sent with the given parameters.
+   *
+   * Reads the events the Google tag queued on the page, so it only sees the
+   * events sent to visitors the tag is configured for.
+   *
+   * @code
+   * Then the analytics event "component_click" should have been sent with:
+   *   | component | promo_card |
+   *   | link_type | external   |
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the analytics event :name should have been sent with:')]
+  public function analyticsAssertEventSent(string $name, TableNode $table): void {
+    $expected = $table->getRowsHash();
+    $events = $this->analyticsEvents($name);
+
+    foreach ($events as $params) {
+      $matches = array_filter($expected, static fn(string $value, string $param): bool => isset($params[$param]) && (string) $params[$param] === $value, ARRAY_FILTER_USE_BOTH);
+
+      if (count($matches) === count($expected)) {
+        return;
+      }
+    }
+
+    throw new \RuntimeException(sprintf('No "%s" analytics event was sent with %s. Sent: %s', $name, json_encode($expected), json_encode($events)));
+  }
+
+  /**
+   * Assert that the last analytics event of a name omits a parameter.
+   *
+   * @code
+   * Then the last "component_click" analytics event should not have the parameter "link_url"
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the last :name analytics event should not have the parameter :parameter')]
+  public function analyticsAssertLastEventOmitsParameter(string $name, string $parameter): void {
+    $events = $this->analyticsEvents($name);
+
+    if ($events === []) {
+      throw new \RuntimeException(sprintf('No "%s" analytics event was sent.', $name));
+    }
+
+    $last = end($events);
+
+    if (array_key_exists($parameter, $last)) {
+      throw new \RuntimeException(sprintf('Expected the last "%s" analytics event to omit "%s", but it was sent with %s.', $name, $parameter, json_encode($last)));
+    }
+  }
+
+  /**
+   * Read the parameters of the analytics events of a name sent so far.
+   *
+   * @return array<int, array<string, mixed>>
+   *   The parameters of each event, oldest first.
+   */
+  protected function analyticsEvents(string $name): array {
+    $name_js = json_encode($name);
+    $script = <<<JS
+      return Array.prototype.filter.call(window.dataLayer || [], function (entry) {
+        return entry && entry[0] === 'event' && entry[1] === {$name_js};
+      }).map(function (entry) {
+        return entry[2] || {};
+      });
+JS;
+
+    return (array) $this->getSession()->getDriver()->evaluateScript($script);
   }
 
   /**
