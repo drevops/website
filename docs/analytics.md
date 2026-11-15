@@ -36,7 +36,7 @@ Axel gathers parameters from the clicked element up through its ancestors, and t
 
 The module's parameters are the `data-axel-param-*` values and the `page_type` and `page_id` settings. The [Axel README](https://github.com/drevops/axel#event-types) describes how Axel derives each parameter. It never sends what a visitor types, strips query strings from URLs and sends `mailto:` and `tel:` links as their scheme only.
 
-A webform sends `form_submit` only when its confirmation type is **Inline** or **Page**, because those render the confirmation the module marks. The contact webform confirms inline. A confirmation shown as a status message after a redirect carries no marker and sends no `form_submit`.
+A webform sends `form_submit` only when its confirmation type is **Inline** or **Page**, because those render the confirmation the module marks. The contact webform confirms inline and submits with AJAX, so refreshing the confirmation never resubmits the enquiry. A confirmation shown as a status message after a redirect carries no marker and sends no `form_submit`.
 
 To keep an element out of every event, add `data-axel-skip` to it or to an ancestor.
 
