@@ -29,6 +29,12 @@ class PreprocessHookTest extends UnitTestCase {
   /**
    * Tests the attributes added to a paragraph.
    *
+   * @param int|null $id
+   *   The paragraph ID, or NULL for an unsaved paragraph.
+   * @param bool $has_title
+   *   Whether the paragraph has a title field.
+   * @param string|null $title
+   *   The title field value.
    * @param array<string, string> $expected
    *   The expected attributes.
    */

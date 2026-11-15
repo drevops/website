@@ -23,6 +23,10 @@ class FormAlterHookTest extends UnitTestCase {
    *
    * @param array $form
    *   The form.
+   * @param string $form_id
+   *   The form ID.
+   * @param string $expected
+   *   The expected form name.
    */
   #[DataProvider('dataProviderFormAlter')]
   public function testFormAlter(array $form, string $form_id, string $expected): void {

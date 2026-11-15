@@ -62,6 +62,12 @@ class AnalyticsAttributesTest extends UnitTestCase {
   /**
    * Tests the attributes that mark an element as a component.
    *
+   * @param string $name
+   *   The bundle or view mode machine name.
+   * @param string|null $id
+   *   The entity identifier, or NULL when unsaved.
+   * @param string $title
+   *   The component title.
    * @param array<string, string> $expected
    *   The expected attributes.
    */

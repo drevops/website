@@ -24,6 +24,10 @@ class PageAttachmentsHookTest extends UnitTestCase {
   /**
    * Tests the page context attached to a front-end page.
    *
+   * @param mixed $node
+   *   The node route parameter, as accepted by hook().
+   * @param string|null $route_name
+   *   The name of the current route.
    * @param array{type: string, id: string} $expected
    *   The expected page context.
    */
@@ -64,8 +68,8 @@ class PageAttachmentsHookTest extends UnitTestCase {
    * Builds the hook under test.
    *
    * @param mixed $node
-   *   'node' for a saved node, 'unsaved' for a new one, otherwise the raw
-   *   route parameter.
+   *   The string 'node' for a saved node, 'unsaved' for a new one, otherwise
+   *   the raw route parameter.
    * @param string|null $route_name
    *   The name of the current route.
    * @param bool $is_admin
