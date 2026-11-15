@@ -109,7 +109,7 @@ Feature: Analytics events
     And I fill in "Message" with "[TEST] Analytics form submission."
     And I press "Send message"
     And I wait for 1 second
-    Then I should see "Thank you for contacting us. We will get back to you within one business day."
+    Then I should see "Thank you for contacting us. We will get back to you within 2 business days."
     And the element ".webform-confirmation" with the attribute "data-axel-form-submitted" and the value "webform:contact" should exist
     And the analytics event "form_submit" should have been sent with:
       | form_name | webform:contact |

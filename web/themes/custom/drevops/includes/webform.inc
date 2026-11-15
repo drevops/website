@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements template_preprocess_webform_confirmation().
  */
@@ -29,6 +31,9 @@ function drevops_preprocess_webform_confirmation(array &$variables): void {
     '#props' => [
       'type' => 'success',
       'theme' => 'light',
+      // The component's own role is 'contentinfo', the page footer landmark.
+      'has_aria' => FALSE,
+      'attributes' => new Attribute(['role' => 'status']),
     ],
     '#slots' => [
       'content' => $text,

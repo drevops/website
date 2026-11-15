@@ -144,7 +144,7 @@ settings:
   confirmation_type: inline
   confirmation_url: '<front>'
   confirmation_title: ''
-  confirmation_message: 'Thank you for contacting us. We will get back to you within one business day.'
+  confirmation_message: 'Thank you for contacting us. We will get back to you within 2 business days.'
   confirmation_attributes: {  }
   confirmation_back: false
   confirmation_back_label: ''
