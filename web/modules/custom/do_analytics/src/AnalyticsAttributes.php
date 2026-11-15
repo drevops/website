@@ -38,6 +38,11 @@ final class AnalyticsAttributes {
   public const string BLOCK = 'data-analytics-block';
 
   /**
+   * Identifier of a form that stays the same wherever the form is placed.
+   */
+  public const string FORM = 'data-analytics-form';
+
+  /**
    * Longest value Google Analytics 4 accepts for an event parameter.
    */
   public const int MAX_LENGTH = 100;

@@ -66,7 +66,7 @@ The following table lists the parameters that belong to 1 or 2 events:
 | `link_type` | `component_click` | `internal`, `external`, `download`, `email`, `phone`, `anchor`, `lightbox` or `button` |
 | `link_url` | `component_click` | The path of an internal link, or the origin and path of an external link. Left out for `email`, `phone` and `button`. |
 | `link_domain` | `component_click` | The host name of an external link |
-| `form_id` | `component_form_submit` | The Drupal form ID of the submitted form |
+| `form_id` | `component_form_submit` | `webform:<id>` for a webform, such as `webform:contact`, otherwise the Drupal form ID. `FormAlterHook` puts it on the form as `data-analytics-form`. |
 | `text_length` | `content_copy` | The number of characters copied |
 | `percent` | `scroll_depth` | The scroll threshold reached |
 

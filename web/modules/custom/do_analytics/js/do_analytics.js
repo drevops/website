@@ -260,7 +260,7 @@
 
     send('component_form_submit', {
       ...context(form),
-      form_id: text(formId ? formId.value : form.id),
+      form_id: text(form.dataset.analyticsForm || (formId ? formId.value : form.id)),
     });
   }
 
