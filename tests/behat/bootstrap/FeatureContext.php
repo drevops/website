@@ -225,13 +225,18 @@ JS;
    */
   #[Then('the analytics event :name should have been sent with:')]
   public function analyticsAssertEventSent(string $name, TableNode $table): void {
-    $expected = $table->getRowsHash();
+    $expected = [];
+
+    foreach ($table->getRows() as [$param, $value]) {
+      $expected[$param] = $value;
+    }
+
     $events = $this->analyticsEvents($name);
 
     foreach ($events as $params) {
-      $matches = array_filter($expected, static fn(string $value, string $param): bool => isset($params[$param]) && (string) $params[$param] === $value, ARRAY_FILTER_USE_BOTH);
+      $sent = array_map(static fn(mixed $value): string => is_scalar($value) ? (string) $value : (string) json_encode($value), $params);
 
-      if (count($matches) === count($expected)) {
+      if (array_intersect_assoc($expected, $sent) === $expected) {
         return;
       }
     }
