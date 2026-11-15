@@ -27,10 +27,10 @@ Feature: Analytics events
       | field_c_p_link:uri   | https://example.com/analytics   |
       | field_c_p_theme      | light                           |
     And the following fields for the "civictheme_content" paragraph exist in the field "field_c_n_components" within the "civictheme_page" "node" entity with the value "[TEST] Page Analytics events" in the field "title":
-      | field_c_p_theme            | light                                                                                        |
-      | field_c_p_vertical_spacing | both                                                                                         |
-      | field_c_p_content:value    | <p><a href="mailto:do-test@example.com">Email</a> <a href="/do-test/guide.pdf">Guide</a></p> |
-      | field_c_p_content:format   | civictheme_rich_text                                                                         |
+      | field_c_p_theme            | light                                                                                                            |
+      | field_c_p_vertical_spacing | both                                                                                                             |
+      | field_c_p_content:value    | <p><a href="mailto:do-test@example.com">Email do-test@example.com</a> <a href="/do-test/guide.pdf">Guide</a></p> |
+      | field_c_p_content:format   | civictheme_rich_text                                                                                             |
 
   Scenario: Components and blocks carry the context the tracker reports
     Given I am an anonymous user
@@ -87,9 +87,9 @@ Feature: Analytics events
       | link_text | Guide              |
     When I click on the element ".ct-basic-content a[href^='mailto:']"
     Then the analytics event "component_click" should have been sent with:
-      | component | content |
-      | link_type | email   |
-      | link_text | Email   |
+      | component | content       |
+      | link_type | email         |
+      | link_text | Email [email] |
     And the last "component_click" analytics event should not have the parameter "link_url"
 
   @javascript

@@ -40,15 +40,17 @@
 
   const HIDDEN_TEXT = '.ct-visually-hidden';
 
+  const EMAIL = /[^\s@<>()]+@[^\s@<>()]+\.[a-z]{2,}/gi;
+
   const SCROLL_THRESHOLDS = [25, 50, 75, 100];
 
-  // Low thresholds let a component taller than the viewport report a view.
-  const VIEW_THRESHOLDS = [0, 0.05, 0.1, 0.25, 0.5, 0.75, 1];
+  const viewed = new WeakSet();
 
-  let viewObserver = null;
+  let viewObservers = [];
 
+  // Email addresses are personal information, which GA4 must not receive.
   function text(value) {
-    return (value || '').replace(/\s+/g, ' ').trim().slice(0, MAX_LENGTH);
+    return (value || '').replace(EMAIL, '[email]').replace(/\s+/g, ' ').trim().slice(0, MAX_LENGTH);
   }
 
   function send(name, params) {
@@ -236,11 +238,14 @@
       return;
     }
 
+    const destination = target(control);
+
     send('component_click', {
       ...context(control),
       element: sdcNames(control)[0],
-      link_text: label(control),
-      ...target(control),
+      // The text of a phone link is usually the number itself.
+      link_text: destination.link_type === 'phone' ? '' : label(control),
+      ...destination,
     });
   }
 
@@ -282,19 +287,22 @@
     });
   }
 
-  function onIntersect(entries) {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) {
-        return;
-      }
+  function markViewed(container) {
+    if (viewed.has(container)) {
+      return;
+    }
 
-      if (entry.intersectionRatio < 0.5 && entry.intersectionRect.height < window.innerHeight / 2) {
-        return;
-      }
+    viewed.add(container);
+    viewObservers.forEach((observer) => observer.unobserve(container));
+    send('component_view', context(container));
+  }
 
-      viewObserver.unobserve(entry.target);
-      send('component_view', context(entry.target));
-    });
+  function onHalfVisible(entries) {
+    entries.filter((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.5).forEach((entry) => markViewed(entry.target));
+  }
+
+  function onMiddleCrossed(entries) {
+    entries.filter((entry) => entry.isIntersecting).forEach((entry) => markViewed(entry.target));
   }
 
   function observeViews(root) {
@@ -302,11 +310,20 @@
       return;
     }
 
-    viewObserver = viewObserver || new IntersectionObserver(onIntersect, { threshold: VIEW_THRESHOLDS });
+    // A component crossing the middle of the viewport fills at least half of
+    // it, so a component more than twice the viewport height is still viewed.
+    if (!viewObservers.length) {
+      viewObservers = [new IntersectionObserver(onHalfVisible, { threshold: 0.5 }), new IntersectionObserver(onMiddleCrossed, { rootMargin: '-50% 0px -50% 0px' })];
+    }
 
-    once('do-analytics-view', CONTAINER, root)
+    // An Ajax response can attach behaviors to a component itself, which a
+    // selector search of its descendants does not return.
+    const self = root instanceof Element && root.matches(CONTAINER) ? once('do-analytics-view', root) : [];
+
+    self
+      .concat(once('do-analytics-view', CONTAINER, root))
       .filter((container) => outermost(container) === container && !container.closest(IGNORED))
-      .forEach((container) => viewObserver.observe(container));
+      .forEach((container) => viewObservers.forEach((observer) => observer.observe(container)));
   }
 
   function trackScroll() {

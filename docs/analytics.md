@@ -31,7 +31,7 @@ The script sends 5 events. Their names differ from the `click`, `scroll` and `fo
 | Event | Sent when | Parameters |
 |---|---|---|
 | `component_click` | A visitor clicks a link, button, `summary`, checkbox, radio button or element with a `button`, `tab` or `menuitem` role | Component context and click parameters |
-| `component_view` | Half of a component is visible for the first time on the page. A component taller than the viewport counts when it fills half the viewport. | Component context |
+| `component_view` | Half of a component is visible, or the component crosses the middle of the viewport, for the first time on the page | Component context |
 | `component_form_submit` | A visitor submits a form, before the server validates it | Component context and `form_id` |
 | `scroll_depth` | A visitor reaches 25, 50, 75 and 100 percent of a scrollable page, once each | `percent`, `page_type` and `page_id` |
 | `content_copy` | A visitor copies selected text | Component context, `element` and `text_length` |
@@ -62,7 +62,7 @@ The following table lists the parameters that belong to 1 or 2 events:
 | Parameter | Sent with | Value |
 |---|---|---|
 | `element` | `component_click`, `content_copy` | The theme component that holds the clicked or copied element, such as `button` or `link`. `content_copy` sends `code` for text copied from `pre` or `code`. |
-| `link_text` | `component_click` | The control's `aria-label`, then its visible text, then its `title`, then its text including visually hidden text, then the `alt` of an image inside it |
+| `link_text` | `component_click` | The control's `aria-label`, then its visible text, then its `title`, then its text including visually hidden text, then the `alt` of an image inside it. Left out for `phone`. |
 | `link_type` | `component_click` | `internal`, `external`, `download`, `email`, `phone`, `anchor`, `lightbox` or `button` |
 | `link_url` | `component_click` | The path of an internal link, or the origin and path of an external link. Left out for `email`, `phone` and `button`. |
 | `link_domain` | `component_click` | The host name of an external link |
@@ -76,7 +76,7 @@ Every text value is cut to 100 characters, which is the longest event parameter 
 
 ## What the events leave out
 
-The events carry no form values, no copied text, no email addresses and no phone numbers. URLs lose their query string, because GA4's terms forbid sending personal information and a query string can carry it.
+The events carry no form values, no copied text and no phone numbers. An email address in any text value becomes `[email]`. URLs lose their query string, because GA4's terms forbid sending personal information and a query string can carry it.
 
 The admin toolbar and contextual links send no events. To stop clicks, views, form submissions and copies on any other element from sending events, add a `data-analytics-ignore` attribute to it or to an ancestor.
 
