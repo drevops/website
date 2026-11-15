@@ -24,11 +24,8 @@ Feature: Contact form
     And I fill in "Message" with "This is a test message for the contact form."
     And I save screenshot
     And I press "Send message"
-    # The form may not send actual messages in the test environment
-    # So we'll just verify that the form was submitted successfully
     Then I should not see an "#edit-submit" element
-    # @todo Enable one the messages are fixed.
-    # Then I should see the text "Your message has been sent."
+    And I should see "Your message has been sent."
     And I save screenshot
 
   @javascript

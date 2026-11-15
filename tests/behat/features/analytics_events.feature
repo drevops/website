@@ -7,8 +7,9 @@ Feature: Analytics events
 
   Background:
     Given the following "civictheme_page" content exists:
-      | title                        | status |
-      | [TEST] Page Analytics events | 1      |
+      | title                            | status |
+      | [TEST] Page Analytics events     | 1      |
+      | [TEST] Analytics referenced page | 1      |
 
     And the following fields for the "civictheme_manual_list" paragraph exist in the field "field_c_n_components" within the "civictheme_page" "node" entity with the value "[TEST] Page Analytics events" in the field "title":
       | field_c_p_title             | [TEST] Analytics list |
@@ -26,6 +27,9 @@ Feature: Analytics events
       | field_c_p_link:title | [TEST] Analytics link 2         |
       | field_c_p_link:uri   | https://example.com/analytics   |
       | field_c_p_theme      | light                           |
+    And the following fields for the "civictheme_promo_card_ref" paragraph exist in the field "field_c_p_list_items" within the "civictheme_manual_list" "paragraph" entity with the value "[TEST] Analytics list" in the field "field_c_p_title":
+      | field_c_p_reference | [TEST] Analytics referenced page |
+      | field_c_p_theme     | light                            |
     And the following fields for the "civictheme_content" paragraph exist in the field "field_c_n_components" within the "civictheme_page" "node" entity with the value "[TEST] Page Analytics events" in the field "title":
       | field_c_p_theme            | light                                                                                        |
       | field_c_p_vertical_spacing | both                                                                                         |
@@ -40,6 +44,7 @@ Feature: Analytics events
     And the element ".ct-list" with the attribute "data-axel-param-component-title" and the value "[TEST] Analytics list" should exist
     And the element ".ct-promo-card" with the attribute "data-axel-param-component-title" and the value "[TEST] Analytics card 1" should exist
     And the element ".ct-promo-card" with the attribute "data-axel-param-component-id" and a value containing "paragraph:" should exist
+    And the element "[data-axel-param-component='promo_card_ref']" with the attribute "data-axel-param-component-title" and the value "[TEST] Analytics referenced page" should exist
     And the element ".ct-basic-content" with the attribute "data-axel-param-component" and the value "content" should exist
     And the element "#block-drevops-content" with the attribute "data-axel-param-region" and the value "content" should exist
     And the element "#block-drevops-content" with the attribute "data-axel-param-block" and the value "drevops_content" should exist
@@ -94,3 +99,17 @@ Feature: Analytics events
     Then the analytics event "form_start" should have been sent with:
       | form_name | webform:contact |
       | component | webform         |
+
+  @javascript
+  Scenario: Submitting the contact form sends a form submit from its inline confirmation
+    Given I am an anonymous user
+    When I go to "/contact"
+    And I fill in "Name" with "[TEST] Analytics user"
+    And I fill in "Email" with "do-test@example.com"
+    And I fill in "Message" with "[TEST] Analytics form submission."
+    And I press "Send message"
+    And I wait for 1 second
+    Then I should see "Your message has been sent."
+    And the element ".webform-confirmation" with the attribute "data-axel-form-submitted" and the value "webform:contact" should exist
+    And the analytics event "form_submit" should have been sent with:
+      | form_name | webform:contact |
