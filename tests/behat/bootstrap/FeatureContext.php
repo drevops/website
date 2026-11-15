@@ -162,6 +162,32 @@ JS;
   }
 
   /**
+   * Assert that an element is not covered by another element above it.
+   *
+   * @code
+   * Then the element ".webform-confirmation" should not be covered by the element ".ct-header"
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the element :selector should not be covered by the element :reference')]
+  public function elementAssertNotCoveredBy(string $selector, string $reference): void {
+    $reference_js = json_encode($reference, JSON_UNESCAPED_SLASHES);
+    $script = <<<JS
+      var reference = document.querySelector({$reference_js});
+      if (!reference) {
+        throw new Error('Element with selector ' + {$reference_js} + ' not found.');
+      }
+      return [{{ELEMENT}}.getBoundingClientRect().top, reference.getBoundingClientRect().bottom];
+JS;
+    [$top, $reference_bottom] = $this->elementExecuteJs($selector, $script);
+
+    if ($top < $reference_bottom) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to start below "%s" (y=%d), but it starts at y=%d.', $selector, $reference, $reference_bottom, $top));
+    }
+  }
+
+  /**
    * Assert the opacity of an element's background colour.
    *
    * @code

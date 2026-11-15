@@ -15,7 +15,7 @@ The module loads `axel.drupal.gtag.min.js` from jsDelivr on every page except ad
 | `data-axel-event` | Every paragraph, every node rendered in a view mode other than `full`, and every placed block | `component_click` |
 | `data-axel-param-component` | Paragraphs and nodes | The paragraph's bundle or the node's view mode, without the `civictheme_` prefix, such as `promo_card` |
 | `data-axel-param-component-id` | Paragraphs and nodes | `paragraph:<id>` or `node:<id>` |
-| `data-axel-param-component-title` | Paragraphs with a `field_c_p_title` value, and nodes | The title as plain text, cut to 100 characters, with email addresses replaced by `[email]` |
+| `data-axel-param-component-title` | Paragraphs with a `field_c_p_title` value, reference paragraphs and nodes | The title as plain text, cut to 100 characters, with email addresses replaced by `[email]`. A reference paragraph, such as `promo_card_ref`, uses the title of the content it references. |
 | `data-axel-param-block` | Placed blocks | The block's machine name, such as `drevops_footer_menu_1` |
 | `data-axel-param-region` | Placed blocks | The theme region, such as `footer_middle_5` |
 | `data-axel-form` | Every form | `webform:<id>` for a webform, such as `webform:contact`, otherwise the Drupal form ID |
@@ -36,7 +36,7 @@ Axel gathers parameters from the clicked element up through its ancestors, and t
 
 The module's parameters are the `data-axel-param-*` values and the `page_type` and `page_id` settings. The [Axel README](https://github.com/drevops/axel#event-types) describes how Axel derives each parameter. It never sends what a visitor types, strips query strings from URLs and sends `mailto:` and `tel:` links as their scheme only.
 
-The contact webform confirms with `url_message`, which shows its confirmation as a status message after a redirect. That message carries no `data-axel-form-submitted`, so the contact form sends no `form_submit`.
+A webform sends `form_submit` only when its confirmation type is **Inline** or **Page**, because those render the confirmation the module marks. The contact webform confirms inline and submits with AJAX, so refreshing the confirmation never resubmits the enquiry. A confirmation shown as a status message after a redirect carries no marker and sends no `form_submit`.
 
 To keep an element out of every event, add `data-axel-skip` to it or to an ancestor.
 

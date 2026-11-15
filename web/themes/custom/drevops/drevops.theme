@@ -28,6 +28,7 @@ require_once __DIR__ . '/includes/footer_navigation.inc';
 require_once __DIR__ . '/includes/content_moderation.inc';
 require_once __DIR__ . '/includes/admin_navigation.inc';
 require_once __DIR__ . '/includes/error_page.inc';
+require_once __DIR__ . '/includes/webform.inc';
 
 /**
  * Adds a CSS class to a block wrapper.
