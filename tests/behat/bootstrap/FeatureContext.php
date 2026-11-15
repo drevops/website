@@ -245,30 +245,6 @@ JS;
   }
 
   /**
-   * Assert that the last analytics event of a name omits a parameter.
-   *
-   * @code
-   * Then the last "component_click" analytics event should not have the parameter "link_url"
-   * @endcode
-   *
-   * @javascript
-   */
-  #[Then('the last :name analytics event should not have the parameter :parameter')]
-  public function analyticsAssertLastEventOmitsParameter(string $name, string $parameter): void {
-    $events = $this->analyticsEvents($name);
-
-    if ($events === []) {
-      throw new \RuntimeException(sprintf('No "%s" analytics event was sent.', $name));
-    }
-
-    $last = end($events);
-
-    if (array_key_exists($parameter, $last)) {
-      throw new \RuntimeException(sprintf('Expected the last "%s" analytics event to omit "%s", but it was sent with %s.', $name, $parameter, json_encode($last)));
-    }
-  }
-
-  /**
    * Read the parameters of the analytics events of a name sent so far.
    *
    * @return array<int, array<string, mixed>>

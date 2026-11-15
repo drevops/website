@@ -32,7 +32,7 @@ class FormAlterHookTest extends UnitTestCase {
   public function testFormAlter(array $form, string $form_id, string $expected): void {
     new FormAlterHook()->formAlter($form, $this->createMock(FormStateInterface::class), $form_id);
 
-    $this->assertSame($expected, $form['#attributes']['data-analytics-form']);
+    $this->assertSame($expected, $form['#attributes']['data-axel-form']);
   }
 
   /**
@@ -53,7 +53,7 @@ class FormAlterHookTest extends UnitTestCase {
 
     new FormAlterHook()->formAlter($form, $this->createMock(FormStateInterface::class), 'user_login_form');
 
-    $this->assertSame(['class' => ['ct-webform'], 'data-analytics-form' => 'user_login_form'], $form['#attributes']);
+    $this->assertSame(['class' => ['ct-webform'], 'data-axel-form' => 'user_login_form'], $form['#attributes']);
   }
 
 }

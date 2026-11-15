@@ -12,12 +12,13 @@ use Drupal\do_analytics\Hook\PreprocessHook;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\Tests\UnitTestCase;
+use Drupal\webform\WebformInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests the analytics attributes added to paragraphs, nodes and blocks.
+ * Tests the Axel attributes added to components, blocks and confirmations.
  *
  * That the attributes reach the rendered component roots is asserted in the
  * Behat feature.
@@ -66,9 +67,10 @@ class PreprocessHookTest extends UnitTestCase {
       TRUE,
       'Senior delivery',
       [
-        'data-analytics-component' => 'promo_card',
-        'data-analytics-component-id' => 'paragraph:12',
-        'data-analytics-component-title' => 'Senior delivery',
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'promo_card',
+        'data-axel-param-component-id' => 'paragraph:12',
+        'data-axel-param-component-title' => 'Senior delivery',
       ],
     ];
     yield 'with an empty title' => [
@@ -76,8 +78,9 @@ class PreprocessHookTest extends UnitTestCase {
       TRUE,
       NULL,
       [
-        'data-analytics-component' => 'promo_card',
-        'data-analytics-component-id' => 'paragraph:12',
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'promo_card',
+        'data-axel-param-component-id' => 'paragraph:12',
       ],
     ];
     yield 'without a title field' => [
@@ -85,8 +88,9 @@ class PreprocessHookTest extends UnitTestCase {
       FALSE,
       NULL,
       [
-        'data-analytics-component' => 'promo_card',
-        'data-analytics-component-id' => 'paragraph:12',
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'promo_card',
+        'data-axel-param-component-id' => 'paragraph:12',
       ],
     ];
     yield 'unsaved' => [
@@ -94,8 +98,9 @@ class PreprocessHookTest extends UnitTestCase {
       TRUE,
       'Senior delivery',
       [
-        'data-analytics-component' => 'promo_card',
-        'data-analytics-component-title' => 'Senior delivery',
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'promo_card',
+        'data-axel-param-component-title' => 'Senior delivery',
       ],
     ];
   }
@@ -120,9 +125,10 @@ class PreprocessHookTest extends UnitTestCase {
     $this->hook()->node($variables);
 
     $this->assertSame([
-      'data-analytics-component' => 'promo_card',
-      'data-analytics-component-id' => 'node:171',
-      'data-analytics-component-title' => 'Generated blog post 1',
+      'data-axel-event' => 'component_click',
+      'data-axel-param-component' => 'promo_card',
+      'data-axel-param-component-id' => 'node:171',
+      'data-axel-param-component-title' => 'Generated blog post 1',
     ], $variables['attributes']);
   }
 
@@ -173,8 +179,9 @@ class PreprocessHookTest extends UnitTestCase {
     $this->hook(['drevops_footer_menu_1' => $block])->block($variables);
 
     $this->assertSame([
-      'data-analytics-block' => 'drevops_footer_menu_1',
-      'data-analytics-region' => 'footer_middle_5',
+      'data-axel-event' => 'component_click',
+      'data-axel-param-block' => 'drevops_footer_menu_1',
+      'data-axel-param-region' => 'footer_middle_5',
       'id' => 'block-drevops-footer-menu-1',
     ], $variables['attributes']);
   }
@@ -187,7 +194,7 @@ class PreprocessHookTest extends UnitTestCase {
 
     $this->hook()->block($variables);
 
-    $this->assertSame(['data-analytics-block' => 'drevops_removed'], $variables['attributes']);
+    $this->assertSame(['data-axel-event' => 'component_click', 'data-axel-param-block' => 'drevops_removed'], $variables['attributes']);
   }
 
   /**
@@ -212,6 +219,31 @@ class PreprocessHookTest extends UnitTestCase {
     yield 'no id' => [[]];
     yield 'empty id' => [['#id' => '']];
     yield 'not a string' => [['#id' => 12]];
+  }
+
+  /**
+   * Tests that a webform confirmation reports the submission of its webform.
+   */
+  public function testWebformConfirmation(): void {
+    $webform = $this->createMock(WebformInterface::class);
+    $webform->method('id')->willReturn('civictheme_enquiry');
+
+    $variables = ['webform' => $webform, 'attributes' => ['class' => ['webform-confirmation']]];
+
+    $this->hook()->webformConfirmation($variables);
+
+    $this->assertSame(['data-axel-form-submitted' => 'webform:civictheme_enquiry', 'class' => ['webform-confirmation']], $variables['attributes']);
+  }
+
+  /**
+   * Tests that a confirmation without a webform is left alone.
+   */
+  public function testWebformConfirmationWithoutWebform(): void {
+    $variables = ['webform' => NULL, 'attributes' => []];
+
+    $this->hook()->webformConfirmation($variables);
+
+    $this->assertSame([], $variables['attributes']);
   }
 
   /**

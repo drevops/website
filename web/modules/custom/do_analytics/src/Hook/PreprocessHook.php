@@ -11,9 +11,10 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\do_analytics\AnalyticsAttributes;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\webform\WebformInterface;
 
 /**
- * Marks rendered components with the context the analytics tracker reports.
+ * Renders the Axel attributes that report clicks inside components.
  */
 final class PreprocessHook {
 
@@ -76,15 +77,24 @@ final class PreprocessHook {
       return;
     }
 
-    $attributes = [AnalyticsAttributes::BLOCK => $id];
-
     $block = $this->entityTypeManager->getStorage('block')->load($id);
+    $region = $block instanceof BlockInterface ? $block->getRegion() : NULL;
 
-    if ($block instanceof BlockInterface) {
-      $attributes[AnalyticsAttributes::REGION] = $block->getRegion();
+    AnalyticsAttributes::merge($variables, AnalyticsAttributes::block($id, $region));
+  }
+
+  /**
+   * Implements hook_preprocess_HOOK() for 'webform_confirmation'.
+   */
+  #[Hook('preprocess_webform_confirmation')]
+  public function webformConfirmation(array &$variables): void {
+    $webform = $variables['webform'] ?? NULL;
+
+    if (!$webform instanceof WebformInterface) {
+      return;
     }
 
-    AnalyticsAttributes::merge($variables, $attributes);
+    AnalyticsAttributes::merge($variables, [AnalyticsAttributes::FORM_SUBMITTED => FormAlterHook::webformName((string) $webform->id())]);
   }
 
   /**

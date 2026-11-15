@@ -22,14 +22,14 @@ use Symfony\Component\Routing\Route;
 class PageAttachmentsHookTest extends UnitTestCase {
 
   /**
-   * Tests the page context attached to a front-end page.
+   * Tests the Axel library and settings attached to a front-end page.
    *
    * @param mixed $node
    *   The node route parameter, as accepted by hook().
    * @param string|null $route_name
    *   The name of the current route.
-   * @param array{type: string, id: string} $expected
-   *   The expected page context.
+   * @param array<string, string> $expected
+   *   The expected static event parameters.
    */
   #[DataProvider('dataProviderAttach')]
   public function testAttach(mixed $node, ?string $route_name, array $expected): void {
@@ -37,8 +37,11 @@ class PageAttachmentsHookTest extends UnitTestCase {
 
     $this->hook($node, $route_name, FALSE)->attach($attachments);
 
-    $this->assertSame(['core/drupal', 'do_analytics/tracker'], $attachments['#attached']['library']);
-    $this->assertSame($expected, $attachments['#attached']['drupalSettings']['doAnalytics']['page']);
+    $this->assertSame(['core/drupal', 'do_analytics/axel'], $attachments['#attached']['library']);
+    $this->assertSame([
+      'types' => ['click', 'form_start', 'field_complete', 'form_submit'],
+      'properties' => $expected,
+    ], $attachments['#attached']['drupalSettings']['axel']);
     $this->assertContains('route', $attachments['#cache']['contexts']);
   }
 
@@ -46,11 +49,11 @@ class PageAttachmentsHookTest extends UnitTestCase {
    * Data provider for testAttach.
    */
   public static function dataProviderAttach(): \Iterator {
-    yield 'node page' => ['node', 'entity.node.canonical', ['type' => 'civictheme_page', 'id' => 'node:1']];
-    yield 'unsaved node' => ['unsaved', 'entity.node.preview', ['type' => 'entity.node.preview', 'id' => '']];
-    yield 'node id only' => ['1', 'entity.node.revision', ['type' => 'entity.node.revision', 'id' => '']];
-    yield 'view page' => [NULL, 'view.blog.page_1', ['type' => 'view.blog.page_1', 'id' => '']];
-    yield 'no route' => [NULL, NULL, ['type' => '', 'id' => '']];
+    yield 'node page' => ['node', 'entity.node.canonical', ['page_type' => 'civictheme_page', 'page_id' => 'node:1']];
+    yield 'unsaved node' => ['unsaved', 'entity.node.preview', ['page_type' => 'entity.node.preview']];
+    yield 'node id only' => ['1', 'entity.node.revision', ['page_type' => 'entity.node.revision']];
+    yield 'view page' => [NULL, 'view.blog.page_1', ['page_type' => 'view.blog.page_1']];
+    yield 'no route' => [NULL, NULL, []];
   }
 
   /**

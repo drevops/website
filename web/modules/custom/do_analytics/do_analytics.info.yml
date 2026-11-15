@@ -1,6 +1,6 @@
 name: DrevOps Website Analytics
 type: module
-description: Sends component-level interaction events to Google Analytics.
+description: Loads Axel and renders its attributes so clicks and form interactions reach Google Analytics with their context.
 core_version_requirement: ^11
 package: website
 dependencies:

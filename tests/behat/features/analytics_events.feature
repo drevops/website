@@ -27,92 +27,70 @@ Feature: Analytics events
       | field_c_p_link:uri   | https://example.com/analytics   |
       | field_c_p_theme      | light                           |
     And the following fields for the "civictheme_content" paragraph exist in the field "field_c_n_components" within the "civictheme_page" "node" entity with the value "[TEST] Page Analytics events" in the field "title":
-      | field_c_p_theme            | light                                                                                                            |
-      | field_c_p_vertical_spacing | both                                                                                                             |
-      | field_c_p_content:value    | <p><a href="mailto:do-test@example.com">Email do-test@example.com</a> <a href="/do-test/guide.pdf">Guide</a></p> |
-      | field_c_p_content:format   | civictheme_rich_text                                                                                             |
+      | field_c_p_theme            | light                                                                                        |
+      | field_c_p_vertical_spacing | both                                                                                         |
+      | field_c_p_content:value    | <p><a href="mailto:do-test@example.com">Email</a> <a href="/do-test/guide.pdf">Guide</a></p> |
+      | field_c_p_content:format   | civictheme_rich_text                                                                         |
 
-  Scenario: Components and blocks carry the context the tracker reports
+  Scenario: Components and blocks carry the Axel attributes
     Given I am an anonymous user
     When I visit the "civictheme_page" content page with the title "[TEST] Page Analytics events"
-    Then the element ".ct-list" with the attribute "data-analytics-component" and the value "manual_list" should exist
-    And the element ".ct-list" with the attribute "data-analytics-component-title" and the value "[TEST] Analytics list" should exist
-    And the element ".ct-promo-card" with the attribute "data-analytics-component-title" and the value "[TEST] Analytics card 1" should exist
-    And the element ".ct-promo-card" with the attribute "data-analytics-component-id" and a value containing "paragraph:" should exist
-    And the element ".ct-basic-content" with the attribute "data-analytics-component" and the value "content" should exist
-    And the element "#block-drevops-content" with the attribute "data-analytics-region" and the value "content" should exist
-    And the element "#block-drevops-content" with the attribute "data-analytics-block" and the value "drevops_content" should exist
+    Then the element ".ct-list" with the attribute "data-axel-event" and the value "component_click" should exist
+    And the element ".ct-list" with the attribute "data-axel-param-component" and the value "manual_list" should exist
+    And the element ".ct-list" with the attribute "data-axel-param-component-title" and the value "[TEST] Analytics list" should exist
+    And the element ".ct-promo-card" with the attribute "data-axel-param-component-title" and the value "[TEST] Analytics card 1" should exist
+    And the element ".ct-promo-card" with the attribute "data-axel-param-component-id" and a value containing "paragraph:" should exist
+    And the element ".ct-basic-content" with the attribute "data-axel-param-component" and the value "content" should exist
+    And the element "#block-drevops-content" with the attribute "data-axel-param-region" and the value "content" should exist
+    And the element "#block-drevops-content" with the attribute "data-axel-param-block" and the value "drevops_content" should exist
+    And the element "script[src*='@drevops/axel@']" with the attribute "integrity" and a value containing "sha384-" should exist
 
   @javascript
-  Scenario: Clicking a link in a card sends the card and its list as context
-    Given I am an anonymous user
-    When I visit the "civictheme_page" content page with the title "[TEST] Page Analytics events"
-    And I disable link navigation
-    And I click on the element "[data-analytics-component-title='[TEST] Analytics card 2'] a[href='https://example.com/analytics']"
-    Then the analytics event "component_click" should have been sent with:
-      | component          | promo_card                    |
-      | component_title    | [TEST] Analytics card 2       |
-      | component_position | 2                             |
-      | parent_component   | manual_list                   |
-      | region             | content                       |
-      | block              | drevops_content               |
-      | page_type          | civictheme_page               |
-      | link_type          | external                      |
-      | link_url           | https://example.com/analytics |
-      | link_domain        | example.com                   |
-
-  @javascript
-  Scenario: Clicking an internal link in a card reports its path
+  Scenario: Clicking a link in a card sends the card and its block as context
     Given I am an anonymous user
     When I visit the "civictheme_page" content page with the title "[TEST] Page Analytics events"
     And I disable link navigation
-    And I click on the element "[data-analytics-component-title='[TEST] Analytics card 1'] a[href$='/contact']"
+    And I click on the element "[data-axel-param-component-title='[TEST] Analytics card 2'] a[href='https://example.com/analytics']"
     Then the analytics event "component_click" should have been sent with:
-      | component          | promo_card              |
-      | component_title    | [TEST] Analytics card 1 |
-      | component_position | 1                       |
-      | link_type          | internal                |
-      | link_url           | /contact                |
+      | component       | promo_card                    |
+      | component_title | [TEST] Analytics card 2       |
+      | region          | content                       |
+      | block           | drevops_content               |
+      | page_type       | civictheme_page               |
+      | click_type      | link                          |
+      | link_url        | https://example.com/analytics |
 
   @javascript
-  Scenario: Email and download links are classified, and the email address is not sent
+  Scenario: Email and download links in content send the content component
     Given I am an anonymous user
     When I visit the "civictheme_page" content page with the title "[TEST] Page Analytics events"
     And I disable link navigation
     And I click on the element ".ct-basic-content a[href$='/do-test/guide.pdf']"
     Then the analytics event "component_click" should have been sent with:
-      | component | content            |
-      | link_type | download           |
-      | link_url  | /do-test/guide.pdf |
-      | link_text | Guide              |
+      | component | content |
+      | link_text | Guide   |
     When I click on the element ".ct-basic-content a[href^='mailto:']"
     Then the analytics event "component_click" should have been sent with:
-      | component | content       |
-      | link_type | email         |
-      | link_text | Email [email] |
-    And the last "component_click" analytics event should not have the parameter "link_url"
+      | component | content |
+      | link_text | Email   |
+      | link_url  | mailto: |
 
   @javascript
   Scenario: Clicking a footer menu link sends the block and region it is placed in
     Given I am an anonymous user
     When I visit the "civictheme_page" content page with the title "[TEST] Page Analytics events"
     And I disable link navigation
-    And I click on the element "[data-analytics-block='drevops_footer_menu_1'] a[href]"
+    And I click on the element "[data-axel-param-block='drevops_footer_menu_1'] a[href]"
     Then the analytics event "component_click" should have been sent with:
-      | component | navigation            |
-      | element   | link                  |
-      | block     | drevops_footer_menu_1 |
-      | region    | footer_middle_5       |
-      | link_type | internal              |
+      | block      | drevops_footer_menu_1 |
+      | region     | footer_middle_5       |
+      | click_type | link                  |
 
   @javascript
-  Scenario: A component scrolled into view sends a view event
+  Scenario: Focusing a webform field sends a form start with the webform name
     Given I am an anonymous user
-    When I visit the "civictheme_page" content page with the title "[TEST] Page Analytics events"
-    And I scroll to the element ".ct-promo-card"
-    And I wait for 1 second
-    Then the analytics event "component_view" should have been sent with:
-      | component        | promo_card              |
-      | component_title  | [TEST] Analytics card 1 |
-      | parent_component | manual_list             |
-      | page_type        | civictheme_page         |
+    When I go to "/contact"
+    And I click on the element "form[data-axel-form='webform:contact'] input[name='name']"
+    Then the analytics event "form_start" should have been sent with:
+      | form_name | webform:contact |
+      | component | webform         |

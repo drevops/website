@@ -8,44 +8,41 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
 
 /**
- * Builds the data attributes the analytics tracker reads its context from.
+ * Builds the Axel data attributes rendered into the page.
+ *
+ * @see https://github.com/drevops/axel#attributes
  */
 final class AnalyticsAttributes {
 
   /**
-   * Type of the component an element belongs to, such as 'promo_card'.
+   * Names the click event for every link and button inside the element.
    */
-  public const string COMPONENT = 'data-analytics-component';
+  public const string EVENT = 'data-axel-event';
 
   /**
-   * Entity behind the component, as '<entity type>:<id>'.
+   * Marks a form for the 'form_start' and 'field_complete' events.
    */
-  public const string COMPONENT_ID = 'data-analytics-component-id';
+  public const string FORM = 'data-axel-form';
 
   /**
-   * Human-readable title of the component.
+   * Sends 'form_submit' for the named form when the element is on the page.
    */
-  public const string COMPONENT_TITLE = 'data-analytics-component-title';
+  public const string FORM_SUBMITTED = 'data-axel-form-submitted';
 
   /**
-   * Machine name of the theme region a block is placed in.
+   * Name of the event sent for clicks inside a component.
    */
-  public const string REGION = 'data-analytics-region';
-
-  /**
-   * Machine name of a placed block.
-   */
-  public const string BLOCK = 'data-analytics-block';
-
-  /**
-   * Identifier of a form that stays the same wherever the form is placed.
-   */
-  public const string FORM = 'data-analytics-form';
+  public const string CLICK_EVENT = 'component_click';
 
   /**
    * Longest value Google Analytics 4 accepts for an event parameter.
    */
   public const int MAX_LENGTH = 100;
+
+  /**
+   * Prefix of an attribute that adds a parameter to every event.
+   */
+  private const string PARAM_PREFIX = 'data-axel-param-';
 
   /**
    * Prefix CivicTheme puts on its bundles and view modes.
@@ -58,7 +55,7 @@ final class AnalyticsAttributes {
   private const string EMAIL = '/[^\s@<>()]+@[^\s@<>()]+\.[a-z]{2,}/iu';
 
   /**
-   * Builds the attributes that mark an element as a component.
+   * Builds the attributes that report clicks inside a component.
    *
    * @param string $name
    *   Machine name of the bundle or view mode the component renders.
@@ -68,14 +65,39 @@ final class AnalyticsAttributes {
    *   Title of the component, possibly holding markup.
    *
    * @return array<string, string>
-   *   The attributes, without the ones that have no value.
+   *   The attributes, without the parameters that have no value.
    */
   public static function component(string $name, ?string $id = NULL, string $title = ''): array {
-    return array_filter([
-      self::COMPONENT => self::name($name),
-      self::COMPONENT_ID => $id ?? '',
-      self::COMPONENT_TITLE => self::text($title),
-    ], static fn(string $value): bool => $value !== '');
+    return self::event([
+      'component' => self::name($name),
+      'component_id' => $id ?? '',
+      'component_title' => self::text($title),
+    ]);
+  }
+
+  /**
+   * Builds the attributes that report clicks inside a placed block.
+   *
+   * @param string $id
+   *   Machine name of the block.
+   * @param string|null $region
+   *   Theme region the block is placed in, or NULL when unknown.
+   *
+   * @return array<string, string>
+   *   The attributes, without the parameters that have no value.
+   */
+  public static function block(string $id, ?string $region = NULL): array {
+    return self::event([
+      'block' => $id,
+      'region' => $region ?? '',
+    ]);
+  }
+
+  /**
+   * Converts a parameter name into its Axel attribute name.
+   */
+  public static function param(string $name): string {
+    return self::PARAM_PREFIX . str_replace('_', '-', $name);
   }
 
   /**
@@ -92,7 +114,8 @@ final class AnalyticsAttributes {
   /**
    * Reduces a value to plain text that fits an event parameter.
    *
-   * Email addresses become '[email]'.
+   * Axel sends rendered parameters as they are, so email addresses become
+   * '[email]' here.
    */
   public static function text(string $value): string {
     $value = Html::decodeEntities(strip_tags($value));
@@ -129,6 +152,25 @@ final class AnalyticsAttributes {
     }
 
     $variables['attributes'] = $attributes + (is_array($existing) ? $existing : []);
+  }
+
+  /**
+   * Builds the click event attribute with its parameters.
+   *
+   * @param array<string, string> $params
+   *   The parameters, keyed by name.
+   *
+   * @return array<string, string>
+   *   The attributes, without the parameters that have no value.
+   */
+  protected static function event(array $params): array {
+    $attributes = [self::EVENT => self::CLICK_EVENT];
+
+    foreach (array_filter($params, static fn(string $value): bool => $value !== '') as $name => $value) {
+      $attributes[self::param($name)] = $value;
+    }
+
+    return $attributes;
   }
 
 }

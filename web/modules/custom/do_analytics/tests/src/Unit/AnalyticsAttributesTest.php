@@ -89,9 +89,10 @@ class AnalyticsAttributesTest extends UnitTestCase {
       'paragraph:12',
       'Senior delivery',
       [
-        'data-analytics-component' => 'promo_card',
-        'data-analytics-component-id' => 'paragraph:12',
-        'data-analytics-component-title' => 'Senior delivery',
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'promo_card',
+        'data-axel-param-component-id' => 'paragraph:12',
+        'data-axel-param-component-title' => 'Senior delivery',
       ],
     ];
     yield 'unsaved' => [
@@ -99,8 +100,9 @@ class AnalyticsAttributesTest extends UnitTestCase {
       NULL,
       'Senior delivery',
       [
-        'data-analytics-component' => 'promo_card',
-        'data-analytics-component-title' => 'Senior delivery',
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'promo_card',
+        'data-axel-param-component-title' => 'Senior delivery',
       ],
     ];
     yield 'no title' => [
@@ -108,8 +110,9 @@ class AnalyticsAttributesTest extends UnitTestCase {
       'paragraph:5',
       '',
       [
-        'data-analytics-component' => 'content',
-        'data-analytics-component-id' => 'paragraph:5',
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'content',
+        'data-axel-param-component-id' => 'paragraph:5',
       ],
     ];
     yield 'title of markup only' => [
@@ -117,10 +120,72 @@ class AnalyticsAttributesTest extends UnitTestCase {
       'paragraph:5',
       '<br>',
       [
-        'data-analytics-component' => 'content',
-        'data-analytics-component-id' => 'paragraph:5',
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'content',
+        'data-axel-param-component-id' => 'paragraph:5',
       ],
     ];
+    yield 'title with an email address' => [
+      'civictheme_content',
+      'paragraph:5',
+      'Write to alice@example.com',
+      [
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'content',
+        'data-axel-param-component-id' => 'paragraph:5',
+        'data-axel-param-component-title' => 'Write to [email]',
+      ],
+    ];
+  }
+
+  /**
+   * Tests the attributes that report clicks inside a placed block.
+   *
+   * @param string|null $region
+   *   The theme region.
+   * @param array<string, string> $expected
+   *   The expected attributes.
+   */
+  #[DataProvider('dataProviderBlock')]
+  public function testBlock(?string $region, array $expected): void {
+    $this->assertSame($expected, AnalyticsAttributes::block('drevops_footer_menu_1', $region));
+  }
+
+  /**
+   * Data provider for testBlock.
+   */
+  public static function dataProviderBlock(): \Iterator {
+    yield 'with a region' => [
+      'footer_middle_5',
+      [
+        'data-axel-event' => 'component_click',
+        'data-axel-param-block' => 'drevops_footer_menu_1',
+        'data-axel-param-region' => 'footer_middle_5',
+      ],
+    ];
+    yield 'without a region' => [
+      NULL,
+      [
+        'data-axel-event' => 'component_click',
+        'data-axel-param-block' => 'drevops_footer_menu_1',
+      ],
+    ];
+  }
+
+  /**
+   * Tests that parameter names become Axel attribute names.
+   */
+  #[DataProvider('dataProviderParam')]
+  public function testParam(string $name, string $expected): void {
+    $this->assertSame($expected, AnalyticsAttributes::param($name));
+  }
+
+  /**
+   * Data provider for testParam.
+   */
+  public static function dataProviderParam(): \Iterator {
+    yield 'single word' => ['region', 'data-axel-param-region'];
+    yield 'underscores' => ['component_title', 'data-axel-param-component-title'];
   }
 
   /**
@@ -129,10 +194,10 @@ class AnalyticsAttributesTest extends UnitTestCase {
   public function testMergeIntoArray(): void {
     $variables = ['attributes' => ['class' => ['card'], 'id' => 'card-1']];
 
-    AnalyticsAttributes::merge($variables, ['data-analytics-component' => 'promo_card']);
+    AnalyticsAttributes::merge($variables, ['data-axel-event' => 'promo_card']);
 
     $this->assertSame([
-      'data-analytics-component' => 'promo_card',
+      'data-axel-event' => 'promo_card',
       'class' => ['card'],
       'id' => 'card-1',
     ], $variables['attributes']);
@@ -145,10 +210,10 @@ class AnalyticsAttributesTest extends UnitTestCase {
     $attribute = new Attribute(['class' => ['card']]);
     $variables = ['attributes' => $attribute];
 
-    AnalyticsAttributes::merge($variables, ['data-analytics-component' => 'promo_card']);
+    AnalyticsAttributes::merge($variables, ['data-axel-event' => 'promo_card']);
 
     $this->assertSame($attribute, $variables['attributes']);
-    $this->assertSame('promo_card', $attribute->offsetGet('data-analytics-component')?->value());
+    $this->assertSame('promo_card', $attribute->offsetGet('data-axel-event')?->value());
     $this->assertTrue($attribute->hasClass('card'));
   }
 
@@ -160,9 +225,9 @@ class AnalyticsAttributesTest extends UnitTestCase {
    */
   #[DataProvider('dataProviderMergeIntoMissingAttributes')]
   public function testMergeIntoMissingAttributes(array $variables): void {
-    AnalyticsAttributes::merge($variables, ['data-analytics-block' => 'drevops_content']);
+    AnalyticsAttributes::merge($variables, ['data-axel-param-block' => 'drevops_content']);
 
-    $this->assertSame(['data-analytics-block' => 'drevops_content'], $variables['attributes']);
+    $this->assertSame(['data-axel-param-block' => 'drevops_content'], $variables['attributes']);
   }
 
   /**

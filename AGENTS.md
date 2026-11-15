@@ -107,7 +107,7 @@ The `docs/` directory contains **what** applies to this project:
 - `docs/releasing.md` - Version scheme and release process
 - `docs/sitemap.md` - XML sitemap module, coverage and generation
 - `docs/seo.md` - Meta tags, social share cards and structured data
-- `docs/analytics.md` - Google Analytics events, their context parameters and GA4 set-up
+- `docs/analytics.md` - Axel attributes, the Google Analytics events they send and GA4 set-up
 - `docs/csp.md` - The content security policy, its nonce and its derived script hash
 - `docs/related-content.md` - Related-content lists and topic pages
 - `docs/performance.md` - Image styles, self-hosted fonts and layout stability
