@@ -57,7 +57,7 @@ jobs:
       # The Lagoon CLI removes the environment through the API, so removal does
       # not depend on the Lagoon webhook endpoint resolving the project.
       - name: Remove environment after a PR is closed
-        run: ./vendor/bin/vortex-deploy-lagoon
+        run: ./vendor/drevops/vortex-tooling/src/vortex-deploy-lagoon
         env:
           VORTEX_DEPLOY_ACTION: destroy
           VORTEX_DEPLOY_LAGOON_BRANCH: pr-${{ github.event.pull_request.number }}
