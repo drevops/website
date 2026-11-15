@@ -305,7 +305,7 @@
     viewObserver = viewObserver || new IntersectionObserver(onIntersect, { threshold: VIEW_THRESHOLDS });
 
     once('do-analytics-view', CONTAINER, root)
-      .filter((container) => outermost(container) === container)
+      .filter((container) => outermost(container) === container && !container.closest(IGNORED))
       .forEach((container) => viewObserver.observe(container));
   }
 
