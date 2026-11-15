@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Then;
 use Behat\Step\When;
 use DrevOps\BehatSteps\DrupalContext;
@@ -190,6 +191,76 @@ JS;
     if (abs($alpha - (float) $opacity) > 0.005) {
       throw new \RuntimeException(sprintf('Expected element "%s" to have a background opacity of %s, but its background colour is "%s".', $selector, $opacity, $color));
     }
+  }
+
+  /**
+   * Stop clicked links from leaving the page.
+   *
+   * The page must stay loaded for the events a click sends to be read back.
+   *
+   * @code
+   * When I disable link navigation
+   * @endcode
+   *
+   * @javascript
+   */
+  #[When('I disable link navigation')]
+  public function analyticsDisableLinkNavigation(): void {
+    $this->getSession()->executeScript("document.addEventListener('click', function (event) { if (event.target.closest('a[href]')) { event.preventDefault(); } });");
+  }
+
+  /**
+   * Assert that an analytics event was sent with the given parameters.
+   *
+   * Reads the events the Google tag queued on the page, so it only sees the
+   * events sent to visitors the tag is configured for.
+   *
+   * @code
+   * Then the analytics event "component_click" should have been sent with:
+   *   | component | promo_card |
+   *   | link_type | external   |
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the analytics event :name should have been sent with:')]
+  public function analyticsAssertEventSent(string $name, TableNode $table): void {
+    $expected = [];
+
+    foreach ($table->getRows() as [$param, $value]) {
+      $expected[$param] = $value;
+    }
+
+    $events = $this->analyticsEvents($name);
+
+    foreach ($events as $params) {
+      $sent = array_map(static fn(mixed $value): string => is_scalar($value) ? (string) $value : (string) json_encode($value), $params);
+
+      if (array_intersect_assoc($expected, $sent) === $expected) {
+        return;
+      }
+    }
+
+    throw new \RuntimeException(sprintf('No "%s" analytics event was sent with %s. Sent: %s', $name, json_encode($expected), json_encode($events)));
+  }
+
+  /**
+   * Read the parameters of the analytics events of a name sent so far.
+   *
+   * @return array<int, array<string, mixed>>
+   *   The parameters of each event, oldest first.
+   */
+  protected function analyticsEvents(string $name): array {
+    $name_js = json_encode($name);
+    $script = <<<JS
+      return Array.prototype.filter.call(window.dataLayer || [], function (entry) {
+        return entry && entry[0] === 'event' && entry[1] === {$name_js};
+      }).map(function (entry) {
+        return entry[2] || {};
+      });
+JS;
+
+    return (array) $this->getSession()->getDriver()->evaluateScript($script);
   }
 
   /**

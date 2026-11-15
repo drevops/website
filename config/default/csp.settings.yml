@@ -17,6 +17,7 @@ enforce:
         - 'https://www.google.com'
         - 'https://cdnjs.cloudflare.com'
         - 'https://cdn.jsdelivr.net/gh/cferdinandi/tabby@12.0.3/dist/js/tabby.min.js'
+        - 'https://cdn.jsdelivr.net/npm/@drevops/axel@0.3.2/dist/axel.drupal.gtag.min.js'
         - 'https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.js'
         - 'https://unpkg.com/tippy.js@6.3.7/dist/tippy.umd.js'
     object-src:
