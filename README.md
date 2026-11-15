@@ -1,9 +1,6 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="web/themes/custom/drevops/assets/logos/logo_primary_dark_desktop.svg" />
-  <img width="300" src="web/themes/custom/drevops/assets/logos/logo_primary_light_desktop.svg" alt="Vortex Logo" />
-</picture>
+<img width="300" src=".github/assets/logo.svg" alt="DrevOps logo" />
 
 Drupal 11 implementation of DrevOps Website for DrevOps
 
