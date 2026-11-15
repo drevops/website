@@ -50,7 +50,7 @@ final class AnalyticsAttributes {
   /**
    * Prefix CivicTheme puts on its bundles and view modes.
    */
-  protected const string PREFIX = 'civictheme_';
+  private const string PREFIX = 'civictheme_';
 
   /**
    * Builds the attributes that mark an element as a component.

@@ -20,12 +20,12 @@ final class PreprocessHook {
   /**
    * Field holding the title of a CivicTheme paragraph.
    */
-  protected const string TITLE_FIELD = 'field_c_p_title';
+  private const string TITLE_FIELD = 'field_c_p_title';
 
   /**
    * View mode of a node rendered as its own page.
    */
-  protected const string FULL_VIEW_MODE = 'full';
+  private const string FULL_VIEW_MODE = 'full';
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,

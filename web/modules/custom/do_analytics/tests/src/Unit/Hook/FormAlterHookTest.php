@@ -30,7 +30,7 @@ class FormAlterHookTest extends UnitTestCase {
    */
   #[DataProvider('dataProviderFormAlter')]
   public function testFormAlter(array $form, string $form_id, string $expected): void {
-    (new FormAlterHook())->formAlter($form, $this->createMock(FormStateInterface::class), $form_id);
+    new FormAlterHook()->formAlter($form, $this->createMock(FormStateInterface::class), $form_id);
 
     $this->assertSame($expected, $form['#attributes']['data-analytics-form']);
   }
@@ -51,7 +51,7 @@ class FormAlterHookTest extends UnitTestCase {
   public function testExistingAttributesAreKept(): void {
     $form = ['#attributes' => ['class' => ['ct-webform']]];
 
-    (new FormAlterHook())->formAlter($form, $this->createMock(FormStateInterface::class), 'user_login_form');
+    new FormAlterHook()->formAlter($form, $this->createMock(FormStateInterface::class), 'user_login_form');
 
     $this->assertSame(['class' => ['ct-webform'], 'data-analytics-form' => 'user_login_form'], $form['#attributes']);
   }

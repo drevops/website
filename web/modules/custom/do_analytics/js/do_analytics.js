@@ -174,7 +174,9 @@
 
     const image = control.querySelector('img[alt]');
 
-    return text(control.getAttribute('aria-label') || text(visible.textContent) || control.getAttribute('title') || text(control.textContent) || (image ? image.alt : ''));
+    return text(
+      control.getAttribute('aria-label') || text(visible.textContent) || control.getAttribute('title') || text(control.textContent) || (image ? image.alt : ''),
+    );
   }
 
   // Email addresses, phone numbers and query strings are left out, as they can
@@ -313,7 +315,10 @@
     // A component crossing the middle of the viewport fills at least half of
     // it, so a component more than twice the viewport height is still viewed.
     if (!viewObservers.length) {
-      viewObservers = [new IntersectionObserver(onHalfVisible, { threshold: 0.5 }), new IntersectionObserver(onMiddleCrossed, { rootMargin: '-50% 0px -50% 0px' })];
+      viewObservers = [
+        new IntersectionObserver(onHalfVisible, { threshold: 0.5 }),
+        new IntersectionObserver(onMiddleCrossed, { rootMargin: '-50% 0px -50% 0px' }),
+      ];
     }
 
     // An Ajax response can attach behaviors to a component itself, which a
