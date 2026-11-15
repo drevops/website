@@ -24,6 +24,11 @@ final class PreprocessHook {
   private const string TITLE_FIELD = 'field_c_p_title';
 
   /**
+   * Field holding the content a CivicTheme reference paragraph renders.
+   */
+  private const string REFERENCE_FIELD = 'field_c_p_reference';
+
+  /**
    * View mode of a node rendered as its own page.
    */
   private const string FULL_VIEW_MODE = 'full';
@@ -43,9 +48,28 @@ final class PreprocessHook {
       return;
     }
 
+    AnalyticsAttributes::merge($variables, AnalyticsAttributes::component($paragraph->bundle(), $this->entityId($paragraph), $this->paragraphTitle($paragraph)));
+  }
+
+  /**
+   * Finds the title a paragraph is displayed under.
+   *
+   * A reference paragraph has no title of its own and displays the title of
+   * the content it references.
+   *
+   * @return string
+   *   The title, or an empty string when the paragraph has none.
+   */
+  protected function paragraphTitle(ParagraphInterface $paragraph): string {
     $title = $paragraph->hasField(self::TITLE_FIELD) ? (string) $paragraph->get(self::TITLE_FIELD)->value : '';
 
-    AnalyticsAttributes::merge($variables, AnalyticsAttributes::component($paragraph->bundle(), $this->entityId($paragraph), $title));
+    if ($title !== '' || !$paragraph->hasField(self::REFERENCE_FIELD)) {
+      return $title;
+    }
+
+    $referenced = $paragraph->get(self::REFERENCE_FIELD)->entity;
+
+    return $referenced instanceof EntityInterface ? (string) $referenced->label() : '';
   }
 
   /**

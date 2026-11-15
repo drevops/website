@@ -48,7 +48,7 @@ class PreprocessHookTest extends UnitTestCase {
     $paragraph->method('bundle')->willReturn('civictheme_promo_card');
     $paragraph->method('id')->willReturn($id);
     $paragraph->method('getEntityTypeId')->willReturn('paragraph');
-    $paragraph->method('hasField')->with('field_c_p_title')->willReturn($has_title);
+    $paragraph->method('hasField')->willReturnCallback(static fn(string $name): bool => $name === 'field_c_p_title' && $has_title);
     $paragraph->method('get')->with('field_c_p_title')->willReturn($field);
 
     $variables = ['paragraph' => $paragraph, 'attributes' => ['class' => ['card']]];
@@ -56,6 +56,80 @@ class PreprocessHookTest extends UnitTestCase {
     $this->hook()->paragraph($variables);
 
     $this->assertSame($expected + ['class' => ['card']], $variables['attributes']);
+  }
+
+  /**
+   * Tests the title of a reference paragraph.
+   *
+   * @param bool $has_referenced
+   *   Whether the reference field holds a node.
+   * @param array<string, string> $expected
+   *   The expected attributes.
+   */
+  #[DataProvider('dataProviderReferenceParagraph')]
+  public function testReferenceParagraph(bool $has_referenced, array $expected): void {
+    $node = $this->createMock(NodeInterface::class);
+    $node->method('label')->willReturn('Website Development');
+
+    $reference = $this->createMock(FieldItemListInterface::class);
+    $reference->method('__get')->with('entity')->willReturn($has_referenced ? $node : NULL);
+
+    $paragraph = $this->createMock(ParagraphInterface::class);
+    $paragraph->method('bundle')->willReturn('civictheme_promo_card_ref');
+    $paragraph->method('id')->willReturn(1303);
+    $paragraph->method('getEntityTypeId')->willReturn('paragraph');
+    $paragraph->method('hasField')->willReturnCallback(static fn(string $name): bool => $name === 'field_c_p_reference');
+    $paragraph->method('get')->with('field_c_p_reference')->willReturn($reference);
+
+    $variables = ['paragraph' => $paragraph, 'attributes' => []];
+
+    $this->hook()->paragraph($variables);
+
+    $this->assertSame($expected, $variables['attributes']);
+  }
+
+  /**
+   * Data provider for testReferenceParagraph.
+   */
+  public static function dataProviderReferenceParagraph(): \Iterator {
+    yield 'referenced content' => [
+      TRUE,
+      [
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'promo_card_ref',
+        'data-axel-param-component-id' => 'paragraph:1303',
+        'data-axel-param-component-title' => 'Website Development',
+      ],
+    ];
+    yield 'reference removed' => [
+      FALSE,
+      [
+        'data-axel-event' => 'component_click',
+        'data-axel-param-component' => 'promo_card_ref',
+        'data-axel-param-component-id' => 'paragraph:1303',
+      ],
+    ];
+  }
+
+  /**
+   * Tests that a paragraph's own title wins over the referenced content.
+   */
+  public function testOwnTitleWinsOverReference(): void {
+    $title = $this->createMock(FieldItemListInterface::class);
+    $title->method('__get')->with('value')->willReturn('Our services');
+
+    $paragraph = $this->createMock(ParagraphInterface::class);
+    $paragraph->method('bundle')->willReturn('civictheme_promo_card_ref');
+    $paragraph->method('id')->willReturn(1303);
+    $paragraph->method('getEntityTypeId')->willReturn('paragraph');
+    $paragraph->method('hasField')->willReturn(TRUE);
+    $paragraph->method('get')->willReturnCallback(fn(string $name): FieldItemListInterface => $name === 'field_c_p_title' ? $title : $this->fail('The reference field must not be read.'));
+
+    $variables = ['paragraph' => $paragraph, 'attributes' => []];
+
+    $this->hook()->paragraph($variables);
+
+    $this->assertSame('Our services', $variables['attributes']['data-axel-param-component-title']);
   }
 
   /**
