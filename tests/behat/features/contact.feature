@@ -25,7 +25,9 @@ Feature: Contact form
     And I save screenshot
     And I press "Send message"
     Then I should not see an "#edit-submit" element
-    And I should see "Your message has been sent."
+    And I should see "Thank you for contacting us. We will get back to you within one business day."
+    And I should see a ".webform-confirmation .ct-message--success" element
+    And I should not see a ".webform-confirmation__back" element
     And I save screenshot
 
   @javascript
