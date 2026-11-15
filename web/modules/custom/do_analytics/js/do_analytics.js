@@ -147,7 +147,7 @@
     return {
       component: container ? container.dataset.analyticsComponent : outer || own || 'page',
       component_id: container ? container.dataset.analyticsComponentId : '',
-      component_title: container ? container.dataset.analyticsComponentTitle : '',
+      component_title: container ? text(container.dataset.analyticsComponentTitle) : '',
       component_position: container ? position(container) : '',
       parent_component: parent ? parent.dataset.analyticsComponent : '',
       parent_component_id: parent ? parent.dataset.analyticsComponentId : '',
@@ -234,9 +234,15 @@
   }
 
   function onClick(event) {
-    const control = event.target instanceof Element ? event.target.closest(CONTROLS) : null;
+    // The clicked element is checked, as an ignored element can sit inside a
+    // tracked link.
+    if (!(event.target instanceof Element) || event.target.closest(IGNORED)) {
+      return;
+    }
 
-    if (!control || control.closest(IGNORED)) {
+    const control = event.target.closest(CONTROLS);
+
+    if (!control) {
       return;
     }
 

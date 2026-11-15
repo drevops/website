@@ -53,6 +53,11 @@ final class AnalyticsAttributes {
   private const string PREFIX = 'civictheme_';
 
   /**
+   * Pattern of an email address, which GA4 must not receive.
+   */
+  private const string EMAIL = '/[^\s@<>()]+@[^\s@<>()]+\.[a-z]{2,}/iu';
+
+  /**
    * Builds the attributes that mark an element as a component.
    *
    * @param string $name
@@ -86,9 +91,12 @@ final class AnalyticsAttributes {
 
   /**
    * Reduces a value to plain text that fits an event parameter.
+   *
+   * Email addresses become '[email]'.
    */
   public static function text(string $value): string {
     $value = Html::decodeEntities(strip_tags($value));
+    $value = (string) preg_replace(self::EMAIL, '[email]', $value);
     $value = trim((string) preg_replace('/\s+/u', ' ', $value));
 
     return mb_substr($value, 0, self::MAX_LENGTH);

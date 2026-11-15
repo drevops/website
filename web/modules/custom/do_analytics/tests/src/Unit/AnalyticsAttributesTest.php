@@ -55,6 +55,10 @@ class AnalyticsAttributesTest extends UnitTestCase {
     yield 'entities' => ['Build &amp; support', 'Build & support'];
     yield 'whitespace' => ["  Senior\n\t delivery  ", 'Senior delivery'];
     yield 'empty' => ['', ''];
+    yield 'email address' => ['Contact alice@example.com today', 'Contact [email] today'];
+    yield 'encoded email address' => ['Write to alice&#64;example.com', 'Write to [email]'];
+    yield 'email address past the limit' => [str_repeat('a', 95) . ' bob@example.com', str_repeat('a', 95) . ' [ema'];
+    yield 'at sign without a domain' => ['Meet @drevops', 'Meet @drevops'];
     yield 'too long' => [str_repeat('a', 150), str_repeat('a', 100)];
     yield 'multibyte at the limit' => [str_repeat('ä', 101), str_repeat('ä', 100)];
   }
