@@ -19,11 +19,12 @@ The module loads `axel.drupal.gtag.min.js` from jsDelivr on every page except ad
 | `data-axel-param-block` | Placed blocks | The block's machine name, such as `drevops_footer_menu_1` |
 | `data-axel-param-region` | Placed blocks | The theme region, such as `footer_middle_5` |
 | `data-axel-form` | Every form | `webform:<id>` for a webform, such as `webform:contact`, otherwise the Drupal form ID |
+| `data-axel-form-id` | Every form | The Drupal form ID, such as `webform_submission_contact_paragraph_40_add_form`, which Axel sends as `form_id` |
 | `data-axel-form-submitted` | Webform confirmations rendered on a page or inline | `webform:<id>` |
 
 Axel gathers parameters from the clicked element up through its ancestors, and the closest value of each name wins. A click on a card in the main content therefore sends the card's `component` and the content block's `block` and `region`.
 
-`PageAttachmentsHook` puts the Axel settings in `drupalSettings.axel`. They turn on the `click`, `form_start`, `field_complete` and `form_submit` event types, and add `page_type` and `page_id` to every event. They also set `hiddenTextSelector` to `.ct-visually-hidden, .visually-hidden`, so labels leave out screen-reader-only text such as "(Opens in a new tab/window)". `page_type` is the node bundle, or the route name on a page without a node. `page_id` is `node:<id>` on a node page.
+`PageAttachmentsHook` puts the Axel settings in `drupalSettings.axel`. They turn on the `click`, `form_start`, `field_complete` and `form_submit` event types, and add `page_type` and `page_id` to every event. They also set `hiddenTextSelector` to `.ct-visually-hidden, .visually-hidden`, so labels leave out screen-reader-only text such as "(Opens in a new tab/window)". `formIdAttributes` reads `form_id` from `data-axel-form-id`. Drupal adds a random suffix to a form's `id` and `data-drupal-selector` when an AJAX response redraws it, and the form ID stays the same. `page_type` is the node bundle, or the route name on a page without a node. `page_id` is `node:<id>` on a node page.
 
 ## Events
 
