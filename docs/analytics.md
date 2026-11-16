@@ -6,7 +6,7 @@ This page describes how the site reports clicks and form interactions to Google 
 
 Axel reads `data-axel-*` attributes from the page and sends an event when a visitor clicks a link or button, or starts filling in a form. The `do_analytics` module loads Axel and renders those attributes through preprocess hooks, with no template overrides.
 
-The module loads `axel.drupal.gtag.min.js` from jsDelivr on every page except admin routes. The library pins version `0.3.2` with its Subresource Integrity hash, and the `csp` module admits that exact URL in `script-src`. Axel sends each event through `gtag('event', name, params)`. The `google_tag` module loads the GA4 tag `G-LCQ5CZ3H3W` for anonymous visitors only, so events from logged-in users never reach GA4.
+The module loads `axel.drupal.gtag.min.js` from jsDelivr on every page except admin routes. The library pins version `0.3.2` with its Subresource Integrity hash, and the `csp` module admits that exact URL in `script-src`. Axel sends each event through `gtag('event', name, params)`. On production, the `google_tag` module loads the GA4 tag `G-LCQ5CZ3H3W` for anonymous visitors only, so events from logged-in users never reach GA4. See [Non-production environments](#non-production-environments) for the other environments.
 
 ## Attributes the module renders
 
@@ -53,6 +53,17 @@ GA4 Enhanced Measurement also sends `form_start` and `form_submit`. Turn off **F
 ## Watch events in the browser
 
 Append `#axel-debug` to a page URL. Axel logs every event to the browser console and marks it with `debug_mode`, so GA4 lists it in **Admin > DebugView**.
+
+## Non-production environments
+
+`web/sites/default/includes/modules/settings.google_tag.php` turns off the `G-LCQ5CZ3H3W` tag container on every environment except production. Local, CI, dev and pull-request environments send nothing to GA4, so test clicks never reach the production reports. Axel still runs there and queues its events in `window.dataLayer`, so `#axel-debug` and the Behat steps work as usual.
+
+To see a non-production environment's events in GA4, report them to a separate GA4 property:
+
+1. In GA4, create a property for testing and copy the measurement ID of its web stream, such as `G-ABC123XYZ`.
+2. Set the `DRUPAL_GOOGLE_TAG_ID` environment variable to that ID on the environment, then redeploy it. The tag container loads with that ID instead of `G-LCQ5CZ3H3W`.
+
+Production ignores `DRUPAL_GOOGLE_TAG_ID`.
 
 ## Update Axel
 

@@ -267,6 +267,36 @@ class SwitchableSettingsTest extends SettingsTestCase {
   }
 
   /**
+   * Test Google tag config.
+   */
+  #[DataProvider('dataProviderGoogleTag')]
+  public function testGoogleTag(string $env, array $vars, array $expected_present, array $expected_absent = []): void {
+    $this->setEnvVars($vars + ['ENVIRONMENT_TYPE' => $env]);
+
+    $this->requireSettingsFile();
+
+    $this->assertConfigContains($expected_present);
+    $this->assertConfigNotContains($expected_absent);
+  }
+
+  /**
+   * Data provider for testGoogleTag().
+   */
+  public static function dataProviderGoogleTag(): \Iterator {
+    $container = 'google_tag.container.G-LCQ5CZ3H3W.680a169398dd50.88125398';
+
+    yield [self::ENVIRONMENT_LOCAL, [], [$container => ['status' => FALSE]], [$container => ['tag_container_ids' => NULL]]];
+    yield [self::ENVIRONMENT_CI, [], [$container => ['status' => FALSE]], [$container => ['tag_container_ids' => NULL]]];
+    yield [self::ENVIRONMENT_DEV, [], [$container => ['status' => FALSE]], [$container => ['tag_container_ids' => NULL]]];
+    yield [self::ENVIRONMENT_STAGE, [], [$container => ['status' => FALSE]], [$container => ['tag_container_ids' => NULL]]];
+    yield [self::ENVIRONMENT_SUT, [], [$container => ['status' => FALSE]], [$container => ['tag_container_ids' => NULL]]];
+    yield [self::ENVIRONMENT_PROD, [], [], [$container => NULL]];
+    yield [self::ENVIRONMENT_DEV, ['DRUPAL_GOOGLE_TAG_ID' => 'G-TEST123'], [$container => ['tag_container_ids' => ['G-TEST123']]], [$container => ['status' => NULL]]];
+    yield [self::ENVIRONMENT_LOCAL, ['DRUPAL_GOOGLE_TAG_ID' => 'G-TEST123'], [$container => ['tag_container_ids' => ['G-TEST123']]], [$container => ['status' => NULL]]];
+    yield [self::ENVIRONMENT_PROD, ['DRUPAL_GOOGLE_TAG_ID' => 'G-TEST123'], [], [$container => NULL]];
+  }
+
+  /**
    * Test Fast 404 settings.
    *
    * Runs isolated so that the module stub owns the 'fast404_preboot()'
