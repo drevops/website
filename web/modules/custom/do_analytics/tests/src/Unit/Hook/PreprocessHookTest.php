@@ -180,6 +180,56 @@ class PreprocessHookTest extends UnitTestCase {
   }
 
   /**
+   * Tests the title taken from the rich text of a paragraph.
+   *
+   * @param bool $has_title
+   *   Whether the paragraph has a title field.
+   * @param string|null $title
+   *   The title field value.
+   * @param string|null $content
+   *   The rich text field value.
+   * @param string|null $expected
+   *   The expected title, or NULL when no title is rendered.
+   */
+  #[DataProvider('dataProviderContentHeading')]
+  public function testContentHeading(bool $has_title, ?string $title, ?string $content, ?string $expected): void {
+    $fields = [
+      'field_c_p_title' => $title,
+      'field_c_p_content' => $content,
+    ];
+
+    $paragraph = $this->createMock(ParagraphInterface::class);
+    $paragraph->method('bundle')->willReturn('civictheme_manual_list');
+    $paragraph->method('id')->willReturn(1281);
+    $paragraph->method('getEntityTypeId')->willReturn('paragraph');
+    $paragraph->method('hasField')->willReturnCallback(static fn(string $name): bool => $name === 'field_c_p_content' || ($name === 'field_c_p_title' && $has_title));
+    $paragraph->method('get')->willReturnCallback(function (string $name) use ($fields): FieldItemListInterface {
+      $field = $this->createMock(FieldItemListInterface::class);
+      $field->method('__get')->with('value')->willReturn($fields[$name]);
+
+      return $field;
+    });
+
+    $variables = ['paragraph' => $paragraph, 'attributes' => []];
+
+    $this->hook()->paragraph($variables);
+
+    $this->assertSame($expected, $variables['attributes']['data-axel-param-component-title'] ?? NULL);
+  }
+
+  /**
+   * Data provider for testContentHeading.
+   */
+  public static function dataProviderContentHeading(): \Iterator {
+    yield 'heading with markup' => [TRUE, NULL, '<h2 class="text-align-center"><strong>Built by hand or AI-assisted.</strong> Your choice.</h2><p>Intro.</p>', 'Built by hand or AI-assisted. Your choice.'];
+    yield 'first heading after text' => [TRUE, '', '<p>Intro.</p><h3>Good engineering</h3><h2>Later</h2>', 'Good engineering'];
+    yield 'no heading' => [TRUE, NULL, '<p>Intro only.</p>', NULL];
+    yield 'empty content' => [TRUE, NULL, NULL, NULL];
+    yield 'own title wins' => [TRUE, 'Our work', '<h2>Websites we build</h2>', 'Our work'];
+    yield 'without a title field' => [FALSE, NULL, '<h2>For teams whose website is infrastructure</h2>', NULL];
+  }
+
+  /**
    * Tests that variables without a paragraph are left alone.
    */
   public function testParagraphMissing(): void {

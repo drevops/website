@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\do_analytics\Hook;
 
 use Drupal\block\BlockInterface;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -27,6 +28,11 @@ final class PreprocessHook {
    * Field holding the content a CivicTheme reference paragraph renders.
    */
   private const string REFERENCE_FIELD = 'field_c_p_reference';
+
+  /**
+   * Field holding the rich text of a CivicTheme paragraph.
+   */
+  private const string CONTENT_FIELD = 'field_c_p_content';
 
   /**
    * View mode of a node rendered as its own page.
@@ -55,21 +61,45 @@ final class PreprocessHook {
    * Finds the title a paragraph is displayed under.
    *
    * A reference paragraph has no title of its own and displays the title of
-   * the content it references.
+   * the content it references. A paragraph whose title field is empty displays
+   * the first heading of its rich text instead.
    *
    * @return string
    *   The title, or an empty string when the paragraph has none.
    */
   protected function paragraphTitle(ParagraphInterface $paragraph): string {
-    $title = $paragraph->hasField(self::TITLE_FIELD) ? (string) $paragraph->get(self::TITLE_FIELD)->value : '';
+    $has_title = $paragraph->hasField(self::TITLE_FIELD);
+    $title = $has_title ? (string) $paragraph->get(self::TITLE_FIELD)->value : '';
 
-    if ($title !== '' || !$paragraph->hasField(self::REFERENCE_FIELD)) {
+    if ($title !== '') {
       return $title;
     }
 
-    $referenced = $paragraph->get(self::REFERENCE_FIELD)->entity;
+    if ($paragraph->hasField(self::REFERENCE_FIELD)) {
+      $referenced = $paragraph->get(self::REFERENCE_FIELD)->entity;
 
-    return $referenced instanceof EntityInterface ? (string) $referenced->label() : '';
+      return $referenced instanceof EntityInterface ? (string) $referenced->label() : '';
+    }
+
+    return $has_title ? $this->contentHeading($paragraph) : '';
+  }
+
+  /**
+   * Finds the first heading in a paragraph's rich text.
+   *
+   * @return string
+   *   The heading text, or an empty string when the rich text has none.
+   */
+  protected function contentHeading(ParagraphInterface $paragraph): string {
+    $content = $paragraph->hasField(self::CONTENT_FIELD) ? (string) $paragraph->get(self::CONTENT_FIELD)->value : '';
+
+    if ($content === '') {
+      return '';
+    }
+
+    $heading = (new \DOMXPath(Html::load($content)))->query('(//h2|//h3|//h4|//h5|//h6)[1]')->item(0);
+
+    return $heading instanceof \DOMNode ? $heading->textContent : '';
   }
 
   /**
