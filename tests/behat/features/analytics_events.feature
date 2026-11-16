@@ -111,6 +111,19 @@ Feature: Analytics events
       | component | webform         |
 
   @javascript
+  Scenario: A webform keeps its form ID when a validation error redraws it
+    Given I am an anonymous user
+    When I go to "/contact"
+    And the browser validation for the form ".webform-submission-contact-form" is disabled
+    And I fill in "Name" with "[TEST] Analytics user"
+    And I press "Send message"
+    And I wait for 2 seconds
+    Then I should see "Email field is required."
+    When I fill in "Email" with "do-test@example.com"
+    And I click on the element "form[data-axel-form='webform:contact'] input[name='name']"
+    Then the analytics events "field_complete" should all have the same "form_id"
+
+  @javascript
   Scenario: Submitting the contact form sends a form submit from its inline confirmation
     Given I am an anonymous user
     When I go to "/contact"
