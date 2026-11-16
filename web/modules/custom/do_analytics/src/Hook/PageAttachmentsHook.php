@@ -19,6 +19,11 @@ final class PageAttachmentsHook {
    */
   private const array TYPES = ['click', 'form_start', 'field_complete', 'form_submit'];
 
+  /**
+   * Screen-reader-only elements whose text Axel leaves out of labels.
+   */
+  private const string HIDDEN_TEXT_SELECTOR = '.ct-visually-hidden, .visually-hidden';
+
   public function __construct(
     protected RouteMatchInterface $routeMatch,
     protected AdminContext $adminContext,
@@ -36,6 +41,7 @@ final class PageAttachmentsHook {
     $attachments['#attached']['library'][] = 'do_analytics/axel';
     $attachments['#attached']['drupalSettings']['axel'] = [
       'types' => self::TYPES,
+      'hiddenTextSelector' => self::HIDDEN_TEXT_SELECTOR,
       'properties' => $this->page(),
     ];
     $attachments['#cache']['contexts'][] = 'route';

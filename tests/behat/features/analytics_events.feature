@@ -92,6 +92,16 @@ Feature: Analytics events
       | click_type | link                  |
 
   @javascript
+  Scenario: Clicking an icon-only social link sends its title without the screen-reader text
+    Given I am an anonymous user
+    When I visit the "civictheme_page" content page with the title "[TEST] Page Analytics events"
+    And I disable link navigation
+    And I click on the element "a.ct-social-links__button[href='https://github.com/drevops']"
+    Then the analytics event "component_click" should have been sent with:
+      | block     | drevops_footer_social_links |
+      | link_text | GitHub                      |
+
+  @javascript
   Scenario: Focusing a webform field sends a form start with the webform name
     Given I am an anonymous user
     When I go to "/contact"
