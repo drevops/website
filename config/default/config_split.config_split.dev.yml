@@ -13,4 +13,5 @@ folder: ../config/dev
 module: {  }
 theme: {  }
 complete_list: {  }
-partial_list: {  }
+partial_list:
+  - google_tag.container.G-LCQ5CZ3H3W.680a169398dd50.88125398
