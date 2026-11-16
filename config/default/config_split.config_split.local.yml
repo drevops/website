@@ -15,4 +15,5 @@ module:
 theme: {  }
 complete_list:
   - purge_control.settings
-partial_list: {  }
+partial_list:
+  - google_tag.container.G-LCQ5CZ3H3W.680a169398dd50.88125398

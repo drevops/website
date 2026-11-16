@@ -7,6 +7,7 @@ namespace Drupal\do_analytics\Hook;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Routing\AdminContext;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\do_analytics\AnalyticsAttributes;
 use Drupal\node\NodeInterface;
 
 /**
@@ -18,6 +19,16 @@ final class PageAttachmentsHook {
    * Axel event types to track.
    */
   private const array TYPES = ['click', 'form_start', 'field_complete', 'form_submit'];
+
+  /**
+   * Screen-reader-only elements whose text Axel leaves out of labels.
+   */
+  private const string HIDDEN_TEXT_SELECTOR = '.ct-visually-hidden, .visually-hidden';
+
+  /**
+   * Form attributes Axel reads 'form_id' from, the first with a value winning.
+   */
+  private const array FORM_ID_ATTRIBUTES = [AnalyticsAttributes::FORM_ID, 'id'];
 
   public function __construct(
     protected RouteMatchInterface $routeMatch,
@@ -36,6 +47,8 @@ final class PageAttachmentsHook {
     $attachments['#attached']['library'][] = 'do_analytics/axel';
     $attachments['#attached']['drupalSettings']['axel'] = [
       'types' => self::TYPES,
+      'hiddenTextSelector' => self::HIDDEN_TEXT_SELECTOR,
+      'formIdAttributes' => self::FORM_ID_ATTRIBUTES,
       'properties' => $this->page(),
     ];
     $attachments['#cache']['contexts'][] = 'route';

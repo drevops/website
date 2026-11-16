@@ -8,6 +8,7 @@ use Drupal\Core\Extension\ThemeExtensionList;
 use Drupal\do_base\Hook\LibraryInfoAlterHook;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Tests the library definitions this site alters.
@@ -155,9 +156,9 @@ class LibraryInfoAlterHookTest extends DoBaseUnitTestBase {
   }
 
   /**
-   * Tests that Gherkin support is added to the syntax highlighter.
+   * Tests that the extra languages are added to the syntax highlighter.
    */
-  public function testGherkinIsAddedToTheSyntaxHighlighter(): void {
+  public function testLanguagesAreAddedToTheSyntaxHighlighter(): void {
     // Prepare.
     $libraries = ['highlight_js.custom' => ['dependencies' => ['highlight_js/highlight_js']]];
 
@@ -167,23 +168,66 @@ class LibraryInfoAlterHookTest extends DoBaseUnitTestBase {
     // Assert.
     $this->assertSame([
       'highlight_js/highlight_js',
+      'do_base/highlight_js.apache',
       'do_base/highlight_js.gherkin',
+      'do_base/highlight_js.nginx',
     ], $libraries['highlight_js.custom']['dependencies']);
   }
 
   /**
-   * Tests that a syntax highlighter without the custom bundle is left alone.
+   * Tests that each added language is defined as a library of this module.
+   *
+   * @param string $language
+   *   The highlight.js language name.
    */
-  public function testSyntaxHighlighterWithoutTheCustomBundleIsLeftAlone(): void {
+  #[DataProvider('dataProviderLanguageLibraryIsDefined')]
+  public function testLanguageLibraryIsDefined(string $language): void {
     // Prepare.
-    $libraries = ['highlight_js.other' => ['dependencies' => []]];
+    $libraries = Yaml::parseFile(dirname(__DIR__, 3) . '/do_base.libraries.yml');
+
+    // Assert.
+    $this->assertArrayHasKey('highlight_js.' . $language, $libraries);
+    $this->assertSame([
+      'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/' . $language . '.min.js' => ['type' => 'external', 'minified' => TRUE],
+    ], $libraries['highlight_js.' . $language]['js']);
+    $this->assertSame(['highlight_js/highlight_js.js'], $libraries['highlight_js.' . $language]['dependencies']);
+  }
+
+  /**
+   * Data provider for testLanguageLibraryIsDefined.
+   */
+  public static function dataProviderLanguageLibraryIsDefined(): \Iterator {
+    yield 'apache' => ['apache'];
+    yield 'gherkin' => ['gherkin'];
+    yield 'nginx' => ['nginx'];
+  }
+
+  /**
+   * Tests that libraries holding no custom highlighter bundle are left alone.
+   *
+   * @param array<string, mixed> $libraries
+   *   The library definitions as the extension declares them.
+   * @param string $extension
+   *   The extension declaring the libraries.
+   */
+  #[DataProvider('dataProviderLibrariesWithoutTheCustomBundleAreLeftAlone')]
+  public function testLibrariesWithoutTheCustomBundleAreLeftAlone(array $libraries, string $extension): void {
+    // Prepare.
     $expected = $libraries;
 
     // Act.
-    $this->hook()->alter($libraries, 'highlight_js');
+    $this->hook()->alter($libraries, $extension);
 
     // Assert.
     $this->assertSame($expected, $libraries);
+  }
+
+  /**
+   * Data provider for testLibrariesWithoutTheCustomBundleAreLeftAlone.
+   */
+  public static function dataProviderLibrariesWithoutTheCustomBundleAreLeftAlone(): \Iterator {
+    yield 'the highlighter without the custom bundle' => [['highlight_js.other' => ['dependencies' => []]], 'highlight_js'];
+    yield 'another extension with a library of that name' => [['highlight_js.custom' => ['dependencies' => []]], 'civictheme'];
   }
 
   /**

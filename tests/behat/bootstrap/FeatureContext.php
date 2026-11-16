@@ -162,6 +162,32 @@ JS;
   }
 
   /**
+   * Assert that an element is not covered by another element above it.
+   *
+   * @code
+   * Then the element ".webform-confirmation" should not be covered by the element ".ct-header"
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the element :selector should not be covered by the element :reference')]
+  public function elementAssertNotCoveredBy(string $selector, string $reference): void {
+    $reference_js = json_encode($reference, JSON_UNESCAPED_SLASHES);
+    $script = <<<JS
+      var reference = document.querySelector({$reference_js});
+      if (!reference) {
+        throw new Error('Element with selector ' + {$reference_js} + ' not found.');
+      }
+      return [{{ELEMENT}}.getBoundingClientRect().top, reference.getBoundingClientRect().bottom];
+JS;
+    [$top, $reference_bottom] = $this->elementExecuteJs($selector, $script);
+
+    if ($top < $reference_bottom) {
+      throw new \RuntimeException(sprintf('Expected element "%s" to start below "%s" (y=%d), but it starts at y=%d.', $selector, $reference, $reference_bottom, $top));
+    }
+  }
+
+  /**
    * Assert the opacity of an element's background colour.
    *
    * @code
@@ -242,6 +268,25 @@ JS;
     }
 
     throw new \RuntimeException(sprintf('No "%s" analytics event was sent with %s. Sent: %s', $name, json_encode($expected), json_encode($events)));
+  }
+
+  /**
+   * Assert that at least 2 analytics events of a name sent 1 parameter value.
+   *
+   * @code
+   * Then the analytics events "field_complete" should all have the same "form_id"
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the analytics events :name should all have the same :param')]
+  public function analyticsAssertEventsShareParam(string $name, string $param): void {
+    $events = $this->analyticsEvents($name);
+    $values = array_unique(array_map(static fn(array $params): string => (string) ($params[$param] ?? ''), $events));
+
+    if (count($events) < 2 || count($values) !== 1 || reset($values) === '') {
+      throw new \RuntimeException(sprintf('Expected at least 2 "%s" analytics events with 1 non-empty "%s". Sent: %s', $name, $param, json_encode($events)));
+    }
   }
 
   /**

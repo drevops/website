@@ -25,6 +25,14 @@ final class AnalyticsAttributes {
   public const string FORM = 'data-axel-form';
 
   /**
+   * Holds the Drupal form ID, which Axel sends as 'form_id'.
+   *
+   * Drupal adds a random suffix to the 'id' and 'data-drupal-selector' of a
+   * form on every AJAX rebuild, and the form ID stays the same.
+   */
+  public const string FORM_ID = 'data-axel-form-id';
+
+  /**
    * Sends 'form_submit' for the named form when the element is on the page.
    */
   public const string FORM_SUBMITTED = 'data-axel-form-submitted';

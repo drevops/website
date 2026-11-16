@@ -1,11 +1,11 @@
 axel:
-  version: 0.3.2
+  version: 0.4.0
   js:
-    https://cdn.jsdelivr.net/npm/@drevops/axel@0.3.2/dist/axel.drupal.gtag.min.js:
+    https://cdn.jsdelivr.net/npm/@drevops/axel@0.4.0/dist/axel.drupal.gtag.min.js:
       type: external
       minified: true
       attributes:
-        integrity: sha384-qzYFqyovoMEJmJ2wi9iSbbY8mUH/aDM/jCwTg3nJHTWHwd2ihuq0bOIOQ1SIjvwD
+        integrity: sha384-9aSCkdIxcT06obOWEW7Ovr832gLNMw3GVhaEUqOK8AXgH6VTwUsMNDjRpHnKftJs
         crossorigin: anonymous
   dependencies:
     - core/drupal
