@@ -56,14 +56,23 @@ Append `#axel-debug` to a page URL. Axel logs every event to the browser console
 
 ## Non-production environments
 
-`web/sites/default/includes/modules/settings.google_tag.php` turns off the `G-LCQ5CZ3H3W` tag container on every environment except production. Local, CI, dev and pull-request environments send nothing to GA4, so test clicks never reach the production reports. Axel still runs there and queues its events in `window.dataLayer`, so `#axel-debug` and the Behat steps work as usual.
+The `ci`, `dev` and `local` config splits each hold a partial patch that sets the `G-LCQ5CZ3H3W` tag container's `status` to `false`. Local, CI, dev and pull-request environments send nothing to GA4, so test clicks never reach the production reports. Production activates no split and keeps the container from `config/default`. Axel still runs everywhere and queues its events in `window.dataLayer`, so `#axel-debug` and the Behat steps work as usual.
 
-To see a non-production environment's events in GA4, report them to a separate GA4 property:
+To see dev and pull-request events in GA4, report them to a separate GA4 property:
 
 1. In GA4, create a property for testing and copy the measurement ID of its web stream, such as `G-ABC123XYZ`.
-2. Set the `DRUPAL_GOOGLE_TAG_ID` environment variable to that ID on the environment, then redeploy it. The tag container loads with that ID instead of `G-LCQ5CZ3H3W`.
+2. Replace the content of the patch in `config/dev/` with:
 
-Production ignores `DRUPAL_GOOGLE_TAG_ID`.
+   ```yaml
+   adding:
+     tag_container_ids:
+       - G-ABC123XYZ
+   removing:
+     tag_container_ids:
+       - G-LCQ5CZ3H3W
+   ```
+
+3. Deploy the change. The next configuration import on a dev or pull-request environment loads the tag with the test ID.
 
 ## Update Axel
 
