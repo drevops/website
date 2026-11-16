@@ -15,7 +15,7 @@ The module loads `axel.drupal.gtag.min.js` from jsDelivr on every page except ad
 | `data-axel-event` | Every paragraph, every node rendered in a view mode other than `full`, and every placed block | `component_click` |
 | `data-axel-param-component` | Paragraphs and nodes | The paragraph's bundle or the node's view mode, without the `civictheme_` prefix, such as `promo_card` |
 | `data-axel-param-component-id` | Paragraphs and nodes | `paragraph:<id>` or `node:<id>` |
-| `data-axel-param-component-title` | Paragraphs with a `field_c_p_title` value, reference paragraphs and nodes | The title as plain text, cut to 100 characters, with email addresses replaced by `[email]`. A reference paragraph, such as `promo_card_ref`, uses the title of the content it references. |
+| `data-axel-param-component-title` | Paragraphs with a `field_c_p_title` field, reference paragraphs and nodes | The title as plain text, cut to 100 characters, with email addresses replaced by `[email]`. A reference paragraph, such as `promo_card_ref`, uses the title of the content it references. A paragraph with an empty `field_c_p_title`, such as a `manual_list` with its heading in the intro, uses the first heading in `field_c_p_content`. |
 | `data-axel-param-block` | Placed blocks | The block's machine name, such as `drevops_footer_menu_1` |
 | `data-axel-param-region` | Placed blocks | The theme region, such as `footer_middle_5` |
 | `data-axel-form` | Every form | `webform:<id>` for a webform, such as `webform:contact`, otherwise the Drupal form ID |
