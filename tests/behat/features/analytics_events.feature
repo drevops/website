@@ -92,6 +92,16 @@ Feature: Analytics events
       | click_type | link                  |
 
   @javascript
+  Scenario: Clicking an icon-only social link sends its title without the screen-reader text
+    Given I am an anonymous user
+    When I visit the "civictheme_page" content page with the title "[TEST] Page Analytics events"
+    And I disable link navigation
+    And I click on the element "a.ct-social-links__button[href='https://github.com/drevops']"
+    Then the analytics event "component_click" should have been sent with:
+      | block     | drevops_footer_social_links |
+      | link_text | GitHub                      |
+
+  @javascript
   Scenario: Focusing a webform field sends a form start with the webform name
     Given I am an anonymous user
     When I go to "/contact"
@@ -99,6 +109,19 @@ Feature: Analytics events
     Then the analytics event "form_start" should have been sent with:
       | form_name | webform:contact |
       | component | webform         |
+
+  @javascript
+  Scenario: A webform keeps its form ID when a validation error redraws it
+    Given I am an anonymous user
+    When I go to "/contact"
+    And the browser validation for the form ".webform-submission-contact-form" is disabled
+    And I fill in "Name" with "[TEST] Analytics user"
+    And I press "Send message"
+    And I wait for 2 seconds
+    Then I should see "Email field is required."
+    When I fill in "Email" with "do-test@example.com"
+    And I click on the element "form[data-axel-form='webform:contact'] input[name='name']"
+    Then the analytics events "field_complete" should all have the same "form_id"
 
   @javascript
   Scenario: Submitting the contact form sends a form submit from its inline confirmation

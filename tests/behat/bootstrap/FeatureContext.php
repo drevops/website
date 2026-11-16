@@ -271,6 +271,25 @@ JS;
   }
 
   /**
+   * Assert that at least 2 analytics events of a name sent 1 parameter value.
+   *
+   * @code
+   * Then the analytics events "field_complete" should all have the same "form_id"
+   * @endcode
+   *
+   * @javascript
+   */
+  #[Then('the analytics events :name should all have the same :param')]
+  public function analyticsAssertEventsShareParam(string $name, string $param): void {
+    $events = $this->analyticsEvents($name);
+    $values = array_unique(array_map(static fn(array $params): string => (string) ($params[$param] ?? ''), $events));
+
+    if (count($events) < 2 || count($values) !== 1 || reset($values) === '') {
+      throw new \RuntimeException(sprintf('Expected at least 2 "%s" analytics events with 1 non-empty "%s". Sent: %s', $name, $param, json_encode($events)));
+    }
+  }
+
+  /**
    * Read the parameters of the analytics events of a name sent so far.
    *
    * @return array<int, array<string, mixed>>

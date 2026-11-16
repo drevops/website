@@ -40,6 +40,8 @@ class PageAttachmentsHookTest extends UnitTestCase {
     $this->assertSame(['core/drupal', 'do_analytics/axel'], $attachments['#attached']['library']);
     $this->assertSame([
       'types' => ['click', 'form_start', 'field_complete', 'form_submit'],
+      'hiddenTextSelector' => '.ct-visually-hidden, .visually-hidden',
+      'formIdAttributes' => ['data-axel-form-id', 'id'],
       'properties' => $expected,
     ], $attachments['#attached']['drupalSettings']['axel']);
     $this->assertContains('route', $attachments['#cache']['contexts']);

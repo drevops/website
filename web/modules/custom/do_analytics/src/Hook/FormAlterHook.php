@@ -23,6 +23,7 @@ final class FormAlterHook {
     // A webform's form ID includes the entity it is placed on, so the same
     // webform would report a different name on every page.
     $form['#attributes'][AnalyticsAttributes::FORM] = is_string($webform_id) && $webform_id !== '' ? self::webformName($webform_id) : $form_id;
+    $form['#attributes'][AnalyticsAttributes::FORM_ID] = $form_id;
   }
 
   /**

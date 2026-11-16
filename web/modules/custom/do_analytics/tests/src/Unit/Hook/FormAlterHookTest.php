@@ -33,6 +33,7 @@ class FormAlterHookTest extends UnitTestCase {
     new FormAlterHook()->formAlter($form, $this->createMock(FormStateInterface::class), $form_id);
 
     $this->assertSame($expected, $form['#attributes']['data-axel-form']);
+    $this->assertSame($form_id, $form['#attributes']['data-axel-form-id']);
   }
 
   /**
@@ -53,7 +54,7 @@ class FormAlterHookTest extends UnitTestCase {
 
     new FormAlterHook()->formAlter($form, $this->createMock(FormStateInterface::class), 'user_login_form');
 
-    $this->assertSame(['class' => ['ct-webform'], 'data-axel-form' => 'user_login_form'], $form['#attributes']);
+    $this->assertSame(['class' => ['ct-webform'], 'data-axel-form' => 'user_login_form', 'data-axel-form-id' => 'user_login_form'], $form['#attributes']);
   }
 
 }
