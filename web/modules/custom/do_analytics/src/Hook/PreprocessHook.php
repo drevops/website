@@ -97,7 +97,7 @@ final class PreprocessHook {
       return '';
     }
 
-    $headings = (new \DOMXPath(Html::load($content)))->query('(//h2|//h3|//h4|//h5|//h6)[1]');
+    $headings = new \DOMXPath(Html::load($content))->query('(//h2|//h3|//h4|//h5|//h6)[1]');
     $heading = $headings === FALSE ? NULL : $headings->item(0);
 
     return $heading instanceof \DOMNode ? $heading->textContent : '';
