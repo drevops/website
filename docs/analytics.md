@@ -56,7 +56,7 @@ Append `#axel-debug` to a page URL. Axel logs every event to the browser console
 
 ## Non-production environments
 
-The `ci`, `dev` and `local` config splits each hold a partial patch that sets the `G-LCQ5CZ3H3W` tag container's `status` to `false`. Local, CI, dev and pull-request environments send nothing to GA4, so test clicks never reach the production reports. Production activates no split and keeps the container from `config/default`. Axel still runs everywhere and queues its events in `window.dataLayer`, so `#axel-debug` and the Behat steps work as usual.
+The `ci`, `dev`, `local` and `stage` config splits each hold a partial patch that sets the `G-LCQ5CZ3H3W` tag container's `status` to `false`. Local, CI, dev, stage and pull-request environments send nothing to GA4, so test clicks never reach the production reports. Production activates no split and keeps the container from `config/default`. Axel still runs everywhere and queues its events in `window.dataLayer`, so `#axel-debug` and the Behat steps work as usual.
 
 To see dev and pull-request events in GA4, report them to a separate GA4 property:
 
