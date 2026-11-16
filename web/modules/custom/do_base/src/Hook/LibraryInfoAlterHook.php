@@ -23,6 +23,13 @@ final readonly class LibraryInfoAlterHook {
    */
   private const string BASE_THEME = 'civictheme';
 
+  /**
+   * Languages the CDN common bundle carries no grammar for.
+   *
+   * Each is loaded through its own do_base/highlight_js.LANGUAGE library.
+   */
+  private const array HIGHLIGHT_LANGUAGES = ['apache', 'gherkin', 'nginx'];
+
   public function __construct(
     protected ThemeExtensionList $themeExtensionList,
   ) {
@@ -34,9 +41,9 @@ final readonly class LibraryInfoAlterHook {
   #[Hook('library_info_alter', order: new OrderAfter(modules: ['ckeditor5']))]
   public function alter(array &$libraries, string $extension): void {
     if ($extension === 'highlight_js' && isset($libraries['highlight_js.custom'])) {
-      // The CDN common bundle carries no Gherkin grammar, so it is loaded
-      // separately.
-      $libraries['highlight_js.custom']['dependencies'][] = 'do_base/highlight_js.gherkin';
+      foreach (self::HIGHLIGHT_LANGUAGES as $language) {
+        $libraries['highlight_js.custom']['dependencies'][] = 'do_base/highlight_js.' . $language;
+      }
     }
 
     if ($extension === 'gin' && isset($libraries['media_library'])) {
