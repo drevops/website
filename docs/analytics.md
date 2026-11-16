@@ -6,7 +6,7 @@ This page describes how the site reports clicks and form interactions to Google 
 
 Axel reads `data-axel-*` attributes from the page and sends an event when a visitor clicks a link or button, or starts filling in a form. The `do_analytics` module loads Axel and renders those attributes through preprocess hooks, with no template overrides.
 
-The module loads `axel.drupal.gtag.min.js` from jsDelivr on every page except admin routes. The library pins version `0.3.2` with its Subresource Integrity hash, and the `csp` module admits that exact URL in `script-src`. Axel sends each event through `gtag('event', name, params)`. On production, the `google_tag` module loads the GA4 tag `G-LCQ5CZ3H3W` for anonymous visitors only, so events from logged-in users never reach GA4. See [Non-production environments](#non-production-environments) for the other environments.
+The module loads `axel.drupal.gtag.min.js` from jsDelivr on every page except admin routes. The library pins version `0.3.3` with its Subresource Integrity hash, and the `csp` module admits that exact URL in `script-src`. Axel sends each event through `gtag('event', name, params)`. On production, the `google_tag` module loads the GA4 tag `G-LCQ5CZ3H3W` for anonymous visitors only, so events from logged-in users never reach GA4. See [Non-production environments](#non-production-environments) for the other environments.
 
 ## Attributes the module renders
 
