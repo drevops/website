@@ -11,7 +11,7 @@ The obvious alternative, [`drupal/access_unpublished`](https://www.drupal.org/pr
 ## How editors use it
 
 1. Open the content item and choose the **Preview Link** tab (`/node/<nid>/generate-preview-link`).
-2. Click **Generate preview link**, then copy the URL the form shows and send it on.
+2. When the form says no preview link exists yet, click **Generate preview link**. Copy the URL the form shows and send it on.
 3. **Save and regenerate preview link** mints a new token and immediately kills the old URL. **Reset lifetime** restarts the clock without changing the URL.
 
 Opening the link binds its token to the visitor's session, so from that point they can follow ordinary links into the content: a URL they could not otherwise see redirects them to its preview, carrying a notice that explains why and offers to drop the token.
