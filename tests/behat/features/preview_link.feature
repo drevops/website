@@ -16,18 +16,21 @@ Feature: Preview links for unpublished content
     And I follow "Preview Link"
     Then the response status code should be 200
     And I should see "Preview link"
+    And I should see "No preview link has been generated yet."
 
-    When I press "Save and regenerate preview link"
+    When I press "Generate preview link"
     Then the response status code should be 200
+    And I should see "Preview Link saved."
     And I should see "Expiry:"
     And the response should contain "/preview-link/node/"
+    And I should see the button "Save and regenerate preview link"
 
   Scenario: Site Administrator can reach the preview link form for a draft page
     Given I am logged in as a user with the role "Site Administrator"
     When I visit the "civictheme_page" content page with the title "[TEST] Preview Draft Page"
     And I follow "Preview Link"
     Then the response status code should be 200
-    And I should see the button "Save and regenerate preview link"
+    And I should see the button "Generate preview link"
 
   Scenario: Editor without the permission is not offered a preview link
     Given I am logged in as a user with the permissions "access content, access administration pages, access content overview, view any unpublished content"
