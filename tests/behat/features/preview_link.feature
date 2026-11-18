@@ -25,6 +25,11 @@ Feature: Preview links for unpublished content
     And the response should contain "/preview-link/node/"
     And I should see the button "Save and regenerate preview link"
 
+    When I press "Save and regenerate preview link"
+    Then the response status code should be 200
+    And I should see "The token has been regenerated."
+    And the response should contain "/preview-link/node/"
+
   Scenario: Site Administrator can reach the preview link form for a draft page
     Given I am logged in as a user with the role "Site Administrator"
     When I visit the "civictheme_page" content page with the title "[TEST] Preview Draft Page"
