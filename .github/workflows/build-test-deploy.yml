@@ -76,7 +76,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.10.0@sha256:36db4ee12da3372c86966fccd543e49c9470bca12e86eb5d4aad7904dd84a0dd
+      image: drevops/ci-runner:26.11.0@sha256:555efdca6b8428f6223389ca4e116407de553a4240f09abbef78f4896c137129
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -173,7 +173,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.10.0@sha256:36db4ee12da3372c86966fccd543e49c9470bca12e86eb5d4aad7904dd84a0dd
+      image: drevops/ci-runner:26.11.0@sha256:555efdca6b8428f6223389ca4e116407de553a4240f09abbef78f4896c137129
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -242,7 +242,7 @@ jobs:
             echo "VORTEX_CI_DB_CACHE_FALLBACK=no"
             echo "VORTEX_FRONTEND_BUILD_SKIP=1"
             # Import the fetched dump into a clean base image (if database-in-image storage is used).
-            echo "VORTEX_DB_IMAGE_BASE=drevops/mariadb-drupal-data:26.10.0"
+            echo "VORTEX_DB_IMAGE_BASE=drevops/db-data-mysql-8.4:26.11.0"
             # Deploy container image (if database-in-image storage is used).
             echo "VORTEX_EXPORT_DB_CONTAINER_REGISTRY_PUSH_PROCEED=1"
           } >> "$GITHUB_ENV"
@@ -356,7 +356,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.10.0@sha256:36db4ee12da3372c86966fccd543e49c9470bca12e86eb5d4aad7904dd84a0dd
+      image: drevops/ci-runner:26.11.0@sha256:555efdca6b8428f6223389ca4e116407de553a4240f09abbef78f4896c137129
       env:
         PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
         VORTEX_CONTAINER_REGISTRY_USER: ${{ secrets.VORTEX_CONTAINER_REGISTRY_USER }}
@@ -624,7 +624,7 @@ jobs:
 
     container:
       # https://hub.docker.com/r/drevops/ci-runner
-      image: drevops/ci-runner:26.10.0@sha256:36db4ee12da3372c86966fccd543e49c9470bca12e86eb5d4aad7904dd84a0dd
+      image: drevops/ci-runner:26.11.0@sha256:555efdca6b8428f6223389ca4e116407de553a4240f09abbef78f4896c137129
       env:
         TZ: ${{ vars.TZ || 'UTC' }}
         TERM: xterm-256color
