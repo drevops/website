@@ -17,10 +17,19 @@
     "prHourlyLimit": 0,
     "commitBodyTable": true,
     "rangeStrategy": "bump",
+    "constraints": {
+        "composer": "2.11.*"
+    },
     "timezone": "Australia/Melbourne",
     "configMigration": true,
     "internalChecksFilter": "strict",
     "minimumReleaseAgeBehaviour": "timestamp-optional",
+    "vulnerabilityAlerts": {
+        "labels": [
+            "Dependencies",
+            "Security"
+        ]
+    },
     "logLevelRemap": [
         {
             "matchMessage": "/Some .+ did not have a releaseTimestamp, but as we're running with minimumReleaseAgeBehaviour=timestamp-optional, proceeding/",
@@ -278,7 +287,7 @@
                 "/^\\.github/workflows/.+\\.yml$/"
             ],
             "matchStrings": [
-                "docker run[^\\n]*?\\s(?<depName>[a-z0-9][a-z0-9._\\-]*(?:/[a-z0-9._\\-]+)+):(?<currentValue>v?[0-9][\\w.\\-]*)"
+                "docker (?:run|create)[^\\n]*?\\s(?<depName>[a-z0-9][a-z0-9._\\-]*(?:/[a-z0-9._\\-]+)+):(?<currentValue>v?[0-9][\\w.\\-]*)"
             ],
             "datasourceTemplate": "docker",
             "versioningTemplate": "docker"
