@@ -17,7 +17,7 @@ final class ClientErrorLogHook {
   public function __construct(
     protected RouteMatchInterface $routeMatch,
     protected AdminContext $adminContext,
-    protected AccountInterface $currentUser,
+    protected AccountInterface $account,
   ) {}
 
   /**
@@ -29,7 +29,7 @@ final class ClientErrorLogHook {
     $attachments['#cache']['contexts'][] = 'route';
 
     // The logging endpoint only accepts reports from logged-in users.
-    if ($this->currentUser->isAnonymous() || !$this->adminContext->isAdminRoute($this->routeMatch->getRouteObject())) {
+    if ($this->account->isAnonymous() || !$this->adminContext->isAdminRoute($this->routeMatch->getRouteObject())) {
       return;
     }
 

@@ -2,10 +2,9 @@
  * @file
  * Reports uncaught browser errors to the site log.
  *
- * A failed Ajax request throws a Drupal.AjaxError whose message holds the
- * HTTP status, path and response text, so it reaches the log in full.
- * @param {object} Drupal
- * - The Drupal object.
+ * A failed Ajax request throws a Drupal.AjaxError whose message holds the HTTP
+ * status, path and response text, so it reaches the log in full.
+ * @param {object} Drupal  - The Drupal object.
  */
 
 (function doBaseClientErrorLog(Drupal) {
@@ -22,8 +21,8 @@
   /**
    * Converts a value to a string cut to a maximum length.
    *
-   * @param {*}      value  - The value to convert.
-   * @param {number} length - Longest string kept.
+   * @param {unknown} value   - The value to convert.
+   * @param {number}  length  - Longest string kept.
    * @return {string} The cut string.
    */
   function cut(value, length) {
@@ -33,10 +32,10 @@
   /**
    * Sends one error to the logging endpoint.
    *
-   * @param {string} kind     - The event that surfaced the error.
-   * @param {*}      error    - The thrown value, if the event carries one.
-   * @param {string} fallback - Message to use when the value has none.
-   * @param {object} location - Source, line and column of the error.
+   * @param {string}  kind      - The event that surfaced the error.
+   * @param {unknown} error     - The thrown value, if the event carries one.
+   * @param {string}  fallback  - Message to use when the value has none.
+   * @param {object}  location  - Source, line and column of the error.
    */
   function report(kind, error, fallback, location) {
     if (sent >= limit) {
@@ -45,7 +44,7 @@
     sent += 1;
 
     const isError = error instanceof Error;
-    const message = isError ? error.message : error ?? fallback;
+    const message = isError ? error.message : (error ?? fallback);
     // The endpoint refuses a report without a message, and both an empty
     // Error and a rejection without a reason carry none.
     const body = {
