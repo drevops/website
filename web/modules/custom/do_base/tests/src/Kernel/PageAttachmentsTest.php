@@ -322,7 +322,7 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   /**
    * Runs the alter hook over the given attachments.
    *
-   * @param array<string, array<string, mixed>> $attachments
+   * @param array<mixed> $attachments
    *   The attachments to alter.
    */
   protected function alter(array &$attachments): void {
