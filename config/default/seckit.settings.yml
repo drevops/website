@@ -27,7 +27,7 @@ seckit_csrf:
 seckit_clickjacking:
   js_css_noscript: true
   noscript_message: 'Sorry, you need to enable JavaScript to visit this website.'
-  x_frame: '0'
+  x_frame: '2'
   x_frame_allow_from: ''
 seckit_ssl:
   hsts: true
@@ -40,7 +40,7 @@ seckit_ct:
   report_uri: ''
   enforce: true
 seckit_fp:
-  feature_policy: true
+  feature_policy: false
   feature_policy_policy: "camera 'none'; microphone 'none'; geolocation 'none'; fullscreen 'self'"
 seckit_various:
   from_origin: true

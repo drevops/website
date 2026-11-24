@@ -66,3 +66,4 @@ cloneable_entities:
   - xmlsitemap
   - preview_link
   - linkcheckerlink
+  - response_header
