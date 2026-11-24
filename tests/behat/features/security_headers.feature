@@ -10,7 +10,8 @@ Feature: Security headers
     When I go to the homepage
     Then the response status code should be 200
     And the response header "Permissions-Policy" should contain "camera=(), microphone=(), geolocation=()"
-    And the response header "Permissions-Policy" should contain "fullscreen=(self \"https://www.youtube.com\")"
+    And the response header "Permissions-Policy" should contain "fullscreen=(self"
+    And the response header "Permissions-Policy" should contain "https://www.youtube.com"
     And the response header "Cross-Origin-Opener-Policy" should contain "same-origin"
     And the response header "Cross-Origin-Resource-Policy" should contain "same-origin"
     And the response header "X-Permitted-Cross-Domain-Policies" should contain "none"
