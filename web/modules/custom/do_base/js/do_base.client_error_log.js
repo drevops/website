@@ -14,6 +14,22 @@
   const limit = 10;
   let sent = 0;
 
+  // Match the lengths the endpoint keeps, so a long Ajax response body cannot
+  // push the request past the 64 KiB a keepalive request may carry.
+  const messageLength = 4000;
+  const fieldLength = 1000;
+
+  /**
+   * Converts a value to a string cut to a maximum length.
+   *
+   * @param {*}      value  - The value to convert.
+   * @param {number} length - Longest string kept.
+   * @return {string} The cut string.
+   */
+  function cut(value, length) {
+    return String(value ?? '').slice(0, length);
+  }
+
   /**
    * Sends one error to the logging endpoint.
    *
@@ -29,15 +45,18 @@
     sent += 1;
 
     const isError = error instanceof Error;
+    const message = isError ? error.message : error ?? fallback;
+    // The endpoint refuses a report without a message, and both an empty
+    // Error and a rejection without a reason carry none.
     const body = {
       kind,
-      name: isError ? error.name : '',
-      message: isError ? error.message : String(error ?? fallback),
-      stack: isError && error.stack ? error.stack : '',
-      source: location.source || '',
+      name: isError ? cut(error.name, fieldLength) : '',
+      message: cut(message, messageLength) || `${kind} without a message`,
+      stack: isError ? cut(error.stack, fieldLength) : '',
+      source: cut(location.source, fieldLength),
       line: location.line || 0,
       column: location.column || 0,
-      url: window.location.href,
+      url: cut(window.location.href, fieldLength),
     };
 
     // A failed report is dropped rather than reported, so the logger cannot
