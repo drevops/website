@@ -1,0 +1,23 @@
+do_base_test.client_errors:
+  path: '/do-base-test/client-errors'
+  defaults:
+    _form: '\Drupal\do_base_test\Form\ClientErrorsForm'
+    _title: 'Client errors'
+  requirements:
+    _access: 'TRUE'
+  options:
+    _admin_route: TRUE
+
+do_base_test.server_error:
+  path: '/do-base-test/client-errors/server-error'
+  defaults:
+    _controller: '\Drupal\do_base_test\Controller\ClientErrorsController::serverError'
+  requirements:
+    _access: 'TRUE'
+
+do_base_test.not_ajax:
+  path: '/do-base-test/client-errors/not-ajax'
+  defaults:
+    _controller: '\Drupal\do_base_test\Controller\ClientErrorsController::notAjax'
+  requirements:
+    _access: 'TRUE'
