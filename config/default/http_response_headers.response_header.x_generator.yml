@@ -1,0 +1,12 @@
+uuid: 4f09a56d-64f9-44b0-95e9-21a088d0e7e7
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: rVXSHnFplX0srS0yj58pNNp_cHSe07Q-YnpBHUX4xUY
+id: x_generator
+label: X-Generator
+description: 'Allows the declaration of the CMS type and version to be modified.'
+name: X-Generator
+value: ''
+visibility: {  }

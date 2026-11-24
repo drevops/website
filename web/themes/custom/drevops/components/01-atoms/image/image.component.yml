@@ -29,6 +29,13 @@ props:
       type: ['integer', 'null']
       title: Height
       description: Image height.
+    loading:
+      type: string
+      title: Loading
+      description: Loading strategy. Defaults to lazy.
+      enum:
+        - lazy
+        - eager
     modifier_class:
       type: string
       title: Modifier classes

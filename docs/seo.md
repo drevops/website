@@ -36,7 +36,7 @@ Configuration holds the values that genuinely differ between pages:
 | Metatag default | Holds |
 |---|---|
 | `global` | Site-level values, the Twitter card type and handle, and the `Organization` and `WebSite` structured data |
-| `front` | The front page's canonical and Open Graph URL |
+| `front` | The front page's canonical and Open Graph URL, and its `og:updated_time`, repeated from `node` because the front page never reads the `node` default |
 | `node` | Node title, description and URL |
 | `node__blog` | `og:type: article`, the article timestamps and the `Article` structured data |
 | `node__civictheme_page`, `node__project` | The summary field the description is taken from |

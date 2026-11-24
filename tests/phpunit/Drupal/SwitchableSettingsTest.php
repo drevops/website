@@ -1299,4 +1299,50 @@ class SwitchableSettingsTest extends SettingsTestCase {
     ];
   }
 
+  /**
+   * Test Rename Admin Paths config.
+   */
+  #[DataProvider('dataProviderRenameAdminPaths')]
+  public function testRenameAdminPaths(array $vars, array $expected_present, array $expected_absent = []): void {
+    $this->setEnvVars($vars);
+
+    $this->requireSettingsFile();
+
+    $this->assertConfigContains($expected_present);
+    $this->assertConfigNotContains($expected_absent);
+  }
+
+  /**
+   * Data provider for testRenameAdminPaths().
+   */
+  public static function dataProviderRenameAdminPaths(): \Iterator {
+    yield 'variable not set' => [
+      [],
+      [],
+      ['rename_admin_paths.settings' => ['user_path' => NULL, 'user_path_value' => NULL]],
+    ];
+
+    yield 'variable set to an empty value' => [
+      ['DRUPAL_USER_PATH' => ''],
+      [],
+      ['rename_admin_paths.settings' => ['user_path' => NULL, 'user_path_value' => NULL]],
+    ];
+
+    yield 'variable set to slashes only' => [
+      ['DRUPAL_USER_PATH' => '/'],
+      [],
+      ['rename_admin_paths.settings' => ['user_path' => NULL, 'user_path_value' => NULL]],
+    ];
+
+    yield 'variable set' => [
+      ['DRUPAL_USER_PATH' => 'staff'],
+      ['rename_admin_paths.settings' => ['user_path' => 1, 'user_path_value' => 'staff']],
+    ];
+
+    yield 'variable set with surrounding slashes' => [
+      ['DRUPAL_USER_PATH' => '/staff/'],
+      ['rename_admin_paths.settings' => ['user_path' => 1, 'user_path_value' => 'staff']],
+    ];
+  }
+
 }

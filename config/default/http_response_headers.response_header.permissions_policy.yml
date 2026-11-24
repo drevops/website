@@ -1,0 +1,10 @@
+uuid: c023768a-d936-4bc0-b904-5a5dcc0cbc70
+langcode: en
+status: true
+dependencies: {  }
+id: permissions_policy
+label: Permissions-Policy
+description: 'Browser features pages may use. YouTube needs fullscreen for embedded video.'
+name: Permissions-Policy
+value: 'camera=(), microphone=(), geolocation=(), fullscreen=(self "https://www.youtube.com")'
+visibility: {  }

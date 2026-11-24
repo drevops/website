@@ -58,6 +58,16 @@ Feature: Page content metatags
     And the response should contain "<meta name=\"twitter:card\" content=\"summary_large_image\""
     And the response should contain "<meta name=\"twitter:image\" content=\""
 
+  Scenario: Front page states when it last changed
+    Given I am an anonymous user
+    When I am on the homepage
+    Then the response should contain "<meta property=\"og:updated_time\" content=\""
+
+  Scenario: Pages do not announce the platform they are built with
+    Given I am an anonymous user
+    When I am on the homepage
+    Then the response should not contain "<meta name=\"Generator\""
+
   Scenario: Page carries breadcrumb structured data
     Given the following civictheme_page content exists:
       | title                    | status |

@@ -272,6 +272,70 @@ class PageAttachmentsTest extends DoBaseKernelTestBase {
   }
 
   /**
+   * Tests that the generator tag is removed and other head elements are kept.
+   *
+   * @param array<int, array{0: array<string, mixed>, 1: string}> $head
+   *   Head elements attached before the alter runs.
+   * @param array<int, string> $expected
+   *   Keys of the head elements expected to remain.
+   */
+  #[DataProvider('dataProviderGeneratorTagIsRemoved')]
+  public function testGeneratorTagIsRemoved(array $head, array $expected): void {
+    // Prepare.
+    $attachments = ['#attached' => ['html_head' => $head]];
+
+    // Act.
+    $this->alter($attachments);
+
+    // Assert.
+    $this->assertSame($expected, array_values(array_map(static fn(array $element): string => $element[1], $attachments['#attached']['html_head'])));
+  }
+
+  /**
+   * Data provider for testGeneratorTagIsRemoved.
+   */
+  public static function dataProviderGeneratorTagIsRemoved(): \Iterator {
+    $generator = [['#tag' => 'meta', '#attributes' => ['name' => 'Generator', 'content' => 'Drupal 11 (https://www.drupal.org)']], 'system_meta_generator'];
+    $viewport = [['#tag' => 'meta', '#attributes' => ['name' => 'viewport', 'content' => 'width=device-width']], 'viewport'];
+    $charset = [['#tag' => 'meta', '#attributes' => ['charset' => 'utf-8']], 'system_meta_content_type'];
+
+    yield 'generator among other tags' => [[$charset, $generator, $viewport], ['system_meta_content_type', 'viewport']];
+    yield 'generator alone' => [[$generator], []];
+    yield 'no generator' => [[$charset, $viewport], ['system_meta_content_type', 'viewport']];
+    yield 'nothing attached' => [[], []];
+  }
+
+  /**
+   * Tests that the alter leaves attachments without a head untouched.
+   */
+  public function testAlterWithoutHeadAddsNothing(): void {
+    // Prepare.
+    $attachments = ['#attached' => ['library' => ['core/drupal']]];
+
+    // Act.
+    $this->alter($attachments);
+
+    // Assert.
+    $this->assertSame(['#attached' => ['library' => ['core/drupal']]], $attachments);
+  }
+
+  /**
+   * Runs the alter hook over the given attachments.
+   *
+   * @param array<mixed> $attachments
+   *   The attachments to alter.
+   */
+  protected function alter(array &$attachments): void {
+    $hook = $this->container->get(PageAttachmentsHook::class);
+
+    if (!$hook instanceof PageAttachmentsHook) {
+      throw new \UnexpectedValueException('The hook is expected to be registered as a service.');
+    }
+
+    $hook->alter($attachments);
+  }
+
+  /**
    * Runs the hook over an empty set of attachments.
    *
    * The hook is taken from the container, so the wiring it is registered with

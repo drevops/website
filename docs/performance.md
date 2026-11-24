@@ -47,6 +47,14 @@ Components are included from Twig rather than rendered through a render element,
 
 `ahoy lint-sdc` validates component templates with `sdc_devel`, which reports any Twig function missing from its allow list as unknown. `TwigValidatorRuleInfoAlterHook` in `do_base` adds this one; a function added for another component needs the same.
 
+## Images load lazily unless they open the page
+
+The image component renders `loading="lazy"` by default, so the browser fetches an image only as it nears the viewport. A lazy image hidden with `display: none`, such as the logo variant for the other breakpoint, is never fetched.
+
+The banner's featured and card images pass `loading: 'eager'`, because either can be the largest contentful paint. Pass `eager` from any other component whose image sits at the top of the page.
+
+Logos keep the default, because this theme has no override of `civictheme:logo`. They are small SVGs with their dimensions reserved, so loading them lazily moves nothing.
+
 ## Overriding a CivicTheme component
 
 Drupal matches components by name within an extension, so a same-named component in this theme is a new component rather than an override. The `replaces:` key in the `.component.yml` is what makes it an override:
