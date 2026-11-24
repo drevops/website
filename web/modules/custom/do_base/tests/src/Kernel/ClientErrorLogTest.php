@@ -196,6 +196,48 @@ class ClientErrorLogTest extends DoBaseKernelTestBase {
   }
 
   /**
+   * Tests that a user's reports are refused once they exceed the hourly limit.
+   */
+  public function testReportsBeyondTheLimitAreRefused(): void {
+    // Prepare.
+    $this->setUpCurrentUser();
+    $controller = $this->controller();
+
+    for ($i = 1; $i <= 50; $i++) {
+      $controller->log($this->createReport(['message' => '[TEST] Report ' . $i]));
+    }
+
+    // Act.
+    $response = $controller->log($this->createReport(['message' => '[TEST] Report 51']));
+
+    // Assert.
+    $this->assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+    $this->assertCount(50, $this->logEntries());
+  }
+
+  /**
+   * Tests that another user is not limited by someone else's reports.
+   */
+  public function testLimitIsPerUser(): void {
+    // Prepare.
+    $this->setUpCurrentUser();
+    $flood = $this->container->get('flood');
+
+    for ($i = 1; $i <= 50; $i++) {
+      $flood->register('do_base.client_error_log', 3600, 'user:' . $this->container->get('current_user')->id());
+    }
+
+    $this->setUpCurrentUser();
+
+    // Act.
+    $response = $this->controller()->log($this->createReport(['message' => '[TEST] Another user']));
+
+    // Assert.
+    $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    $this->assertCount(1, $this->logEntries());
+  }
+
+  /**
    * Tests that only logged-in users can post JSON reports to the endpoint.
    */
   public function testEndpointRequirements(): void {
@@ -210,6 +252,7 @@ class ClientErrorLogTest extends DoBaseKernelTestBase {
     $this->assertSame(['POST'], $route->getMethods());
     $this->assertSame('TRUE', $route->getRequirement('_user_is_logged_in'));
     $this->assertSame('json', $route->getRequirement('_content_type_format'));
+    $this->assertSame('TRUE', $route->getRequirement('_csrf_request_header_token'));
     $this->assertTrue($route->getOption('no_cache'));
   }
 

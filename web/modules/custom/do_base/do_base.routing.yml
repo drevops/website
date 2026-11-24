@@ -14,5 +14,6 @@ do_base.client_error_log:
   requirements:
     _user_is_logged_in: 'TRUE'
     _content_type_format: json
+    _csrf_request_header_token: 'TRUE'
   options:
     no_cache: TRUE

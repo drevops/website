@@ -34,8 +34,10 @@ ahoy drush watchdog:show --type=javascript --extended
 ## Limits
 
 - A page sends at most 10 reports, so an error thrown in a loop can't flood the log.
+- Each user can send 50 reports per hour. The endpoint answers report 51 with a 429 response and logs nothing.
 - The message keeps its first 4000 characters, and every other field keeps its first 1000.
 - The endpoint, `POST /client-error-log`, accepts JSON from logged-in users only. It answers a report with no message with a 400 response.
+- Each report carries the session's CSRF token in an `X-CSRF-Token` header, which the script reads from `/session/token`. Another site can't read that token, so it can't post reports for a logged-in user.
 - Core catches Ajax command failures itself, such as a stylesheet that fails to load, and writes them only to the browser console. Those failures don't reach the log.
 
 ## Related

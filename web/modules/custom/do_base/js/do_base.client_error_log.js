@@ -12,6 +12,7 @@
   // flood the log.
   const limit = 10;
   let sent = 0;
+  let token = null;
 
   // Match the lengths the endpoint keeps, so a long Ajax response body cannot
   // push the request past the 64 KiB a keepalive request may carry.
@@ -60,13 +61,40 @@
 
     // A failed report is dropped rather than reported, so the logger cannot
     // feed on its own errors.
-    fetch(Drupal.url('client-error-log'), {
-      method: 'POST',
-      credentials: 'same-origin',
-      keepalive: true,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    }).catch(function ignoreFailure() {});
+    csrfToken()
+      .then(function send(token) {
+        return fetch(Drupal.url('client-error-log'), {
+          method: 'POST',
+          credentials: 'same-origin',
+          keepalive: true,
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': token },
+          body: JSON.stringify(body),
+        });
+      })
+      .catch(function ignoreFailure() {});
+  }
+
+  /**
+   * Fetches the session's CSRF token once per page.
+   *
+   * @return {Promise<string>} The token the endpoint requires.
+   */
+  function csrfToken() {
+    if (!token) {
+      token = fetch(Drupal.url('session/token'), { credentials: 'same-origin' }).then(function readToken(response) {
+        if (!response.ok) {
+          throw new Error(`Token request failed with ${response.status}`);
+        }
+
+        return response.text();
+      });
+      // A failed request is retried by the next report.
+      token.catch(function resetToken() {
+        token = null;
+      });
+    }
+
+    return token;
   }
 
   window.addEventListener('error', function reportError(event) {

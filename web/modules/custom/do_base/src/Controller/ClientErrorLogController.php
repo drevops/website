@@ -6,6 +6,7 @@ namespace Drupal\do_base\Controller;
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Flood\FloodInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,9 +27,25 @@ class ClientErrorLogController extends ControllerBase {
    */
   protected const int FIELD_LENGTH = 1000;
 
+  /**
+   * Name of the flood event that counts each user's reports.
+   */
+  protected const string FLOOD_EVENT = 'do_base.client_error_log';
+
+  /**
+   * Reports a user may send within the window.
+   */
+  protected const int FLOOD_THRESHOLD = 50;
+
+  /**
+   * Length of the window, in seconds.
+   */
+  protected const int FLOOD_WINDOW = 3600;
+
   public function __construct(
     #[Autowire(service: 'logger.channel.javascript')]
     protected LoggerInterface $logger,
+    protected FloodInterface $flood,
   ) {
   }
 
@@ -39,10 +56,20 @@ class ClientErrorLogController extends ControllerBase {
    *   The request carrying the error as a JSON object.
    *
    * @return \Symfony\Component\HttpFoundation\Response
-   *   An empty response, or a 400 response when the body is not an object
-   *   with a message.
+   *   An empty response, a 429 response once the user has sent too many
+   *   reports, or a 400 response when the body is not an object with a message.
    */
   public function log(Request $request): Response {
+    // The per-page cap lives in the browser, so it does not bind a client that
+    // posts directly.
+    $identifier = 'user:' . $this->currentUser()->id();
+
+    if (!$this->flood->isAllowed(static::FLOOD_EVENT, static::FLOOD_THRESHOLD, static::FLOOD_WINDOW, $identifier)) {
+      return new Response('', Response::HTTP_TOO_MANY_REQUESTS);
+    }
+
+    $this->flood->register(static::FLOOD_EVENT, static::FLOOD_WINDOW, $identifier);
+
     $report = json_decode($request->getContent(), TRUE);
 
     if (!is_array($report) || $this->text($report, 'message', static::MESSAGE_LENGTH) === '') {
