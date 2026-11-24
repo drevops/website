@@ -35,5 +35,6 @@ Add the host to the matching directive in `config/default/csp.settings.yml` and 
 
 ## Related
 
+- [Security headers](security-headers.md) - the other security headers, including `X-Frame-Options`, which repeats `frame-ancestors`
 - [Front-end performance](performance.md) - self-hosted fonts, and the editor stylesheets the policy would otherwise block
 - [SEO](seo.md) - meta tags, share cards and structured data
