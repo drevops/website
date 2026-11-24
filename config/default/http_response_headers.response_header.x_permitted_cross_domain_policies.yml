@@ -1,0 +1,10 @@
+uuid: 670d8642-b2e3-4893-8c21-fcf137ae3329
+langcode: en
+status: true
+dependencies: {  }
+id: x_permitted_cross_domain_policies
+label: X-Permitted-Cross-Domain-Policies
+description: 'No cross-domain policy files for Flash and PDF clients.'
+name: X-Permitted-Cross-Domain-Policies
+value: none
+visibility: {  }

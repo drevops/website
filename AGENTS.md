@@ -109,6 +109,7 @@ The `docs/` directory contains **what** applies to this project:
 - `docs/seo.md` - Meta tags, social share cards and structured data
 - `docs/analytics.md` - Axel attributes, the Google Analytics events they send and GA4 set-up
 - `docs/csp.md` - The content security policy, its nonce and its derived script hash
+- `docs/security-headers.md` - Security headers and their sources, the renamed login path and the CAA record
 - `docs/related-content.md` - Related-content lists and topic pages
 - `docs/performance.md` - Image styles, self-hosted fonts and layout stability
 - `docs/image-zoom.md` - Zoomable lightbox for images placed in content

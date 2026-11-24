@@ -12,6 +12,7 @@
  * - alt: [string] Image alt text.
  * - width: [integer,null] Image width.
  * - height: [integer,null] Image height.
+ * - loading: [string] Loading strategy (lazy or eager). Defaults to lazy.
  * - modifier_class: [string] Additional CSS classes.
  * - attributes: [Drupal\Core\Template\Attribute] Additional HTML attributes.
  */
@@ -35,6 +36,7 @@
     alt="{{ alt }}"
     {% if width %}width="{{ width }}"{% endif %}
     {% if height %}height="{{ height }}"{% endif %}
+    loading="{{ loading|default('lazy') }}"
     {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}
   />
 {% endif %}

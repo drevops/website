@@ -1,0 +1,10 @@
+uuid: 27203d45-90f7-4e4e-9ed5-9fb9c68eb26f
+langcode: en
+status: true
+dependencies: {  }
+id: cross_origin_resource_policy
+label: Cross-Origin-Resource-Policy
+description: 'Only this origin may load responses served by Drupal.'
+name: Cross-Origin-Resource-Policy
+value: same-origin
+visibility: {  }

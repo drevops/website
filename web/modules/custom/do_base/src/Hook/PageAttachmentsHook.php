@@ -57,6 +57,30 @@ final class PageAttachmentsHook {
   }
 
   /**
+   * Implements hook_page_attachments_alter().
+   */
+  #[Hook('page_attachments_alter')]
+  public function alter(array &$attachments): void {
+    $this->removeGeneratorTag($attachments);
+  }
+
+  /**
+   * Removes the generator meta tag core attaches to every page.
+   *
+   * The tag names the platform and its major version, which helps automated
+   * scanners pick targets and tells a visitor nothing.
+   */
+  protected function removeGeneratorTag(array &$attachments): void {
+    $head = $attachments['#attached']['html_head'] ?? [];
+
+    foreach ($head as $delta => $element) {
+      if (($element[1] ?? NULL) === 'system_meta_generator') {
+        unset($attachments['#attached']['html_head'][$delta]);
+      }
+    }
+  }
+
+  /**
    * Preloads the banner background image.
    *
    * The banner paints its background from CSS, so the browser cannot discover
