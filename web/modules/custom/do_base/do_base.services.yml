@@ -2,6 +2,9 @@ services:
   logger.channel.do_base:
     parent: logger.channel_base
     arguments: ['do_base']
+  logger.channel.javascript:
+    parent: logger.channel_base
+    arguments: ['javascript']
   Drupal\do_base\NavigationScriptHash:
     arguments: ['@extension.list.module', '@cache.default', '@logger.channel.do_base', '%app.root%']
   Drupal\do_base\Hook\AutomatedListPagerHook:

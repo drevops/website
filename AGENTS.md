@@ -115,6 +115,7 @@ The `docs/` directory contains **what** applies to this project:
 - `docs/image-zoom.md` - Zoomable lightbox for images placed in content
 - `docs/broken-links.md` - Daily link checks, the report and the host cron needs
 - `docs/preview-links.md` - sharing unpublished content by link
+- `docs/browser-errors.md` - Logging uncaught browser and Ajax errors from administration pages
 - `docs/faqs.md` - Project-specific FAQs
 
 **Always check these files first** to understand project-specific decisions.
