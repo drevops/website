@@ -22,9 +22,6 @@
 {% set modifier_class = '%s %s'|format(theme_class, modifier_class|default('')) %}
 {# Handle Drupal edge case where empty alt may be passed as literal '""' string #}
 {% set alt = (alt == '""') ? '' : (alt|default('')) %}
-{% set has_attributes = attributes is defined and attributes is not null %}
-{# A browser keeps the first of 2 'loading' attributes, so it is emitted once. #}
-{% set loading = loading|default(has_attributes and attributes.loading is not empty ? attributes.loading|render : 'lazy') %}
 
 {% if url %}
   {% if not width or not height %}
@@ -39,7 +36,7 @@
     alt="{{ alt }}"
     {% if width %}width="{{ width }}"{% endif %}
     {% if height %}height="{{ height }}"{% endif %}
-    loading="{{ loading }}"
-    {% if has_attributes %}{{- attributes|without('loading') -}}{% endif %}
+    loading="{{ loading|default('lazy') }}"
+    {% if attributes is defined and attributes is not null %}{{- attributes -}}{% endif %}
   />
 {% endif %}
