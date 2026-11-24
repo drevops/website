@@ -11,6 +11,11 @@ Feature: Site footer menu
     Then I should see "Privacy policy" in the ".ct-footer__middle .ct-navigation" element
     And I should see "Responsible AI policy" in the ".ct-footer__middle .ct-navigation" element
 
+  Scenario: Site visitor's browser defers the footer logo until it is scrolled to
+    Given I am an anonymous user
+    When I go to the homepage
+    Then the element ".ct-footer__logo .ct-logo__image" with the attribute "loading" and the value "lazy" should exist
+
   @javascript
   Scenario: Site visitor sees the footer menu as a single row on a desktop
     When I set the viewport to "1440" by "900"

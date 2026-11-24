@@ -29,6 +29,7 @@ Feature: Banner card type
     Then I should see a ".ct-banner.ct-banner-type--card .container .ct-banner__card-layout .ct-banner__card img.ct-banner__card-image" element
     And the element ".ct-banner__card-image" with the attribute "src" and a value containing "/styles/banner_card/" should exist
     And the element ".ct-banner__card-image" with the attribute "src" and a value containing ".webp" should exist
+    And the element ".ct-banner__card-image" with the attribute "loading" and the value "eager" should exist
     And I should not see a ".ct-banner__featured-image__wrapper" element
     And I should not see a ".ct-banner__card-layout .col-m-6" element
 
@@ -40,5 +41,6 @@ Feature: Banner card type
     When I visit the "project" content page with the title "[TEST] Banner default project"
     Then I should see a ".ct-banner.ct-banner-type--default .ct-banner__featured-image__wrapper img.ct-banner__featured-image" element
     And the element ".ct-banner__featured-image" with the attribute "src" and a value containing "/styles/banner_featured/" should exist
+    And the element ".ct-banner__featured-image" with the attribute "loading" and the value "eager" should exist
     And I should not see a ".ct-banner__card-layout" element
     And I should not see a ".ct-banner__card" element
