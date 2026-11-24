@@ -8,5 +8,6 @@ id: front
 label: 'Front page'
 tags:
   canonical_url: '[site:url]'
+  og_updated_time: '[node:changed:custom:c]'
   og_url: '[site:url]'
   shortlink: '[site:url]'
