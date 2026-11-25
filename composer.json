@@ -232,6 +232,9 @@
             "drupal/environment_indicator": {
                 "Add a Navigation integration submodule - https://www.drupal.org/project/environment_indicator/issues/3457688": "patches/environment-indicator-navigation.patch"
             },
+            "drupal/gin": {
+                "Guard the vertical toolbar collapse in the meta sidebar when core Navigation is enabled": "patches/gin-sidebar-optional-toolbar.patch"
+            },
             "drupal/linkchecker": {
                 "Make linkchecker service compatible with Guzzle7 - https://www.drupal.org/project/linkchecker/issues/3396666": "patches/linkchecker-guzzle7-connect-exception.patch"
             },

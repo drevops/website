@@ -32,6 +32,24 @@ Feature: Content Security Policy
     And the response header "Content-Security-Policy" should contain "https://www.youtube.com"
     And the response header "Content-Security-Policy" should contain "https://www.google-analytics.com"
 
+  Scenario: CSP asks anonymous pages for a sample of every blocked script
+    Given I am an anonymous user
+    When I go to the homepage
+    Then the response status code should be 200
+    And the response header "Content-Security-Policy" should contain "script-src 'self' 'report-sample'"
+    And the response header "Content-Security-Policy" should contain "script-src-elem 'self' 'report-sample'"
+
+  Scenario Outline: CSP asks admin pages for a sample of every blocked script
+    Given I am logged in as a user with the role "civictheme_site_administrator"
+    When I go to "<path>"
+    Then the response status code should be 200
+    And the response header "Content-Security-Policy" should contain "script-src-elem 'self' 'report-sample'"
+
+    Examples:
+      | path                     |
+      | /admin/content           |
+      | node/add/civictheme_page |
+
   Scenario: CSP allows no external font source
     Given I am an anonymous user
     When I go to the homepage

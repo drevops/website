@@ -236,6 +236,23 @@ JS;
   }
 
   /**
+   * Clear the local storage of the current origin.
+   *
+   * The browser keeps local storage between scenarios, so state a page saved
+   * in one scenario is read back by the next.
+   *
+   * @code
+   * When I clear the local storage
+   * @endcode
+   *
+   * @javascript
+   */
+  #[When('I clear the local storage')]
+  public function browserClearLocalStorage(): void {
+    $this->getSession()->executeScript('window.localStorage.clear();');
+  }
+
+  /**
    * Assert that an analytics event was sent with the given parameters.
    *
    * Reads the events the Google tag queued on the page, so it only sees the

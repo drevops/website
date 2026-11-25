@@ -10,6 +10,8 @@ enforce:
       base: self
     script-src:
       base: self
+      flags:
+        - report-sample
       sources:
         - 'https://www.googletagmanager.com'
         - 'https://www.gstatic.com'
