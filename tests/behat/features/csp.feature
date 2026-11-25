@@ -31,6 +31,8 @@ Feature: Content Security Policy
     And the response header "Content-Security-Policy" should contain "https://www.recaptcha.net"
     And the response header "Content-Security-Policy" should contain "https://www.youtube.com"
     And the response header "Content-Security-Policy" should contain "https://www.google-analytics.com"
+    And the response header "Content-Security-Policy" should contain "https://js-agent.newrelic.com"
+    And the response header "Content-Security-Policy" should contain "https://bam.nr-data.net"
 
   Scenario: CSP asks anonymous pages for a sample of every blocked script
     Given I am an anonymous user
