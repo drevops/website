@@ -1,0 +1,28 @@
+Guard the vertical toolbar collapse in 'Drupal.ginSidebar.showSidebar()'.
+
+Below 1280 px, opening the meta sidebar calls
+'Drupal.ginToolbar.collapseToolbar()' whenever the stored 'classic_toolbar'
+setting is 'vertical'. 'Drupal.ginToolbar' is defined by 'js/toolbar.js',
+which is not loaded when core's Navigation module is enabled, so the call
+throws "Cannot read properties of undefined (reading 'collapseToolbar')".
+
+When it throws from 'Drupal.ginSidebar.init()', the rest of 'init()' and of
+the behavior's 'attach()' never runs: the resize observer, the resizable
+sidebar, the Alt+S shortcut and the sidebar toggle click handler are not set
+up.
+
+The 2 neighbouring calls already use optional chaining. Drop this patch once
+a Gin release guards the call itself.
+
+diff --git a/js/sidebar.js b/js/sidebar.js
+--- a/js/sidebar.js
++++ b/js/sidebar.js
+@@ -109,7 +109,7 @@
+         Drupal.ginCoreNavigation?.collapseToolbar();
+
+         if (toolbarVariant === 'vertical') {
+-          Drupal.ginToolbar.collapseToolbar();
++          Drupal.ginToolbar?.collapseToolbar();
+         } else if (toolbarVariant === 'new') {
+           Drupal.behaviors.ginNavigation?.collapseSidebar();
+         }
