@@ -22,6 +22,7 @@ enforce:
         - 'https://cdn.jsdelivr.net/npm/@drevops/axel@0.4.0/dist/axel.drupal.gtag.min.js'
         - 'https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.js'
         - 'https://unpkg.com/tippy.js@6.3.7/dist/tippy.umd.js'
+        - 'https://js-agent.newrelic.com'
     object-src:
       base: none
     style-src:
@@ -57,6 +58,7 @@ enforce:
         - 'https://www.google-analytics.com'
         - 'https://www.recaptcha.net'
         - 'https://www.google.com'
+        - 'https://bam.nr-data.net'
     upgrade-insecure-requests: true
   reporting:
     plugin: uri

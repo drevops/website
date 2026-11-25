@@ -10,16 +10,18 @@ This document describes **what** the policy admits on this site and why. The mod
 
 `script-src` carries no `unsafe-inline`, so an inline `<script>` runs only if the policy names it.
 
-- **The nonce** is generated per response by the `csp` module. Every response asks for one, which is what puts `nonce-{value}` in the directive. Nothing but the module ever writes it.
+- **The nonce** is generated per response by the `csp` module. Every response asks for one, which is what puts `nonce-{value}` in the directive. Nothing but the module generates it.
 - **The hash** covers the inline script that core's navigation toolbar renders to set the admin sidebar's state before first paint. That script carries no nonce, so a hash is the only source that admits it. Without it the script is blocked, the console reports the violation, and editors see the sidebar flash from collapsed to expanded on every admin page.
 
 A hash is not a secret: it is a digest of code that ships in Drupal core, it is published in the response header on every request, and it admits exactly one byte-identical script and nothing else. What must stay unpredictable is the nonce, and that never leaves the request it was made for.
 
 ### New Relic browser monitoring
 
-On Lagoon, the New Relic PHP agent adds 2 inline `NREUM` scripts to each HTML page that PHP renders. Neither script carries the nonce, so the policy blocks both and logs 2 violations. `web/sites/default/includes/modules/settings.newrelic.php` calls `newrelic_disable_autorum()`, which stops the agent from adding them. Server-side APM keeps reporting.
+On Lagoon, the New Relic PHP agent injects 2 inline `NREUM` scripts into HTML pages, and neither carries the nonce. `NewRelicBrowserMiddleware` in `do_base` turns that injection off and adds both scripts itself. Each script carries the nonce from the response's `Content-Security-Policy` header. The middleware wraps the page cache, so a cached page gets scripts that match the policy it's served with.
 
-A report whose `script-sample` starts with `window.NREUM` or `(window.NREUM||` means the agent added the scripts. Check that `settings.newrelic.php` loads on that environment.
+The scripts load the agent from `https://js-agent.newrelic.com` and send data to `https://bam.nr-data.net`, so `script-src` and `connect-src` list both hosts. Locally and in CI the New Relic extension isn't loaded, so the middleware changes nothing.
+
+A report whose `script-sample` starts with `window.NREUM` or `(window.NREUM||` means a New Relic script went out without the nonce. Check that `do_base` is enabled and that the response's policy carries a nonce.
 
 ## The hash is derived, not recorded
 
