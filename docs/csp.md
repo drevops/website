@@ -31,7 +31,7 @@ It logs a warning to the `do_base` channel and returns no hash when it cannot ac
 
 ## Violation reports
 
-Browsers send every violation to `/report-csp-violation`. The `seckit` module serves that path and logs each report as a warning of type `seckit`. To read the reports from the command line, run:
+Browsers send every violation to `/report-csp-violation`. The `seckit` module serves that path and logs each report as a warning of type `seckit`. On any environment, open **Reports > Recent log messages** and filter by the `seckit` type. To read the local reports from the command line, run:
 
 ```bash
 ahoy drush watchdog:show --type=seckit --extended
@@ -42,8 +42,9 @@ ahoy drush watchdog:show --type=seckit --extended
 To find where a blocked script comes from, search `web/` for its sample:
 
 - If the sample matches code the site renders, admit that script with a nonce or a derived hash, the same way as the navigation toolbar script.
-- If nothing in `web/` matches, search the page's rendered source, because Twig can assemble a script from parts. Then load the page in a browser profile with no extensions.
-- If the script is in neither, a browser feature or an extension added it, and its reports need no fix.
+- If nothing in `web/` matches, search the page's rendered source, because Twig can assemble a script from parts.
+- If the rendered source doesn't hold it either, a script the page loads, such as Google Tag Manager, can create it at runtime. Find the script's initiator in the browser's developer tools before you decide.
+- If the report stops in a browser profile with no extensions, an extension added the script, and its reports need no fix.
 
 ## Adding an external source
 
