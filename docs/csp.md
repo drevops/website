@@ -29,6 +29,23 @@ It logs a warning to the `do_base` channel and returns no hash when it cannot ac
 
 `PageAttachmentsTest::testAllowedHashMatchesTheTemplate()` asserts the derivation still reads the template core currently ships, so any of the above fails in continuous integration rather than only appearing in a log.
 
+## Violation reports
+
+Browsers send every violation to `/report-csp-violation`. The `seckit` module serves that path and logs each report as a warning of type `seckit`. On any environment, open **Reports > Recent log messages** and filter by the `seckit` type. To read the local reports from the command line, run:
+
+```bash
+ahoy drush watchdog:show --type=seckit --extended
+```
+
+`script-src` carries `'report-sample'`, so a report about a blocked inline script holds the script's first 40 characters in `script-sample`. The `csp` module copies `script-src` into `script-src-elem` when it adds the navigation hash, so both directives carry the flag.
+
+To find where a blocked script comes from, search `web/` for its sample:
+
+- If the sample matches code the site renders, admit that script with a nonce or a derived hash, the same way as the navigation toolbar script.
+- If nothing in `web/` matches, search the page's rendered source, because Twig can assemble a script from parts.
+- If the rendered source doesn't hold it either, a script the page loads, such as Google Tag Manager, can create it at runtime. Find the script's initiator in the browser's developer tools before you decide.
+- If the report stops in a browser profile with no extensions, an extension added the script, and its reports need no fix.
+
 ## Adding an external source
 
 Add the host to the matching directive in `config/default/csp.settings.yml` and export. Prefer self-hosting the asset: the fonts this site serves were moved off `fonts.googleapis.com` for that reason, and the policy has had no Google Fonts source since. See [Front-end performance](performance.md#fonts-are-served-from-this-origin).

@@ -1,0 +1,44 @@
+Guard the vertical toolbar collapse in 'Drupal.ginSidebar.showSidebar()'.
+
+Below 1280 px, opening the meta sidebar calls
+'Drupal.ginToolbar.collapseToolbar()' whenever the stored 'classic_toolbar'
+setting is 'vertical'. 'Drupal.ginToolbar' is defined by 'js/toolbar.js',
+which is not loaded when core's Navigation module is enabled, so the call
+throws "Cannot read properties of undefined (reading 'collapseToolbar')".
+
+When it throws from 'Drupal.ginSidebar.init()', the rest of 'init()' and of
+the behavior's 'attach()' never runs: the resize observer, the resizable
+sidebar, the Alt+S shortcut and the sidebar toggle click handler are not set
+up.
+
+The 2 neighbouring calls already use optional chaining. The 'sidebar' library
+loads the built 'dist/js/sidebar.js', so the guard goes into both it and the
+'js/sidebar.js' source. Drop this patch once a Gin release guards the call
+itself.
+
+diff --git a/dist/js/sidebar.js b/dist/js/sidebar.js
+index 1c94b82..b347703 100644
+--- a/dist/js/sidebar.js
++++ b/dist/js/sidebar.js
+@@ -34,7 +34,7 @@
+           sidebarTrigger.setAttribute("title", hideLabel), sidebarTrigger.nextSibling && (sidebarTrigger.nextSibling.innerHTML = hideLabel), 
+           sidebarTrigger.setAttribute("aria-expanded", "true"), sidebarTrigger.classList.add("is-active"), 
+           document.body.setAttribute("data-meta-sidebar", "open"), localStorage.setItem(chooseStorage, "true"), 
+-          window.innerWidth < 1280 && (Drupal.ginCoreNavigation?.collapseToolbar(), "vertical" === toolbarVariant ? Drupal.ginToolbar.collapseToolbar() : "new" === toolbarVariant && Drupal.behaviors.ginNavigation?.collapseSidebar()));
++          window.innerWidth < 1280 && (Drupal.ginCoreNavigation?.collapseToolbar(), "vertical" === toolbarVariant ? Drupal.ginToolbar?.collapseToolbar() : "new" === toolbarVariant && Drupal.behaviors.ginNavigation?.collapseSidebar()));
+         },
+         collapseSidebar: function() {
+           const chooseStorage = (arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : window.innerWidth) < 1024 ? "Drupal.gin.sidebarExpanded.mobile" : storageDesktop, showLabel = Drupal.t("Show sidebar panel"), sidebarTrigger = document.querySelector(".meta-sidebar__trigger");
+diff --git a/js/sidebar.js b/js/sidebar.js
+index 7c187a0..ecbafb3 100644
+--- a/js/sidebar.js
++++ b/js/sidebar.js
+@@ -109,7 +109,7 @@
+         Drupal.ginCoreNavigation?.collapseToolbar();
+ 
+         if (toolbarVariant === 'vertical') {
+-          Drupal.ginToolbar.collapseToolbar();
++          Drupal.ginToolbar?.collapseToolbar();
+         } else if (toolbarVariant === 'new') {
+           Drupal.behaviors.ginNavigation?.collapseSidebar();
+         }

@@ -1,0 +1,6 @@
+client_errors:
+  js:
+    js/client-errors.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

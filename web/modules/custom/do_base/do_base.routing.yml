@@ -5,3 +5,15 @@ do_base.admin_config_site:
     _title: 'Site settings'
   requirements:
     _permission: 'access administration pages'
+
+do_base.client_error_log:
+  path: '/client-error-log'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\do_base\Controller\ClientErrorLogController::log'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _content_type_format: json
+    _csrf_request_header_token: 'TRUE'
+  options:
+    no_cache: TRUE

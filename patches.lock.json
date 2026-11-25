@@ -1,5 +1,5 @@
 {
-    "_hash": "0433a80fd2deb57787d75833699b04d84d283104f920e33fcdea84c500cade86",
+    "_hash": "acb0c8791b91c5327a4d040e27771c26f524aaa3b5d774a9828b1d08aee7fe7e",
     "patches": {
         "drupal/civictheme": [
             {
@@ -41,6 +41,18 @@
                 "description": "Add a Navigation integration submodule - https://www.drupal.org/project/environment_indicator/issues/3457688",
                 "url": "patches/environment-indicator-navigation.patch",
                 "sha256": "3dc73539c124b5fc12b324d6ac9900be395f8765c17f3ced7281d9c8d3fcf2b5",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ],
+        "drupal/gin": [
+            {
+                "package": "drupal/gin",
+                "description": "Guard the vertical toolbar collapse in the meta sidebar when core Navigation is enabled",
+                "url": "patches/gin-sidebar-optional-toolbar.patch",
+                "sha256": "f69c6698bcf1c1cbd2c692bdfed450c3df55c2d8117849e535ef3ad01ceb1c5a",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"
