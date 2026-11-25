@@ -42,7 +42,8 @@ ahoy drush watchdog:show --type=seckit --extended
 To find where a blocked script comes from, search `web/` for its sample:
 
 - If the sample matches code the site renders, admit that script with a nonce or a derived hash, the same way as the navigation toolbar script.
-- If nothing in `web/` matches, a browser feature or an extension added the script. The site can't change that script, and its reports need no fix.
+- If nothing in `web/` matches, search the page's rendered source, because Twig can assemble a script from parts. Then load the page in a browser profile with no extensions.
+- If the script is in neither, a browser feature or an extension added it, and its reports need no fix.
 
 ## Adding an external source
 
