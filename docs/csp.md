@@ -15,6 +15,12 @@ This document describes **what** the policy admits on this site and why. The mod
 
 A hash is not a secret: it is a digest of code that ships in Drupal core, it is published in the response header on every request, and it admits exactly one byte-identical script and nothing else. What must stay unpredictable is the nonce, and that never leaves the request it was made for.
 
+### New Relic browser monitoring
+
+On Lagoon, the New Relic PHP agent adds 2 inline `NREUM` scripts to each HTML page that PHP renders. Neither script carries the nonce, so the policy blocks both and logs 2 violations. `web/sites/default/includes/modules/settings.newrelic.php` calls `newrelic_disable_autorum()`, which stops the agent from adding them. Server-side APM keeps reporting.
+
+A report whose `script-sample` starts with `window.NREUM` or `(window.NREUM||` means the agent added the scripts. Check that `settings.newrelic.php` loads on that environment.
+
 ## The hash is derived, not recorded
 
 `NavigationScriptHash` reads `core/modules/navigation/layouts/navigation.html.twig`, hashes each inline script it holds, and caches the result. Nothing digest-like is committed, so a core release that edits that script cannot leave a stale value behind.
