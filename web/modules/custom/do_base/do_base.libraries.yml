@@ -5,6 +5,14 @@ recaptcha_v3_guard:
     - core/drupal
     - core/once
 
+client_error_log:
+  header: true
+  js:
+    js/do_base.client_error_log.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+
 media_library:
   css:
     theme:

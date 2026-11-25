@@ -1,0 +1,8 @@
+name: DrevOps Website Base Test
+type: module
+description: Pages that fail in the browser, for testing do_base's browser error log.
+core_version_requirement: ^11
+package: Testing
+hidden: true
+dependencies:
+  - do_base:do_base
