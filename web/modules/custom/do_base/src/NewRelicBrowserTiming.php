@@ -23,7 +23,6 @@ class NewRelicBrowserTiming {
    */
   public function disableAutoInstrumentation(): void {
     if (function_exists('newrelic_disable_autorum')) {
-      // @phpstan-ignore-next-line
       newrelic_disable_autorum();
     }
   }
@@ -39,8 +38,7 @@ class NewRelicBrowserTiming {
       return '';
     }
 
-    // @phpstan-ignore-next-line
-    return (string) newrelic_get_browser_timing_header(FALSE);
+    return newrelic_get_browser_timing_header(FALSE);
   }
 
   /**
@@ -56,8 +54,7 @@ class NewRelicBrowserTiming {
       return '';
     }
 
-    // @phpstan-ignore-next-line
-    return (string) newrelic_get_browser_timing_footer(FALSE);
+    return newrelic_get_browser_timing_footer(FALSE);
   }
 
 }
