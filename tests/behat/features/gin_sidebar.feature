@@ -9,6 +9,7 @@ Feature: Gin content form sidebar
   Scenario Outline: Site administrator can hide the content form sidebar
     Given I am logged in as a user with the role "civictheme_site_administrator"
     When I visit "/"
+    And I clear the local storage
     And I set the viewport to <width> by 900
     And I visit "node/add/civictheme_page"
     Then the element ".meta-sidebar__trigger" with the attribute "aria-expanded" and the value "true" should exist

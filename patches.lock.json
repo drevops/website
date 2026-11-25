@@ -1,5 +1,5 @@
 {
-    "_hash": "a3bd0cf804edc44a4876c51c86d09f42e16ca0b71937d20f72a6444b218c8920",
+    "_hash": "acb0c8791b91c5327a4d040e27771c26f524aaa3b5d774a9828b1d08aee7fe7e",
     "patches": {
         "drupal/civictheme": [
             {
@@ -52,7 +52,7 @@
                 "package": "drupal/gin",
                 "description": "Guard the vertical toolbar collapse in the meta sidebar when core Navigation is enabled",
                 "url": "patches/gin-sidebar-optional-toolbar.patch",
-                "sha256": "5e87a5a879a41558580e9200bb0020524a79bab63a06c2c067921c5efe1dddb3",
+                "sha256": "f69c6698bcf1c1cbd2c692bdfed450c3df55c2d8117849e535ef3ad01ceb1c5a",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"
